@@ -1,10 +1,26 @@
 
-var module = angular.module('APP', []);
+/**
+var myApp = angular.module('myApp', []);
 
-function AccountCtrl($scope, $http, Data) {
+myApp.config([
+  	'$routeProvider', 
+  	function($routeProvider) {
+  		$routeProvider.
+  			when('/:edit', {
+  				templateUrl: 'partials/contact-edit.html',   
+  				controller: 'accountCtrl'
+  			});
+  	}
+  ]);
+
+
+
+myApp.controller("accountCtrl", function($scope, $http, $routeParams, Data) {
 
 	$scope.account = Data;
-
+	
+	
+	alert('sss:' + $routeParams.edit);
 	
 	$scope.saveContactDetails = function() {
 		
@@ -22,7 +38,7 @@ function AccountCtrl($scope, $http, Data) {
 	        // Update the rendering.
 	        //render();
 		   
-		   alert($currentRoute.route);
+		   
 		   
 		   if ($currentRoute == '/edit') {
 			   alert('it edit');
@@ -31,25 +47,16 @@ function AccountCtrl($scope, $http, Data) {
 	    }
 	);
 	
-	/*
+	
 	$scope.showAccountForm = function() {
 		alert('sdfjlkj');
-	};*/
-}
-
-module.config([
-	'$routeProvider', 
-	function($routeProvider) {
-		$routeProvider.
-			when('/edit', {
-				templateUrl: 'partials/contact-edit.html',   
-				controller: AccountCtrl
-			});
-	}
-]);
+	};
+});
 
 
-module.directive('editContactDetails', function() {
+**/
+
+myApp.directive('editContactDetails', function() {
 	return function(scope, el, attrs) {
 		
 		el.bind('click', function() {
@@ -60,7 +67,7 @@ module.directive('editContactDetails', function() {
 	};
 });
 
-module.directive('editEmail', function() {
+myApp.directive('editEmail', function() {
 	return function(scope, el, attrs) {
 		
 		el.bind('click', function() {

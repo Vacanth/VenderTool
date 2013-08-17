@@ -13,7 +13,7 @@ Attributes
 	<div class="hdr">
 
 		<div class="topnav inline">
-			<a href="#"><spring:message code="form.header.logo"/></a>
+			<a href="home"><spring:message code="form.header.logo"/></a>
 			
 			<%-- 
 			<a href="#"><spring:message code="form.header.platform"/></a>
@@ -46,10 +46,14 @@ Attributes
 				</c:when>
 				<c:otherwise>
 					<div class="user inline">
-						<a href="#">${email} </a>
-						<a href="#" class="arw"></a>
+						<a id="accountBtn" href="javascript:;">${email} <b class="arw"></b></a>
 						
-						| <a href="">Sign-out</a>
+						<ul id="accountMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+						  <li><a tabindex="-1" href="account">Account</a></li>
+						  <li class="divider"></li>
+						  <li><a tabindex="-1" href="signout">Sign-out</a></li>
+						</ul>
+
 					</div>
 					<form class="srch inline">
 						<input placeholder="Search"/>
@@ -64,7 +68,7 @@ Attributes
 					<span>
 						<spring:message code="form.registration.lang"/>
 					</span>
-					<select id="home-header-lang-menu" name="lang">
+					<select id="languageMenu" name="lang">
 						<option value="en">English</option>
 						<option value="es">español</option>
 					</select>

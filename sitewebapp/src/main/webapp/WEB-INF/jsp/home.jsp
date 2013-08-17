@@ -11,11 +11,7 @@
 	<jsp:attribute name="header">
 		<t:header email="${email}" currentPage="home"/>
 	</jsp:attribute>
-	
-	<jsp:attribute name="scripts">
-		<script src="<c:url value='/resources/js/lang-menu.js' />"></script>
-	</jsp:attribute>
-	
+
 	<jsp:attribute name="css">
 		<link href="<c:url value='/resources/css/home.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>

@@ -4,13 +4,13 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.vendertool.sharedtypes.core.Account;
-import com.vendertool.sharedtypes.core.Address;
-import com.vendertool.sharedtypes.core.ContactDetails;
-import com.vendertool.sharedtypes.core.CountryEnum;
+import com.vendertool.sitewebapp.model.AccountFieldSet;
+import com.vendertool.sitewebapp.test.util.MockDataUtil;
 
 @Controller
 public class AccountController {
@@ -21,31 +21,15 @@ public class AccountController {
 	public String getAccount(ModelMap modelMap) {
 		logger.info("account GET controller invoked");
 		
-		// Mock models
-		Address address = new Address();
-		address.setAddressLine1("123 Main St");
-		address.setAddressLine2("Apt. B");
-		address.setCity("San Jose");
-		address.setState("CA");
-		address.setZip("95125");
-		address.setCountry(CountryEnum.UNITED_STATES);
-		
-		ContactDetails contact = new ContactDetails();
-		contact.setAddress(address);
-		contact.setFirstName("Ted");
-		contact.setLastName("Szeto");
-		
-		Account acct = new Account();
-		acct.setEmailId("ted@gmail.com");
-		acct.setContact(contact);
-		
-		modelMap.put("account", acct);
+		AccountFieldSet acctFieldSet = MockDataUtil.getAccountFieldSet();
+
+		modelMap.put("acctFieldSet", acctFieldSet);
 		
 		// Add JSON for Angular
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			String acctJson= mapper.writeValueAsString(acct);
-			modelMap.put("accountJson", acctJson);
+			String acctFieldSetJson= mapper.writeValueAsString(acctFieldSet);
+			modelMap.put("acctFieldSetJson", acctFieldSetJson);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -53,4 +37,20 @@ public class AccountController {
 		
 		return "account";
 	}
+	
+	@RequestMapping(value="account/save", method=RequestMethod.POST)
+	public @ResponseBody AccountFieldSet saveAccount(@RequestBody AccountFieldSet acctFieldSet) {
+		
+
+		System.err.println("Address1: " + acctFieldSet.getAddressLine1().getValue());
+		System.err.println("Country: " + acctFieldSet.getCountry().getValue());
+		
+		return acctFieldSet;
+	}
+	
+		
+	
+	
+	
+	
 }

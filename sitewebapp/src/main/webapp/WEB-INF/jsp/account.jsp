@@ -7,20 +7,21 @@
 
 
 
-<t:page title="VendorTool" isAngularPage="true">
+<t:page title="VendorTool" angularAppName="accountApp">
 
 	<jsp:attribute name="header">
-		<t:header email="${account.emailId}" currentPage="account"/>
+		<t:header email="${accFieldSet.email.value}" currentPage="account"/>
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/resources/js/controller/account-ctrl.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/resources/js/account/app.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/resources/js/account/controllers.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">
 		<script type="text/javascript">
-			module.factory('Data', function() {
-				return ${accountJson};
+			accountApp.factory('Data', function() {
+				return ${acctFieldSetJson};
 			});
 		</script>
 	</jsp:attribute>
@@ -32,41 +33,19 @@
 	<jsp:body>
 		<div ng-controller="AccountCtrl" class="acct contact main input-group bx-rnd-shdw">
 			<h3 class="ttl">Account</h3>
-			<style>
-			.acct.profile .list-group {
-				width:150px;
-			}
-			.list-group .list-group-item {
-				border:0;
-				border-bottom:1px solid #ddd;
-				border-top:1px solid #ddd;
-				border-top-right-radius: 0;
-				border-top-left-radius: 0;
-				white-space:nowrap;
-				padding-right:0px;
-			}
 			
-			.info {
-				
-			}
-			.info .col1 {
-				padding-left:30px;
-			}
-			
-			</style>
 			<div class="list-group">
-				<a href="profile" class="list-group-item">Contact info</a>
-				<a edit-profile href="#/edit"  class="list-group-item">Change contact info</a>
-				<a edit-email href="javascript:;" class="list-group-item">Change email</a>
-				<a href="password-edit" class="list-group-item">Change password</a>
+				<a href="#/contact" 			ng-class="getClass('/contact')" 			class="list-group-item">Contact info</a>
+				<a href="#/contact/:change"		ng-class="getClass('/contact/:change')" 	class="list-group-item">Change contact info</a>
+				<a href="#/email/:change"		ng-class="getClass('/email/:change')" 		class="list-group-item">Change email</a>
+				<a href="#/password/:change"	ng-class="getClass('/password/:change')"	class="list-group-item">Change password</a>
 			</div>
 			
 			<div ng-view class="info-wrp">
 				
+	
+				<%-- 
 				
-				<!--===================================
-				Profile
-				=======================================-->
 				<table id="info" class="info readonly" cellspacing="0" cellpadding="0">
 					<tr>
 						<td class="col1"><label>Email:</label></td>
@@ -110,7 +89,7 @@
 					</tr>
 					
 				</table>
-
+				--%>
 				
 				<%-- 
 				<!--===================================
