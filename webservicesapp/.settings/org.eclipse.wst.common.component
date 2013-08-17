@@ -31,9 +31,6 @@
         <dependent-module archiveName="mercadolibreadapter-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mercadolibreadapter/mercadolibreadapter">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="fts-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fts/fts">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/webservicesapp/target/classes"/>
         <property name="context-root" value="services"/>
     </wb-module>
