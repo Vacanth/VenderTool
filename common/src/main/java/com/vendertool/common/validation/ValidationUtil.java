@@ -3,6 +3,7 @@ package com.vendertool.common.validation;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -45,6 +46,18 @@ public class ValidationUtil {
 		return !isNull(obj);
 	}
 	
+	/**
+	 * Checks if the given list is empty.
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public boolean isEmpty(List obj) {
+		if(obj == null){
+			return true;
+		}
+		return !(obj.size() > 0);
+	}
 	/**
 	 * Checks if the string value is empty
 	 * 

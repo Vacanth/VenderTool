@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.api.client.ClientResponse;
+import com.vendertool.sharedtypes.core.FileInformation;
+import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.rnr.FileUploadRequest;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.model.FileUploadDataModel;
@@ -29,6 +29,8 @@ public class FileUploadController {
 
 	private static final Logger logger = Logger
 			.getLogger(FileUploadController.class);
+
+//	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
 
 	@RequestMapping(value = "fileUpload", method = RequestMethod.GET)
 	public String getFileUploadPage(ModelMap modelMap) {
@@ -45,36 +47,31 @@ public class FileUploadController {
 			@ModelAttribute("uploadFile") FileUploadDataModel uploadForm,
 			Model map, HttpServletRequest request) throws IOException {
 
-		MultipartFile files = uploadForm.getFile();
+		MultipartFile file = uploadForm.getFile();
+		FileUploadRequest fileRequest = null;
+		if (file != null) {
+			fileRequest = new FileUploadRequest();
+			List<FileInformation> fileInformationList = new ArrayList<>();
 
-		List<String> fileNames = new ArrayList<String>();
+			FileInformation fileInfo = new FileInformation();
+			fileInfo.setFileData(file.getBytes());
+			fileInfo.setFileName(file.getOriginalFilename());
+			fileInfo.setFileSize(file.getSize());
 
-		MultipartFile multipartFile = files;
+			fileInformationList.add(fileInfo);
+			fileRequest.setFiles(fileInformationList);
+		}
 
-		String fileName = multipartFile.getOriginalFilename();
-		fileNames.add(fileName);
-		// Handle file content - multipartFile.getInputStream()
-		/*
-		 *  * final String response = resource .entity(request,
-		 * MediaType.MULTIPART_FORM_DATA) .accept("text/plain")
-		 * .post(String.class);
-		 */
-		FormDataMultiPart form = new FormDataMultiPart().field("file",
-				multipartFile.getInputStream(),
-				MediaType.MULTIPART_FORM_DATA_TYPE);
-		FormDataContentDisposition cd = FormDataContentDisposition.name("file")
-				.fileName(multipartFile.getOriginalFilename())
-				.size(multipartFile.getSize()).build();
-		form.contentDisposition(cd);
-		String hostName = RestServiceClientHelper.getServerURL(request);
-		String url = hostName + URLConstants.WEB_SERVICE_PATH
-				+ URLConstants.FILE_UPLOAD_PATH;
-
-		WebResource webResource = Client.create().resource(url);
-		webResource.type(MediaType.MULTIPART_FORM_DATA)
-				.accept(MediaType.TEXT_PLAIN).post(form);
-		// System.out.println("Uploaded"+response);
-		map.addAttribute("files", fileNames);
+		if (fileRequest != null) {
+			String hostName = RestServiceClientHelper.getServerURL(request);
+			String url = hostName + URLConstants.WEB_SERVICE_PATH
+					+ URLConstants.FILE_UPLOAD_PATH;
+			ClientResponse response = RestServiceClientHelper
+					.invokeRestService(url, fileRequest, null,
+							MediaType.APPLICATION_XML_TYPE, HttpMethodEnum.POST);
+		} else {
+			// Error page.
+		}
 		return "fileUploadSuccess";
 	}
 }

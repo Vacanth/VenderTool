@@ -30,14 +30,10 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>javassist</groupId>
-			<artifactId>javassist</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency> -->
+		<!-- <dependency> <groupId>javassist</groupId> <artifactId>javassist</artifactId> 
+			</dependency> -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -54,25 +50,22 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency> -->
+		<!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey</artifactId>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-		</dependency> -->
+		<!-- <dependency> <groupId>javax.mail</groupId> <artifactId>mail</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>velocity</groupId>
 			<artifactId>velocity</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
+
 	</dependencies>
 </project>
