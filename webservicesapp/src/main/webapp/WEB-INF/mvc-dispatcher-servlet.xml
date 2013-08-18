@@ -10,6 +10,8 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
          http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:component-scan base-package="com.vendertool.registration" />
+	<context:component-scan base-package="com.vendertool.inventory" />
+	<context:component-scan base-package="com.vendertool.listing" />
 
 	<mvc:annotation-driven />
 
@@ -17,8 +19,8 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 		<property name="prefix"> <value>/WEB-INF/pages/</value> </property> <property 
 		name="suffix"> <value>.jsp</value> </property> </bean> -->
 
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+<!-- 	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" /> -->
 	<!-- Configures view for returning JSON to the client -->
 	<bean
 		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">

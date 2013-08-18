@@ -3,8 +3,6 @@ package com.vendertool.registration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +48,6 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	
 	@Autowired
 	private View jsonView_i;
-	private static final String DATA_FIELD = "response";
-	private static final String ERROR_FIELD = "error";
 	private static final Logger logger = Logger.getLogger(RegistrationServiceImpl.class);
 	private CachedRegistrationAccountDatasource cachedDS;
 	private static int RANDOM_CODE_DIGIT_COUNT = 5;
@@ -63,10 +59,8 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		cachedDS = CachedRegistrationAccountDatasource.getInstance();
 	}
 	
-	@RequestMapping(value="/register", method = RequestMethod.POST, produces = {"application/json"})
-	/*public RegisterAccountResponse registerAccount(
-			RegisterAccountRequest request) {*/
-	public @ResponseBody RegisterAccountResponse createFund(@RequestBody RegisterAccountRequest request,  
+	@RequestMapping(value="/register", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+	public @ResponseBody RegisterAccountResponse registerAccount(@RequestBody RegisterAccountRequest request,  
 			HttpServletResponse httpResponse_p, WebRequest request_p) {  
 		
 		RegisterAccountResponse response = new RegisterAccountResponse();
@@ -128,7 +122,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		return response;
 	}
 	
-	@RequestMapping(value="/confirmRegistration", method = RequestMethod.POST, produces = {"application/json"})
+	@RequestMapping(value="/confirmRegistration", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
 	public ConfirmRegistrationResponse confirmRegistration(ConfirmRegistrationRequest request) {
 		ConfirmRegistrationResponse response = new ConfirmRegistrationResponse();
 

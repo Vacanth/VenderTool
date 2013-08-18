@@ -3,6 +3,9 @@ package com.vendertool.mercadolibreadapter.add;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item{
    	private boolean accepts_mercadopago;
    	private List attributes;
@@ -41,7 +44,8 @@ public class Item{
    	private String subtitle;
    	private List tags;
    	private String thumbnail;
-   	private String title;
+   	private String secure_thumbnail;
+	private String title;
    	private List variations;
    	private String video_id;
    	private String warranty;
@@ -319,5 +323,11 @@ public class Item{
 	}
 	public void setWarranty(String warranty){
 		this.warranty = warranty;
+	}
+	  	public String getSecure_thumbnail() {
+		return secure_thumbnail;
+	}
+	public void setSecure_thumbnail(String secure_thumbnail) {
+		this.secure_thumbnail = secure_thumbnail;
 	}
 }

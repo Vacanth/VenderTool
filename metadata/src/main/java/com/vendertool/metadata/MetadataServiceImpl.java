@@ -8,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
 import com.vendertool.sharedtypes.core.MarketEnum;
@@ -22,7 +23,7 @@ public class MetadataServiceImpl extends BaseVenderToolServiceImpl implements
 
 	@RequestMapping(value = "/getSupportedLocales", method = RequestMethod.GET, produces = {
 			"application/xml", "application/json" })
-	public GetSupportedLocalesResponse getSupportedLocales() {
+	public @ResponseBody GetSupportedLocalesResponse getSupportedLocales() {
 		GetSupportedLocalesResponse response = new GetSupportedLocalesResponse();
 		Set<Locale> locales = MarketCountryConfig.getInstance()
 				.getSupportedLocales();
@@ -32,7 +33,7 @@ public class MetadataServiceImpl extends BaseVenderToolServiceImpl implements
 
 	@RequestMapping(value = "/getSupportedCountries", method = RequestMethod.GET, produces = {
 			"application/xml", "application/json" })
-	public GetSupportedCountriesResponse getSupportedCountries(
+	public @ResponseBody GetSupportedCountriesResponse getSupportedCountries(
 			@QueryParam("market") MarketEnum market) {
 		GetSupportedCountriesResponse response = new GetSupportedCountriesResponse();
 

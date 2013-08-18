@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
 import com.vendertool.sharedtypes.core.Product;
@@ -34,7 +35,8 @@ public class InventoryManagementServiceImpl extends BaseVenderToolServiceImpl
 
 	@RequestMapping(value = "/getProduct", method = RequestMethod.GET, produces = {
 			"application/xml", "application/json" })
-	public GetProductResponse getProduct(
+	public @ResponseBody
+	GetProductResponse getProduct(
 			@RequestParam(value = "productId", required = false) String id) {
 		GetProductResponse response = new GetProductResponse();
 		Product product = new Product("iPhone 5");
@@ -52,7 +54,8 @@ public class InventoryManagementServiceImpl extends BaseVenderToolServiceImpl
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST, produces = {
 			"application/xml", "application/json" }, consumes = {
 			"application/xml", "application/json" })
-	public AddProductResponse addProduct(@RequestBody AddProductRequest request) {
+	public @ResponseBody
+	AddProductResponse addProduct(@RequestBody AddProductRequest request) {
 		Product product = request.getProduct();
 		System.out.println("/inventory/addproduct/ call. Adding product ... "
 				+ product.toString());
@@ -65,116 +68,79 @@ public class InventoryManagementServiceImpl extends BaseVenderToolServiceImpl
 	@RequestMapping(value = "/updateProduct", method = RequestMethod.POST, produces = {
 			"application/xml", "application/json" }, consumes = {
 			"application/xml", "application/json" })
-	public UpdateProductResponse updateProduct(@RequestBody UpdateProductRequest request) {
+	public @ResponseBody
+	UpdateProductResponse updateProduct(
+			@RequestBody UpdateProductRequest request) {
 		return null;
 	}
 
-	
 	@RequestMapping(value = "/removeProduct", method = RequestMethod.DELETE, produces = {
 			"application/xml", "application/json" })
-	public RemoveProductResponse removeProduct(
+	public @ResponseBody
+	RemoveProductResponse removeProduct(
 			@RequestParam(value = "productId", required = false) String productId) {
 		return null;
 	}
 
-	public UpdateProductPriceQuanityResponse updateProductPriceQuantity(
-			UpdateProductPriceQuantityRequest request) {
-		// TODO Auto-generated method stub
+	@RequestMapping(value = "/updateProductPriceQuantity", method = RequestMethod.POST, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	UpdateProductPriceQuanityResponse updateProductPriceQuantity(
+			@RequestBody UpdateProductPriceQuantityRequest request) {
 		return null;
 	}
 
-	public AdjustProductQuantityResponse adjustQuantity(
-			AdjustProductQuantityRequest request) {
-		// TODO Auto-generated method stub
+	@RequestMapping(value = "/adjustQuantity", method = RequestMethod.POST, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	AdjustProductQuantityResponse adjustQuantity(
+			@RequestBody AdjustProductQuantityRequest request) {
 		return null;
 	}
 
-	public DuplicateProductResponse duplicateProduct(String productId) {
-		// TODO Auto-generated method stub
+	@RequestMapping(value = "/duplicateProduct", method = RequestMethod.POST, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	DuplicateProductResponse duplicateProduct(@RequestBody String productId) {
 		return null;
 	}
 
-	public AddProductVariationResponse addProductVariation(
-			AddProductVariationRequest request) {
-		// TODO Auto-generated method stub
+	@RequestMapping(value = "/addProductVariation", method = RequestMethod.POST, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	AddProductVariationResponse addProductVariation(
+			@RequestBody AddProductVariationRequest request) {
 		return null;
 	}
 
-	public RemoveProductVariationResponse removeProductVariation(
-			String productId, String variationId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public GetProductVariationResponse getProductVariation(String productId,
+	@RequestMapping(value = "/removeProductVariation", method = RequestMethod.DELETE, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	RemoveProductVariationResponse removeProductVariation(String productId,
 			String variationId) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public AddProductImageResponse addProductImage(
-			AddProductImageRequest request) {
-		// TODO Auto-generated method stub
+	@RequestMapping(value = "/getProductVariation", method = RequestMethod.GET, produces = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	GetProductVariationResponse getProductVariation(
+			@RequestParam(value = "productId", required = false) String productId,
+			@RequestParam(value = "variationId", required = false) String variationId) {
 		return null;
 	}
 
-	/*@POST
-	@Path("/updateProductPriceQuantity")
-	@ConsumeMime({ "application/xml", "application/json" })
-	@ProduceMime({ "application/xml", "application/json" })
-	public UpdateProductPriceQuanityResponse updateProductPriceQuantity(
-			UpdateProductPriceQuantityRequest request) {
+	@RequestMapping(value = "/addProductImage", method = RequestMethod.POST, produces = {
+			"application/xml", "application/json" }, consumes = {
+			"application/xml", "application/json" })
+	public @ResponseBody
+	AddProductImageResponse addProductImage(
+			@RequestBody AddProductImageRequest request) {
 		return null;
 	}
-
-	@POST
-	@Path("/adjustQuantity")
-	@ConsumeMime({ "application/xml", "application/json" })
-	@ProduceMime({ "application/xml", "application/json" })
-	public AdjustProductQuantityResponse adjustQuantity(
-			AdjustProductQuantityRequest request) {
-		return null;
-	}
-
-	@POST
-	@Path("/duplicateProduct")
-	@ProduceMime({ "application/xml", "application/json" })
-	public DuplicateProductResponse duplicateProduct(String productId) {
-		return null;
-	}
-
-	@POST
-	@Path("/addProductVariation")
-	@ConsumeMime({ "application/xml", "application/json" })
-	@ProduceMime({ "application/xml", "application/json" })
-	public AddProductVariationResponse addProductVariation(
-			AddProductVariationRequest request) {
-		return null;
-	}
-
-	@DELETE
-	@Path("/removeProductVariation")
-	@ProduceMime({ "application/xml", "application/json" })
-	public RemoveProductVariationResponse removeProductVariation(
-			String productId, String variationId) {
-		return null;
-	}
-
-	@GET
-	@Path("/getProductVariation")
-	@ProduceMime({ "application/xml", "application/json" })
-	public GetProductVariationResponse getProductVariation(
-			@QueryParam("productId") String productId,
-			@QueryParam("variationId") String variationId) {
-		return null;
-	}
-
-	@POST
-	@Path("/addProductImage")
-	@ConsumeMime({ "application/xml", "application/json" })
-	@ProduceMime({ "application/xml", "application/json" })
-	public AddProductImageResponse addProductImage(
-			AddProductImageRequest request) {
-		return null;
-	}*/
 }

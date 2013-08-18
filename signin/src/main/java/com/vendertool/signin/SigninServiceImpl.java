@@ -3,6 +3,7 @@ package com.vendertool.signin;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
 import com.vendertool.sharedtypes.rnr.SigninRequest;
@@ -18,15 +19,14 @@ public class SigninServiceImpl extends BaseVenderToolServiceImpl implements
 	@RequestMapping(value = "/signin", method = RequestMethod.POST, produces = {
 			"application/xml", "application/json" }, consumes = {
 			"application/xml", "application/json" })
-	public SigninResponse signin(SigninRequest request) {
+	public @ResponseBody SigninResponse signin(SigninRequest request) {
 		return null;
 	}
 
 	@RequestMapping(value = "/signout", method = RequestMethod.POST, produces = {
 			"application/xml", "application/json" }, consumes = {
 			"application/xml", "application/json" })
-	public SignoutResponse signout(SignoutRequest request) {
+	public @ResponseBody SignoutResponse signout(SignoutRequest request) {
 		return null;
 	}
-
 }

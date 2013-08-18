@@ -22,6 +22,7 @@ import com.vendertool.sitewebapp.common.URLConstants;
 public class RegisterController {
 	private static final Logger logger = Logger
 			.getLogger(RegisterController.class);
+	private static RestTemplate restTemplate = new RestTemplate();
 
 	@RequestMapping(value = "register", method = RequestMethod.GET)
 	public String getRegistrationView(ModelMap modelMap) {
@@ -39,7 +40,6 @@ public class RegisterController {
 	public String register(ModelMap modelMap, HttpServletRequest request,
 			@ModelAttribute("account") Account account) {
 		logger.info("register POST controller invoked");
-		// Account account = (Account) modelMap.get("account");
 		RegisterAccountRequest registerAccountRequest = new RegisterAccountRequest();
 		registerAccountRequest.setAccount(account);
 
@@ -48,7 +48,7 @@ public class RegisterController {
 		String url = hostName + URLConstants.WEB_SERVICE_PATH
 				+ URLConstants.REGISTRATION_REGISTER_PATH;
 
-		RestTemplate restTemplate = new RestTemplate();
+		restTemplate = new RestTemplate();
 		ResponseEntity<RegisterAccountResponse> responseEntity = restTemplate
 				.postForEntity(url, registerAccountRequest,
 						RegisterAccountResponse.class);

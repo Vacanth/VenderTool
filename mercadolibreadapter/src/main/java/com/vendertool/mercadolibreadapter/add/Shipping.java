@@ -3,6 +3,9 @@ package com.vendertool.mercadolibreadapter.add;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Shipping{
    	private String dimensions;
    	private boolean free_shipping;

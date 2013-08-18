@@ -6,6 +6,8 @@ import java.util.List;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.sharedtypes.core.Classification;
@@ -26,6 +28,7 @@ public class MercadolibreListingAdapter implements
 	private static String VERIFY_LISTING_URL = "https://api.mercadolibre.com/items/validate?access_token=$APP_USR-9773-041316-013619f30678959c46bbda5f211aff75__C_N__-107245974";
 	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=$APP_USR-9773-041316-013619f30678959c46bbda5f211aff75__C_N__-107245974";
 	private static MercadolibreListingAdapter uniqInstance;
+	static private RestTemplate restTemplate = new RestTemplate();
 
 	private MercadolibreListingAdapter() {
 	}
@@ -40,46 +43,19 @@ public class MercadolibreListingAdapter implements
 	public BaseResponse execute(BaseRequest request) {
 		AddListingRequest listingRequest = (AddListingRequest) request;
 		Item item = adaptToRequest(listingRequest);
-		//Call Verify
-		/*MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
-		communicatorVO.setRequestObject(item);
-		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
-		communicatorVO.setTargetURL(VERIFY_LISTING_URL);
-		MercadolibreCommunicator communicator = MercadolibreCommunicator.getInstance();
-		ClientResponse response = communicator.call(communicatorVO);
+		ResponseEntity<Item> responseEntity = restTemplate.postForEntity(
+				LISTING_URL, item, Item.class);
+		// Call Verify
+		Item responseItem = responseEntity.getBody();
 
-		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatus());
-		}
-
-		String output = (String) response.getEntity(String.class);
-		Item responseItem = readItem(output);
-		
-		//Call Add listing
-		communicatorVO.setTargetURL(LISTING_URL);
-		AddListingResponse addListingResponse = adaptTOResponse(responseItem);*/
-		return null;
+		// Call Add listing
+		AddListingResponse addListingResponse = adaptTOResponse(responseItem);
+		return addListingResponse;
 	}
 
 	private AddListingResponse adaptTOResponse(Item responseItem) {
 		AddListingResponse response = new AddListingResponse();
 		response.setListingId(responseItem.getId());
-		return response;
-	}
-
-	private Item readItem(String output) {
-		Item response = null;
-		try {
-			response = new ObjectMapper().readValue(output, Item.class);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		return response;
 	}
 

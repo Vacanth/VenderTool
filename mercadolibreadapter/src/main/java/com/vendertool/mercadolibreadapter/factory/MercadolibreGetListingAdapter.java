@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.sharedtypes.core.Amount;
@@ -20,6 +22,7 @@ public class MercadolibreGetListingAdapter implements
 
 	private static String GET_LISTING_URL = "https://api.mercadolibre.com/items/";
 	private static MercadolibreGetListingAdapter uniqInstance;
+	private static RestTemplate restTemplate = new RestTemplate();
 
 	private MercadolibreGetListingAdapter() {
 	}
@@ -32,41 +35,30 @@ public class MercadolibreGetListingAdapter implements
 	}
 
 	public BaseResponse execute(BaseRequest request) {
-		GetListingRequest itemId = (GetListingRequest)request;
-		
-		/*MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
-		communicatorVO.setMethodEnum(HttpMethodEnum.GET);
-		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
-		communicatorVO.setTargetURL(GET_LISTING_URL+itemId.getListingId());
-		MercadolibreCommunicator communicator = MercadolibreCommunicator.getInstance();
-		ClientResponse response = communicator.call(communicatorVO);
-		
-		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatus());
-		}
-		
-		String output = (String) response.getEntity(String.class);
-		Item responseItem = readItem(output);
-		
-		GetListingResponse getListingResponse = adaptToGetListingResponse(responseItem);*/
-		
-		return null;
+		GetListingRequest itemId = (GetListingRequest) request;
+		String url = GET_LISTING_URL + itemId.getListingId();
+		ResponseEntity<Item> responseEntity = restTemplate.getForEntity(url,
+				Item.class);
+		Item responseItem = responseEntity.getBody();
+
+		GetListingResponse getListingResponse = adaptToGetListingResponse(responseItem);
+
+		return getListingResponse;
 	}
 
 	private GetListingResponse adaptToGetListingResponse(Item responseItem) {
-		if(responseItem == null){
+		if (responseItem == null) {
 			return null;
 		}
 		GetListingResponse response = new GetListingResponse();
-		
+
 		Listing listing = new Listing();
-		
+
 		listing.setCondition(responseItem.getCondition());
 		listing.setPrice(new Amount());
 		listing.setQuantity(responseItem.getAvailable_quantity().intValue());
 		Product product = new Product();
-//		product.setDescription(responseItem.getDescriptions());
+		// product.setDescription(responseItem.getDescriptions());
 		product.setTitle(responseItem.getTitle());
 		listing.setProduct(product);
 		response.setListing(listing);

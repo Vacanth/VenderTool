@@ -1,5 +1,8 @@
 package com.vendertool.mercadolibreadapter.add;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cause {
 	private String code;
 	private String message;

@@ -1,7 +1,9 @@
 
 package com.vendertool.mercadolibreadapter.add;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Geolocation{
    	private String latitude;
    	private String longitude;
