@@ -1,9 +1,6 @@
 package com.vendertool.sitewebapp.security;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -13,13 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-import com.vendertool.sharedtypes.core.Account;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.rnr.GetAccountResponse;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 
 @Service
@@ -44,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
 				URLConstants.REGISTRATION_GET_ACCOUNT_PATH;
 		
-		MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
+		/*MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
 		queryParams.add(USERNAME_KEY, username);
 		
 		ClientResponse response = RestServiceClientHelper
@@ -74,8 +65,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Unable to locate user");			
 		}
 		
-		UserDetails userDetails = new CustomUserDetails(account);
+		UserDetails userDetails = new CustomUserDetails(account);*/
 		
-		return userDetails;
+		return null;
 	}
 }

@@ -83,4 +83,14 @@
 			<property name="paramName" value="lang" />
 		</bean>
 	</mvc:interceptors>
+	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+    <property name="messageConverters">
+        <list>
+            <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+        </list>
+    </property>
+</bean>
 </beans>

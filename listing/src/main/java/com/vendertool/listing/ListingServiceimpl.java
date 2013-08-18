@@ -1,41 +1,17 @@
 package com.vendertool.listing;
 
-import javax.ws.rs.ConsumeMime;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.ProduceMime;
-import javax.ws.rs.QueryParam;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.vendertool.common.MarketCountryKey;
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
-import com.vendertool.mercadolibreadapter.IMarketListingAdapter;
-import com.vendertool.sharedtypes.core.CountryEnum;
-import com.vendertool.sharedtypes.core.Listing;
-import com.vendertool.sharedtypes.core.MarketEnum;
-import com.vendertool.sharedtypes.rnr.AddListingRequest;
-import com.vendertool.sharedtypes.rnr.AddListingResponse;
-import com.vendertool.sharedtypes.rnr.AdjustListingQuantityRequest;
-import com.vendertool.sharedtypes.rnr.AdjustListingQuantityResponse;
-import com.vendertool.sharedtypes.rnr.DuplicateListingResponse;
-import com.vendertool.sharedtypes.rnr.EndListingResponse;
-import com.vendertool.sharedtypes.rnr.GetAuctionBidCountResponse;
-import com.vendertool.sharedtypes.rnr.GetAuctionHighBidderResponse;
-import com.vendertool.sharedtypes.rnr.GetListingPriceQuantityResponse;
-import com.vendertool.sharedtypes.rnr.GetListingResponse;
-import com.vendertool.sharedtypes.rnr.UpdateListingPriceQuanityResponse;
-import com.vendertool.sharedtypes.rnr.UpdateListingPriceQuantityRequest;
-import com.vendertool.sharedtypes.rnr.UpdateListingRequest;
-import com.vendertool.sharedtypes.rnr.UpdateListingResponse;
-import com.vendertool.sharedtypes.rnr.VerifyListingRequest;
-import com.vendertool.sharedtypes.rnr.VerifyListingResponse;
 
-@Path("/listing")
+@Controller
+@RequestMapping("/listing")
 public class ListingServiceimpl extends BaseVenderToolServiceImpl 
-	implements IListingService {
+	/*implements IListingService*/ {
 	
 
-	@GET
+/*	@GET
 	@Path("/getListing")
 	@ProduceMime({ "application/xml", "application/json" })
 	public GetListingResponse getListing(@QueryParam("listingId") String id) {
@@ -132,5 +108,5 @@ public class ListingServiceimpl extends BaseVenderToolServiceImpl
 	@ProduceMime({ "application/xml", "application/json" })
 	public VerifyListingResponse verifyListing(VerifyListingRequest request) {
 		return null;
-	}
+	}*/
 }

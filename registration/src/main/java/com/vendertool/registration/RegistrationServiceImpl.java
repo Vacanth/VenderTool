@@ -2,17 +2,20 @@ package com.vendertool.registration;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.View;
 
 import com.vendertool.common.SessionIdGenerator;
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
@@ -39,13 +42,16 @@ import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
 
-@Path("/registration")
+//
+@Controller
+@RequestMapping("/registration")
 public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		implements IRegistrationService {
 	
-	  @Context
-	  UriInfo uri;
-	
+	@Autowired
+	private View jsonView_i;
+	private static final String DATA_FIELD = "response";
+	private static final String ERROR_FIELD = "error";
 	private static final Logger logger = Logger.getLogger(RegistrationServiceImpl.class);
 	private CachedRegistrationAccountDatasource cachedDS;
 	private static int RANDOM_CODE_DIGIT_COUNT = 5;
@@ -57,17 +63,17 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		cachedDS = CachedRegistrationAccountDatasource.getInstance();
 	}
 	
-	@POST
-	@Path("/register")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public RegisterAccountResponse registerAccount(
-			RegisterAccountRequest request) {
+	@RequestMapping(value="/register", method = RequestMethod.POST, produces = {"application/json"})
+	/*public RegisterAccountResponse registerAccount(
+			RegisterAccountRequest request) {*/
+	public @ResponseBody RegisterAccountResponse createFund(@RequestBody RegisterAccountRequest request,  
+			HttpServletResponse httpResponse_p, WebRequest request_p) {  
 		
 		RegisterAccountResponse response = new RegisterAccountResponse();
 		if(request == null) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addError(Errors.COMMON.NULL_ARGUMENT_PASSED);
+//			return new ModelAndView(jsonView_i, DATA_FIELD, response);
 			return response;
 		}
 		
@@ -79,6 +85,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 				response.setAccount(request.getAccount());
 			}
 			response.setSuccess(false);
+//			return new ModelAndView(jsonView_i, DATA_FIELD, response);
 			return response;
 		}
 		
@@ -99,8 +106,9 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		if(status == CachedRegistrationAccountDatasource.Status.NEW) {
 			response.setSuccess(true);
 			response.setAccount(account);
-			String baseurl = uri.getBaseUri().toString();
-			RegistrationEmailHelper.sendRegistrationEmail(account, baseurl);
+			/*String baseurl = uri.getBaseUri().toString();*/
+			RegistrationEmailHelper.sendRegistrationEmail(account, "www.test.com");
+			//return new ModelAndView(jsonView_i, DATA_FIELD, response);
 			return response;
 		}
 
@@ -110,18 +118,17 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		if(status == CachedRegistrationAccountDatasource.Status.EXISTING) {
 			response.addError(Errors.REGISTRATION.EMAIL_ALREADY_REGISTERED);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
+//			return new ModelAndView(jsonView_i, DATA_FIELD, response);
 			return response;
 		}
 		
 		response.addError(Errors.SYSTEM.INTERNAL_ERROR);
 		response.setStatus(ResponseAckStatusEnum.FAILURE);
+		//return new ModelAndView(jsonView_i, DATA_FIELD, response);
 		return response;
 	}
 	
-	@POST
-	@Path("/confirmRegistration")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RequestMapping(value="/confirmRegistration", method = RequestMethod.POST, produces = {"application/json"})
 	public ConfirmRegistrationResponse confirmRegistration(ConfirmRegistrationRequest request) {
 		ConfirmRegistrationResponse response = new ConfirmRegistrationResponse();
 
@@ -173,17 +180,14 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	}
 	
 
-	@GET
-	@Path("/getAccount")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public GetAccountResponse getAccount(@QueryParam(value="username") String username) {
+	@RequestMapping(value="/getAccount", method = RequestMethod.GET, produces = {"application/json","application/xml"})
+	public @ResponseBody GetAccountResponse getAccount(@RequestParam(value = "username", required = false) String username) {
 		CachedRegistrationAccountDatasource cachedDS = 
 				CachedRegistrationAccountDatasource.getInstance();
 		
 		Account account = cachedDS.getAccount(username);
 		GetAccountResponse response = new GetAccountResponse();
-		if(account != null) {
+		if(account == null) {
 			response.addError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND);
 		}
 		
@@ -208,4 +212,19 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		return null;
 	}
 
+	public RegisterAccountResponse registerAccount(
+			RegisterAccountRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Injector methods.
+	 *
+	 * @param view
+	 *            the new json view
+	 */
+	public void setJsonView(View view) {
+		jsonView_i = view;
+	}
 }

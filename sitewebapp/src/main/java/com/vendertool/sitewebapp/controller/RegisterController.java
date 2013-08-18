@@ -1,21 +1,17 @@
 package com.vendertool.sitewebapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.client.RestTemplate;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.vendertool.sharedtypes.core.Account;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
@@ -52,21 +48,24 @@ public class RegisterController {
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
 				URLConstants.REGISTRATION_REGISTER_PATH;
 		
-		ClientResponse response = RestServiceClientHelper
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<RegisterAccountResponse> responseEntity = restTemplate.postForEntity(url, registerAccountRequest, RegisterAccountResponse.class);
+		RegisterAccountResponse registerAccountresponse = responseEntity.getBody();
+		/*ClientResponse response = RestServiceClientHelper
 				.invokeRestService(url, registerAccountRequest, null, MediaType.APPLICATION_XML_TYPE,
 						HttpMethodEnum.POST);
 		
 		int responseCode = response.getStatus();
 		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
 				+ url + "' from '" + getClass().getName()
-				+ ".register' is '" + responseCode + "'.");
+				+ ".register' is '" + responseCode + "'.");*/
 		
 		//HTTP error code 200
-		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+		/*if(response.getStatus() != Response.Status.OK.getStatusCode()) {
 			throw new VTRuntimeException("Unable to register");
-		}
+		}*/
 		
-		RegisterAccountResponse registerAccountresponse = response.getEntity(RegisterAccountResponse.class);
+//		RegisterAccountResponse registerAccountresponse = response.getEntity(RegisterAccountResponse.class);
 		if(registerAccountresponse.hasErrors()) {
 			logger.error("Registration failed with errors: " + registerAccountresponse.getErrors());
 			

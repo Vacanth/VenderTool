@@ -2,16 +2,12 @@ package com.vendertool.mercadolibreadapter.factory;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.MediaType;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.sharedtypes.core.Amount;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
@@ -38,7 +34,7 @@ public class MercadolibreGetListingAdapter implements
 	public BaseResponse execute(BaseRequest request) {
 		GetListingRequest itemId = (GetListingRequest)request;
 		
-		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
+		/*MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setMethodEnum(HttpMethodEnum.GET);
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		communicatorVO.setTargetURL(GET_LISTING_URL+itemId.getListingId());
@@ -53,8 +49,9 @@ public class MercadolibreGetListingAdapter implements
 		String output = (String) response.getEntity(String.class);
 		Item responseItem = readItem(output);
 		
-		GetListingResponse getListingResponse = adaptToGetListingResponse(responseItem);
-		return getListingResponse;
+		GetListingResponse getListingResponse = adaptToGetListingResponse(responseItem);*/
+		
+		return null;
 	}
 
 	private GetListingResponse adaptToGetListingResponse(Item responseItem) {

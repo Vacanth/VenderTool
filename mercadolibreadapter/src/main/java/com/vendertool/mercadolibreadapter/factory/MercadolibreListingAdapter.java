@@ -7,11 +7,9 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.sharedtypes.core.Classification;
 import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Listing.ListingFormatEnum;
 import com.vendertool.sharedtypes.core.PaymentMethod;
@@ -43,7 +41,7 @@ public class MercadolibreListingAdapter implements
 		AddListingRequest listingRequest = (AddListingRequest) request;
 		Item item = adaptToRequest(listingRequest);
 		//Call Verify
-		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
+		/*MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
 		communicatorVO.setTargetURL(VERIFY_LISTING_URL);
@@ -60,8 +58,8 @@ public class MercadolibreListingAdapter implements
 		
 		//Call Add listing
 		communicatorVO.setTargetURL(LISTING_URL);
-		AddListingResponse addListingResponse = adaptTOResponse(responseItem);
-		return addListingResponse;
+		AddListingResponse addListingResponse = adaptTOResponse(responseItem);*/
+		return null;
 	}
 
 	private AddListingResponse adaptTOResponse(Item responseItem) {

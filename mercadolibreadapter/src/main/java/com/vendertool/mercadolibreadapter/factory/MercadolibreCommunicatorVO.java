@@ -1,10 +1,7 @@
 package com.vendertool.mercadolibreadapter.factory;
 
-import javax.ws.rs.core.MediaType;
 
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
-
-public class MercadolibreCommunicatorVO {
+public class MercadolibreCommunicatorVO {/*
 
 	private String targetURL;
 	private MediaType mediaType;
@@ -42,4 +39,4 @@ public class MercadolibreCommunicatorVO {
 	public void setMethodEnum(HttpMethodEnum methodEnum) {
 		this.methodEnum = methodEnum;
 	}
-}
+*/}

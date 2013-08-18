@@ -28,7 +28,7 @@ public class RegistrationEmailService extends VenderToolEmailService {
 				MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 				message.setTo(dataModel.getToEmail());
 				message.setSubject(dataModel.getSubject());
-				Map<String, EmailDataModel> model = new HashMap<String, EmailDataModel>();
+				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("emailData", dataModel);
 				String text = VelocityEngineUtils.mergeTemplateIntoString(
 						getVelocityEngine(), "emailtemplates/Registration.vm",

@@ -5,10 +5,12 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VTError implements Serializable {
-	private VTErrorCode errorCode;
+	private VTErrorCode vtErrorCode;
 	private String errorMessage;
 	private VTErrorSeverityEnum severity;
 	private VTErrorDomainEnum domain;
@@ -25,18 +27,18 @@ public class VTError implements Serializable {
 	
 	public VTError(VTErrorCode errorCode, String errorMessage,
 			VTErrorSeverityEnum severity, VTErrorDomainEnum domain) {
-		this.errorCode = errorCode;
+		this.vtErrorCode = errorCode;
 		this.errorMessage = errorMessage;
 		this.domain = domain;
 		this.severity = severity;
 	}
 
-	public VTErrorCode getErrorCode() {
-		return errorCode;
+	public VTErrorCode getVtErrorCode() {
+		return vtErrorCode;
 	}
 
-	public void setErrorCode(VTErrorCode errorCode) {
-		this.errorCode = errorCode;
+	public void setVtErrorCode(VTErrorCode errorCode) {
+		this.vtErrorCode = errorCode;
 	}
 
 	public String getErrorMessage() {
@@ -63,8 +65,9 @@ public class VTError implements Serializable {
 		this.domain = domain;
 	}
 	
+	@JsonIgnore
 	public String getDomainCodeKey() {
-		return getDomain() + "." + getErrorCode().getErrorCode();
+		return getDomain() + "." + getVtErrorCode().getErrorCode();
 	}
 	
 	private static final long serialVersionUID = 4207311508169879885L;

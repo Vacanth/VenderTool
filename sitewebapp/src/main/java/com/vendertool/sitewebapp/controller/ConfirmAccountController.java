@@ -3,22 +3,14 @@ package com.vendertool.sitewebapp.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
-import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
@@ -60,7 +52,7 @@ public class ConfirmAccountController {
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
 				URLConstants.REGISTRATION_CONFIRM_PATH;
 		
-		ClientResponse response = RestServiceClientHelper
+		/*ClientResponse response = RestServiceClientHelper
 				.invokeRestService(url, confirmRegRequest, null, MediaType.APPLICATION_JSON_TYPE,
 						HttpMethodEnum.POST);
 		
@@ -77,7 +69,7 @@ public class ConfirmAccountController {
 		ConfirmRegistrationResponse confirmAccountresponse = response.getEntity(ConfirmRegistrationResponse.class);
 		if(confirmAccountresponse.hasErrors()) {
 			return "confirmaccountfailed";
-		}
+		}*/
 		
 		return "confirmaccountsuccess";
 	}

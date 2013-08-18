@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.vendertool.sharedtypes.core.FileInformation;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.rnr.FileUploadRequest;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
@@ -66,9 +63,9 @@ public class FileUploadController {
 			String hostName = RestServiceClientHelper.getServerURL(request);
 			String url = hostName + URLConstants.WEB_SERVICE_PATH
 					+ URLConstants.FILE_UPLOAD_PATH;
-			ClientResponse response = RestServiceClientHelper
+			/*ClientResponse response = RestServiceClientHelper
 					.invokeRestService(url, fileRequest, null,
-							MediaType.APPLICATION_XML_TYPE, HttpMethodEnum.POST);
+							MediaType.APPLICATION_XML_TYPE, HttpMethodEnum.POST);*/
 		} else {
 			// Error page.
 		}

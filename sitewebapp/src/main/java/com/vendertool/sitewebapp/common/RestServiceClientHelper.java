@@ -1,23 +1,9 @@
 package com.vendertool.sitewebapp.common;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.vendertool.sharedtypes.core.HttpMethodEnum;
-
-public class RestServiceClientHelper {
+public class RestServiceClientHelper {/*
 	
 	private static final Logger logger = Logger.getLogger(RestServiceClientHelper.class);
 	
@@ -126,11 +112,13 @@ public class RestServiceClientHelper {
 		return jsonvalue;
 	}
 	
+	
+*/
 	public static String getServerURL(HttpServletRequest request) {
 		if (request == null) {
 			return null;
 		}
 		return URLConstants.HTTP + request.getServerName()
 				+ URLConstants.PORT_SEPERATOR + request.getServerPort();
-	}
+	}	
 }
