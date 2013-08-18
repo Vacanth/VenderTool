@@ -20,64 +20,54 @@ import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
 public class RegisterController {
-	private static final Logger logger = Logger.getLogger(RegisterController.class);
-	
-	@RequestMapping(value="register", method=RequestMethod.GET)
+	private static final Logger logger = Logger
+			.getLogger(RegisterController.class);
+
+	@RequestMapping(value = "register", method = RequestMethod.GET)
 	public String getRegistrationView(ModelMap modelMap) {
 		logger.info("register GET controller invoked");
 
 		Account account = new Account();
 		ErrorResponse errorResponse = new ErrorResponse();
-		
+
 		modelMap.addAttribute("account", account);
 		modelMap.addAttribute("errorResponse", errorResponse);
 		return "register";
 	}
-	
-	
-	@RequestMapping(value="register", method=RequestMethod.POST)
+
+	@RequestMapping(value = "register", method = RequestMethod.POST)
 	public String register(ModelMap modelMap, HttpServletRequest request,
 			@ModelAttribute("account") Account account) {
 		logger.info("register POST controller invoked");
-//		Account account = (Account) modelMap.get("account");
+		// Account account = (Account) modelMap.get("account");
 		RegisterAccountRequest registerAccountRequest = new RegisterAccountRequest();
 		registerAccountRequest.setAccount(account);
-		
+
 		String hostName = RestServiceClientHelper.getServerURL(request);
-		
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.REGISTRATION_REGISTER_PATH;
-		
+
+		String url = hostName + URLConstants.WEB_SERVICE_PATH
+				+ URLConstants.REGISTRATION_REGISTER_PATH;
+
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<RegisterAccountResponse> responseEntity = restTemplate.postForEntity(url, registerAccountRequest, RegisterAccountResponse.class);
-		RegisterAccountResponse registerAccountresponse = responseEntity.getBody();
-		/*ClientResponse response = RestServiceClientHelper
-				.invokeRestService(url, registerAccountRequest, null, MediaType.APPLICATION_XML_TYPE,
-						HttpMethodEnum.POST);
-		
-		int responseCode = response.getStatus();
-		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
-				+ url + "' from '" + getClass().getName()
-				+ ".register' is '" + responseCode + "'.");*/
-		
-		//HTTP error code 200
-		/*if(response.getStatus() != Response.Status.OK.getStatusCode()) {
-			throw new VTRuntimeException("Unable to register");
-		}*/
-		
-//		RegisterAccountResponse registerAccountresponse = response.getEntity(RegisterAccountResponse.class);
-		if(registerAccountresponse.hasErrors()) {
-			logger.error("Registration failed with errors: " + registerAccountresponse.getErrors());
-			
+		ResponseEntity<RegisterAccountResponse> responseEntity = restTemplate
+				.postForEntity(url, registerAccountRequest,
+						RegisterAccountResponse.class);
+		RegisterAccountResponse registerAccountresponse = responseEntity
+				.getBody();
+		if (registerAccountresponse.hasErrors()) {
+			logger.error("Registration failed with errors: "
+					+ registerAccountresponse.getErrors());
+
 			Account responseAccount = registerAccountresponse.getAccount();
-			ErrorResponse errorResponse = new ErrorResponse(registerAccountresponse);
+			ErrorResponse errorResponse = new ErrorResponse(
+					registerAccountresponse);
 			modelMap.addAttribute("account", responseAccount);
 			modelMap.addAttribute("errorResponse", errorResponse);
-			
+
 			return "register";
 		}
-		
+
 		return "accounthub";
 	}
-	
+
 }

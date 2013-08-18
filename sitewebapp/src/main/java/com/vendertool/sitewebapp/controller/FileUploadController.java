@@ -13,10 +13,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.rnr.FileUploadRequest;
+import com.vendertool.sharedtypes.rnr.FileUploadResponse;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.model.FileUploadDataModel;
@@ -28,6 +30,8 @@ public class FileUploadController {
 			.getLogger(FileUploadController.class);
 
 //	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
+	
+	static RestTemplate restTemplate = new RestTemplate();
 
 	@RequestMapping(value = "fileUpload", method = RequestMethod.GET)
 	public String getFileUploadPage(ModelMap modelMap) {
@@ -66,6 +70,7 @@ public class FileUploadController {
 			/*ClientResponse response = RestServiceClientHelper
 					.invokeRestService(url, fileRequest, null,
 							MediaType.APPLICATION_XML_TYPE, HttpMethodEnum.POST);*/
+			restTemplate.postForEntity(url, fileRequest, FileUploadResponse.class);
 		} else {
 			// Error page.
 		}

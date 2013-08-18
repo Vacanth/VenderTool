@@ -1,23 +1,20 @@
 package com.vendertool.fileupload;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.common.service.BaseVenderToolServiceImpl;
 import com.vendertool.sharedtypes.rnr.FileUploadRequest;
+import com.vendertool.sharedtypes.rnr.FileUploadResponse;
 
-@Path("/file")
+@Controller
+@RequestMapping("/file")
 public class FPSService extends BaseVenderToolServiceImpl {
 
-	@POST
-	@Path("/upload")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response uploadFile(FileUploadRequest fileUploadRequest) {
+	@RequestMapping(value="/upload", method = RequestMethod.POST, produces = {"application/json","application/xml"}, consumes = {"application/json","application/xml"})
+	public @ResponseBody FileUploadResponse uploadFile(FileUploadRequest fileUploadRequest) {
 
 		/*// TODO file path.
 		String uploadedFileLocation = "d://uploaded/"
@@ -26,6 +23,6 @@ public class FPSService extends BaseVenderToolServiceImpl {
 		FPSHelper.getInstance().writeToFile(uploadedInputStream,
 				uploadedFileLocation);
 		String output = "File uploaded to : " + uploadedFileLocation;*/
-		return Response.status(200).entity("").build();
+		return new FileUploadResponse();
 	}
 }

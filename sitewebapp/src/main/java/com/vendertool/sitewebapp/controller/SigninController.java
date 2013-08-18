@@ -9,8 +9,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.vendertool.sharedtypes.rnr.SigninRequest;
-
 @Controller
 public class SigninController {
 	private static final Logger logger = Logger.getLogger(SigninController.class);

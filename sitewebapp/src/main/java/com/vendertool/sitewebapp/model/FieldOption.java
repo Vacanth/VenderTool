@@ -17,6 +17,4 @@ public class FieldOption {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	
 }
