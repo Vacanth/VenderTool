@@ -1,0 +1,44 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<util:list id="dbList" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="productDBConnection" />
+	</util:list>
+
+	<!-- productDB ***** Start ***** -->
+	<!-- DB Connection Credentials -->
+	<bean id="productDBConnection" class="com.vendertool.dbscripts.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/invdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="codeGenDetails" ref="tableDetails" />
+	</bean>
+
+	<!-- Table Details -->
+	<bean id="productDB" class="com.vendertool.dbscripts.codegen.DBCodeGenDetails">
+		<property name="packageName" value="com.vendertool.test" />
+		<property name="targetFolder" value="src/main/java" />
+		<property name="tableNamePattern" value="product" />
+	</bean>
+
+	<!-- <bean id="productDB2" class="com.vendertool.dbscripts.codegen.DBCodeGenDetails"> 
+		<property name="packageName" value="com.vendertool.test" /> <property name="targetFolder" 
+		value="src/main/java" /> <property name="tableNamePattern" value="product" 
+		/> </bean> -->
+
+	<util:list id="tableDetails" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="productDB" />
+		<!-- <ref bean="productDB2" /> -->
+	</util:list>
+	
+	<!-- productDB **** End ***** -->
+	
+	<!-- More DBs -->
+</beans>
