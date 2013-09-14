@@ -6,15 +6,15 @@
 
 	<import resource="classpath:dal/Datasource.xml" />
 	
-	<bean id="fileDAO" class="com.vendertool.fps.dal.dao.FileDaoImpl">
+	<bean id="fileDao" class="com.vendertool.fps.dal.dao.FileDaoImpl">
 		<property name="dataSource" ref="fpsdbdataSource" />
 	</bean>
 	
-	<bean id="taskDAO" class="com.vendertool.fps.dal.dao.TaskDaoImpl">
+	<bean id="taskDao" class="com.vendertool.fps.dal.dao.TaskDaoImpl">
 		<property name="dataSource" ref="fpsdbdataSource" />
 	</bean>
 	
-	<bean id="jobDAO" class="com.vendertool.fps.dal.dao.JobDaoImpl">
+	<bean id="jobDao" class="com.vendertool.fps.dal.dao.JobDaoImpl">
 		<property name="dataSource" ref="fpsdbdataSource" />
 	</bean>
 </beans>
