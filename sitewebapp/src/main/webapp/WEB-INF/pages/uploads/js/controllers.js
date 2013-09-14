@@ -38,7 +38,7 @@ uploadsApp.controller('UploadsCtrl', ['$scope', '$http', '$routeParams', '$locat
 		}
 		
 		props = 'left=' + left + ',top=' + top + ',width=' + width + ',height=' + height + ',toolbar=0,location=0,status=0,menubar=0,resizable=1';
-		window.open('../fileUploader', 'popup', props);
+		window.open('../uploader', 'popup', props);
 	};
 	
 	

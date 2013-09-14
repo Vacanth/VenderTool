@@ -30,9 +30,9 @@ import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
-public class FileUploaderController {
+public class UploaderController {
 	
-	private static final Logger logger = Logger.getLogger(FileUploaderController.class);
+	private static final Logger logger = Logger.getLogger(UploaderController.class);
 	
 	@RequestMapping(value = "uploadFile", method = RequestMethod.POST)
 	protected @ResponseBody ModelMap saveFile(HttpServletRequest request) 
@@ -94,16 +94,16 @@ public class FileUploaderController {
 		return modelMap;
 	}
 	
-	@RequestMapping(value=URLConstants.FILE_UPLOADER, method=RequestMethod.GET)
-	public String getFileUploaderPopup(ModelMap modelMap, Principal principal) {
-		logger.info("getFileUploaderPopup controller invoked");
-		return "fileUploader/fileUploader";
+	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)
+	public String getUploaderPopup(ModelMap modelMap, Principal principal) {
+		logger.info("getUploaderPopup controller invoked");
+		return "uploader/uploader";
 	}
 	
-	@RequestMapping(value = "fileUploader/partial/fileUploaderModule", method = RequestMethod.GET)
-	public String getFileUploaderTemplate() {
-		logger.info("getFileUploaderTemplate controller invoked");
-		return "fileUploader/partial/fileUploaderModule";
+	@RequestMapping(value = "uploader/partial/uploaderModule", method = RequestMethod.GET)
+	public String getUploaderTemplate() {
+		logger.info("getUploaderTemplate controller invoked");
+		return "uploader/partial/uploaderModule";
 	}
 	
 }

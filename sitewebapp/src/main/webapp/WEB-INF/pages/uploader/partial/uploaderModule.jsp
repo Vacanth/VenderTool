@@ -1,6 +1,6 @@
-<div class="fup">
-	<div class="fup-content" ng-cloak>
-		<div class="fup-body">
+<div class="upldr">
+	<div class="upldr-content" ng-cloak>
+		<div class="upldr-body">
 			<div ng-show="dupeNames.length" class="alert alert-danger">
 				<button ng-click="dupeNames = !dupeNames" type="button" class="close" aria-hidden="true">&times;</button>
 				Could not add file because a file with the same name has already been added.
@@ -14,12 +14,15 @@
 				Please try uploading those files again.
 			</div>
 			
-			<div  class="fup-inp-wrp">
+			<div  class="upldr-inp-wrp">
 				<div ng-class="{disabledAddBtn: uploadInProgress}"></div>
-				<button type="button" class="upload-btn btn btn-primary" data-dismiss="modal">
-					<i class="plus"></i><span>Add Files</span>
+
+				<button type="button" class="btn btn-primary iconBtn addFiles">
+					<div class="bg"></div><i class="icon"></i>
+					<b>Add Files</b>
 				</button>
-				<input class="qry-fup-inp fup-inp-main" type="file" multiple="multiple" />
+				
+				<input class="qry-upldr-inp upldr-inp-main" type="file" multiple="multiple" />
 			</div>
 	
 			<div style="border:1px solid #ccc; min-height:150px">
@@ -40,7 +43,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="fup-footer">
+		<div class="upldr-footer">
 			<div class="progress progress-striped active">
 				<div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width:{{percentDone}}%">
 					<span>{{percentDone}}% Complete</span>
@@ -48,7 +51,7 @@
 			</div>
 			
 			<button ng-click="closePopup()" type="button" class="btn btn-default">Cancel</button>
-			<button ng-class="{disabled: allUploadsSuccessful || !fileWrappers || uploadInProgress}" type="button" class="qry-fup-upBtn btn btn-primary">Upload Files</button>
+			<button ng-class="{disabled: allUploadsSuccessful || !fileWrappers || uploadInProgress}" type="button" class="qry-upldr-upBtn btn btn-primary">Upload Files</button>
 		</div>
-	</div><!-- fup-content -->
+	</div><!-- upldr-content -->
 </div><!-- End of file-uploader directive -->

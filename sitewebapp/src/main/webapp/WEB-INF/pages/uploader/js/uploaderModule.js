@@ -1,8 +1,8 @@
-angular.module('fileUploaderModule', []).directive("fileUploader", function() {
+angular.module('uploaderModule', []).directive("uploader", function() {
 	
 	_css = {
-		'fileInput':		'qry-fup-inp',
-		'uploadBtn':		'qry-fup-upBtn'
+		'fileInput':'qry-upldr-inp',
+		'uploadBtn':'qry-upldr-upBtn'
 	};
 
 	return {
@@ -387,7 +387,7 @@ angular.module('fileUploaderModule', []).directive("fileUploader", function() {
 			uploadBtn.bind('click', uploadFiles);
 		
 		},
-		templateUrl:'fileUploader/partial/fileUploaderModule',
+		templateUrl:'uploader/partial/uploaderModule',
 		scope: true
 		
 	};// End of returned statement

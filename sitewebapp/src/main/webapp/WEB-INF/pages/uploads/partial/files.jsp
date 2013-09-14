@@ -2,12 +2,13 @@
 
 
 <div ng-controller="UploadsCtrl">
-
+	
 	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn uploads">
 		<div class="bg"></div><i class="icon"></i>
 		<b>Upload Files</b>
 	</a>
 
+	
 	<table class="table table-striped uploadTable">
 		<tr>
 			<th>Files</th>

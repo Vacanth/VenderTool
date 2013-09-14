@@ -28,12 +28,6 @@
 		<css>/WEB-INF/tags/errorResponse/css/errorResponse.css</css>
 	</group>
 
-	<!-- fileUploader popup -->
-	<group name="fileUploader">
-		<css>/WEB-INF/pages/fileUploader/css/fileUploaderModule.css</css>
-		<js>/WEB-INF/pages/fileUploader/js/fileUploaderModule.js</js>
-	</group>
-
    	<group name="pageTag">
    		<group-ref>bootstrap</group-ref>
 		<css>/WEB-INF/tags/page/css/page.css</css>
@@ -69,12 +63,18 @@
 		<js>/WEB-INF/resources/js/lib/jquery.placeholder.js</js>
 	</group>
 	
+	<group name="uploader">
+		<css>/WEB-INF/pages/uploader/css/uploaderModule.css</css>
+		<js>/WEB-INF/pages/uploader/js/uploaderModule.js</js>
+	</group>
+	
 	<group name="uploads">
 		<group-ref>accounthubCss</group-ref>
 		<css>/WEB-INF/pages/uploads/css/uploads.css</css>
 		<js>/WEB-INF/pages/uploads/js/app.js</js>
 		<js>/WEB-INF/pages/uploads/js/controllers.js</js>
 	</group>
+	
 	
 	
 	
