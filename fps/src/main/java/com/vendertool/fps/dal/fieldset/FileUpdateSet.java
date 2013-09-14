@@ -14,6 +14,8 @@ public class FileUpdateSet {
 		return FileUpdateSetHolder.INSTANCE;
 	}
 	
+	public final Path<?>[] FULL = FILE.all();
+	
 	public final Path<?>[] STATUS = {
 		FILE.status,
 		FILE.lastModifiedDate

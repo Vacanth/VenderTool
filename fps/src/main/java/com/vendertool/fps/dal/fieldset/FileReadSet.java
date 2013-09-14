@@ -9,10 +9,12 @@ public class FileReadSet {
 	private static class FileReadSetHolder {
 		private static final FileReadSet INSTANCE = new FileReadSet();
 	}
-	
+
 	public static FileReadSet getInstance() {
 		return FileReadSetHolder.INSTANCE;
 	}
+	
+	public final Path<?>[] FULL = FILE.all();
 	
 	public final Path<?>[] STATUS = {
 			FILE.accountId, 
