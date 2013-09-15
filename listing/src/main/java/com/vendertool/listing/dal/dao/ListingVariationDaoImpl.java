@@ -5,12 +5,18 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
+import com.mysema.query.sql.dml.SQLUpdateClause;
+import com.mysema.query.types.Path;
 import com.vendertool.common.dal.dao.BaseDaoImpl;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
+import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.InsertException;
+import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
+import com.vendertool.listing.dal.dao.codegen.QListing;
 import com.vendertool.listing.dal.dao.codegen.QListingVariation;
 import com.vendertool.sharedtypes.core.ListingVariation;
 
@@ -84,5 +90,89 @@ public class ListingVariationDaoImpl extends BaseDaoImpl implements ListingVaria
 	@Override
 	public String getSequenceProcedureName() {
 		return "nextvalForListingVariation()";
+	}
+
+	@Override
+	public void updateListing(ListingVariation listingVariation,
+			Path<?>[] updateSet) throws DBConnectionException, UpdateException,
+			DatabaseException {
+
+		if (VUTIL.isNull(listingVariation) || VUTIL.isNull(updateSet)) {
+			UpdateException ue = new UpdateException(
+					"Cannot update null listingVariation");
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
+
+		Connection con = null;
+
+		try {
+			con = getConnection();
+
+			QListing l = QListing.listing;
+
+			SQLUpdateClause s = update(con, l).populate(listingVariation,
+					new ListingVariationMapper(updateSet));
+
+			// Always log the query before executing it
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				UpdateException ue = new UpdateException(e);
+				logger.debug(ue.getMessage(), ue);
+				throw ue;
+			}
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
+	
+	}
+
+	@Override
+	public void deleteListing(Long listingVariationId)
+			throws DBConnectionException, DeleteException, DatabaseException {
+		if (listingVariationId != null && listingVariationId <= 0) {
+			DeleteException fe = new DeleteException(
+					"Cannot delete null listingVariationId");
+			logger.debug(fe.getMessage(), fe);
+			throw fe;
+		}
+
+		Connection con = null;
+
+		try {
+			con = getConnection();
+
+			QListingVariation l = QListingVariation.listingVariation;
+
+			SQLDeleteClause s = delete(con, l).where(l.listingVariationId.eq(listingVariationId));
+
+			// Always log the query before executing it
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				DeleteException ie = new DeleteException(e);
+				logger.debug(ie.getMessage(), ie);
+				throw ie;
+			}
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
 	}
 }
