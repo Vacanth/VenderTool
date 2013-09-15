@@ -330,6 +330,20 @@ public enum CountryEnum {
 		return ISO3_To_Locale.get(iso3Code);
 	}
 	
+	public static CountryEnum getCountryFromISO3Code(String iso3Code) {
+		if((iso3Code == null) || (iso3Code.isEmpty())) {
+			return null;
+		}
+		
+		CountryEnum[] countries = CountryEnum.values();
+		for(CountryEnum country : countries) {
+			if(country.getIso3Code().equals(iso3Code)) {
+				return country;
+			}
+		}
+		return null;
+	}
+	
 	public int getId() {
 		return id;
 	}

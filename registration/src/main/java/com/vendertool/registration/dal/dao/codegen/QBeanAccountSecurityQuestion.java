@@ -1,0 +1,82 @@
+package com.vendertool.registration.dal.dao.codegen;
+
+import javax.annotation.Generated;
+
+/**
+ * QBeanAccountSecurityQuestion is a Querydsl bean type
+ */
+@Generated("com.mysema.query.codegen.BeanSerializer")
+public class QBeanAccountSecurityQuestion {
+
+    private Long accountId;
+
+    private Long accountSecurityQuestionId;
+
+    private java.sql.Timestamp createdDate;
+
+    private Byte lastModifiedApp;
+
+    private java.sql.Timestamp lastModifiedDate;
+
+    private String securityAnswer;
+
+    private Integer securityQuestionId;
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    public Long getAccountSecurityQuestionId() {
+        return accountSecurityQuestionId;
+    }
+
+    public void setAccountSecurityQuestionId(Long accountSecurityQuestionId) {
+        this.accountSecurityQuestionId = accountSecurityQuestionId;
+    }
+
+    public java.sql.Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(java.sql.Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Byte getLastModifiedApp() {
+        return lastModifiedApp;
+    }
+
+    public void setLastModifiedApp(Byte lastModifiedApp) {
+        this.lastModifiedApp = lastModifiedApp;
+    }
+
+    public java.sql.Timestamp getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(java.sql.Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+
+    public Integer getSecurityQuestionId() {
+        return securityQuestionId;
+    }
+
+    public void setSecurityQuestionId(Integer securityQuestionId) {
+        this.securityQuestionId = securityQuestionId;
+    }
+
+}
+

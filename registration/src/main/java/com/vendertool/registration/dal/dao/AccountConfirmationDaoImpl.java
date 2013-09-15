@@ -41,7 +41,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public void insertAccountConfirmation(Long accountId,
+	public void insert(Long accountId,
 			AccountConfirmation accountConf) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
@@ -135,7 +135,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public void deleteAccountConfirmation(Long accountId)
+	public void delete(Long accountId)
 			throws DBConnectionException, DeleteException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId)) {
@@ -177,7 +177,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public AccountConfirmation findLatestAccountConfirmation(Long accountId)
+	public AccountConfirmation findLatestActive(Long accountId)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId)) {

@@ -19,6 +19,8 @@ public class QAddress extends com.mysema.query.sql.RelationalPathBase<QBeanAddre
 
     public static final QAddress address = new QAddress("address");
 
+    public final NumberPath<Long> accountId = createNumber("account_id", Long.class);
+
     public final StringPath addrLn1 = createString("addr_ln1");
 
     public final StringPath addrLn2 = createString("addr_ln2");

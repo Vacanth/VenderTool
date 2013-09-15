@@ -12,18 +12,18 @@ import com.vendertool.common.dal.exception.InsertException;
 
 public interface PasswordHistoryDao extends BaseDao {
 	
-	public Long insertPreviousPassword(Long accountId, String password, String salt)
+	public Long insert(Long accountId, String password, String salt)
 			throws DBConnectionException, InsertException, DatabaseException;
 	
-	public String findMatchingPassword(Long accountId, String newpassword)
+	public String findByPassword(Long accountId, String newpassword)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public List<String> findAllPreviousPasswords(Long accountId)
+	public List<String> findAllByAccountId(Long accountId)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public void deletePreviousPasswords(Long accountId, Date olderthan)
+	public void deleteByAccountId(Long accountId, Date olderthan)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
-	public void deletePasswordHistory(Long pwdHistoryId)
+	public void delete(Long pwdHistoryId)
 			throws DBConnectionException, DeleteException, DatabaseException;
 }

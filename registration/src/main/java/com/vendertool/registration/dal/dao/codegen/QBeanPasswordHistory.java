@@ -3,10 +3,10 @@ package com.vendertool.registration.dal.dao.codegen;
 import javax.annotation.Generated;
 
 /**
- * QBeanPassswordHistory is a Querydsl bean type
+ * QBeanPasswordHistory is a Querydsl bean type
  */
 @Generated("com.mysema.query.codegen.BeanSerializer")
-public class QBeanPassswordHistory {
+public class QBeanPasswordHistory {
 
     private Long accountId;
 
@@ -14,11 +14,11 @@ public class QBeanPassswordHistory {
 
     private java.sql.Timestamp lastModifiedDate;
 
-    private Long passswordHistoryId;
-
     private String password;
 
-    private String salat;
+    private Long passwordHistoryId;
+
+    private String salt;
 
     public Long getAccountId() {
         return accountId;
@@ -44,14 +44,6 @@ public class QBeanPassswordHistory {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Long getPassswordHistoryId() {
-        return passswordHistoryId;
-    }
-
-    public void setPassswordHistoryId(Long passswordHistoryId) {
-        this.passswordHistoryId = passswordHistoryId;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -60,12 +52,20 @@ public class QBeanPassswordHistory {
         this.password = password;
     }
 
-    public String getSalat() {
-        return salat;
+    public Long getPasswordHistoryId() {
+        return passwordHistoryId;
     }
 
-    public void setSalat(String salat) {
-        this.salat = salat;
+    public void setPasswordHistoryId(Long passwordHistoryId) {
+        this.passwordHistoryId = passwordHistoryId;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
 }

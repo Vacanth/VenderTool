@@ -21,7 +21,6 @@ import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QAccount;
-import com.vendertool.registration.dal.fieldset.FieldSets;
 import com.vendertool.sharedtypes.core.Account;
 
 public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
@@ -29,7 +28,7 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 			
 	@Override
-	public void insertAccount(Account account) throws DBConnectionException,
+	public void insert(Account account) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
 		if(VUTIL.isNull(account)) {
@@ -84,16 +83,9 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 			}
 		}
 	}
-
-	@Override
-	public Account findAccountProfile(String email) throws DBConnectionException,
-			FinderException, DatabaseException {
-		
-		return findAccountByReadSet(email, FieldSets.ACCOUNT_READSET.PROFILE);
-	}
 	
 	@Override
-	public Account findAccount(String email, Path<?>[] readSet)
+	public Account findByEmail(String email, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		return findAccountByReadSet(email, readSet);
@@ -147,7 +139,7 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 	
 
 	@Override
-	public void updateAccount(Account account, Path<?>[] updateSet)
+	public void update(Account account, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
 		if(VUTIL.isNull(account) || VUTIL.isNull(updateSet)){
@@ -269,8 +261,9 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 
 
 	@Override
-	public void deleteAccount(String email) throws DBConnectionException,
+	public void delete(String email) throws DBConnectionException,
 			DeleteException {
+		
 		if(VUTIL.isEmpty(email)) {
 			DeleteException fe = new DeleteException("Cannot delete null email");
 			logger.debug(fe.getMessage(), fe);

@@ -59,7 +59,7 @@
 	<bean id="registrationTables" class="com.vendertool.tools.db.codegen.DBCodeGenDetails">
 		<property name="packageName" value="com.vendertool.registration.dal.dao.codegen" />
 		<property name="targetFolder" value="../registration/src/main/java" />
-		<property name="tableNamePattern" value="account,account_confirmation,passsword_history" />
+		<property name="tableNamePattern" value="account,account_confirmation,password_history,account_security_question" />
 	</bean>
 	<!-- Registration **** End ***** -->
 	

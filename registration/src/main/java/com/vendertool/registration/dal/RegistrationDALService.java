@@ -2,6 +2,8 @@ package com.vendertool.registration.dal;
 
 import org.apache.log4j.Logger;
 
+import com.vendertool.common.dal.dao.AddressDao;
+import com.vendertool.common.dal.dao.AddressDaoFactory;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
@@ -16,6 +18,8 @@ import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
 import com.vendertool.registration.dal.fieldset.FieldSets;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.Address;
+import com.vendertool.sharedtypes.core.ContactDetails;
 
 public class RegistrationDALService {
 	private static final Logger logger = Logger.getLogger(RegistrationDALService.class);
@@ -23,11 +27,13 @@ public class RegistrationDALService {
 	AccountDao accountDao;
 	AccountConfirmationDao accountConfDao;
 	PasswordHistoryDao pwdHistoryDao;
+	AddressDao addrDao;
 	
 	private RegistrationDALService() {
 		accountDao = RegistrationDaoFactory.getInstance().getAccountDao();
 		accountConfDao = RegistrationDaoFactory.getInstance().getAccountConfirmationDao();
 		pwdHistoryDao = RegistrationDaoFactory.getInstance().getPasswordHistoryDao();
+		addrDao = AddressDaoFactory.getInstance().getAddressDao();
 	}
 	
 	private static class RegistrationDALServiceHolder {
@@ -46,24 +52,24 @@ public class RegistrationDALService {
 			return null;
 		}
 		
-		Long accountId = accountDao.generateNextSequence();
 		AccountConfirmation accConf = account.getAccountConf();
 		if(accConf == null) {
 			throw new InsertException(
 					"Session tokens are not generated for account confirmation");
 		}
 		
+		Long accountId = accountDao.generateNextSequence();
 		account.setId(accountId);
-		accountConfDao.insertAccountConfirmation(accountId, accConf);
+		accountConfDao.insert(accountId, accConf);
 		
 		try {
-			accountDao.insertAccount(account);
+			accountDao.insert(account);
 		} catch (Exception e) {
 			//manually rollback
 			Long aid = accountDao.findAccountId(account.getEmailId());
 			if(aid == null) { //if not null just return the response, because the account is already created
 				try {
-					accountConfDao.deleteAccountConfirmation(accountId);
+					accountConfDao.delete(accountId);
 					return null;
 				} catch (DeleteException de) {
 					//don't throw rollback exceptions, just log it
@@ -76,18 +82,73 @@ public class RegistrationDALService {
 	}
 	
 	
-	public void changeAccountProfile(Account account)
+	public void updateAccountProfile(Account account)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
 		if(VUTIL.isNull(account)) {
 			return;
 		}
 		
-		accountDao.updateAccount(account, FieldSets.ACCOUNT_UPDATESET.PROFILE);
+		updateAddress(account);
+		
+		accountDao.update(account, FieldSets.ACCOUNT_UPDATESET.PROFILE);
+	}
+
+
+	private boolean updateAddress(Account account) throws DBConnectionException,
+			DatabaseException, UpdateException {
+		
+		ContactDetails cd = account.getContactDetails();
+		Address address = cd.getAddress();
+		
+		if(address == null) {
+			return false;
+		}
+		
+		Long id = address.getId();
+		if((address.getId() == null) || (address.getId().longValue() <= 0)) {
+			Long addrId = insertAddress(account, address);
+			address.setId(addrId);
+			return true;
+		}
+		
+		try {
+			Address dbAddress = addrDao.findById(id);
+			if((dbAddress == null) || (!address.locationEquals(dbAddress))) {
+				Long addrId = insertAddress(account, address);
+				address.setId(addrId);
+				return true;
+			}
+			
+			addrDao.updateAddressMetadata(address);
+			
+		} catch (FinderException e) {
+			UpdateException ue = new UpdateException(
+					"Unable to update account profile for "
+							+ account.getEmailId(), e);
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
+		
+		return true;
+	}
+
+
+	private Long insertAddress(Account account, Address address)
+			throws DBConnectionException, DatabaseException, UpdateException {
+		try {
+			return addrDao.insert(account.getId(), address);
+		} catch (InsertException e) {
+			UpdateException ue = new UpdateException(
+					"Unable to update account profile for "
+							+ account.getEmailId(), e);
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
 	}
 	
 	
-	public boolean changePassword(String email, String oldPassword,
+	public boolean updatePassword(String email, String oldPassword,
 			String newPassword) throws FinderException, DBConnectionException,
 			DatabaseException, InsertException {
 		
@@ -96,25 +157,25 @@ public class RegistrationDALService {
 			return false;
 		}
 		
-		Account account = accountDao.findAccount(email, FieldSets.ACCOUNT_READSET.PASSWORD);
+		Account account = accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
 		
 		if(VUTIL.isNull(account)) {
 			throw new FinderException("Unable to find the account");
 		}
 		
-		Long id = pwdHistoryDao.insertPreviousPassword(account.getId(),
+		Long id = pwdHistoryDao.insert(account.getId(),
 				account.getPassword(), account.getPasswordSalt());
 		
 		try {
 			accountDao.updatePassword(email, newPassword);
 		} catch (Exception e) {
 			//Check if the update was good, but the exception was somewhere upstream
-			Account changedAcc = accountDao.findAccount(email,
+			Account changedAcc = accountDao.findByEmail(email,
 					FieldSets.ACCOUNT_READSET.PASSWORD);
 			
 			if(VUTIL.isNull(changedAcc) || (!changedAcc.getPassword().equals(newPassword))) {
 				try {
-					pwdHistoryDao.deletePasswordHistory(id);
+					pwdHistoryDao.delete(id);
 				} catch (Exception ex) {
 					//Don't throw exception during rollback, just log it
 					logger.debug(ex.getMessage(), ex);
@@ -128,7 +189,7 @@ public class RegistrationDALService {
 	}
 	
 	
-	public boolean changeEmail(String oldEmail, String newEmail)
+	public boolean updateEmail(String oldEmail, String newEmail)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
 		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(newEmail)) {
@@ -151,14 +212,24 @@ public class RegistrationDALService {
 	}
 	
 	
-	public Account getAccountDetails(String email)
+	public Account getAccountProfile(String email)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		if(VUTIL.isNull(email)) {
 			return null;
 		}
 		
-		return accountDao.findAccount(email, FieldSets.ACCOUNT_READSET.PROFILE);
+		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PROFILE);
+	}
+	
+	public Account getAccountPassword(String email)
+			throws DBConnectionException, FinderException, DatabaseException {
+		
+		if(VUTIL.isNull(email)) {
+			return null;
+		}
+		
+		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
 	}
 	
 	
@@ -169,16 +240,41 @@ public class RegistrationDALService {
 			return false;
 		}
 		
-		Long accountId = accountDao.findAccountId(email);
+		Account account = accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
 		
-		if(VUTIL.isNull(accountId)) {
+		if(VUTIL.isNull(account)) {
 			throw new FinderException("Unable to find the account");
-			
 		}
 		
-		String pwd = pwdHistoryDao.findMatchingPassword(accountId, newPassword);
+		if(newPassword.equals(account.getPassword())) {
+			return true;
+		}
+		
+		String pwd = pwdHistoryDao.findByPassword(account.getId(), newPassword);
 		return (!VUTIL.isEmpty(pwd));
 		
+	}
+	
+	public void removeAccount(String email) throws DeleteException,
+			DBConnectionException, DatabaseException, FinderException {
+		
+		if(VUTIL.isEmpty(email)) {
+			throw new DeleteException("Cannot delete null account");
+		}
+		
+		Long accId = accountDao.findAccountId(email);
+		
+		if(VUTIL.isNull(accId) || (accId.longValue() <= 0)) {
+			throw new DeleteException("Cannot find account information for email " + email);
+		}
+		
+		accountDao.delete(email);
+		
+		pwdHistoryDao.deleteByAccountId(accId, null);
+		
+		accountConfDao.delete(accId);
+		
+		addrDao.deleteByAccountId(accId, true);
 	}
 	
 	

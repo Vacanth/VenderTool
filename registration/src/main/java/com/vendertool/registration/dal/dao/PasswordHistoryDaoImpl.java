@@ -18,7 +18,7 @@ import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.validation.ValidationUtil;
-import com.vendertool.registration.dal.dao.codegen.QPassswordHistory;
+import com.vendertool.registration.dal.dao.codegen.QPasswordHistory;
 
 public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 		PasswordHistoryDao {
@@ -37,7 +37,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public Long insertPreviousPassword(Long accountId, String password,
+	public Long insert(Long accountId, String password,
 			String salt) throws DBConnectionException, InsertException,
 			DatabaseException {
 		
@@ -53,16 +53,16 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 			con = getConnection();
 			
 			Timestamp ts = new Timestamp(new Date().getTime());
-			QPassswordHistory ph = QPassswordHistory.passswordHistory;
+			QPasswordHistory ph = QPasswordHistory.passwordHistory;
 			SQLInsertClause s = insert(con, ph)
-					.columns(ph.accountId, ph.createdDate, ph.lastModifiedDate, ph.password, ph.salat)
+					.columns(ph.accountId, ph.createdDate, ph.lastModifiedDate, ph.password, ph.salt)
 					.values(accountId, ts, ts, password, salt);
 	    	
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
 	    	try {
-	    		return s.executeWithKey(ph.passswordHistoryId);
+	    		return s.executeWithKey(ph.passwordHistoryId);
 	    	} catch (Exception e) {
 	    		InsertException ie = new InsertException(e);
 				logger.debug(ie.getMessage(), ie);
@@ -80,7 +80,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public String findMatchingPassword(Long accountId, String newpassword)
+	public String findByPassword(Long accountId, String newpassword)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId) || VUTIL.isNull(newpassword)) {
@@ -94,7 +94,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 		try { 
 			con = getConnection();
 			
-			QPassswordHistory ph = QPassswordHistory.passswordHistory;
+			QPasswordHistory ph = QPasswordHistory.passwordHistory;
 			
 			SQLQuery query = from(con, ph)
 					.where(ph.accountId.eq(accountId).and(ph.password.eq(newpassword)));
@@ -122,7 +122,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public void deletePreviousPasswords(Long accountId, Date olderthan)
+	public void deleteByAccountId(Long accountId, Date olderthan)
 			throws DBConnectionException, DeleteException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId)) {
@@ -136,7 +136,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 		try {
 			con = getConnection();
 			
-			QPassswordHistory ph = QPassswordHistory.passswordHistory;
+			QPasswordHistory ph = QPasswordHistory.passwordHistory;
 			
 			SQLDeleteClause s = null;
 			
@@ -171,7 +171,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public List<String> findAllPreviousPasswords(Long accountId)
+	public List<String> findAllByAccountId(Long accountId)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId)) {
@@ -185,7 +185,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 		try { 
 			con = getConnection();
 			
-			QPassswordHistory ph = QPassswordHistory.passswordHistory;
+			QPasswordHistory ph = QPasswordHistory.passwordHistory;
 			
 			SQLQuery query = from(con, ph)
 					.where(ph.accountId.eq(accountId));
@@ -213,7 +213,7 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public void deletePasswordHistory(Long pwdHistoryId)
+	public void delete(Long pwdHistoryId)
 			throws DBConnectionException, DeleteException, DatabaseException {
 		
 		if(VUTIL.isNull(pwdHistoryId)) {
@@ -227,10 +227,10 @@ public class PasswordHistoryDaoImpl extends BaseDaoImpl implements
 		try {
 			con = getConnection();
 			
-			QPassswordHistory ph = QPassswordHistory.passswordHistory;
+			QPasswordHistory ph = QPasswordHistory.passwordHistory;
 			
 			SQLDeleteClause s = delete(con, ph).where(
-					ph.passswordHistoryId.eq(pwdHistoryId));
+					ph.passwordHistoryId.eq(pwdHistoryId));
 			
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + s.toString());

@@ -12,16 +12,13 @@ import com.vendertool.sharedtypes.core.Account;
 
 public interface AccountDao extends BaseDao {
 	
-	public void insertAccount(Account account) throws DBConnectionException,
+	public void insert(Account account) throws DBConnectionException,
 			InsertException, DatabaseException;
-
-	public Account findAccountProfile(String email)
-			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public Account findAccount(String email, Path<?>[] readSet)
+	public Account findByEmail(String email, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 
-	public void updateAccount(Account account, Path<?>[] updateSet)
+	public void update(Account account, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
 	public void updateEmail(String oldEmail, String newEmail)
@@ -30,7 +27,7 @@ public interface AccountDao extends BaseDao {
 	public void updatePassword(String email, String password) 
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
-	public void deleteAccount(String email)
+	public void delete(String email)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
 	public Long findAccountId(String email) 

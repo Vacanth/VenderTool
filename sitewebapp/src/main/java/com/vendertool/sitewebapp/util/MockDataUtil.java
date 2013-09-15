@@ -23,7 +23,7 @@ public class MockDataUtil {
 		address.setAddressLine2("Apt. B");
 		address.setCity("San Jose");
 		address.setState("CA");
-		address.setZip("95125");
+		address.setPostalCode("95125");
 		address.setCountry(CountryEnum.UNITED_STATES);
 		ContactDetails contact = new ContactDetails();
 		contact.setAddress(address);

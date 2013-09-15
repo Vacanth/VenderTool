@@ -25,6 +25,12 @@ public class QAccount extends com.mysema.query.sql.RelationalPathBase<QBeanAccou
 
     public final NumberPath<Long> billingAddrId = createNumber("billing_addr_id", Long.class);
 
+    public final StringPath contactPhoneHome = createString("contact_phone_home");
+
+    public final StringPath contactPhoneMobile = createString("contact_phone_mobile");
+
+    public final StringPath contactPhoneWork = createString("contact_phone_work");
+
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
 
     public final StringPath currencyCodeIso3 = createString("currency_code_iso3");

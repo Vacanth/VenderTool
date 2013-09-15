@@ -5,7 +5,6 @@ import java.util.Date;
 
 import junit.framework.Assert;
 
-import com.mysema.query.types.Path;
 import com.vendertool.common.dal.dao.BaseDao;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
@@ -80,9 +79,10 @@ public class AccountDaoTest extends BaseDaoTest{
 		//DAL find & JUnit assert
 		log("======== FIND AND ASSERT TEST =======");
 		for(Account account : accounts) {
-			Account dbaccount = findProfile(account.getEmailId());
-			logAccount("findProfile ****\n", dbaccount);
+			Account dbaccount = dao.findByEmail(account.getEmailId(),
+					FieldSets.ACCOUNT_READSET.PROFILE);
 			assertAccount(account, dbaccount);
+			log(dbaccount.toString());
 		}
 		
 		//local update (non-dal)
@@ -91,43 +91,43 @@ public class AccountDaoTest extends BaseDaoTest{
 		
 		//DAL update
 		log("======== UPDATE ACCOUNT TO THE DATABASE =======");
-		update(accounts[0], FieldSets.ACCOUNT_UPDATESET.PROFILE);
+		dao.update(accounts[0], FieldSets.ACCOUNT_UPDATESET.PROFILE);
 		
 		//DAL find
 		log("======== FIND PROFILE TEST =======");
-		Account dbaccount = findProfile(accounts[0].getEmailId());
-		
-		//JUnit assert
-		logAccount("updateProfile ****\n", dbaccount);
+		Account dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.PROFILE);
 		assertAccount(accounts[0], dbaccount);
+		log(dbaccount.toString());
+		
 		
 		//DAL find PK
 		log("======== FIND BY PK TEST =======");
-		Long pk = findPK(accounts[0].getEmailId());
-		
-		//JUnit assert PK
+		Long pk = dao.findAccountId(accounts[0].getEmailId());
 		Assert.assertEquals(dbaccount.getId(), pk);
+		log("find by id=" + pk);
 		
 		//DAL find by readset
 		log("======== FIND WITH READ SET TEST =======");
-		dbaccount = findAccount(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.SIGNIN);
+		dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.SIGNIN);
 		
 		//JUnit assert read set
 		Assert.assertNull(dbaccount.getContactDetails());
 		Assert.assertNotNull(dbaccount.getEmailId());
 		Assert.assertNotNull(dbaccount.getPassword());
 		Assert.assertNotNull(dbaccount.getRoles());
+		log("Account info after find with sign in readset");
+		log(dbaccount.toString());
 		
 		//DAL delete
 		log("======== DELETE TEST =======");
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
-			delete(accounts[idx].getEmailId());
+			dao.delete(accounts[idx].getEmailId());
 		}
 		
 		//DAL find
 		log("======== FIND AFTER DELETE TEST =======");
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
-			pk = findPK(accounts[idx].getEmailId());
+			pk = dao.findAccountId(accounts[idx].getEmailId());
 			Assert.assertNull(pk);
 		}
 		
@@ -149,41 +149,11 @@ public class AccountDaoTest extends BaseDaoTest{
 		Assert.assertEquals(expected.getContactDetails().getFirstName(), actual.getContactDetails().getFirstName());
 	}
 	
-	private void logAccount(String msg, Account account) {
-		log(msg);
-		log(account.toString());
-	}
-	
 	private void insert() throws DBConnectionException, InsertException,
 			DatabaseException {
 		for(Account account : accounts) {
-			dao.insertAccount(account);
+			dao.insert(account);
 		}
-	}
-	
-	private Long findPK(String email) throws DBConnectionException,
-			FinderException, DatabaseException {
-		return dao.findAccountId(email);
-	}
-	
-	private Account findAccount(String email, Path<?>[] readSet)
-			throws DBConnectionException, FinderException, DatabaseException {
-		return dao.findAccount(email, readSet);
-	}
-	
-	private Account findProfile(String email) throws DBConnectionException,
-			FinderException, DatabaseException {
-		return dao.findAccountProfile(email);
-	}
-	
-	private void update(Account account, Path<?>[] updateSet)
-			throws DBConnectionException, UpdateException, DatabaseException {
-		dao.updateAccount(account, updateSet);
-	}
-	
-	private void delete(String email) throws DBConnectionException,
-			DeleteException, DatabaseException {
-		dao.deleteAccount(email);
 	}
 
 	@Override

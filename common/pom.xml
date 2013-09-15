@@ -54,7 +54,27 @@
 		       </executions>
 		     </plugin>
 			
-			
+			 <plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="../common/src/main/resources/config/qa/dal/Datasource.xml"
+									todir="${project.build.outputDirectory}/dal" />
+								<copy file="../common/src/main/resources/CommonDAL.xml"
+									todir="${project.build.outputDirectory}/dal" />
+								<copy file="src/main/resources/dal-module.xml"
+									todir="${project.build.outputDirectory}/dal" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

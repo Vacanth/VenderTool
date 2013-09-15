@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vendertool.sharedtypes.core.Phone.PhoneType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -76,6 +77,18 @@ public class ContactDetails {
 	}
 
 	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CONTACT DETAILS=[")
+			.append("\n\tFIRST NAME=").append(getFirstName())
+			.append("\n\tMIDDLE NAME=").append(getMiddleName())
+			.append("\n\tLAST NAME=").append(getLastName())
+			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
+			.append("\n\tADDRESS=").append((getAddress() != null) ? getAddress().toString() : null)
+			.append("\n\tPhones=").append((getPhones() != null) ? getPhones().toString() : null);
 	
-	
+		return sb.toString();
+	}
 }

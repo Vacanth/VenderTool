@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlEnum;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Phone {
 	
@@ -51,5 +53,15 @@ public class Phone {
 		this.type = type;
 	}
 	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("PHONE=[")
+			.append("\n\tTYPE=").append(getType())
+			.append("\n\tCOUNTRY CODE=").append(getCountryCode())
+			.append("\n\tAREA CODE=").append(getAreaCode())
+			.append("\n\tNUMBER=").append(getNumber());
 	
+		return sb.toString();
+	}
 }

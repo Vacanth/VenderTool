@@ -14,7 +14,7 @@ import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.test.dal.BaseDaoTest;
 import com.vendertool.registration.dal.dao.PasswordHistoryDao;
 import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
-import com.vendertool.registration.dal.dao.codegen.QPassswordHistory;
+import com.vendertool.registration.dal.dao.codegen.QPasswordHistory;
 
 public class PasswordHistoryDaoTest extends BaseDaoTest {
 
@@ -24,7 +24,7 @@ public class PasswordHistoryDaoTest extends BaseDaoTest {
 	String[] passwords;
 	String[] salts;
 	PasswordHistoryDao dao;
-	QPassswordHistory ph;
+	QPasswordHistory ph;
 
 	protected PasswordHistoryDaoTest() {
 		super();
@@ -45,20 +45,22 @@ public class PasswordHistoryDaoTest extends BaseDaoTest {
 		insert();
 
 		log("======== DAL find all passwords inserted =======");
-		List<String> dbpwds = dao.findAllPreviousPasswords(ACCOUNT_ID);
+		List<String> dbpwds = dao.findAllByAccountId(ACCOUNT_ID);
 		Assert.assertNotNull(dbpwds);
 		for (String pwd : passwords) {
 			Assert.assertTrue(dbpwds.contains(pwd));
+			log("Password = " + pwd);
 		}
 
 		log("======== DAL find exact matching pwd =======");
-		String dbpwd = dao.findMatchingPassword(ACCOUNT_ID, passwords[0]);
+		String dbpwd = dao.findByPassword(ACCOUNT_ID, passwords[0]);
 		Assert.assertEquals(passwords[0], dbpwd);
+		log("Find by password = " + dbpwd);
 
 		log("======== DAL delete pwds =======");
-		dao.deletePreviousPasswords(ACCOUNT_ID, null);
+		dao.deleteByAccountId(ACCOUNT_ID, null);
 
-		dbpwds = dao.findAllPreviousPasswords(ACCOUNT_ID);
+		dbpwds = dao.findAllByAccountId(ACCOUNT_ID);
 		Assert.assertNull(dbpwds);
 
 		log("******   TEST DONE!!!   ******");
@@ -68,14 +70,14 @@ public class PasswordHistoryDaoTest extends BaseDaoTest {
 			DatabaseException {
 		
 		for (int i = 0; i < PWD_COUNT; i++) {
-			dao.insertPreviousPassword(ACCOUNT_ID, passwords[i], salts[i]);
+			dao.insert(ACCOUNT_ID, passwords[i], salts[i]);
 		}
 	}
 
 	@Override
 	protected void setupTestData() {
 		dao = (PasswordHistoryDao) getDao();
-		ph = QPassswordHistory.passswordHistory;
+		ph = QPasswordHistory.passwordHistory;
 		passwords = new String[PWD_COUNT];
 		salts = new String[PWD_COUNT];
 

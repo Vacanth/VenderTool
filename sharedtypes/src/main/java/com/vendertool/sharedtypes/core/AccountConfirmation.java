@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AccountConfirmation {
 	private Long id;
@@ -61,5 +63,19 @@ public class AccountConfirmation {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("AccountConfirmation=[[")
+			.append("\n\tID=").append(getId())
+			.append("\n\tCONFIRM SESSION ID=").append(getConfirmSessionId())
+			.append("\n\tCONFIRM CODE=").append(getConfirmCode())
+			.append("\n\tCONFIRMATION ATTEMPTS=").append(getConfirmationAttempts())
+			.append("\n\tCONFIRMATION DATE=").append(getConfirmationDate())
+			.append("\n\tCREATION DATE=").append(getCreateDate());
+			
+		return sb.toString();
 	}
 }

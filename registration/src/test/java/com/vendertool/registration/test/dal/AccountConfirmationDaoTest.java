@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
+import junit.framework.Assert;
+
 import com.vendertool.common.SessionIdGenerator;
 import com.vendertool.common.dal.dao.BaseDao;
 import com.vendertool.common.dal.exception.DBConnectionException;
@@ -21,7 +23,7 @@ import com.vendertool.sharedtypes.core.AccountConfirmation;
 public class AccountConfirmationDaoTest extends BaseDaoTest{
 
 	private static final int ACCOUNT_COUNT = 2;
-	private static final long START_ACCOUNT_ID = 600;
+	private static final long ACCOUNT_ID = 600;
 	
 	AccountConfirmation[] accConfs;
 	AccountConfirmationDao dao;
@@ -66,12 +68,17 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		
 		log("======== DAL find latest account confirmation =======");
 		AccountConfirmation dbaccConf = 
-				dao.findLatestAccountConfirmation(START_ACCOUNT_ID);
-		log("DB account conf: " + "id="+dbaccConf.getId() + ", created_dt="+dbaccConf.getCreateDate());
+				dao.findLatestActive(ACCOUNT_ID);
+		Assert.assertNotNull(dbaccConf);
+		log(dbaccConf.toString());
 		
 		log("======== DAL update attempts for one account =======");
 		long id = dbaccConf.getId();
-		dao.updateConfirmationAttempts(START_ACCOUNT_ID, id, 1);
+		dao.updateConfirmationAttempts(ACCOUNT_ID, id, 1);
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		Assert.assertNotNull(dbaccConf);
+		log(dbaccConf.toString());
+		
 		
 		log("======== DAL insert one more for first account id =======");
 		AccountConfirmation nac = accConfs[0];
@@ -80,28 +87,32 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
         cal.add(Calendar.DATE, 1); //add  by 1 day
         nac.setCreateDate(cal.getTime());
         log("New date added is = " + cal.getTime());
-		dao.insertAccountConfirmation(START_ACCOUNT_ID, accConfs[0]);
+		dao.insert(ACCOUNT_ID, accConfs[0]);
 		
 		log("======== DAL find latest account confirmation after new insert =======");
-		dbaccConf = dao.findLatestAccountConfirmation(START_ACCOUNT_ID);
-		log("DB account conf: " + "id="+dbaccConf.getId() + ", created_dt="+dbaccConf.getCreateDate());
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		Assert.assertNotNull(dbaccConf);
+		log(dbaccConf.toString());
 		
 		
 		log("======== DAL delete =======");
-		long accNo = START_ACCOUNT_ID;
+		long accNo = ACCOUNT_ID;
 		int count = accConfs.length;
 		for(int i=0; i<count; i++) {
-			dao.deleteAccountConfirmation(accNo++);
+			dao.delete(accNo++);
 		}
-		log("******   TEST DONE!!!   ******");
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		Assert.assertNull(dbaccConf);
+		
+		log("******   TEST COMPLETE   ******");
 	}
 
 	private void insert() throws DBConnectionException, InsertException,
 			DatabaseException {
 		
-		long aid = START_ACCOUNT_ID;
+		long aid = ACCOUNT_ID;
 		for (AccountConfirmation aconf : accConfs) {
-			dao.insertAccountConfirmation(aid++, aconf);
+			dao.insert(aid++, aconf);
 		}
 	}
 	

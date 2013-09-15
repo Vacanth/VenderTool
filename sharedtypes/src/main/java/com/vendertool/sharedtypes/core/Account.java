@@ -238,4 +238,26 @@ public class Account {
 		
 		roles.add(role);
 	}
+	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Account=[[")
+			.append("\n\tID=").append(getId())
+			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
+			.append("\n\tSTATUS=").append(getAccountStatus())
+			.append("\n\tBILLING ADDRESS=").append((getBillingAddress() != null) ? getBillingAddress().toString() : null)
+			.append("\n\tCONTACT DETAILS=").append((getContactDetails() != null) ? getContactDetails().toString() : null)
+			.append("\n\tCURRENCY=").append((getCurrency() != null) ? getCurrency().getCurrencyCode() : null)
+			.append("\n\tLANGUAGE=").append((getLanguage() != null) ? getLanguage().getEnglishName() : null)
+			.append("\n\tCREATED DATE=").append(getCreateDate())
+			.append("\n\tLAST MOD DATE=").append(getLastModifiedDate())
+			.append("\n\tROLES=").append(normalize(getRoles()))
+			.append("\n\tPASSWORD=").append(getPassword())
+			.append("\n\tSALT=").append(getPasswordSalt())
+		.append("]]");
+		
+		return sb.toString();
+	}
 }

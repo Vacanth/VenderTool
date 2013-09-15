@@ -14,7 +14,6 @@ import com.mysema.query.sql.Configuration;
 import com.mysema.query.sql.MySQLTemplates;
 import com.mysema.query.sql.codegen.DefaultNamingStrategy;
 import com.mysema.query.sql.codegen.MetaDataExporter;
-import com.mysema.query.sql.codegen.MetaDataSerializer;
 import com.mysema.query.sql.codegen.NamingStrategy;
 
 public class DBCodeGenTool {

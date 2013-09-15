@@ -8,6 +8,8 @@ import javax.annotation.Generated;
 @Generated("com.mysema.query.codegen.BeanSerializer")
 public class QBeanAddress {
 
+    private Long accountId;
+
     private String addrLn1;
 
     private String addrLn2;
@@ -39,6 +41,14 @@ public class QBeanAddress {
     private Byte status;
 
     private Byte useCase;
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 
     public String getAddrLn1() {
         return addrLn1;

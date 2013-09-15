@@ -14,6 +14,12 @@ public class QBeanAccount {
 
     private Long billingAddrId;
 
+    private String contactPhoneHome;
+
+    private String contactPhoneMobile;
+
+    private String contactPhoneWork;
+
     private java.sql.Timestamp createdDate;
 
     private String currencyCodeIso3;
@@ -66,6 +72,30 @@ public class QBeanAccount {
 
     public void setBillingAddrId(Long billingAddrId) {
         this.billingAddrId = billingAddrId;
+    }
+
+    public String getContactPhoneHome() {
+        return contactPhoneHome;
+    }
+
+    public void setContactPhoneHome(String contactPhoneHome) {
+        this.contactPhoneHome = contactPhoneHome;
+    }
+
+    public String getContactPhoneMobile() {
+        return contactPhoneMobile;
+    }
+
+    public void setContactPhoneMobile(String contactPhoneMobile) {
+        this.contactPhoneMobile = contactPhoneMobile;
+    }
+
+    public String getContactPhoneWork() {
+        return contactPhoneWork;
+    }
+
+    public void setContactPhoneWork(String contactPhoneWork) {
+        this.contactPhoneWork = contactPhoneWork;
     }
 
     public java.sql.Timestamp getCreatedDate() {
