@@ -14,6 +14,8 @@ public class JobUpdateSet {
 		return JobUpdateSetHolder.INSTANCE;
 	}
 	
+	public final Path<?>[] FULL = JOB.all();
+	
 	public final Path<?>[] STATUS = {
 		JOB.status,
 		JOB.lastModifiedDate

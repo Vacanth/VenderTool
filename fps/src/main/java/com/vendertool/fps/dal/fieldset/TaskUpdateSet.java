@@ -14,6 +14,8 @@ public class TaskUpdateSet {
 		return TaskUpdateSetHolder.INSTANCE;
 	}
 	
+	public final Path<?>[] FULL = TASK.all();
+	
 	public final Path<?>[] STATUS = {
 		TASK.status,
 		TASK.lastModifiedDate

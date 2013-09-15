@@ -30,7 +30,7 @@ public class JobDaoImpl extends BaseDaoImpl implements JobDao {
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 		
 	@Override
-	public void insert(Job job) throws DBConnectionException,
+	public long insert(Job job) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
 		if(VUTIL.isNull(job)) {
@@ -64,6 +64,8 @@ public class JobDaoImpl extends BaseDaoImpl implements JobDao {
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
 	    	}
+	    	return seq;
+	    	
 		} finally {
 			closeConnection(con);
 		}

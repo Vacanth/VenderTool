@@ -30,7 +30,7 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao {
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 		
 	@Override
-	public void insert(File file) throws DBConnectionException,
+	public long insert(File file) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
 		if(VUTIL.isNull(file)) {
@@ -64,6 +64,7 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao {
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
 	    	}
+	    	return seq;
 		} finally {
 			closeConnection(con);
 		}

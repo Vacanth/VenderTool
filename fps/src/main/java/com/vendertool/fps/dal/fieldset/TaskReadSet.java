@@ -14,6 +14,8 @@ public class TaskReadSet {
 		return FileReadSetHolder.INSTANCE;
 	}
 	
+	public final Path<?>[] FULL = TASK.all();
+	
 	public final Path<?>[] STATUS = {
 			TASK.accountId, 
 			TASK.status,

@@ -14,6 +14,8 @@ public class JobReadSet {
 		return FileReadSetHolder.INSTANCE;
 	}
 	
+	public final Path<?>[] FULL = JOB.all();
+	
 	public final Path<?>[] STATUS = {
 			JOB.accountId, 
 			JOB.status,

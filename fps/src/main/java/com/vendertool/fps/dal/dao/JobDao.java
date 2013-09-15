@@ -13,7 +13,7 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.sharedtypes.core.fps.Job;
 
 public interface JobDao extends BaseDao {
-	public void insert (Job job) throws DBConnectionException,
+	public long insert (Job job) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void update(Job job, Path<?>[] updateSet)

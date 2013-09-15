@@ -30,7 +30,7 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao {
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 		
 	@Override
-	public void insert(Task task) throws DBConnectionException,
+	public long insert(Task task) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
 		if(VUTIL.isNull(task)) {
@@ -64,6 +64,7 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao {
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
 	    	}
+	    	return seq;
 		} finally {
 			closeConnection(con);
 		}

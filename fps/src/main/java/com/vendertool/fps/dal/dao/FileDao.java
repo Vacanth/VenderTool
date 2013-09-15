@@ -13,7 +13,7 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.sharedtypes.core.fps.File;
 
 public interface FileDao extends BaseDao {
-	public void insert (File file) throws DBConnectionException,
+	public long insert (File file) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void update(File file, Path<?>[] updateSet)

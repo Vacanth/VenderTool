@@ -16,6 +16,16 @@ public class FileUpdateSet {
 	
 	public final Path<?>[] FULL = FILE.all();
 	
+	public final Path<?>[] UPDATE_FULL = {
+			FILE.status,
+			FILE.lastModifiedDate,
+			FILE.accountId,
+			FILE.fileGroupId,
+			FILE.refUrl,
+			FILE.storageSource,
+			FILE.useCase,
+	};
+	
 	public final Path<?>[] STATUS = {
 		FILE.status,
 		FILE.lastModifiedDate

@@ -24,10 +24,11 @@ import com.vendertool.sharedtypes.core.fps.FPSUsecaseEnum;
 import com.vendertool.sharedtypes.core.fps.File;
 
 public class FileDaoTest extends BaseDaoTest{
-	private static final int FILE_COUNT = 100;
+	private static final int FILE_COUNT = 10;
 	File[] files;
 	FileDao dao;
 	QFile qa;
+	long lastCount = 0;
 
 	protected FileDaoTest() {
 		super();
@@ -56,7 +57,6 @@ public class FileDaoTest extends BaseDaoTest{
 		Date curDate = new Date();
 	
 		File file = new File();
-		file.setFileId(100000L+idx);
 		file.setFileGroupId("200000"+idx);
 		file.setAccountId(Long.valueOf(100000));
 		file.setCreatedDate(curDate);
@@ -65,6 +65,7 @@ public class FileDaoTest extends BaseDaoTest{
 		file.setUseCase(FPSUsecaseEnum.ADD_LISTING);
 		file.setStorageSource((byte)FPSStorageSourceEnum.AWS_CLOUD.ordinal());
 		file.setRefUrl("testing url " + idx);
+		file.setFilesCountInGroup((byte)1000);
 		
 		return file;
 	}
@@ -72,15 +73,19 @@ public class FileDaoTest extends BaseDaoTest{
 	private void insert() throws DBConnectionException, InsertException,
 			DatabaseException {
 		for(File file : files) {
-			dao.insert(file);
+			lastCount = dao.insert(file);
 		}
 	}
 	
 	public void update() throws DBConnectionException,UpdateException,DatabaseException,FinderException {
 		for (int i=0; i<FILE_COUNT; i++) {
-			File file = dao.findByFileId(200000L+i, FileReadSet.getInstance().FULL);
+			File file = dao.findByFileId(lastCount-i, FileReadSet.getInstance().FULL);
+			System.out.println(file.getLastModifiedDate() + ","+file.getStatus() + ","+
+							file.getRefUrl() +","+ file.getAccountId()+ "," +
+							file.getStorageSource()+ ","+ file.getFileGroupId()+","+
+							file.getUseCase() +","+file.getFilesCountInGroup());
 			file.setFileGroupId("new group Id"+ i);
-			dao.update(file,FileUpdateSet.getInstance().FULL);
+			dao.update(file,FileUpdateSet.getInstance().UPDATE_FULL);
 		}
 	}
 	
@@ -114,7 +119,7 @@ public class FileDaoTest extends BaseDaoTest{
 				DatabaseException, SQLException, DeleteException{
 		for (int i=0; i<FILE_COUNT; i++) {
 			File file = new File();
-			file.setFileId(200000L+i);
+			file.setFileId(lastCount-i);
 			dao.delete(file);
 		}
 	}

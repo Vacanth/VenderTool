@@ -13,7 +13,7 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.sharedtypes.core.fps.Task;
 
 public interface TaskDao extends BaseDao {
-	public void insert (Task task) throws DBConnectionException,
+	public long insert (Task task) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void update(Task task, Path<?>[] updateSet)
