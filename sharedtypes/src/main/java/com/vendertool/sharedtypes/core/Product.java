@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Product{
-	private String productId;
+	private Long productId;
 	private String title;
 	private String description;//optional
 	private String sku;
@@ -44,11 +44,11 @@ public class Product{
 		this.title = title;
 	}
 
-	public String getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 	

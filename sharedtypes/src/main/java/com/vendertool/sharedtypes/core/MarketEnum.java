@@ -4,23 +4,34 @@ import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum
 public enum MarketEnum {
-	MERCADO_LIBRE(1, "MERCADO_LIBRE"),
-	EBAY(2, "EBAY"),
+	UNKNOWN(0, "UNKNOWN"), 
+	MERCADO_LIBRE(1, "MERCADO_LIBRE"), 
+	EBAY(2, "EBAY"), 
 	AMAZON(3, "AMAZON");
-	
+
+	public static MarketEnum get(int id) {
+		MarketEnum[] values = MarketEnum.values();
+		for (MarketEnum typeEnum : values) {
+			if (typeEnum.getId() == id) {
+				return typeEnum;
+			}
+		}
+		return UNKNOWN;
+	}
+
 	private int id;
 	private String name;
-	
-	MarketEnum(int id, String name){
+
+	MarketEnum(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
-	
-	public int getId(){
+
+	public int getId() {
 		return id;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
 

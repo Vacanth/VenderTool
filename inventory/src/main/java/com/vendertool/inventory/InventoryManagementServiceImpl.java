@@ -50,7 +50,7 @@ public class InventoryManagementServiceImpl extends BaseVenderToolServiceImpl
 		if (id == null) {
 			id = pid;
 		}
-		product.setProductId(id);
+//		product.setProductId(id);
 		response.setProduct(product);
 		response.addFieldBindingError(Errors.INVENTORY.INVALID_PRODUCT_CODE,
 				product.getClass().getName(), "productCode");

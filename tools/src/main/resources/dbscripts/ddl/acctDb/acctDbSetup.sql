@@ -11,7 +11,8 @@ USE `acctdb` ;
 DROP TABLE IF EXISTS `acctdb`.`address` ;
 
 CREATE  TABLE IF NOT EXISTS `acctdb`.`address` (
-  `address_id` BIGINT NOT NULL  ,
+  `address_id` BIGINT NOT NULL ,
+  `account_id` BIGINT NOT NULL ,
   `use_case` TINYINT NOT NULL ,
   `addr_type` TINYINT NULL ,
   `contact_first_name` VARCHAR(64) NULL DEFAULT NULL ,
@@ -27,7 +28,8 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`address` (
   `status` TINYINT NULL DEFAULT NULL ,
   `created_date` DATETIME NULL DEFAULT NULL ,
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`address_id`) )
+  PRIMARY KEY (`address_id`) ,
+  INDEX `accountindex` (`account_id` ASC) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -46,6 +48,9 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`account` (
   `first_name` VARCHAR(64) NOT NULL ,
   `last_name` VARCHAR(64) NULL ,
   `middle_name` VARCHAR(64) NULL ,
+  `contact_phone_mobile` VARCHAR(32) NULL ,
+  `contact_phone_home` VARCHAR(32) NULL ,
+  `contact_phone_work` VARCHAR(32) NULL ,
   `picture` BLOB NULL ,
   `registration_addr_id` BIGINT NULL ,
   `billing_addr_id` BIGINT NULL ,
@@ -59,8 +64,7 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`account` (
   PRIMARY KEY (`account_id`) ,
   UNIQUE INDEX `email_addr_unique` (`email_addr` ASC) ,
   INDEX `fk_account_address1_idx` (`registration_addr_id` ASC) ,
-  INDEX `fk_account_address2_idx` (`billing_addr_id` ASC) 
-  )
+  INDEX `fk_account_address2_idx` (`billing_addr_id` ASC) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
