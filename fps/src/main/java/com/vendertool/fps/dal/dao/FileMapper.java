@@ -64,10 +64,10 @@ public class FileMapper implements DALMapper<File> {
 				map.put(f.storageSource, file.getStorageSource());
 			}
 			if(f.useCase.equals(rpath)) {
-				map.put(f.useCase, file.getUseCase());
+				map.put(f.useCase, (file.getUseCase() != null) ? file.getUseCase().getId() : null);
 			}
 			if(f.status.equals(rpath)) {
-				map.put(f.status, file.getStatus());
+				map.put(f.status, (file.getStatus() != null) ? file.getStatus().getId() : null);
 			}
 			
 			if(f.createdDate.equals(rpath)) {

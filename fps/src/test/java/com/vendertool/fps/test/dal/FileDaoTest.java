@@ -63,9 +63,9 @@ public class FileDaoTest extends BaseDaoTest{
 		file.setLastModifiedDate(curDate);
 		file.setStatus(FPSFileStatusEnum.CREATED);
 		file.setUseCase(FPSUsecaseEnum.ADD_LISTING);
-		file.setStorageSource((byte)FPSStorageSourceEnum.AWS_CLOUD.ordinal());
+		file.setStorageSource(new Byte(FPSStorageSourceEnum.AWS_CLOUD.getId()+""));
 		file.setRefUrl("testing url " + idx);
-		file.setFilesCountInGroup((byte)1000);
+		file.setFilesCountInGroup(new Byte(15+""));
 		
 		return file;
 	}
