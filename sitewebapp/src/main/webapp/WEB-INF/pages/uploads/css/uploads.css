@@ -1,0 +1,18 @@
+.iconBtn.uploads {
+	background-color:#6ea3fa;
+	border:#6ea3fa;
+	margin-bottom:15px;
+}
+.iconBtn.uploads .bg {
+	background-color:#3278EA;
+	width:36px;
+}
+.iconBtn.uploads .icon {
+	width:26px;
+	background:url('../resources/img/icons.png') no-repeat -115px 0;
+}
+
+.uploadTable th {
+	font-weight:normal;
+	
+}

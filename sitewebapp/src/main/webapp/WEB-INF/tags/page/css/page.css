@@ -15,6 +15,16 @@ body {
 	/**
    	background-color: #e5e5e5 !important;**/
 }
+select {
+	height: 30px;
+	border: 1px solid #ccc;
+}
+a {
+	text-decoration:none;
+}
+label {
+	font-weight:normal;
+}
 #header {
 	position:relative;
 	height: 45px;
@@ -58,7 +68,7 @@ Content
 ***************************************/
 .ttl {
 	padding:0;
-	margin:0 0 30px 0;
+	margin:0 0 25px 0;
 	font-weight:normal;
 	font-size:26px;
 	
@@ -74,12 +84,7 @@ Content
 .pg-msg .alert {
 	margin-bottom:0;
 }
-a {
-	text-decoration:none;
-}
-label {
-	font-weight:normal;
-}
+
 .inline {
 	display:inline-block;
 }
@@ -119,15 +124,20 @@ Page Header
 	color:#fff;
 }
 
+/*********** Right Controls ***********/
 .hdr .ctls {
 	position:absolute;
 	right:0;
-	top:6px;
+	top:11px;
+	width:360px;
 }
 
-
+/*********** Language menu ***********/
+.hdr .lang  {
+	float:right;
+}
 .hdr .lang .dropdown {
-	margin:5px 15px 0 0;
+	margin:0 15px 0 0;
 	color:#333;
 }
 .hdr .lang .dropdown .lbl {
@@ -141,9 +151,9 @@ Page Header
 	overflow-y: scroll;
 }
 
+/*********** Sign-in link ***********/
 .hdr .ctls .sign-in {
 	float:right;
-	font-size:12px;
 }
 .hdr .ctls .sign-in i {
 	margin:0 7px 0 0;
@@ -151,27 +161,29 @@ Page Header
 	font-style: normal;
 }
 .hdr .ctls .sign-in a {
-	padding:7px 5px;
-	font-size:12px;
+	padding:0px 5px;
 }
-.hdr .ctls.sign-in .join {
+.hdr .ctls .sign-in .join {
 	background-color:#ccc;
 	padding:2px 15px;
 	border-radius:3px;
 	color:#333;
 }
 
+/*********** User link ***********/
 .hdr .user {
 	float:right;
-	padding:7px 5px;
+	padding:0 5px;
 	position:relative;
+	top:1px;
 }
 
-
+/*********** Search box ***********/
 .hdr .ctls .srch {
 	float:right;
 	margin-right:20px;
-	margin-top:3px;
+	position:relative;
+	top:-4px;
 }
 .hdr .ctls .srch input {
 	width:175px;
@@ -180,16 +192,19 @@ Page Header
 	border:0;
 	color:#fff;
 	padding-left:5px;
+	position:relative;
+	top:0;
+	padding-top:0;
+	margin-top:0;
 }
-
 .hdr .ctls .srch button {
 	width:23px;
 	height:20px;
 	background:url('../resources/img/icons.png') no-repeat -19px 0;
 	border:0;
-	position:relative;
-	top:6px;
 	cursor:pointer;
+	position:relative;
+	top:5px;
 }
 
 /**************************************
@@ -265,6 +280,37 @@ Page Footer
 /** style for mathiasbynens/jquery-placeholder **/
 .placeholder {
 	color: #aaa;
+}
+
+
+/**************************************
+Button with icon 
+***************************************/
+.iconBtn {
+	position:relative;
+	overflow:hidden;
+	height:38px;
+	color:#000;
+}
+.iconBtn .bg {
+	display:inline-block;
+	height:50px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.iconBtn .icon {
+	position:relative;
+	display:inline-block;
+	left:-7px;
+	height:28px;
+	margin:0;
+}
+.iconBtn b {
+	display:inline;
+	position:relative;
+	font-weight:normal;
+	top:-9px;
 }
 
 

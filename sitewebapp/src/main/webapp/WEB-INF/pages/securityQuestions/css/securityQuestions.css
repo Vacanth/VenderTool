@@ -1,0 +1,10 @@
+
+.sec-ques select {
+	width:385px;
+}
+.sec-ques input.form-control {
+	width:385px;
+}
+.sec-ques .fldWrp {
+	margin-top:10px;
+}

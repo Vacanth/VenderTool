@@ -11,7 +11,7 @@ import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
 public class AccountHubController {
-	@RequestMapping(value= {URLConstants.ACCOUNT_HUB}, method=RequestMethod.GET)
+	@RequestMapping(value=URLConstants.ACCOUNT_HUB, method=RequestMethod.GET)
 	public String getAccountHub(ModelMap modelMap, Principal principal) {
 		
 	    //String name = principal.getName();

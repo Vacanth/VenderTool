@@ -21,4 +21,33 @@ body {
 	clear:both;
 }
 
+/**************************************
+Button with icon 
+***************************************/
+.iconBtn {
+	position:relative;
+	overflow:hidden;
+	height:38px;
+	color:#000;
+}
+.iconBtn .bg {
+	display:inline-block;
+	height:50px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.iconBtn .icon {
+	position:relative;
+	display:inline-block;
+	left:-7px;
+	height:28px;
+	margin:0;
+}
+.iconBtn b {
+	display:inline;
+	position:relative;
+	font-weight:normal;
+	top:-9px;
+}
 

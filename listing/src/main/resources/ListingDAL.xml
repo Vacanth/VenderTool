@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="classpath:dal/Datasource.xml" />
+	
+	<bean id="listingDAO" class="com.vendertool.listing.dal.dao.ListingDaoImpl">
+		<property name="dataSource" ref="invdbdataSource" />
+	</bean>
+	
+	<bean id="listingVariationDAO" class="com.vendertool.registration.dal.dao.AccountDaoImpl">
+		<property name="dataSource" ref="invdbdataSource" />
+	</bean>
+</beans>

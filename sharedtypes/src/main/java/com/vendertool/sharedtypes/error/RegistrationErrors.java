@@ -133,4 +133,17 @@ public class RegistrationErrors {
 			"Last name is required", 
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
+	
+	public VTError MISSING_SECURITY_QUESTION = new VTError(
+			RegistrationErrorCode.MISSING_SECURITY_QUESTION, 
+			"Please select a question", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError MISSING_SECURITY_ANSWER = new VTError(
+			RegistrationErrorCode.MISSING_SECURITY_ANSWER, 
+			"Answer is required", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
 }

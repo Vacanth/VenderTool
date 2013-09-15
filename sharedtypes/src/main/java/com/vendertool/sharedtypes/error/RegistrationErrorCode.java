@@ -65,4 +65,9 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED");
 	public static VTErrorCode UNAUTHORIZED_ACCOUNT_CONFIRMATION = new RegistrationErrorCode(
 			"UNAUTHORIZED_ACCOUNT_CONFIRMATION");
+	public static VTErrorCode MISSING_SECURITY_QUESTION = new RegistrationErrorCode(
+			"MISSING_SECURITY_QUESTION");
+	public static VTErrorCode MISSING_SECURITY_ANSWER = new RegistrationErrorCode(
+			"MISSING_SECURITY_ANSWER");
+	
 }

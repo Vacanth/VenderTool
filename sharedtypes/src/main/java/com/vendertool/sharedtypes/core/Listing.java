@@ -35,7 +35,8 @@ public class Listing {
 		}
 	}
 	
-	private String listingId;
+	private Long listingId;
+	private Long parentListingId;
 	private Currency listingCurrency;
 	private CountryEnum country;
 	private Product product;
@@ -52,8 +53,106 @@ public class Listing {
 	private Date startDate;
 	private Date createDate;
 	private Date lastModifiedDate;
-	private String createOwnerId;
+	private Long createOwnerId;
+	private Amount auctionCurrrentPrice;
+	private Amount auctionReservedPrice;
+	private Amount auctionStartPrice;
+	private Amount fixedPrice;
+	private Date listingEndTime;
+	private Date listingStartTime;
+	private int lastModifiedApp;
+	private String marketPlaceListingId;
+	private Long masterTemplateId;
+	private String warranty;
 	
+	public String getWarranty() {
+		return warranty;
+	}
+
+	public void setWarranty(String warranty) {
+		this.warranty = warranty;
+	}
+
+	public Long getParentListingId() {
+		return parentListingId;
+	}
+
+	public void setParentListingId(Long parentListingId) {
+		this.parentListingId = parentListingId;
+	}
+
+	public Long getMasterTemplateId() {
+		return masterTemplateId;
+	}
+
+	public void setMasterTemplateId(Long masterTemplateId) {
+		this.masterTemplateId = masterTemplateId;
+	}
+
+	public String getMarketPlaceListingId() {
+		return marketPlaceListingId;
+	}
+
+	public void setMarketPlaceListingId(String marketPlaceListingId) {
+		this.marketPlaceListingId = marketPlaceListingId;
+	}
+
+	public int getLastModifiedApp() {
+		return lastModifiedApp;
+	}
+
+	public void setLastModifiedApp(int lastModifiedApp) {
+		this.lastModifiedApp = lastModifiedApp;
+	}
+
+	public Date getListingStartTime() {
+		return listingStartTime;
+	}
+
+	public void setListingStartTime(Date listingStartTime) {
+		this.listingStartTime = listingStartTime;
+	}
+
+	public Date getListingEndTime() {
+		return listingEndTime;
+	}
+
+	public void setListingEndTime(Date listingEndTime) {
+		this.listingEndTime = listingEndTime;
+	}
+
+	public Amount getFixedPrice() {
+		return fixedPrice;
+	}
+
+	public void setFixedPrice(Amount fixedPrice) {
+		this.fixedPrice = fixedPrice;
+	}
+
+	public Amount getAuctionCurrrentPrice() {
+		return auctionCurrrentPrice;
+	}
+
+	public void setAuctionCurrrentPrice(Amount auctionCurrrentPrice) {
+		this.auctionCurrrentPrice = auctionCurrrentPrice;
+	}
+
+	public Amount getAuctionReservedPrice() {
+		return auctionReservedPrice;
+	}
+
+	public void setAuctionReservedPrice(Amount auctionReservedPrice) {
+		this.auctionReservedPrice = auctionReservedPrice;
+	}
+
+	public Amount getAuctionStartPrice() {
+		return auctionStartPrice;
+	}
+
+	public void setAuctionStartPrice(Amount auctionStartPrice) {
+		this.auctionStartPrice = auctionStartPrice;
+	}
+
 	public Listing(){}
 	
 	public Product getProduct() {
@@ -81,10 +180,10 @@ public class Listing {
 		this.condition = condition;
 	}
 	
-	public String getListingId() {
+	public Long getListingId() {
 		return listingId;
 	}
-	public void setListingId(String listingId) {
+	public void setListingId(Long listingId) {
 		this.listingId = listingId;
 	}
 	
@@ -92,12 +191,6 @@ public class Listing {
 		return "LISTING ID = '" + getListingId() + "' \n PRODUCT = [" + getProduct().toString() + "]\n"
 				+ "CONDITION = '" + getCondition() + "' QUANTITY = '" + getQuantity() + 
 				"' PRICE = '" + ((getPrice() != null) ? getPrice().getValueFormat() : 0) + "'";
-	}
-	public List<Classification> getClassification() {
-		return classifications;
-	}
-	public void setClassification(List<Classification> classifications) {
-		this.classifications = classifications;
 	}
 	public List<PaymentMethod> getPaymentMethods() {
 		return paymentMethods;
@@ -141,10 +234,10 @@ public class Listing {
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
-	public String getCreateOwnerId() {
+	public Long getCreateOwnerId() {
 		return createOwnerId;
 	}
-	public void setCreateOwnerId(String createOwnerId) {
+	public void setCreateOwnerId(Long createOwnerId) {
 		this.createOwnerId = createOwnerId;
 	}
 	public ListingFormatEnum getListingFormat() {

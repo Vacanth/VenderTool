@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
    	
    	<group name="accounthubCss">
-		<css>/WEB-INF/jsp/accounthub/css/accounthub.css</css>
+		<css>/WEB-INF/pages/accounthub/css/accounthub.css</css>
 		<css>/WEB-INF/tags/layoutTable/css/layoutTable.css</css>
 		<css>/WEB-INF/tags/navbarSection/css/navbarSection.css</css>
 	</group>
@@ -28,12 +28,6 @@
 		<css>/WEB-INF/tags/errorResponse/css/errorResponse.css</css>
 	</group>
 
-	<!-- fileUploader popup -->
-	<group name="fileUploader">
-		<css>/WEB-INF/jsp/fileUploader/css/fileUploaderModule.css</css>
-		<js>/WEB-INF/jsp/fileUploader/js/fileUploaderModule.js</js>
-	</group>
-
    	<group name="pageTag">
    		<group-ref>bootstrap</group-ref>
 		<css>/WEB-INF/tags/page/css/page.css</css>
@@ -47,32 +41,40 @@
 	
 	<group name="profile">
 		<group-ref>errorResponseModule</group-ref>
-		<css>/WEB-INF/jsp/profile/css/profile.css</css>
+		<css>/WEB-INF/pages/profile/css/profile.css</css>
 		<css>/WEB-INF/tags/layoutTable/css/layoutTable.css</css>
-		<js>/WEB-INF/jsp/profile/js/app.js</js>
-		<js>/WEB-INF/jsp/profile/js/controllers.js</js>
+		<js>/WEB-INF/pages/profile/js/app.js</js>
+		<js>/WEB-INF/pages/profile/js/controllers.js</js>
 	</group>
 	
 	<group name="register">
 		<group-ref>errorResponseTag</group-ref>
-		<css>/WEB-INF/jsp/register/css/register.css</css>
-		<js>/WEB-INF/jsp/register/js/register.js</js>
+		<css>/WEB-INF/pages/register/css/register.css</css>
+		<js>/WEB-INF/pages/register/js/register.js</js>
 		<js>/WEB-INF/resources/js/lib/jquery.placeholder.js</js>
 	</group>
 	
 	<group name="securityQuestions">
 		<group-ref>errorResponseModule</group-ref>
-		<css>/WEB-INF/jsp/securityQuestions/css/securityQuestions.css</css> 
-		<js>/WEB-INF/jsp/securityQuestions/js/app.js</js>
-		<js>/WEB-INF/jsp/securityQuestions/js/controllers.js</js>
+		<css>/WEB-INF/pages/register/css/register.css</css>
+		<css>/WEB-INF/pages/securityQuestions/css/securityQuestions.css</css>
+		<js>/WEB-INF/pages/securityQuestions/js/app.js</js>
+		<js>/WEB-INF/pages/securityQuestions/js/controllers.js</js>
 		<js>/WEB-INF/resources/js/lib/jquery.placeholder.js</js>
+	</group>
+	
+	<group name="uploader">
+		<css>/WEB-INF/pages/uploader/css/uploaderModule.css</css>
+		<js>/WEB-INF/pages/uploader/js/uploaderModule.js</js>
 	</group>
 	
 	<group name="uploads">
 		<group-ref>accounthubCss</group-ref>
-		<js>/WEB-INF/jsp/uploads/js/app.js</js>
-		<js>/WEB-INF/jsp/uploads/js/controllers.js</js>
+		<css>/WEB-INF/pages/uploads/css/uploads.css</css>
+		<js>/WEB-INF/pages/uploads/js/app.js</js>
+		<js>/WEB-INF/pages/uploads/js/controllers.js</js>
 	</group>
+	
 	
 	
 	

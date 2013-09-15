@@ -10,9 +10,8 @@ Attributes
 <%@ attribute name="clss" required="true"%>
 
 
-
 <c:if test="${model.hasFieldError(clss, field)}">
-	<div class="errResp qry-errResp">
+	<div class="err-msg qry-errResp">
 		<c:forEach items="${model.getFieldErrors(clss, field)}" var="vterror">
 			<div>${vterror.message}</div>
 		</c:forEach>

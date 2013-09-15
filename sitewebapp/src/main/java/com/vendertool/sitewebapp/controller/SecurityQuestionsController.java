@@ -1,8 +1,10 @@
 package com.vendertool.sitewebapp.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,13 +15,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vendertool.sharedtypes.core.Language;
-import com.vendertool.sharedtypes.core.Signin;
+import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
-import com.vendertool.sitewebapp.util.MenuBuilder;
+import com.vendertool.sharedtypes.rnr.ErrorResponse;
 
 @Controller
 public class SecurityQuestionsController {
@@ -44,13 +46,13 @@ public class SecurityQuestionsController {
 		SecurityQuestion q4 = new SecurityQuestion();
 		q4.setId(4);
 		q4.setText("What street did you grow up on");
-		List<SecurityQuestion> questions = new ArrayList<SecurityQuestion>();
-		questions.add(q1);
-		questions.add(q2);
-		questions.add(q3);
-		questions.add(q4);
+		List<SecurityQuestion> questionList = new ArrayList<SecurityQuestion>();
 		
-		modelMap.addAttribute("questions", questions);
+		questionList.add(q1);
+		questionList.add(q2);
+		questionList.add(q3);
+		questionList.add(q4);
+		modelMap.addAttribute("questionList", questionList);
 
 		// Add JSON for Angular
 		try {
@@ -64,35 +66,74 @@ public class SecurityQuestionsController {
 			throw new VTRuntimeException("Cannot convert modelMap to json");
 		}
 		
-		
 		return "securityQuestions/securityQuestions";
 	}
 	
 	@RequestMapping(value="questions/save", method=RequestMethod.POST)
-	public String saveQuestionAnswers(@RequestBody SecurityQuestionsResponse res) {
+	public @ResponseBody Map<String, Object> saveQuestionAnswers(@RequestBody SecurityQuestionsResponse resp) {
 		
+		ErrorResponse errorResponse = new ErrorResponse();
 		
-		if (res != null && !res.getQuestionAnswers().isEmpty()) {
-			for (SecurityQuestionAnswer qa : res.getQuestionAnswers()) {
+		if (resp != null && !resp.getQuestionAnswers().isEmpty()) {
+			int count = 1;
+			for (SecurityQuestionAnswer qa : resp.getQuestionAnswers()) {
+				
+				if (qa.getQuestionId() == null) {
+					errorResponse.addFieldBindingError(
+							Errors.REGISTRATION.MISSING_SECURITY_QUESTION, 
+							SecurityQuestionAnswer.class.getName(),
+							"question" + count);
+				}
+				
+				if (qa.getAnswer() == null || qa.getAnswer().isEmpty()) {
+					errorResponse.addFieldBindingError(
+							Errors.REGISTRATION.MISSING_SECURITY_ANSWER,
+							SecurityQuestionAnswer.class.getName(),
+							"answer" + count);
+				} 
+				
+				count++;
 				System.err.println("id:" + qa.getQuestionId() + " " + qa.getAnswer());
 			}
 		}
 		
-		return "securityQuestions/securityQuestions";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("errorResponse", errorResponse);
+		map.put("securityQuestionsResponse", resp);
 		
+		return map;
 	}
+
+	
+	/******************************************
+	 * 
+	 * Get partial pages for Angular
+	 * 
+	 ******************************************/
+	@RequestMapping(value = "questions/partial/questions", method = RequestMethod.GET)
+	public String getQuestionsPartial() {
+		logger.info("getQuestionsPartial controller invoked");
+		return "securityQuestions/partial/questions";
+	}
+	
+	@RequestMapping(value = "questions/partial/success", method = RequestMethod.GET)
+	public String getSuccessPartial() {
+		logger.info("getSuccessPartial controller invoked");
+		return "securityQuestions/partial/success";
+	}
+
 	
 
 }
 
 /** Mock classes. Replace later **/
 class SecurityQuestion {
-	private int id;
+	private Integer id;
 	private String text;
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getText() {
@@ -105,13 +146,13 @@ class SecurityQuestion {
 
 class SecurityQuestionAnswer {
 	
-	private int questionId;
+	private Integer questionId;
 	private String answer;
 	
-	public int getQuestionId() {
+	public Integer getQuestionId() {
 		return questionId;
 	}
-	public void setQuestionId(int questionId) {
+	public void setQuestionId(Integer questionId) {
 		this.questionId = questionId;
 	}
 	public String getAnswer() {
@@ -123,17 +164,23 @@ class SecurityQuestionAnswer {
 }
 
 class SecurityQuestionsResponse {
-	
+	private List<SecurityQuestion> questions;
 	private List<SecurityQuestionAnswer> questionAnswers;
-
+	public List<SecurityQuestion> getQuestions() {
+		return questions;
+	}
+	public void setQuestions(List<SecurityQuestion> questions) {
+		this.questions = questions;
+	}
 	public List<SecurityQuestionAnswer> getQuestionAnswers() {
 		return questionAnswers;
 	}
-
 	public void setQuestionAnswers(List<SecurityQuestionAnswer> questionAnswers) {
 		this.questionAnswers = questionAnswers;
 	}
 }
+
+
 
 
 

@@ -1,6 +1,8 @@
 package com.vendertool.sitewebapp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -183,6 +185,51 @@ public class ProfileController {
 		
 		return map;
 	}
+	
+	@RequestMapping(value="profile/questions", method=RequestMethod.GET)
+	public @ResponseBody SecurityQuestionsResponse getSecurityQuestionsView(ModelMap modelMap, HttpServletRequest request){
+		logger.info("getSecurityQuestionsView GET controller invoked");
+		
+		// Add the questions
+		SecurityQuestion q1 = new SecurityQuestion();
+		q1.setId(1);
+		q1.setText("What is the name of your favorite pet?");
+		SecurityQuestion q2 = new SecurityQuestion();
+		q2.setId(2);
+		q2.setText("What is the name of your high school?");
+		SecurityQuestion q3 = new SecurityQuestion();
+		q3.setId(3);
+		q3.setText("What is your favorite color");
+		SecurityQuestion q4 = new SecurityQuestion();
+		q4.setId(4);
+		q4.setText("What street did you grow up on");
+		List<SecurityQuestion> questionList = new ArrayList<SecurityQuestion>();
+		questionList.add(q1);
+		questionList.add(q2);
+		questionList.add(q3);
+		questionList.add(q4);
+		
+		// Add the answers
+		SecurityQuestionAnswer sqa1 = new SecurityQuestionAnswer();
+		sqa1.setQuestionId(2);
+		sqa1.setAnswer("Alameda high");
+		SecurityQuestionAnswer sqa2 = new SecurityQuestionAnswer();
+		sqa2.setQuestionId(4);
+		sqa2.setAnswer("Main St.");
+		List<SecurityQuestionAnswer> questionAnswers = new ArrayList<SecurityQuestionAnswer>();
+		questionAnswers.add(sqa1);
+		questionAnswers.add(sqa2);
+		
+		
+		SecurityQuestionsResponse resp = new SecurityQuestionsResponse();
+		resp.setQuestions(questionList);
+		resp.setQuestionAnswers(questionAnswers);
+
+		
+		return resp;
+	}
+	
+	
 
 	
 	
@@ -207,5 +254,11 @@ public class ProfileController {
 	public String getPasswordPartial() {
 		logger.info("getPasswordPartial controller invoked");
 		return "profile/partial/password";
+	}
+	
+	@RequestMapping(value = "profile/partial/questions", method = RequestMethod.GET)
+	public String getQuestionsPartial() {
+		logger.info("getQuestionsPartial controller invoked");
+		return "profile/partial/questions";
 	}
 }

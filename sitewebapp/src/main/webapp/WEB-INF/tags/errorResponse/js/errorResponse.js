@@ -1,4 +1,7 @@
 
 (function() {
-	$('.qry-errResp').prev('input').css('border', '1px solid red');
+	var wrap = $('.qry-errResp').closest('.fldWrp');
+	if (wrap.length > 0) {
+		wrap.addClass('err');
+	}
 })();

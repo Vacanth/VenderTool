@@ -1,0 +1,88 @@
+
+.info .col1  {
+	min-width:140px;
+	padding-right:5px;
+}
+.info .col1 label  {
+	color:#999;
+}
+.info .col2  {
+	width:385px;
+}
+
+.info .col2 .btn {
+	margin-top:15px;
+}
+.info.readonly input {
+	border:1px solid #fff;
+	background-color:#fff;
+	box-shadow:none;
+	
+	cursor:default;
+}
+.info input.readonly  {
+	/** for email field on edit page **/
+	border:1px solid #fff;
+	background-color:#fff;
+	box-shadow:none;
+	cursor:default;
+}
+.info .form-control {
+	font-size:14px;
+	height:30px;
+	display:block;
+}
+.info select {
+	width:385px;
+}
+.info td  {
+	font-size:16px;
+	font-weight:normal;
+	line-height:20px;
+	padding-bottom:10px;
+	white-space:nowrap;
+}
+.info .col1  {
+	padding-top:5px;
+}
+.info .sep  {
+	margin:15px 10px 10px 0;
+	border:0;
+	border-top:1px solid #999;
+	width:100%;
+}
+.info label {
+	font-size:14px;
+	font-weight:normal;
+	min-width:115px;
+	white-space:nowrap;
+	color:#666;
+	float:left;
+}
+.info hr {
+	display:inline-block;
+	height:1px;
+    border:0;
+    border-bottom:1px dotted #ccc;
+    margin:0;
+    padding:0;
+    position:relative;
+    width:300px;
+}
+.info .sub-cncl {
+	margin:15px 0 0 0;
+}
+
+.pg-msg {
+	min-height:44px;
+	margin-bottom:15px;
+}
+.pg-msg .alert {
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+
+
+
+

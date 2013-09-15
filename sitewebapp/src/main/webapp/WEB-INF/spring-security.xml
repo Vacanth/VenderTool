@@ -42,7 +42,7 @@
   	<sec:http pattern="/uploads/**" security="none"/>
   	<sec:http pattern="/fileUpload/**" security="none"/>
   	<sec:http pattern="/sharedNgModules/**" security="none"/>
-  	<sec:http pattern="/fileUploader/**" security="none"/>
+  	<sec:http pattern="/uploader/**" security="none"/>
   	<sec:http pattern="/uploadFile/**" security="none"/>
   	<sec:http pattern="/questions/**" security="none"/>
   	

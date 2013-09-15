@@ -149,7 +149,7 @@ public class MercadolibreListingAdapter implements
 		}
 
 		item.setCondition(listing.getCondition());
-		item.setListing_type_id(listing.getListingId());// TODO listing
+//		item.setListing_type_id(listing.getListingId());// TODO listing
 		item.setAvailable_quantity(listing.getQuantity());
 		// Set Payment menthods.
 		List<PaymentMethod> paymentMethods = listing.getPaymentMethods();
@@ -167,14 +167,13 @@ public class MercadolibreListingAdapter implements
 		return item;
 	}
 
-	private Item prepareItemFromInventory(String productId) {
+	private Item prepareItemFromInventory(Long productId) {
 		Item item = new Item();
 		// TODO make DB call and prepare this.
 		return item;
 	}
 
 	private boolean isProductIDAvailalbe(Product product) {
-		return product != null && product.getProductId() != null
-				&& product.getProductId().length() > 0;
+		return product != null && product.getProductId()  > 0;
 	}
 }

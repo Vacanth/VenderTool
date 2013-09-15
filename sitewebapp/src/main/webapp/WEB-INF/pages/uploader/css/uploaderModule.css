@@ -1,0 +1,94 @@
+.upldr {
+	postion:static;
+	width:100%;
+	padding:20px;
+}
+.upldr .upldr-inp-wrp {
+	position:relative;
+	width:152px;
+	height:45px;
+	overflow:hidden;
+	
+	display:inline-block;
+}
+.upldr-inp-main {
+	position:relative;
+	left:-100px;
+	height:100px;
+	width: 235px;
+	width: 100%\9;;  /* Required for IE 5, 6, 7 */
+	filter: alpha(opacity=0); /** IE **/
+	opacity: 0.0;
+	cursor:pointer;
+}
+
+
+.upldr .iconBtn.addFiles {
+	background-color:#a9cbaa;
+	border:#a9cbaa;
+	margin-bottom:15px;
+	
+	/** positions the below the file browser input **/
+	position:absolute;
+	top:0;
+}
+.upldr .iconBtn.addFiles .bg {
+	background-color:#47b64a;
+	width:36px;
+}
+.upldr .iconBtn.addFiles .icon {
+	width:26px;
+	background:url('../resources/img/icons.png') no-repeat -59px 0px;
+}
+
+
+.upldr .ftable {
+	background-color:#fff;
+	width:100%;
+}
+.upldr .ftable th {
+	font-weight:normal;
+	background-color:#ccc;
+}
+.upldr .ftable th, .upldr .ftable td {
+	border-bottom:1px solid #ccc;
+	border-right:1px solid #ccc;
+	padding:2px 5px;
+}
+.upldr .ftable th:last-child, .upldr .ftable td:last-child {
+	border-right:0;
+}
+
+.upldr .ftable .c1{
+	width:70%;
+}
+.upldr .ftable .c2{
+	width:15%;
+}
+.upldr .ftable .c3{
+	width:15%;
+}
+.upldr .disabled {
+	color:#ccc;
+}
+.upldr .disabledAddBtn {
+	position:absolute;
+	z-index:100;
+	height:100%;
+	width:100%;
+	background-color:#eee;
+	filter: alpha(opacity=10); /** IE **/
+	opacity:.40;
+}
+.upldr .size {
+	color:#999;
+	font-size:10px;
+}
+.upldr .upldr-footer {
+	width:100%;
+	text-align:right;
+}
+
+
+
+
