@@ -9,7 +9,7 @@
 	</a>
 
 	
-	<table class="table table-striped uploadTable">
+	<table class="table  uploadTable">
 		<tr>
 			<th>Files</th>
 			<th>Job Id</th>
@@ -18,6 +18,24 @@
 			<th>Processed Files</th>
 			<th>Job Complete Date</th>
 		</tr>
+		<tbody ng-repeat="job in uploadsRes.jobs">
+			<tr>
+				<td>{{uploadsRes.fileMap[job.jobId][0].fileId}}</td>
+				<td>{{job.jobId}}</td>
+				<td>{{job.status}}</td>
+				<td>{{job.createdDate}}</td>
+				<td>{{}}</td>
+				<td>{{}}</td>
+			</tr>
+			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" ng-show="!$first">
+				<td>{{file.fileId}}</td>
+				<td>{{}}</td>
+				<td>{{}}</td>
+				<td>{{}}</td>
+				<td>{{}}</td>
+				<td>{{}}</td>
+			</tr>
+		</tbody>
 	</table>
 
 </div>

@@ -14,6 +14,7 @@ import com.vendertool.sharedtypes.core.FileUploadDataModel;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sitewebapp.common.URLConstants;
+import com.vendertool.sitewebapp.util.MockDataUtil;
 
 @Controller
 public class UploadsController {
@@ -24,12 +25,10 @@ public class UploadsController {
 	public String getUploadsView(ModelMap modelMap, Principal principal) {
 		logger.info("getUploadsView controller invoked");
 
-		FileUploadDataModel fileUpload = new FileUploadDataModel();
-		
 		// TODO: principal is throwing error
 		//modelMap.addAttribute("email", principal.getName());
 		modelMap.addAttribute("email", "ted@gmail.com");
-		modelMap.addAttribute("fileUpload", fileUpload);
+		modelMap.addAttribute("uploadsResponse", MockDataUtil.getUploadsResponse());
 		modelMap.addAttribute("errorResponse", new ErrorResponse());
 		
 		// Add JSON for Angular

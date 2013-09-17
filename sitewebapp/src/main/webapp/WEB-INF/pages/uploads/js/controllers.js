@@ -5,15 +5,22 @@
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-uploadsApp.controller('UploadsCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams', '$location', function(Data, $scope, $http, $routeParams, $location) {
 	
 	
+	
+	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
+	$scope.errorResponse = Data.errorResponse;
 
+
+
+	
+	//
+	// Popup releated
+	//
 	window.$windowScope = $scope;
 	
-	
-	$scope.updateFiles = function(files) {
-		
+	$scope.updateFiles = function(files) {	
 		//alert(files[0] + 'xxx');
 	};
 	

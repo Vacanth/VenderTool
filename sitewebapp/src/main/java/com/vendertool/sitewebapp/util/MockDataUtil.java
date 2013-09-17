@@ -1,18 +1,28 @@
 package com.vendertool.sitewebapp.util;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.CountryEnum;
+import com.vendertool.sharedtypes.core.PaginationOutput;
 import com.vendertool.sharedtypes.core.Phone;
 import com.vendertool.sharedtypes.core.Phone.PhoneType;
+import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
+import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
+import com.vendertool.sharedtypes.core.fps.File;
+import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sharedtypes.rnr.UploadsResponse;
 
 
 public class MockDataUtil {
@@ -129,6 +139,45 @@ public class MockDataUtil {
 		}
 		
 		return response;
+	}
+	
+	public static UploadsResponse getUploadsResponse() {
+		
+		UploadsResponse res = new UploadsResponse();
+		
+		PaginationOutput pagOut = new PaginationOutput();
+		pagOut.setCurrentPageNumber(1);
+		pagOut.setEntriesPerPage(25);
+		
+		Map<Long, List<File>> fileMap = new HashMap<Long, List<File>>();
+		List<Job> jobs = new ArrayList<Job>();
+		for (int i=0; i<25; i++) {
+			Job job = new Job();
+			job.setAccountId(123L);
+			job.setCreatedDate(new Date());
+			job.setJobId(new Long(i));
+			job.setStatus(FPSJobStatusEnum.SUCCESS);
+			job.setTitle("title " + i);
+			
+			List<File> files = new ArrayList<File>();
+			for (int j=0; j<3; j++) {
+				File f = new File();
+				f.setFileId(new Long(j));
+				f.setAccountId(123L);
+				f.setCreatedDate(new Date());
+				f.setStatus(FPSFileStatusEnum.SUCCESS);
+				files.add(f);
+			}
+			
+			fileMap.put(job.getJobId(), files);
+			jobs.add(job);
+		}
+		
+		res.setFileMap(fileMap);
+		res.setJobs(jobs);
+		res.setPaginationOutput(pagOut);
+		
+		return res;
 	}
 	
 }
