@@ -160,14 +160,26 @@ public class MockDataUtil {
 			job.setTitle("title " + i);
 			
 			List<File> files = new ArrayList<File>();
-			for (int j=0; j<3; j++) {
+			
+			if (i % 2 == 0)  {
+				for (int j=0; j<3; j++) {
+					File f = new File();
+					f.setFileId(new Long(j));
+					f.setAccountId(123L);
+					f.setCreatedDate(new Date());
+					f.setStatus(FPSFileStatusEnum.SUCCESS);
+					files.add(f);
+				}
+			}
+			else {
 				File f = new File();
-				f.setFileId(new Long(j));
+				f.setFileId(new Long(i));
 				f.setAccountId(123L);
 				f.setCreatedDate(new Date());
 				f.setStatus(FPSFileStatusEnum.SUCCESS);
 				files.add(f);
 			}
+			
 			
 			fileMap.put(job.getJobId(), files);
 			jobs.add(job);
