@@ -11,7 +11,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 	
 	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
 	$scope.errorResponse = Data.errorResponse;
-
+	
 
 
 	
@@ -48,6 +48,41 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		window.open('../uploader', 'popup', props);
 	};
 	
+	$scope.makeArray = function(num) {
+	    return new Array(num);   
+	};
+	
+	$scope.getNumOfPages = function() {
+		var num, p = $scope.uploadsRes.paginationOutput;
+		num = parseInt(p.totalResults/p.entriesPerPage);
+		if ( p.totalResults % p.entriesPerPage !== 0) {
+			num++;
+		}
+		
+	    return num;
+	};
+	
+	$scope.getPreviousPage = function() {
+		var p = $scope.uploadsRes.paginationOutput;
+		
+		if (p.currentPage === 1) {
+			return null;
+		}
+		else {
+			return p.currentPage - 1;
+		}
+	};
+	
+	$scope.getNextPage = function() {
+		var p = $scope.uploadsRes.paginationOutput;
+		
+		if (p.currentPage === $scope.getNumOfPages()) {
+			return null;
+		}
+		else {
+			return p.currentPage + 1;
+		}
+	};
 	
 	//alert('hello' + URL.uploadsUrl);
 	
@@ -76,7 +111,21 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 
 }]);
 
+uploadsApp.controller('PaginationCtrl', ['$scope', '$routeParams', '$http', '$location', function($scope, $routeParams, $http, $location) {
+	
+	 var init = function () {
+         if ($routeParams.pageNum) {
+        	 
+        	 alert($routeParams.pageNum);
+        	 
+        	 
+             //$scope.ticketSelected($routeParams.ticketId);
+         }
+     };
 
+     // fire on controller loaded
+     init();
+}]);
 
 
 

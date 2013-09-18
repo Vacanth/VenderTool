@@ -71,9 +71,15 @@
 		</tbody>
 	</table>
 	
-	currentPage:{{uploadsRes.paginationOutput.currentPage}}<br/>
-	entriesPerPage:{{uploadsRes.paginationOutput.entriesPerPage}}<br/>
-	totalResults:{{uploadsRes.paginationOutput.totalResults}}<br/>
+	
+	<ul class="pagination">
+		<li ng-class="{'disabled': getPreviousPage() == null}"><a href="#/files/{{getPreviousPage()}}">&laquo;</a></li>
+		<li ng-repeat="i in makeArray(getNumOfPages())"
+			ng-class="{'active': uploadsRes.paginationOutput.currentPage == ($index + 1)}">
+			<a  href="#/files/{{$index + 1}}">{{$index + 1}}</a>
+		</li>
+		<li ng-class="{'disabled': getNextPage() == null}"><a href="#/files/{{getNextPage()}}">&raquo;</a></li>
+	</ul>
 
 </div>
 
