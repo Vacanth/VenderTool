@@ -3,9 +3,15 @@
 
 <div ng-controller="UploadsCtrl">
 	
-	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn uploads">
+	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn upload">
 		<div class="bg"></div><i class="icon"></i>
 		<b>Upload Files</b>
+	</a>
+	
+	
+	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn download">
+		<div class="bg"></div><i class="icon"></i>
+		<b>Download Files</b>
 	</a>
 	
 	<style>
@@ -50,6 +56,8 @@
 							{{uploadsRes.fileMap[job.jobId][0].fileId}}
 						</span>
 						<a ng-switch-default href="javascript:;" onclick="toggle(this)">
+							<b class="folderIcon"></b>
+						
 							{{uploadsRes.fileMap[job.jobId][0].fileId}}
 						</a>
 					</div>

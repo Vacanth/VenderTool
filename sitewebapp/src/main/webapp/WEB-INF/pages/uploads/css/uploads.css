@@ -1,18 +1,59 @@
-.iconBtn.uploads {
-	background-color:#6ea3fa;
-	border:#6ea3fa;
+/******** Upload and Download buttons ********/
+.iconBtn.upload, .iconBtn.download {
 	margin-bottom:15px;
 }
-.iconBtn.uploads .bg {
+.iconBtn.upload .bg, .iconBtn.download .bg {
 	background-color:#3278EA;
-	width:36px;
+	width:32px;
 }
-.iconBtn.uploads .icon {
-	width:26px;
-	background:url('../resources/img/icons.png') no-repeat -115px 0;
+.iconBtn.upload .icon, .iconBtn.download .icon {
+	width:24px;
+	background:url('../resources/img/icons.png') no-repeat -102px 0;
+	position:relative;
+}
+/******** Upload button ********/
+.iconBtn.upload {
+	background-color:#6ea3fa;
+	border:#6ea3fa;
+	padding-right:25px;
+}
+.iconBtn.upload .bg {
+	background-color:#3278EA;
+}
+/******** Download button ********/
+.iconBtn.download .icon {
+	background-position:-126px 0;
+	top:-2px;
+}
+.iconBtn.download .bg {
+	background-color:#7a54b3;
+}
+.iconBtn.download {
+	background-color:#ac99c8;
+	border:#ac99c8;
 }
 
 .uploadTable th {
 	font-weight:normal;
-	
 }
+.folderIcon {
+	display:inline-block;
+	width:25px;
+	height:18px;
+	background:url('../resources/img/icons.png') no-repeat -54px 1px;
+	position:relative;
+	top:4px;
+	left:-2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -34,11 +34,11 @@
 }
 .upldr .iconBtn.addFiles .bg {
 	background-color:#47b64a;
-	width:36px;
+	width:32px;
 }
 .upldr .iconBtn.addFiles .icon {
 	width:26px;
-	background:url('../resources/img/icons.png') no-repeat -59px 0px;
+	background:url('../resources/img/icons.png') no-repeat -77px 0px;
 }
 
 

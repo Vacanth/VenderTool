@@ -116,7 +116,7 @@ uploadsApp.controller('PaginationCtrl', ['$scope', '$routeParams', '$http', '$lo
 	 var init = function () {
          if ($routeParams.pageNum) {
         	 
-        	 alert($routeParams.pageNum);
+        	 //alert($routeParams.pageNum);
         	 
         	 
              //$scope.ticketSelected($routeParams.ticketId);
