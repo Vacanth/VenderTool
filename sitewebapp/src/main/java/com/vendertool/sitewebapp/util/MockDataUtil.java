@@ -146,8 +146,9 @@ public class MockDataUtil {
 		UploadsResponse res = new UploadsResponse();
 		
 		PaginationOutput pagOut = new PaginationOutput();
-		pagOut.setCurrentPageNumber(1);
+		pagOut.setCurrentPage(1);
 		pagOut.setEntriesPerPage(25);
+		pagOut.setTotalResults(200);
 		
 		Map<Long, List<File>> fileMap = new HashMap<Long, List<File>>();
 		List<Job> jobs = new ArrayList<Job>();

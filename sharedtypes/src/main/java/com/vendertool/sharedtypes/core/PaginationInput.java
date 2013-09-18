@@ -2,14 +2,14 @@ package com.vendertool.sharedtypes.core;
 
 public class PaginationInput {
 	
-	private int currentPageNumber;
+	private int currentPage;
 	private int entriesPerPage;
 	
-	public int getCurrentPageNumber() {
-		return currentPageNumber;
+	public int getCurrentPage() {
+		return currentPage;
 	}
-	public void setCurrentPageNumber(int currentPageNumber) {
-		this.currentPageNumber = currentPageNumber;
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
 	}
 	public int getEntriesPerPage() {
 		return entriesPerPage;

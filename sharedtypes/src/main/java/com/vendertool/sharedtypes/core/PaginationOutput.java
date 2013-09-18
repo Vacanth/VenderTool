@@ -3,15 +3,15 @@ package com.vendertool.sharedtypes.core;
 
 public class PaginationOutput {
 
-	private int currentPageNumber;
+	private int currentPage;
 	private int entriesPerPage;
-	private int totalResultCount;
+	private int totalResults;
 	
-	public int getCurrentPageNumber() {
-		return currentPageNumber;
+	public int getCurrentPage() {
+		return currentPage;
 	}
-	public void setCurrentPageNumber(int currentPageNumber) {
-		this.currentPageNumber = currentPageNumber;
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
 	}
 	public int getEntriesPerPage() {
 		return entriesPerPage;
@@ -19,11 +19,11 @@ public class PaginationOutput {
 	public void setEntriesPerPage(int entriesPerPage) {
 		this.entriesPerPage = entriesPerPage;
 	}
-	public int getTotalResultCount() {
-		return totalResultCount;
+	public int getTotalResults() {
+		return totalResults;
 	}
-	public void setTotalResultCount(int totalResultCount) {
-		this.totalResultCount = totalResultCount;
+	public void setTotalResults(int totalResultCount) {
+		this.totalResults = totalResultCount;
 	}
 
 	

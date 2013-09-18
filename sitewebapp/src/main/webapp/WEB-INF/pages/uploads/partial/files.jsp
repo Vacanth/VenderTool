@@ -70,6 +70,10 @@
 			</tr>
 		</tbody>
 	</table>
+	
+	currentPage:{{uploadsRes.paginationOutput.currentPage}}<br/>
+	entriesPerPage:{{uploadsRes.paginationOutput.entriesPerPage}}<br/>
+	totalResults:{{uploadsRes.paginationOutput.totalResults}}<br/>
 
 </div>
 
