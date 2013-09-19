@@ -8,7 +8,7 @@
 }
 .iconBtn.upload .icon, .iconBtn.download .icon {
 	width:24px;
-	background:url('../resources/img/icons.png') no-repeat -102px 0;
+	background:url('../resources/img/icons.png') no-repeat -82px 0;
 	position:relative;
 }
 /******** Upload button ********/
@@ -22,7 +22,7 @@
 }
 /******** Download button ********/
 .iconBtn.download .icon {
-	background-position:-126px 0;
+	background-position:-106px 0;
 	top:-2px;
 }
 .iconBtn.download .bg {
@@ -38,13 +38,25 @@
 }
 .folderIcon {
 	display:inline-block;
-	width:25px;
+	width:24px;
 	height:18px;
-	background:url('../resources/img/icons.png') no-repeat -54px 1px;
+	background:url('../resources/img/icons.png') no-repeat -131px 1px;
 	position:relative;
 	top:4px;
-	left:-2px;
+	left:-1px;
 }
+.folderIcon.open {
+	background:url('../resources/img/icons.png') no-repeat -153px 1px;
+}
+.fileIcon {
+	display:inline-block;
+	width:24px;
+	height:18px;
+	background:url('../resources/img/icons.png') no-repeat -178px 1px;
+	position:relative;
+	top:4px;
+}
+
 
 
 
