@@ -22,16 +22,16 @@
 	</style>
 	<script>
 		function toggle(link) {
-			var rows = $(link).closest('tbody').find('tr');
-			var lastRow = rows[rows.length - 1];
+			var i, lastRow, rows = $(link).closest('tbody').find('tr');
+			lastRow = rows[rows.length - 1];
 			
 			if ($(lastRow).is(':visible')) {
-				for (var i=2; i<rows.length; i++) {
+				for (i=1; i<rows.length; i++) {
 					$(rows[i]).hide();
 				}
 			}
 			else {
-				for (var i=2; i<rows.length; i++) {
+				for (i=1; i<rows.length; i++) {
 					$(rows[i]).show();
 				}
 			}
@@ -41,7 +41,7 @@
 	
 	<table class="table  uploadTable">
 		<tr>
-			<th>Files</th>
+			<th>Uploaded Files</th>
 			<th>Job Id</th>
 			<th>Status</th>
 			<th>Upload Date</th>
@@ -53,13 +53,21 @@
 				<td>
 					<div ng-switch on="uploadsRes.fileMap[job.jobId].length">
 						<span ng-switch-when="1">
-							{{uploadsRes.fileMap[job.jobId][0].fileId}}
+							<input type="checkbox"/>
+							{{uploadsRes.fileMap[job.jobId][0].name}}
 						</span>
-						<a ng-switch-default href="javascript:;" onclick="toggle(this)">
-							<b class="folderIcon"></b>
 						
-							{{uploadsRes.fileMap[job.jobId][0].fileId}}
-						</a>
+						<span ng-switch-default>
+							<input type="checkbox"/>
+							<b class="folderIcon" onclick="toggle(this)"></b>
+							<span onclick="toggle(this)">
+								<span ng-repeat="file in uploadsRes.fileMap[job.jobId]">
+									{{file.name}}
+								</span>
+							</span>
+							<%-- 
+							{{uploadsRes.fileMap[job.jobId][0].fileId}}--%>
+						</span>
 					</div>
 				</td>
 				<td>{{job.jobId}}</td>
@@ -68,8 +76,11 @@
 				<td>{{}}</td>
 				<td>{{}}</td>
 			</tr>
+			<%--
 			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" ng-show="!$first" class="fileRows">
-				<td>{{file.fileId}}</td>
+			--%>
+			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" class="fileRows">
+				<td><input type="checkbox" style="margin-left:15px"/> {{file.name}}</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
 				<td>{{}}</td>

@@ -165,6 +165,7 @@ public class MockDataUtil {
 			if (i % 2 == 0)  {
 				for (int j=0; j<3; j++) {
 					File f = new File();
+					f.setName("name" + j);
 					f.setFileId(new Long(j));
 					f.setAccountId(123L);
 					f.setCreatedDate(new Date());
@@ -174,6 +175,7 @@ public class MockDataUtil {
 			}
 			else {
 				File f = new File();
+				f.setName("name" + i);
 				f.setFileId(new Long(i));
 				f.setAccountId(123L);
 				f.setCreatedDate(new Date());
