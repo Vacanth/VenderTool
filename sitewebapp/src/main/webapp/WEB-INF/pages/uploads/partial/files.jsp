@@ -22,17 +22,26 @@
 	</style>
 	<script>
 		function toggle(link) {
-			var i, lastRow, rows = $(link).closest('tbody').find('tr');
+			var i, lastRow, folderIcon, rows = $(link).closest('tbody').find('tr');
 			lastRow = rows[rows.length - 1];
+			
+			if ($(link).hasClass('folderIcon')) {
+				folderIcon = $(link);
+			}
+			else {
+				folderIcon = $(link).siblings('.folderIcon');
+			}
 			
 			if ($(lastRow).is(':visible')) {
 				for (i=1; i<rows.length; i++) {
 					$(rows[i]).hide();
+					folderIcon.removeClass('open');
 				}
 			}
 			else {
 				for (i=1; i<rows.length; i++) {
 					$(rows[i]).show();
+					folderIcon.addClass('open');
 				}
 			}
 		}
@@ -54,6 +63,7 @@
 					<div ng-switch on="uploadsRes.fileMap[job.jobId].length">
 						<span ng-switch-when="1">
 							<input type="checkbox"/>
+							<b class="fileIcon"></b>
 							{{uploadsRes.fileMap[job.jobId][0].name}}
 						</span>
 						
@@ -80,7 +90,11 @@
 			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" ng-show="!$first" class="fileRows">
 			--%>
 			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" class="fileRows">
-				<td><input type="checkbox" style="margin-left:15px"/> {{file.name}}</td>
+				<td>
+					<b class="fileIcon" style="margin-left:15px"></b>
+					<input type="checkbox"/> 
+					{{file.name}}
+				</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
 				<td>{{}}</td>

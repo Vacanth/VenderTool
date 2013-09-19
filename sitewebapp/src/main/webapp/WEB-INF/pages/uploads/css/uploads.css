@@ -43,10 +43,9 @@
 	background:url('../resources/img/icons.png') no-repeat -131px 1px;
 	position:relative;
 	top:4px;
-	left:-1px;
 }
 .folderIcon.open {
-	background:url('../resources/img/icons.png') no-repeat -153px 1px;
+	background:url('../resources/img/icons.png') no-repeat -157px 1px;
 }
 .fileIcon {
 	display:inline-block;
