@@ -10,7 +10,7 @@
 		<property name="dataSource" ref="invdbdataSource" />
 	</bean>
 	
-	<bean id="listingVariationDAO" class="com.vendertool.registration.dal.dao.AccountDaoImpl">
+	<bean id="listingVariationDAO" class="com.vendertool.listing.dal.dao.ListingVariationDaoImpl">
 		<property name="dataSource" ref="invdbdataSource" />
 	</bean>
 </beans>

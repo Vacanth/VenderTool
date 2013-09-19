@@ -50,8 +50,8 @@ public class ListingDaoImpl extends BaseDaoImpl implements ListingDao {
 
 			QListing a = QListing.listing;
 
-			Long accountId = listing.getListingId();
-			if (VUTIL.isNull(accountId) || (accountId.longValue() <= 0)) {
+			Long listingId = listing.getListingId();
+			if (VUTIL.isNull(listingId) || (listingId.longValue() <= 0)) {
 				Long seq = generateNextSequence(con);
 				if (VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 					InsertException ie = new InsertException(

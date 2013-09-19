@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.vendertool.serviceparent</groupId>
@@ -8,51 +8,53 @@
 		<version>1.0</version>
 		<relativePath>../serviceparent/pom.xml</relativePath>
 	</parent>
-  
-  <groupId>com.vendertool.listing</groupId>
-  <artifactId>listing</artifactId>
-  <packaging>jar</packaging>
 
-  <name>listing</name>
-  <url>http://maven.apache.org</url>
+	<groupId>com.vendertool.listing</groupId>
+	<artifactId>listing</artifactId>
+	<packaging>jar</packaging>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<name>listing</name>
+	<url>http://maven.apache.org</url>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.vendertool.sharedtypes</groupId>
-      <artifactId>sharedtypes</artifactId>
-      <version>${vendertool-version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.vendertool.common</groupId>
-      <artifactId>common</artifactId>
-      <version>${vendertool-version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.vendertool.metadata</groupId>
-      <artifactId>metadata</artifactId>
-      <version>${vendertool-version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.vendertool.inventory</groupId>
-      <artifactId>inventory</artifactId>
-      <version>${vendertool-version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.vendertool.mercadolibreadapter</groupId>
-      <artifactId>mercadolibreadapter</artifactId>
-      <version>${vendertool-version}</version>
-    </dependency>
-  </dependencies>
-  
-  	<build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.vendertool.sharedtypes</groupId>
+			<artifactId>sharedtypes</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vendertool.common</groupId>
+			<artifactId>common</artifactId>
+			<version>${vendertool-version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vendertool.metadata</groupId>
+			<artifactId>metadata</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vendertool.inventory</groupId>
+			<artifactId>inventory</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vendertool.mercadolibreadapter</groupId>
+			<artifactId>mercadolibreadapter</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -62,6 +64,30 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy file="../common/src/main/resources/config/qa/dal/Datasource.xml"
+									todir="${project.build.outputDirectory}/dal" />
+								<copy file="../common/src/main/resources/CommonDAL.xml"
+									todir="${project.build.outputDirectory}/dal" />
+								<copy file="src/main/resources/ListingDAL.xml"
+									todir="${project.build.outputDirectory}/dal" />
+								<copy file="src/main/resources/dal-module.xml"
+									todir="${project.build.outputDirectory}/dal" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
