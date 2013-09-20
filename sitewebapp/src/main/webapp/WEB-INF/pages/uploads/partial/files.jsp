@@ -4,13 +4,13 @@
 <div ng-controller="UploadsCtrl">
 	
 	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn upload">
-		<div class="bg"></div><i class="icon"></i>
+		<i class="icon"></i>
 		<b>Upload Files</b>
 	</a>
 	
 	
 	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn download">
-		<div class="bg"></div><i class="icon"></i>
+		<i class="icon"></i>
 		<b>Download Files</b>
 	</a>
 	

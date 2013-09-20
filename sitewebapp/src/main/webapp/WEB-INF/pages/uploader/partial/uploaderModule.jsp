@@ -18,7 +18,7 @@
 				<div ng-class="{disabledAddBtn: uploadInProgress}"></div>
 
 				<button type="button" class="btn btn-primary iconBtn addFiles">
-					<div class="bg"></div><i class="icon"></i>
+					<i class="icon"></i>
 					<b>Add Files</b>
 				</button>
 				
