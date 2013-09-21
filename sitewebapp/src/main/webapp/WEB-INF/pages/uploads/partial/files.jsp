@@ -9,7 +9,7 @@
 	</a>
 	
 	
-	<a ng-click="openPopup()" href="javascript:;" type="button" class="btn btn-primary iconBtn download">
+	<a ng-click="downloadFiles()" href="javascript:;" type="button" class="btn btn-primary iconBtn download">
 		<i class="icon"></i>
 		<b>Download Files</b>
 	</a>
@@ -38,7 +38,7 @@
 					folderIcon.removeClass('open');
 				}
 			}
-			else {
+			else { 
 				for (i=1; i<rows.length; i++) {
 					$(rows[i]).show();
 					folderIcon.addClass('open');
@@ -60,45 +60,69 @@
 		<tbody ng-repeat="job in uploadsRes.jobs">
 			<tr>
 				<td>
-					<div ng-switch on="uploadsRes.fileMap[job.jobId].length">
+					<div ng-switch on="job.uploadedFiles.length">
 						<span ng-switch-when="1">
 							<input type="checkbox"/>
 							<b class="fileIcon"></b>
-							{{uploadsRes.fileMap[job.jobId][0].name}}
+							{{job.uploadedFiles[0].name}}
 						</span>
 						
 						<span ng-switch-default>
-							<input type="checkbox"/>
+							<input type="checkbox">
 							<b class="folderIcon" onclick="toggle(this)"></b>
 							<span onclick="toggle(this)">
-								<span ng-repeat="file in uploadsRes.fileMap[job.jobId]">
+								<span ng-repeat="file in job.uploadedFiles">
 									{{file.name}}
 								</span>
 							</span>
-							<%-- 
-							{{uploadsRes.fileMap[job.jobId][0].fileId}}--%>
 						</span>
 					</div>
 				</td>
 				<td>{{job.jobId}}</td>
 				<td>{{job.status}}</td>
 				<td>{{job.createdDate}}</td>
-				<td>{{}}</td>
+				<td>
+					<div ng-switch on="job.processedFiles.length">
+						<span ng-switch-when="1">
+							<input type="checkbox"/>
+							<b class="fileIcon"></b>
+							{{job.processedFiles[0].name}}
+						</span>
+						
+						<span ng-switch-default>
+							<input type="checkbox"/>
+							<b class="folderIcon" onclick="toggle(this)"></b>
+							<span onclick="toggle(this)">
+								<span ng-repeat="file in job.processedFiles">
+									{{file.name}}
+								</span>
+							</span>
+						</span>
+					</div>
+					
+				</td>
 				<td>{{}}</td>
 			</tr>
 			<%--
 			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" ng-show="!$first" class="fileRows">
 			--%>
-			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" class="fileRows">
+			<%--
+			// Hidden rows
+			--%>
+			<tr ng-repeat="file in job.uploadedFiles" class="fileRows">
 				<td>
 					<b class="fileIcon" style="margin-left:15px"></b>
-					<input type="checkbox"/> 
+					<input type="checkbox" ng-model="file.checked"/>
 					{{file.name}}
 				</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
-				<td>{{}}</td>
+				<td>
+					<b class="fileIcon" style="margin-left:15px"></b>
+					<input type="checkbox" ng-model="job.processedFiles[$index].checked"/>
+					{{job.processedFiles[$index].name}}
+				</td>
 				<td>{{}}</td>
 			</tr>
 		</tbody>

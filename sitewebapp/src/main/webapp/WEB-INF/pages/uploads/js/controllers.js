@@ -7,6 +7,7 @@ all the function params as strings in same order.
 ********************/
 uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams', '$location', function(Data, $scope, $http, $routeParams, $location) {
 	
+	var _ns = {};
 	
 	
 	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
@@ -83,6 +84,39 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 			return p.currentPage + 1;
 		}
 	};
+	
+	$scope.downloadFiles = function() {
+		
+		var fileIds = _ns.gatherDownloadFileIds();
+		
+		for (var i=0, n=fileIds.length; i<n; i++) {
+			console.log(fileIds[i]);
+		}
+		
+	};
+	
+	
+	_ns.gatherDownloadFileIds = function() {
+		var jobs = $scope.uploadsRes.jobs;
+		var fileIds = [];
+		
+		for (var i=0, n=jobs.length; i<n; i++) {
+			var uploaded = jobs[i].uploadedFiles;
+			var processed = jobs[i].processedFiles;
+			
+			for (var j=0, m=uploaded.length; j<m; j++) {
+				if (uploaded[j].checked) {
+					fileIds.push(uploaded[j].fileId);
+				}
+				if (processed[j].checked) {
+					fileIds.push(processed[j].fileId);
+				}
+			}
+		}
+		
+		return fileIds;
+	};
+	
 	
 	//alert('hello' + URL.uploadsUrl);
 	

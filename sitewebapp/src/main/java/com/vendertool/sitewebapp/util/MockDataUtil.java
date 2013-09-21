@@ -149,8 +149,7 @@ public class MockDataUtil {
 		pagOut.setCurrentPage(3);
 		pagOut.setEntriesPerPage(25);
 		pagOut.setTotalResults(201);
-		
-		Map<Long, List<File>> fileMap = new HashMap<Long, List<File>>();
+
 		List<Job> jobs = new ArrayList<Job>();
 		for (int i=0; i<25; i++) {
 			Job job = new Job();
@@ -160,9 +159,12 @@ public class MockDataUtil {
 			job.setStatus(FPSJobStatusEnum.SUCCESS);
 			job.setTitle("title " + i);
 			
-			List<File> files = new ArrayList<File>();
-			
+			//
+			// Add uploaded files
+			//
+			List<File> uploadedFiles = new ArrayList<File>();
 			if (i % 2 == 0)  {
+				
 				for (int j=0; j<3; j++) {
 					File f = new File();
 					f.setName("name" + j);
@@ -170,7 +172,7 @@ public class MockDataUtil {
 					f.setAccountId(123L);
 					f.setCreatedDate(new Date());
 					f.setStatus(FPSFileStatusEnum.SUCCESS);
-					files.add(f);
+					uploadedFiles.add(f);
 				}
 			}
 			else {
@@ -180,15 +182,40 @@ public class MockDataUtil {
 				f.setAccountId(123L);
 				f.setCreatedDate(new Date());
 				f.setStatus(FPSFileStatusEnum.SUCCESS);
-				files.add(f);
+				uploadedFiles.add(f);
 			}
+			job.setUploadedFiles(uploadedFiles);
 			
+			//
+			// Add processed files
+			//
+			List<File> processedFiles = new ArrayList<File>();
+			if (i % 2 == 0)  {
+				
+				for (int j=0; j<3; j++) {
+					File f = new File();
+					f.setName("name" + j);
+					f.setFileId(new Long(j));
+					f.setAccountId(123L);
+					f.setCreatedDate(new Date());
+					f.setStatus(FPSFileStatusEnum.SUCCESS);
+					processedFiles.add(f);
+				}
+			}
+			else {
+				File f = new File();
+				f.setName("name" + i);
+				f.setFileId(new Long(i));
+				f.setAccountId(123L);
+				f.setCreatedDate(new Date());
+				f.setStatus(FPSFileStatusEnum.SUCCESS);
+				processedFiles.add(f);
+			}
+			job.setProcessedFiles(processedFiles);
 			
-			fileMap.put(job.getJobId(), files);
 			jobs.add(job);
 		}
 		
-		res.setFileMap(fileMap);
 		res.setJobs(jobs);
 		res.setPaginationOutput(pagOut);
 		

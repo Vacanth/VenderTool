@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,7 +58,7 @@ public class UploaderController {
 		    			fileInfo.setFileData(item.get());
 		    			fileInfo.setFileName(item.getName());
 		    			fileInfo.setFileSize(item.getSize());
-		    			
+
 		    			List<FileInformation> fileInfoList = new ArrayList<FileInformation>();
 		    			FileUploadRequest fileUploadReq = new FileUploadRequest();
 		    			
@@ -92,6 +94,14 @@ public class UploaderController {
 		}
 		
 		return modelMap;
+	}
+	
+	@RequestMapping(value = "uploadDone", method = RequestMethod.POST)
+	protected void uploadDone(@RequestBody Map<String, String> req) 
+		throws IOException {
+		
+		System.err.println("sssssssssssss groupId:" + req.get("groupId"));
+		
 	}
 	
 	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)

@@ -64,16 +64,31 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 						return 'Some files have not been uploaded.';
 					}
 				}
+				else {
+					//
+					// Send upload done flag
+					//
+					sendUploadDoneFlag();
+				}
 			});
 			
 
-			$(window).bind('unload', function() {
-				// Send ajax flag to say that this group is done
+			sendUploadDoneFlag = function() {
 				$.ajax({
-					url: "http://www.amazon.com",
-					context: "oooo"
+					type: 'post',
+					url: allDoneUrl,
+					data: {"groupId": "hello"},
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+					success: function(data, textStatus, jqXHR) {						
+						alert(textStatus);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						
+						alert(textStatus);
+					}
 				});
-			});
+			};
 
 			initialAdd = function() {
 
