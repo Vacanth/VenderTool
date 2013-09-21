@@ -104,7 +104,7 @@ public class ListingMapper implements DALMapper<Listing> {
 				map.put(a.createdDate, new Timestamp(date.getTime()));
 			}
 
-			if (a.currencyId.equals(rpath)) {
+			if (a.currencyCodeIso3.equals(rpath)) {
 				Currency currency = listing.getListingCurrency();
 				if (currency != null) {
 					// map.put(a.currencyId, currency.get);
@@ -289,7 +289,7 @@ public class ListingMapper implements DALMapper<Listing> {
 				listing.setListingId(row.get(l.listingId));
 			}
 
-			if (l.currencyId.equals(rpath)) {
+			if (l.currencyCodeIso3.equals(rpath)) {
 				// listing.setListingId(row.get(l.currencyId));
 			}
 
