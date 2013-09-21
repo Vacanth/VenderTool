@@ -1,6 +1,7 @@
 package com.vendertool.sharedtypes.core.fps;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -21,6 +22,8 @@ public class Job {
 	private Long responseFileSize;
 	private Date createdDate;
 	private Date lastModifiedDate;
+	private List<File> uploadedFiles;
+	private List<File> processedFiles;
 
 	public Job() {
 	}
@@ -128,4 +131,22 @@ public class Job {
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
+
+	public List<File> getUploadedFiles() {
+		return uploadedFiles;
+	}
+
+	public void setUploadedFiles(List<File> uploadedFiles) {
+		this.uploadedFiles = uploadedFiles;
+	}
+
+	public List<File> getProcessedFiles() {
+		return processedFiles;
+	}
+
+	public void setProcessedFiles(List<File> processedFiles) {
+		this.processedFiles = processedFiles;
+	}
+	
+	
 }

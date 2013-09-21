@@ -3,8 +3,10 @@ package com.vendertool.sitewebapp.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
@@ -56,7 +58,7 @@ public class UploaderController {
 		    			fileInfo.setFileData(item.get());
 		    			fileInfo.setFileName(item.getName());
 		    			fileInfo.setFileSize(item.getSize());
-		    			
+
 		    			List<FileInformation> fileInfoList = new ArrayList<FileInformation>();
 		    			FileUploadRequest fileUploadReq = new FileUploadRequest();
 		    			
@@ -92,6 +94,19 @@ public class UploaderController {
 		}
 		
 		return modelMap;
+	}
+	
+	
+	@RequestMapping(value = "uploadDone", method = RequestMethod.POST)
+	protected @ResponseBody Map<String, String> uploadDone(HttpServletRequest req) {
+		
+		String groupId = req.getParameter("groupId");
+		
+		System.err.println("groupId: " + groupId);
+		
+		Map<String, String> msg = new HashMap<String, String>();
+		msg.put("statusMessage", "success");
+		return msg;
 	}
 	
 	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)

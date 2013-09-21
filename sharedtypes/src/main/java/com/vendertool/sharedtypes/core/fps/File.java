@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class File {
 
 	private Long fileId;
+	private String name;
 	private String fileGroupId;
 	private Byte filesCountInGroup;
 	private Long accountId;
@@ -25,6 +26,12 @@ public class File {
 	}
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getFileGroupId() {
 		return fileGroupId;

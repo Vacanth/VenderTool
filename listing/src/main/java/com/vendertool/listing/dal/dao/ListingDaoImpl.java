@@ -2,9 +2,12 @@ package com.vendertool.listing.dal.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.mysema.query.Tuple;
+import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -13,6 +16,7 @@ import com.vendertool.common.dal.dao.BaseDaoImpl;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
+import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
@@ -50,8 +54,8 @@ public class ListingDaoImpl extends BaseDaoImpl implements ListingDao {
 
 			QListing a = QListing.listing;
 
-			Long accountId = listing.getListingId();
-			if (VUTIL.isNull(accountId) || (accountId.longValue() <= 0)) {
+			Long listingId = listing.getListingId();
+			if (VUTIL.isNull(listingId) || (listingId.longValue() <= 0)) {
 				Long seq = generateNextSequence(con);
 				if (VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 					InsertException ie = new InsertException(
@@ -161,6 +165,54 @@ public class ListingDaoImpl extends BaseDaoImpl implements ListingDao {
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
 			}
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
+	}
+
+	@Override
+	public Listing getListing(Long listingId, Path<?>[] readSet) throws DBConnectionException,
+			FinderException, DatabaseException {
+		if (VUTIL.isNotNull(listingId)) {
+			FinderException fe = new FinderException(
+					"Cannot find Listing with null listingId");
+			logger.debug(fe.getMessage(), fe);
+			throw fe;
+		}
+
+		Connection con = null;
+
+		try {
+			con = getConnection();
+
+			QListing a = QListing.listing;
+
+			SQLQuery query = from(con, a).where(a.listingId.eq(listingId));
+
+			// Always log the query before executing it
+			logger.info("DAL QUERY: " + query.toString());
+
+			List<Tuple> rows = query.list(readSet);
+
+			if ((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
+			Listing listing = new ListingMapper(readSet).convert(rows.get(0),
+					readSet);
+			if (listing == null) {
+				FinderException fe = new FinderException("Cannot find account");
+				logger.debug(fe.getMessage(), fe);
+				throw fe;
+			}
+
+			return listing;
 		} finally {
 			try {
 				if (con != null) {

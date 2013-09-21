@@ -12,7 +12,7 @@ import com.vendertool.sharedtypes.rnr.VerifyListingResponse;
 
 
 public interface IMarketListingAdapter {
-	public AddListingResponse addListing(AddListingRequest request);
+	public void addListing(AddListingRequest request, AddListingResponse response);
 	
 	public GetListingResponse getListing(String marketListingId);
 	

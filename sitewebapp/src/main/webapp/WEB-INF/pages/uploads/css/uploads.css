@@ -1,18 +1,63 @@
-.iconBtn.uploads {
-	background-color:#6ea3fa;
-	border:#6ea3fa;
+/******** Upload and Download buttons ********/
+.iconBtn.upload, .iconBtn.download {
 	margin-bottom:15px;
 }
-.iconBtn.uploads .bg {
-	background-color:#3278EA;
-	width:36px;
+.iconBtn.upload .icon, .iconBtn.download .icon {
+	width:24px;
+	background:url('../resources/img/icons.png') no-repeat -82px 0;
+	position:relative;
 }
-.iconBtn.uploads .icon {
-	width:26px;
-	background:url('../resources/img/icons.png') no-repeat -115px 0;
+.iconBtn.upload b, .iconBtn.download b {
+	left:-8px;
+}
+/******** Upload button ********/
+.iconBtn.upload {
+	background-color:#6ea3fa;
+	border:#6ea3fa;
+	padding-right:20px;
+}
+/******** Download button ********/
+.iconBtn.download .icon {
+	background-position:-106px 0;
+	top:-2px;
+}
+.iconBtn.download {
+	background-color:#ac99c8;
+	border:#ac99c8;
 }
 
 .uploadTable th {
 	font-weight:normal;
-	
 }
+.folderIcon {
+	display:inline-block;
+	width:24px;
+	height:18px;
+	background:url('../resources/img/icons.png') no-repeat -131px 1px;
+	position:relative;
+	top:4px;
+}
+.folderIcon.open {
+	background:url('../resources/img/icons.png') no-repeat -157px 1px;
+}
+.fileIcon {
+	display:inline-block;
+	width:24px;
+	height:18px;
+	background:url('../resources/img/icons.png') no-repeat -178px 1px;
+	position:relative;
+	top:4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

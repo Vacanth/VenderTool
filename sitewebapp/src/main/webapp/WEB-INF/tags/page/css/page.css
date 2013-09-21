@@ -289,7 +289,7 @@ Button with icon
 .iconBtn {
 	position:relative;
 	overflow:hidden;
-	height:38px;
+	height:32px;
 	color:#000;
 }
 .iconBtn .bg {
@@ -303,14 +303,15 @@ Button with icon
 	position:relative;
 	display:inline-block;
 	left:-7px;
-	height:28px;
+	height:26px;
 	margin:0;
+	top:-1px;
 }
 .iconBtn b {
 	display:inline;
 	position:relative;
 	font-weight:normal;
-	top:-9px;
+	top:-11px;
 }
 
 

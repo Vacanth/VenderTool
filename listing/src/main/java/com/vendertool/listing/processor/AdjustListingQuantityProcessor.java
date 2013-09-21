@@ -41,7 +41,7 @@ public class AdjustListingQuantityProcessor extends BaseListingProcessor {
 		}
 		AdjustListingQuantityRequest adjustListingQuantityRequest = (AdjustListingQuantityRequest) request;
 		AdjustListingQuantityResponse adjustListingQuantityResponse = (AdjustListingQuantityResponse) response;
-
+		long listingId = adjustListingQuantityRequest.getListingId();
 		// TODO start basic validation
 	}
 
