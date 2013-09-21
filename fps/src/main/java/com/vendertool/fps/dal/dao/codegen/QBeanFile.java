@@ -16,6 +16,8 @@ public class QBeanFile {
 
     private Long fileId;
 
+    private String fileName;
+
     private Byte filesCountInGroup;
 
     private java.sql.Timestamp lastModifiedDate;
@@ -58,6 +60,14 @@ public class QBeanFile {
 
     public void setFileId(Long fileId) {
         this.fileId = fileId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Byte getFilesCountInGroup() {

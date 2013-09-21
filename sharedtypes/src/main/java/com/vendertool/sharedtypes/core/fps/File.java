@@ -13,6 +13,7 @@ public class File {
 	private Byte filesCountInGroup;
 	private Long accountId;
 	private String refUrl;
+	private String fileName;
 	private Byte storageSource;
 	private FPSUsecaseEnum useCase;
 	private FPSFileStatusEnum status;
@@ -80,4 +81,10 @@ public class File {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 }

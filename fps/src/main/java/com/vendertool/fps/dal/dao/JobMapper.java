@@ -62,13 +62,13 @@ public class JobMapper implements DALMapper<Job> {
 				map.put(j.isoCountryCode, job.getIsoCountryCode());
 			}
 			if(j.status.equals(rpath)) {
-				map.put(j.status, job.getStatus());
+				map.put(j.status, (job.getStatus() != null) ? job.getStatus().getId() : null);
 			}
 			if(j.title.equals(rpath)) {
 				map.put(j.title, job.getTitle());
 			}
 			if(j.usecase.equals(rpath)) {
-				map.put(j.usecase, job.getUsecase());
+				map.put(j.usecase, (job.getUsecase() != null) ? job.getUsecase().getId() : null);
 			}
 			if(j.error.equals(rpath)) {
 				map.put(j.error, job.getError());

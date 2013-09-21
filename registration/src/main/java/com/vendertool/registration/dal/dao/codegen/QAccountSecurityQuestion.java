@@ -31,7 +31,7 @@ public class QAccountSecurityQuestion extends com.mysema.query.sql.RelationalPat
 
     public final StringPath securityAnswer = createString("security_answer");
 
-    public final NumberPath<Integer> securityQuestionId = createNumber("security_question_id", Integer.class);
+    public final StringPath securityQuestionCode = createString("security_question_code");
 
     public final com.mysema.query.sql.PrimaryKey<QBeanAccountSecurityQuestion> primary = createPrimaryKey(accountSecurityQuestionId);
 

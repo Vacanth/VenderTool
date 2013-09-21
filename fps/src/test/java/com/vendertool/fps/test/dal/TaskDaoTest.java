@@ -22,7 +22,7 @@ import com.vendertool.sharedtypes.core.fps.FPSTaskStatusEnum;
 import com.vendertool.sharedtypes.core.fps.Task;
 
 public class TaskDaoTest extends BaseDaoTest{
-	private static final int TASK_COUNT = 100;
+	private static final int TASK_COUNT = 10;
 	Task[] tasks;
 	TaskDao dao;
 	QTask qa;

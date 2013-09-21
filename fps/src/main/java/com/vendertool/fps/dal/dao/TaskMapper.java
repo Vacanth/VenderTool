@@ -66,7 +66,7 @@ public class TaskMapper implements DALMapper<Task> {
 				map.put(t.response, task.getResponse());
 			}
 			if(t.status.equals(rpath)) {
-				map.put(t.status, task.getStatus());
+				map.put(t.status, (task.getStatus()!= null) ? task.getStatus().getId() : null);
 			}
 			if(t.isoCountryCode.equals(rpath)) {
 				map.put(t.isoCountryCode, task.getIsoCountryCode());

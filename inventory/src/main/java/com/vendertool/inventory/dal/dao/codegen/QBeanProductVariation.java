@@ -8,8 +8,6 @@ import javax.annotation.Generated;
 @Generated("com.mysema.query.codegen.BeanSerializer")
 public class QBeanProductVariation {
 
-    private Integer availbleQuantity;
-
     private java.sql.Timestamp createdDate;
 
     private java.sql.Timestamp lastModifiedDate;
@@ -20,17 +18,11 @@ public class QBeanProductVariation {
 
     private Long productVariationId;
 
+    private Integer quantity;
+
     private String title;
 
     private String url;
-
-    public Integer getAvailbleQuantity() {
-        return availbleQuantity;
-    }
-
-    public void setAvailbleQuantity(Integer availbleQuantity) {
-        this.availbleQuantity = availbleQuantity;
-    }
 
     public java.sql.Timestamp getCreatedDate() {
         return createdDate;
@@ -70,6 +62,14 @@ public class QBeanProductVariation {
 
     public void setProductVariationId(Long productVariationId) {
         this.productVariationId = productVariationId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getTitle() {

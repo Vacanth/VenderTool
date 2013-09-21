@@ -10,11 +10,9 @@ public class QBeanProduct {
 
     private Long accountId;
 
-    private Integer availbleQuantity;
-
     private java.sql.Timestamp createdDate;
 
-    private String descriptionText;
+    private String currencyCodeIso3;
 
     private Byte dimensionUnit;
 
@@ -36,7 +34,7 @@ public class QBeanProduct {
 
     private String productUrl;
 
-    private String productcol;
+    private Integer quantity;
 
     private String sku;
 
@@ -56,14 +54,6 @@ public class QBeanProduct {
         this.accountId = accountId;
     }
 
-    public Integer getAvailbleQuantity() {
-        return availbleQuantity;
-    }
-
-    public void setAvailbleQuantity(Integer availbleQuantity) {
-        this.availbleQuantity = availbleQuantity;
-    }
-
     public java.sql.Timestamp getCreatedDate() {
         return createdDate;
     }
@@ -72,12 +62,12 @@ public class QBeanProduct {
         this.createdDate = createdDate;
     }
 
-    public String getDescriptionText() {
-        return descriptionText;
+    public String getCurrencyCodeIso3() {
+        return currencyCodeIso3;
     }
 
-    public void setDescriptionText(String descriptionText) {
-        this.descriptionText = descriptionText;
+    public void setCurrencyCodeIso3(String currencyCodeIso3) {
+        this.currencyCodeIso3 = currencyCodeIso3;
     }
 
     public Byte getDimensionUnit() {
@@ -160,12 +150,12 @@ public class QBeanProduct {
         this.productUrl = productUrl;
     }
 
-    public String getProductcol() {
-        return productcol;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setProductcol(String productcol) {
-        this.productcol = productcol;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getSku() {

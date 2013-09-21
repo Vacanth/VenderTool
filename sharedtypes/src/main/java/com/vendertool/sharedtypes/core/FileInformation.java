@@ -9,6 +9,8 @@ public class FileInformation {
 	private byte[] fileData;
 	private String fileName;
 	private long fileSize;
+	private String accountId;
+	private String fileGroupId;
 
 	public byte[] getFileData() {
 		return fileData;
@@ -32,5 +34,21 @@ public class FileInformation {
 
 	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
+	}
+	
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+	public String getFileGroupId() {
+		return fileGroupId;
+	}
+
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
 	}
 }
