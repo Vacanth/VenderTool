@@ -11,12 +11,14 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.listing.dal.dao.ListingDAOFactory;
 import com.vendertool.listing.dal.dao.ListingDao;
 import com.vendertool.sharedtypes.core.Listing;
+import com.vendertool.sharedtypes.core.Product;
 
 public class ListingDALService {
 
 	private static final Logger logger = Logger
 			.getLogger(ListingDALService.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
+	private static final String LOG_STRING = "@ListingDALService : ";
 
 	private ListingDao listingDAO;
 
@@ -38,10 +40,17 @@ public class ListingDALService {
 		if (VUTIL.isNull(listing)) {
 			return null;
 		}
+		Product product = listing.getProduct();
 
+		if (VUTIL.isNull(product)) {
+			throw new InsertException(LOG_STRING + " createListing() :"
+					+ "Product is required while inserting Listing.");
+		}
+		//TODO insert product first.
+//		Product
 		Long listingID = listingDAO.generateNextSequence();
 		listing.setListingId(listingID);
-		listingDAO.insertAccount(listing);
+		listingDAO.insertAccount(listing);//TODO if there are any failures, delete the previous product entry.
 		return listingID;
 	}
 

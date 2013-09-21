@@ -54,7 +54,7 @@ public class ListingMapper implements DALMapper<Listing> {
 			if (a.auctionCurrentPrice.equals(rpath)) {
 				Amount acutionCurrentPrice = listing.getAuctionCurrrentPrice();
 				if (acutionCurrentPrice != null) {
-					map.put(a.listingId, acutionCurrentPrice.getValue());
+					map.put(a.auctionCurrentPrice, acutionCurrentPrice.getValue());
 				}
 			}
 
@@ -286,7 +286,7 @@ public class ListingMapper implements DALMapper<Listing> {
 			}
 
 			if (l.accountId.equals(rpath)) {
-				listing.setListingId(row.get(l.listingId));
+				listing.setListingId(row.get(l.accountId));
 			}
 
 			if (l.currencyCodeIso3.equals(rpath)) {
