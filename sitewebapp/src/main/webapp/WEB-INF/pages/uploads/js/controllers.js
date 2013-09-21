@@ -17,12 +17,35 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 
 	
 	//
-	// Popup releated
+	// Assign scope to window so that the popup can get
+	// a handle on the refreshFileList() function.
 	//
 	window.$windowScope = $scope;
 	
-	$scope.updateFiles = function(files) {	
-		//alert(files[0] + 'xxx');
+	//
+	// This is called from the popup when uploads are done.
+	//
+	$scope.refreshFileList = function() {
+
+		$.ajax({
+			type: 'get',
+			url: 'uploadsResponse',
+			data: {},
+	        dataType: 'json',
+			success: function(data, textStatus, jqXHR) {
+				
+				$scope.uploadsRes = angular.copy(data);
+				$scope.$apply();
+				
+				alert('success refreshing file list');
+				
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				
+				alert('errer refreshing file list:' + errorThrown);
+			}
+		});
+			
 	};
 	
 	$scope.openPopup = function() {

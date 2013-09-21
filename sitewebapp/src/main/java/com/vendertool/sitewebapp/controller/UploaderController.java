@@ -3,6 +3,7 @@ package com.vendertool.sitewebapp.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -96,12 +96,17 @@ public class UploaderController {
 		return modelMap;
 	}
 	
+	
 	@RequestMapping(value = "uploadDone", method = RequestMethod.POST)
-	protected void uploadDone(@RequestBody Map<String, String> req) 
-		throws IOException {
+	protected @ResponseBody Map<String, String> uploadDone(HttpServletRequest req) {
 		
-		System.err.println("sssssssssssss groupId:" + req.get("groupId"));
+		String groupId = req.getParameter("groupId");
 		
+		System.err.println("groupId: " + groupId);
+		
+		Map<String, String> msg = new HashMap<String, String>();
+		msg.put("statusMessage", "success");
+		return msg;
 	}
 	
 	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)

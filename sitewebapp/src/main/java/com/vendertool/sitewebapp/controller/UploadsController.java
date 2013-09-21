@@ -8,11 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vendertool.sharedtypes.core.FileUploadDataModel;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sharedtypes.rnr.UploadsResponse;
 import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.util.MockDataUtil;
 
@@ -45,16 +46,23 @@ public class UploadsController {
 		
 		return "uploads/uploads";
 	}
+	
+	@RequestMapping(value=URLConstants.UPLOADS_RESPONSE, method=RequestMethod.GET)
+	public @ResponseBody UploadsResponse getUploadsResponse(ModelMap modelMap, Principal principal) {
+		logger.info("getUploadsResponse controller invoked");
+		
+		return MockDataUtil.getUploadsResponse();
+	}
 
 	/******************************************
 	 * 
 	 * Get partial pages for Angular
 	 * 
 	 ******************************************/
-	@RequestMapping(value = "accounthub/uploads/partial/files", method = RequestMethod.GET)
+	@RequestMapping(value = "accounthub/uploads/partial/fileList", method = RequestMethod.GET)
 	public String getFilesPartial() {
 		logger.info("getFilesPartial controller invoked");
-		return "uploads/partial/files";
+		return "uploads/partial/fileList";
 	}
 	
 }
