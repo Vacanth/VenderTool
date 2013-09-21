@@ -8,7 +8,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 	return {
 		link: function(scope, element, attrs) {
 
-			var uploadUrl = attrs.uploadUrl,
+			var groupId = attrs.groupId,
+				uploadUrl = attrs.uploadUrl,
 				allDoneUrl = attrs.allDoneUrl,
 				fileInput,
 				uploadBtn,
@@ -38,7 +39,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				scope.errors = undefined; // map of fileId to fileName
 				scope.allUploadsSuccessful = false;
 				scope.retrySendUploadsDoneMessage = false;
-				scope.groupId = makeGroupId();
+				scope.groupId = groupId;
 				scope.uploadProgress = {}; // map of fileId to {'loaded':999, 'total':999}
 				scope.uploadInProgress = false;
 			};
@@ -361,10 +362,6 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				var rand = Math.floor((Math.random()*100000000) + 1);
 				var millis = new Date().getTime();
 				return rand + millis;
-			};
-			
-			makeGroupId = function() {
-				return makeId();
 			};
 			
 			updateUploadStatus = function() {

@@ -15,6 +15,6 @@
 	</jsp:attribute>
 
 	<jsp:body>
-		<div uploader upload-url="uploadFile" all-done-url="uploadDone"></div>
+		<div uploader group-id="${groupId}" upload-url="uploadFile" all-done-url="uploadDone"></div>
 	</jsp:body>
 </t1:popup>

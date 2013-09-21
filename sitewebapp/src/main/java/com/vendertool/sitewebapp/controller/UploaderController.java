@@ -1,7 +1,9 @@
 package com.vendertool.sitewebapp.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -112,6 +114,8 @@ public class UploaderController {
 	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)
 	public String getUploaderPopup(ModelMap modelMap, Principal principal) {
 		logger.info("getUploaderPopup controller invoked");
+		
+		modelMap.put("groupId", generateGroupId());
 		return "uploader/uploader";
 	}
 	
@@ -119,6 +123,10 @@ public class UploaderController {
 	public String getUploaderTemplate() {
 		logger.info("getUploaderTemplate controller invoked");
 		return "uploader/partial/uploaderModule";
+	}
+	
+	private static String generateGroupId() {
+		 return new BigInteger(130,  new SecureRandom()).toString(32);
 	}
 	
 }
