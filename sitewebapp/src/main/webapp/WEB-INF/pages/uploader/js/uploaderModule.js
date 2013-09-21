@@ -276,7 +276,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				
 				$.ajax({
 					type: 'post',
-					url: 'xxxxxxxxxxxxxxx' + allDoneUrl,
+					url: allDoneUrl,
 					data: msg,
 					dataType:'json',
 					success: function(data, textStatus, jqXHR) {						
