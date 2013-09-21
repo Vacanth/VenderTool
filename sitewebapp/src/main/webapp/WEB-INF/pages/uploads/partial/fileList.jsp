@@ -15,9 +15,26 @@
 	</a>
 	
 	<style>
-	
-		.fileRows {
+		.uploadTable tbody+tbody {
+			margin:0;
+			padding:0;
+			border-top:0;
+		}
+		table.uploadTable tbody tr td {
+			padding-top:10px;
+			padding-bottom:10px;
+		}
+		.tableHdr {
+			background-color:#ddd;
+		}
+		.subRow {
 			display:none;
+		}
+		.folder {
+			cursor:pointer;
+		}
+		.rowColor {
+			background-color:#e4f2e6;
 		}
 	</style>
 	<script>
@@ -49,7 +66,7 @@
 	</script>
 	
 	<table class="table  uploadTable">
-		<tr>
+		<tr class="tableHdr">
 			<th>Uploaded Files</th>
 			<th>Job Id</th>
 			<th>Status</th>
@@ -58,7 +75,7 @@
 			<th>Job Complete Date</th>
 		</tr>
 		<tbody ng-repeat="job in uploadsRes.jobs">
-			<tr>
+			<tr ng-class="{'rowColor': $index % 2 == 1}">
 				<td>
 					<div ng-switch on="job.uploadedFiles.length">
 						<span ng-switch-when="1">
@@ -69,8 +86,9 @@
 						
 						<span ng-switch-default>
 							<input type="checkbox">
-							<b class="folderIcon" onclick="toggle(this)"></b>
-							<span onclick="toggle(this)">
+							
+							<span ng-click="showRows($event)" class="folder">
+								<b class="folderIcon"></b>
 								<span ng-repeat="file in job.uploadedFiles">
 									{{file.name}}
 								</span>
@@ -104,12 +122,9 @@
 				<td>{{}}</td>
 			</tr>
 			<%--
-			<tr ng-repeat="file in uploadsRes.fileMap[job.jobId]" ng-show="!$first" class="fileRows">
-			--%>
-			<%--
 			// Hidden rows
 			--%>
-			<tr ng-repeat="file in job.uploadedFiles" class="fileRows">
+			<tr ng-repeat="file in job.uploadedFiles" class="subRow">
 				<td>
 					<b class="fileIcon" style="margin-left:15px"></b>
 					<input type="checkbox" ng-model="file.checked"/>

@@ -118,6 +118,38 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		
 	};
 	
+	$scope.showRows = function($event) { 
+		
+		var tbody = $($event.target).closest('tbody');
+		var subRows = tbody.find('.subRow');
+		var folderIcons = tbody.find('.folderIcon');
+		var isHide = false;
+		
+		// Toggle this hidden rows
+		for (var i=0, n=subRows.length; i<n; i++) {
+			var row = $(subRows[i]);
+			if (row.is(':visible')) {
+				row.hide();
+				isHide = true;
+			}
+			else {
+				row.show();
+				isHide = false;
+			}
+		}
+
+		// Toggle the folder icons
+		if (isHide) {
+			for (var j=0, m=folderIcons.length; j<m; j++) {
+				$(folderIcons[j]).removeClass('open');
+			}
+		}
+		else {
+			for (var j=0, m=folderIcons.length; j<m; j++) {
+				$(folderIcons[j]).addClass('open');
+			}
+		}
+	};
 	
 	_ns.gatherDownloadFileIds = function() {
 		var jobs = $scope.uploadsRes.jobs;
