@@ -109,8 +109,9 @@
 						
 						<span ng-switch-default>
 							<input type="checkbox"/>
-							<b class="folderIcon" onclick="toggle(this)"></b>
-							<span onclick="toggle(this)">
+							
+							<span ng-click="showRows($event)" class="folder">
+								<b class="folderIcon"></b>
 								<span ng-repeat="file in job.processedFiles">
 									{{file.name}}
 								</span>
