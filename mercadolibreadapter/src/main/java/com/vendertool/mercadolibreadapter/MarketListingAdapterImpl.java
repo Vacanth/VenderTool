@@ -15,18 +15,20 @@ import com.vendertool.sharedtypes.rnr.VerifyListingResponse;
 
 public class MarketListingAdapterImpl implements IMarketListingAdapter {
 
-	public AddListingResponse addListing(AddListingRequest request) {
+	public void addListing(AddListingRequest request, AddListingResponse response) {
 		IBaseMercadolibreOperationAdapter adapter = MercadolibreAdapterFactory
 				.getInstance().getOperationAdapter(request);
-		return (AddListingResponse) adapter.execute(request);
+		adapter.execute(request, response);
 	}
 
-	public GetListingResponse getListing(String marketListingId) {
+	public GetListingResponse  getListing(String marketListingId) {
 		GetListingRequest request = new GetListingRequest();
 		request.setListingId(marketListingId);
 		IBaseMercadolibreOperationAdapter adapter = MercadolibreAdapterFactory
 				.getInstance().getOperationAdapter(request);
-		return (GetListingResponse) adapter.execute(request);
+		GetListingResponse response = new GetListingResponse();
+		adapter.execute(request, response);
+		return response;
 	}
 
 	public EndListingResponse endListing(String listingId) {

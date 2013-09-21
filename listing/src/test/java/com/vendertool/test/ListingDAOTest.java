@@ -15,6 +15,7 @@ import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.listing.dal.dao.ListingDAOFactory;
 import com.vendertool.listing.dal.dao.ListingDao;
 import com.vendertool.sharedtypes.core.Listing;
+import com.vendertool.sharedtypes.core.Product;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:dal/dal-module.xml","classpath:dal/ListingDAL.xml" })
@@ -36,6 +37,11 @@ public class ListingDAOTest implements ApplicationContextAware {
 		Listing listing = new Listing();
 		try {
 			listing.setCreateOwnerId(1234L);
+			listing.setQuantity(2);
+			Product pro = new Product();
+			pro.setProductId(123l);
+			listing.setProduct(pro);
+			listing.setMasterTemplateId(234l);
 			listingDAO.insertAccount(listing);
 		} catch (DBConnectionException e) {
 			// TODO Auto-generated catch block

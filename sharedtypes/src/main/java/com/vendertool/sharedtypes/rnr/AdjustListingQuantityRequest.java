@@ -3,7 +3,16 @@ package com.vendertool.sharedtypes.rnr;
 public class AdjustListingQuantityRequest extends BaseRequest {
 	private int quantity;
 	private ArithmeticOpCodeEnum operation;
+	private long listingId;
 	
+	public long getListingId() {
+		return listingId;
+	}
+
+	public void setListingId(long listingId) {
+		this.listingId = listingId;
+	}
+
 	public AdjustListingQuantityRequest(){}
 
 	public int getQuantity() {

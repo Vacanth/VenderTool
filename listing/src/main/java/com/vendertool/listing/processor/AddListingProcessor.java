@@ -68,6 +68,7 @@ public class AddListingProcessor extends BaseListingProcessor {
 			return;
 		}
 		// TODO start basic validation
+		//We can skip this since we are gona relay on MarketPlace validations.
 	}
 
 	@Override
@@ -90,8 +91,7 @@ public class AddListingProcessor extends BaseListingProcessor {
 				.getInstance().getMarketListingAdapter(
 						new MarketCountryKey(listing.getCountry(), listing
 								.getMarket()));
-		adapter.addListing(addListingRequest);
-
+		adapter.addListing(addListingRequest, addListingResponse);
 		// TODO update DB
 	}
 }

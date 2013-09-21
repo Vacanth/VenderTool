@@ -5,5 +5,5 @@ import com.vendertool.sharedtypes.rnr.BaseResponse;
 
 public interface IBaseMercadolibreOperationAdapter {
 
-	public BaseResponse execute(BaseRequest request);
+	public void execute(BaseRequest request, BaseResponse response);
 }

@@ -34,7 +34,7 @@ public class MercadolibreGetListingAdapter implements
 		return MercadolibreGetListingAdapterHolder.INSTANCE;
 	}
 
-	public BaseResponse execute(BaseRequest request) {
+	public void execute(BaseRequest request, BaseResponse response) {
 		GetListingRequest itemId = (GetListingRequest)request;
 		
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
@@ -42,25 +42,23 @@ public class MercadolibreGetListingAdapter implements
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		communicatorVO.setTargetURL(GET_LISTING_URL+itemId.getListingId());
 		MercadolibreCommunicator communicator = MercadolibreCommunicator.getInstance();
-		Response response = communicator.call(communicatorVO);
+		Response resp = communicator.call(communicatorVO);
 		
-		if (response.getStatus() != 200) {
+		if (resp.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 		}
 		
-		String output = response.readEntity(String.class);
+		String output = resp.readEntity(String.class);
 		Item responseItem = readItem(output);
 		
-		GetListingResponse getListingResponse = adaptToGetListingResponse(responseItem);
-		return getListingResponse;
+		adaptToGetListingResponse(responseItem, (GetListingResponse) response);
 	}
 
-	private GetListingResponse adaptToGetListingResponse(Item responseItem) {
+	private void adaptToGetListingResponse(Item responseItem, GetListingResponse response) {
 		if(responseItem == null){
-			return null;
+			return;
 		}
-		GetListingResponse response = new GetListingResponse();
 		
 		Listing listing = new Listing();
 		
@@ -72,7 +70,6 @@ public class MercadolibreGetListingAdapter implements
 		product.setTitle(responseItem.getTitle());
 		listing.setProduct(product);
 		response.setListing(listing);
-		return response;
 	}
 
 	private Item readItem(String output) {
