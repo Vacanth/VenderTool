@@ -32,30 +32,30 @@ public class Dimension {
 		}
 	}
 	
-	private int length;
-	private int width;
-	private int height;
+	private Double length;
+	private Double width;
+	private Double height;
 	private DimensionUnitEnum dimensionUnit;
 	
 	public Dimension() {
 	}
 	
-	public int getLength() {
+	public Double getLength() {
 		return length;
 	}
-	public void setLength(int length) {
+	public void setLength(Double length) {
 		this.length = length;
 	}
-	public int getWidth() {
+	public Double getWidth() {
 		return width;
 	}
-	public void setWidth(int width) {
+	public void setWidth(Double width) {
 		this.width = width;
 	}
-	public int getHeight() {
+	public Double getHeight() {
 		return height;
 	}
-	public void setHeight(int height) {
+	public void setHeight(Double height) {
 		this.height = height;
 	}
 	public DimensionUnitEnum getDimensionUnit() {

@@ -16,7 +16,7 @@ public class Product{
 	private Amount price;
 	private ProductCodeTypeEnum productCodeType;
 	private String productCode;
-	private int quantity = 1;//default to 1
+	private Integer quantity = 1;//default to 1
 	private Weight weight;//optional
 	private Dimension dimension;//optional
 	private List<Image> images;//optional
@@ -24,11 +24,22 @@ public class Product{
 	private List<ProductVariation> variations;//optional
 	private Date createDate;
 	private Date lastModifiedDate;
-	private String accountId;
-	
+	private Long accountId;
+	private String productUrl;
 	
 	public Product(){}
 	
+	
+	public String getProductUrl() {
+		return productUrl;
+	}
+
+
+	public void setProductUrl(String productUrl) {
+		this.productUrl = productUrl;
+	}
+
+
 	public Product(String title){
 		setTitle(title);
 	}
@@ -96,11 +107,11 @@ public class Product{
 		this.productCode = productCode;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -160,11 +171,11 @@ public class Product{
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	public String getAccountId() {
+	public Long getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(String createOwnerId) {
+	public void setAccountId(Long createOwnerId) {
 		this.accountId = createOwnerId;
 	}
 }

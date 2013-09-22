@@ -33,22 +33,49 @@ public class Image {
 			return UNKNOWN;
 		}
 	}
-	
-	private int imageId;
+	private Long accountId;
+	private Long imageId;
 	private byte[] bytes;
 	private String size;
 	private ImageFormatEnum format;
 	private String name;
 	private String imgurl;
+	private String hash;
+	private byte sortOrderId;
 	
+	
+	public byte getSortOrderId() {
+		return sortOrderId;
+	}
+
+	public void setSortOrderId(byte sortOrderId) {
+		this.sortOrderId = sortOrderId;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public Long getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+
 	public Image(){
 	}
 
-	public int getImageId() {
+	public Long getImageId() {
 		return imageId;
 	}
 
-	public void setImageId(int imageId) {
+	public void setImageId(Long imageId) {
 		this.imageId = imageId;
 	}
 

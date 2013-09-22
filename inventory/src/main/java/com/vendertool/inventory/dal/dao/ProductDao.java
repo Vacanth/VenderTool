@@ -1,4 +1,4 @@
-package com.vendertool.common.dal.dao;
+package com.vendertool.inventory.dal.dao;
 
 
 import java.util.List;
@@ -11,32 +11,29 @@ import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
-import com.vendertool.sharedtypes.core.Image;
+import com.vendertool.sharedtypes.core.Product;
 
-public interface ImageDao extends BaseDao {
+public interface ProductDao extends BaseDao {
 	
-	public long insert(Image image) throws DBConnectionException,
+	public long insert(Product product) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
-	public void delete(Image image)
+	public void delete(Product product)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
-	public void delete(long imageId)
+	public void delete(long productId)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
-	public void update(Image image, Path<?>[] updateSet)
+	public void update(Product product, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
-	public void updateHostedUrl(Long accountId,Long imageId,String hostedUrl)
+	public void updateHostedUrl(Long accountId,Long productId,String hostedUrl)
 			throws DBConnectionException, UpdateException, DatabaseException;
 
-	public List<Image> findByAccountId(Long accountId, Path<?>[] readSet)
+	public List<Product> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public List<Image> findByAccountIdRefIdAndRefType(Long accountId, Long refId, Byte refType, Path<?>[] readSet)
-			throws DBConnectionException, FinderException, DatabaseException;
-	
-	public Image findByAccountIdAndImageId(Long accountId,Long imageId, Path<?>[] readSet)
+	public Product findByAccountIdAndProductId(Long accountId,Long productId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 
 

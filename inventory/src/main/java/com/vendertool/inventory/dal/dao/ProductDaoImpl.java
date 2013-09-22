@@ -1,4 +1,4 @@
-package com.vendertool.common.dal.dao;
+package com.vendertool.inventory.dal.dao;
 
 
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.Path;
-import com.vendertool.common.dal.dao.codegen.QImage;
+import com.vendertool.common.dal.dao.BaseDaoImpl;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
@@ -21,18 +21,19 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
-import com.vendertool.sharedtypes.core.Image;
+import com.vendertool.inventory.dal.dao.codegen.QProduct;
+import com.vendertool.sharedtypes.core.Product;
 
-public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
-	private static final Logger logger = Logger.getLogger(ImageDaoImpl.class);
+public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
+	private static final Logger logger = Logger.getLogger(ProductDaoImpl.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 			
 	@Override
-	public long insert(Image image) throws DBConnectionException,
+	public long insert(Product product) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
-		if(VUTIL.isNull(image)) {
-			InsertException ie = new InsertException("Cannot insert null image");
+		if(VUTIL.isNull(product)) {
+			InsertException ie = new InsertException("Cannot insert null product");
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
 		}
@@ -41,7 +42,7 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 		
 		try {
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 			Long seq = generateNextSequence(con);
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 				
@@ -50,11 +51,11 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-				image.setImageId(seq);
+				product.setProductId(seq);
 			}
 	
 	    	SQLInsertClause s = insert(con, a)
-    				.populate(new ImageMapper(a.all()).populateBean(image));
+    				.populate(new ProductMapper(a.all()).populateBean(product));
     	logger.info("DAL QUERY: " + s.toString());
     	
     	try {
@@ -73,31 +74,31 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	@Override
 	public boolean hasSequenceGenerator() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public String getSequenceProcedureName() {
 		// TODO Auto-generated method stub
-		return "nextvalForImage()";
+		return "nextvalForProduct()";
 	}
 
 	@Override
-	public void delete(Image image) throws DBConnectionException,
+	public void delete(Product product) throws DBConnectionException,
 			DeleteException, DatabaseException {
-		delete(image.getImageId());
+		delete(product.getProductId());
 		
 	}
 	@Override
-	public void delete(long imageId) throws DBConnectionException,
+	public void delete(long productId) throws DBConnectionException,
 			DeleteException {
 		Connection con = null;
 		
 		try {
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 			SQLDeleteClause s = delete(con, a)
-				.where(a.imageId.eq(imageId));
+				.where(a.productId.eq(productId));
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
 	    	try {
@@ -113,10 +114,10 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	}
 
 	@Override
-	public void update(Image image, Path<?>[] updateSet)
+	public void update(Product product, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException {
-		if(VUTIL.isNull(image) || VUTIL.isNull(updateSet)){
-			UpdateException ue = new UpdateException("Cannot update null image");
+		if(VUTIL.isNull(product) || VUTIL.isNull(updateSet)){
+			UpdateException ue = new UpdateException("Cannot update null product");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
@@ -125,9 +126,9 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 		
 		try {
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 	    	SQLUpdateClause s = update(con, a)
-					.populate(image, new ImageMapper(updateSet));
+					.populate(product, new ProductMapper(updateSet));
 
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
@@ -144,10 +145,10 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	}
 
 	@Override
-	public void updateHostedUrl(Long accountId, Long imageId,String hostedUrl)
+	public void updateHostedUrl(Long accountId, Long productId,String hostedUrl)
 			throws DBConnectionException, UpdateException, DatabaseException {
-		if(VUTIL.isNull(accountId) || VUTIL.isNull(imageId) || VUTIL.isNull(hostedUrl)){
-			UpdateException ue = new UpdateException("Cannot update null image");
+		if(VUTIL.isNull(accountId) || VUTIL.isNull(productId) || VUTIL.isNull(hostedUrl)){
+			UpdateException ue = new UpdateException("Cannot update null product");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
@@ -156,10 +157,10 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 		
 		try {
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 			SQLUpdateClause s = update(con, a)
-					.set(a.hostedUrl, hostedUrl)
-					.where(a.accountId.eq(accountId),a.imageId.eq(imageId));
+					.set(a.productUrl, hostedUrl)
+					.where(a.accountId.eq(accountId),a.productId.eq(productId));
 
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
@@ -177,13 +178,13 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	}
 
 	@Override
-	public List<Image> findByAccountId(Long accountId, Path<?>[] readSet)
+	public List<Product> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
 	Connection con = null;
 		
 		try { 
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 			SQLQuery query = from(con, a)
 					.where(a.accountId.eq(accountId.longValue()));
 
@@ -196,64 +197,30 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	    		return null;
 	    	}
 	    	
-			List<Image> image = (List<Image>) new ImageMapper(readSet).convert(rows.get(0), readSet);
-			if(image == null) {
-				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
+			List<Product> product = (List<Product>) new ProductMapper(readSet).convert(rows.get(0), readSet);
+			if(product == null) {
+				FinderException fe = new FinderException("Cannot find product for given account : "+accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
 			
-			return image;
-		} finally {
-			closeConnection(con);
-		}
-	}
-	
-	@Override
-	public List<Image> findByAccountIdRefIdAndRefType(Long accountId,Long refId, Byte refType,
-			Path<?>[] readSet) throws DBConnectionException, FinderException,
-			DatabaseException {
-Connection con = null;
-		
-		try { 
-			con = getConnection();
-			QImage a = QImage.image;
-			SQLQuery query = from(con, a)
-					.where(a.accountId.eq(accountId.longValue()) , a.refId.eq(refId.longValue()) , a.refType.eq(refType));
-
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
-			List<Image> image = (List<Image>) new ImageMapper(readSet).convert(rows.get(0), readSet);
-			if(image == null) {
-				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
-				logger.debug(fe.getMessage(), fe);
-				throw fe;
-			}
-			
-			return image;
+			return product;
 		} finally {
 			closeConnection(con);
 		}
 	}
 
 	@Override
-	public Image findByAccountIdAndImageId(Long accountId, Long imageId,
+	public Product findByAccountIdAndProductId(Long accountId, Long productId,
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException {
 	Connection con = null;
 		
 		try { 
 			con = getConnection();
-			QImage a = QImage.image;
+			QProduct a = QProduct.product;
 			SQLQuery query = from(con, a)
-					.where(a.accountId.eq(accountId.longValue()) , a.imageId.eq(imageId.longValue()));
+					.where(a.accountId.eq(accountId.longValue()) , a.productId.eq(productId.longValue()));
 
 	    	logger.info("DAL QUERY: " + query.toString());
 	    	
@@ -264,14 +231,14 @@ Connection con = null;
 	    		return null;
 	    	}
 	    	
-			Image image =  new ImageMapper(readSet).convert(rows.get(0), readSet);
-			if(image == null) {
-				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
+			Product product =  new ProductMapper(readSet).convert(rows.get(0), readSet);
+			if(product == null) {
+				FinderException fe = new FinderException("Cannot find product for given account : "+accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
 			
-			return image;
+			return product;
 		} finally {
 			closeConnection(con);
 		}
@@ -286,6 +253,4 @@ Connection con = null;
 			logger.debug(e.getMessage(), e);
 		}
 	}
-
-	
 }

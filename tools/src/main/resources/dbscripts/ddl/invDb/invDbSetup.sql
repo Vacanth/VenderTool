@@ -14,9 +14,8 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`product` (
   `product_id` BIGINT NOT NULL ,
   `title` VARCHAR(256) NULL DEFAULT NULL ,
   `sku` VARCHAR(64) NULL DEFAULT NULL ,
-  `description_text` TEXT NULL ,
   `price` DECIMAL(18,4) NULL DEFAULT NULL ,
-  `availble_quantity` INT NULL DEFAULT NULL ,
+  `quantity` INT NULL DEFAULT NULL ,
   `account_id` BIGINT NULL DEFAULT NULL ,
   `product_code` VARCHAR(64) NULL DEFAULT NULL ,
   `product_code_type` TINYINT NULL DEFAULT NULL ,
@@ -30,9 +29,9 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`product` (
   `created_date` DATETIME NULL DEFAULT NULL ,
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
   `last_modified_app` TINYINT NULL DEFAULT NULL ,
-  `productcol` VARCHAR(45) NULL ,
   PRIMARY KEY (`product_id`) )
-AUTO_INCREMENT = 1;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -43,15 +42,16 @@ DROP TABLE IF EXISTS `invdb`.`product_variation` ;
 CREATE  TABLE IF NOT EXISTS `invdb`.`product_variation` (
   `product_variation_id` BIGINT NOT NULL ,
   `title` VARCHAR(256) NULL ,
-  `product_id` BIGINT NOT NULL  ,
-  `availble_quantity` INT NULL DEFAULT NULL ,
+  `product_id` BIGINT NOT NULL ,
+  `quantity` INT NULL DEFAULT NULL ,
   `price` DECIMAL(18,4) NULL DEFAULT NULL ,
   `url` VARCHAR(4000) NULL ,
   `created_date` DATETIME NULL DEFAULT NULL ,
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`product_variation_id`) ,
-  INDEX `fk_product_variation_merchant_product1_idx` (`product_id` ASC) )
-ENGINE = InnoDB;
+  INDEX `fk_product_variation_merchant_product1_idx` (`product_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -65,7 +65,7 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`image` (
   `image_name` VARCHAR(64) NULL DEFAULT NULL ,
   `sort_order_id` TINYINT NULL DEFAULT NULL ,
   `ref_id` BIGINT NOT NULL  ,
-  `ref_type` TINYINT NULL DEFAULT NULL ,
+  `ref_type` TINYINT NULL  ,
   `image_format` TINYINT NULL DEFAULT NULL ,
   `hosted_url` VARCHAR(1028) NULL DEFAULT NULL ,
   `hash` VARCHAR(64) NULL DEFAULT NULL ,
@@ -74,8 +74,11 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`image` (
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`image_id`) ,
   INDEX `fk_image_product_variation1_idx` (`ref_id` ASC) ,
-  INDEX `fk_image_merchant_product1_idx` (`ref_id` ASC))
-ENGINE = InnoDB;
+  INDEX `fk_image_merchant_product1_idx` (`ref_id` ASC) ,
+  INDEX `refid_reftype` (`ref_id` ASC, `ref_type` ASC) ,
+  INDEX `accountid` (`account_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -96,8 +99,9 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`product_attribute` (
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`product_attribute_id`) ,
   INDEX `fk_product_attribute_merchant_product1_idx` (`ref_id` ASC) ,
-  INDEX `fk_product_attribute_product_variation1_idx` (`ref_id` ASC) )
-ENGINE = InnoDB;
+  INDEX `fk_product_attribute_product_variation1_idx` (`ref_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -106,7 +110,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `invdb`.`listing` ;
 
 CREATE  TABLE IF NOT EXISTS `invdb`.`listing` (
-  `listing_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `listing_id` BIGINT NOT NULL ,
   `product_id` BIGINT NOT NULL ,
   `account_id` BIGINT NULL DEFAULT NULL ,
   `master_template_id` BIGINT NOT NULL ,
@@ -130,7 +134,8 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`listing` (
   PRIMARY KEY (`listing_id`) ,
   INDEX `fk_listing_merchant_product1_idx` (`product_id` ASC) ,
   INDEX `fk_listing_master_template1_idx` (`master_template_id` ASC) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -139,7 +144,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `invdb`.`listing_variation` ;
 
 CREATE  TABLE IF NOT EXISTS `invdb`.`listing_variation` (
-  `listing_variation_id` BIGINT NOT NULL  ,
+  `listing_variation_id` BIGINT NOT NULL ,
   `listing_id` BIGINT NULL ,
   `product_variation_id` BIGINT NULL ,
   `quantity` INT NULL ,
@@ -150,8 +155,28 @@ CREATE  TABLE IF NOT EXISTS `invdb`.`listing_variation` (
   `created_date` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`listing_variation_id`) ,
   INDEX `fk_listing_variation_listing1_idx` (`listing_id` ASC) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
+
+-- -----------------------------------------------------
+-- Table `invdb`.`product_description`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `invdb`.`product_description` ;
+
+CREATE  TABLE IF NOT EXISTS `invdb`.`product_description` (
+  `product_description_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `product_id` BIGINT NOT NULL ,
+  `account_id` BIGINT NOT NULL ,
+  `product_description_title` VARCHAR(64) NOT NULL ,
+  `product_description_text` LONGTEXT NOT NULL ,
+  `created_date` DATETIME NULL ,
+  `last_modified_date` DATETIME NULL ,
+  PRIMARY KEY (`product_description_id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+USE `invdb` ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
