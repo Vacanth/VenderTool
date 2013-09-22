@@ -65,7 +65,7 @@
 	
 	</script>
 	
-	<table class="table  uploadTable">
+	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)">
 		<tr class="tableHdr">
 			<th>Job Id</th>
 			<th>Uploaded Files</th>
@@ -90,10 +90,10 @@
 							
 						</span>
 						<span ng-switch-default>
-							<input type="checkbox">
+							<input type="checkbox" class="q-uploadedFldrCbx">
 							
-							<span ng-click="showRows($event)" class="folder">
-								<b class="folderIcon"></b>
+							<span class="folder q-folder">
+								<b class="folderIcon q-folderIcon"></b>
 
 								<span ng-switch on="isNullOrEmpty(job.title)">
 									<span ng-switch-when="false">{{job.title}}</span>
@@ -122,9 +122,10 @@
 							
 						</span>
 						<span ng-switch-default>
-							<input type="checkbox"/>
-							<span ng-click="showRows($event)" class="folder">
-								<b class="folderIcon"></b>
+							<input type="checkbox" class="q-processedFldrCbx"/>
+							
+							<span class="folder q-folder">
+								<b class="folderIcon q-folderIcon"></b>
 								
 								<span ng-switch on="isNullOrEmpty(job.title)">
 									<span ng-switch-when="false">{{job.title}}</span>
@@ -141,17 +142,17 @@
 			<%--
 			// Hidden rows
 			--%>
-			<tr ng-repeat="file in job.uploadedFiles" class="subRow">
+			<tr ng-repeat="file in job.uploadedFiles" class="subRow q-subRow">
 				<td>{{}}</td>
 				<td>
-					<input type="checkbox" ng-model="file.checked" style="margin-left:15px"/>
+					<input type="checkbox" ng-model="file.checked" class="q-uploadedCbx" style="margin-left:15px"/>
 					<b class="fileIcon"></b>
 					{{file.name}}
 				</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
 				<td>
-					<input type="checkbox" ng-model="job.processedFiles[$index].checked" style="margin-left:15px"/>
+					<input type="checkbox" ng-model="job.processedFiles[$index].checked" class="q-processedCbx" style="margin-left:15px"/>
 					<b class="fileIcon"></b>
 					{{job.processedFiles[$index].name}}
 				</td>

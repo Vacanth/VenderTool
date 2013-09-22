@@ -7,7 +7,18 @@ all the function params as strings in same order.
 ********************/
 uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams', '$location', function(Data, $scope, $http, $routeParams, $location) {
 	
-	var _ns = {};
+	var _ns = {},
+		_css = {
+			uploadedCheckbox:'q-uploadedCbx',
+			processedCheckbox:'q-processedCbx',
+			uploadedFolderCheckbox:'q-uploadedFldrCbx',
+			processedFolderCheckbox:'q-processedFldrCbx',
+			subRow:'q-subRow',
+			folderIcon:'q-folderIcon',
+			open:'open',
+			folder:'q-folder'
+		}
+	;
 	
 	
 	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
@@ -118,39 +129,6 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		
 	};
 	
-	$scope.showRows = function($event) { 
-		
-		var tbody = $($event.target).closest('tbody');
-		var subRows = tbody.find('.subRow');
-		var folderIcons = tbody.find('.folderIcon');
-		var isHide = false;
-		
-		// Toggle this hidden rows
-		for (var i=0, n=subRows.length; i<n; i++) {
-			var row = $(subRows[i]);
-			if (row.is(':visible')) {
-				row.hide();
-				isHide = true;
-			}
-			else {
-				row.show();
-				isHide = false;
-			}
-		}
-
-		// Toggle the folder icons
-		if (isHide) {
-			for (var j=0, m=folderIcons.length; j<m; j++) {
-				$(folderIcons[j]).removeClass('open');
-			}
-		}
-		else {
-			for (var j=0, m=folderIcons.length; j<m; j++) {
-				$(folderIcons[j]).addClass('open');
-			}
-		}
-	};
-	
 	$scope.isNullOrEmpty = function(someString) {
 		if (someString) {
 			someString = someString.replace(/ /g, '+');
@@ -159,6 +137,103 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 			}
 		}
 		return false;
+	};
+	
+	$scope.toggleRows = function($event) { 
+		var target, tbody, subRows, folderIcons, isHide;
+		
+		target = $($event.target);
+		
+		if (target.closest('.' + _css.folder).length > 0) {
+			
+			tbody = target.closest('tbody');
+			subRows = tbody.find('.' + _css.subRow);
+			folderIcons = tbody.find('.' + _css.folderIcon);
+			isHide = false;
+		
+			// Toggle this hidden rows
+			subRows.each(function(index, el) {
+				if ($(el).is(':visible')) {
+					$(el).hide();
+					isHide = true;
+				}
+				else {
+					$(el).show();
+					isHide = false;
+				}
+			});
+
+			// Toggle the folder icons
+			if (isHide) {
+				folderIcons.each(function(index, el) {
+					$(el).removeClass(_css.open);
+				});
+			}
+			else {
+				folderIcons.each(function(index, el) {
+					$(el).addClass(_css.open);
+				});
+			}
+		}
+	};
+
+	$scope.handleCheckboxCtrls = function($event) {
+		var input, files, folder, fileClass, folderClass, allChecked;
+		
+		if ($event.target.nodeName === 'INPUT') {
+			input = $($event.target);
+			
+			//
+			// Find the checked folder
+			//
+			if (input.hasClass(_css.uploadedFolderCheckbox)) {
+				fileClass = _css.uploadedCheckbox;
+			}
+			else if (input.hasClass(_css.processedFolderCheckbox)) {
+				fileClass = _css.processedCheckbox;
+			}
+			//
+			// Check/un-check the uploaded files for this folder
+			//
+			if (fileClass) {
+				files = input.closest('tbody').find('.' + fileClass);
+				if (files.length > 0) {
+					$(files).each(function(index, el) {
+						$(el).prop('checked',  input.prop('checked'));
+					});
+				}
+			}
+			
+			//
+			// Check/un-check the folder via the files
+			//
+			if (input.hasClass(_css.uploadedCheckbox)) {
+				folderClass = _css.uploadedFolderCheckbox;
+				fileClass = _css.uploadedCheckbox;
+			}
+			else if (input.hasClass(_css.processedCheckbox)) {
+				folderClass = _css.processedFolderCheckbox;
+				fileClass = _css.processedCheckbox;
+			}
+			//
+			// Check/un-check the uploaded files for this folder
+			//
+			if (folderClass) {
+				folder = input.closest('tbody').find('.' + folderClass);
+				files = input.closest('tbody').find('.' + fileClass);
+				
+				allChecked = true;
+				$(files).each(function(index, el) {
+					if ($(el).prop('checked') === false) {
+						allChecked = false;
+					}
+				});
+				
+				if (folder.length > 0) {
+					folder.prop('checked',  allChecked);
+				}
+			}
+		}
 	};
 	
 	_ns.gatherDownloadFileIds = function() {
@@ -183,29 +258,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 	};
 	
 	
-	//alert('hello' + URL.uploadsUrl);
-	
-	/**
-	$scope.accountOrig = Data.account;
-	$scope.accountEdit = angular.copy(Data.account);
-	$scope.errorResponse = Data.errorResponse;
-	$scope.countryOptions = Data.countryOptions;
-	$scope.changeEmailRequest = {};
-	$scope.changePasswordRequest = {};
-	**/
-	/** Do something when param is 'edit'**/
-	//if ($routeParams.edit) {
-		//$('#info').removeClass('readonly');
-		
-		// remove page messages
-		//$scope.$parent.success = false;
-		//$scope.$parent.error = false;
-		
-		//$('.alert-success').hide();
-		//$('.alert-danger').hide();
-	//}
-	
-	/** Do something when page is 'email'**/
+
 
 
 }]);
