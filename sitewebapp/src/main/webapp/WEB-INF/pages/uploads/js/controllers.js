@@ -16,7 +16,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 			subRow:'q-subRow',
 			folderIcon:'q-folderIcon',
 			open:'open',
-			folder:'q-folder'
+			folderRow:'q-folderRow'
 		}
 	;
 	
@@ -144,43 +144,45 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		
 		target = $($event.target);
 		
-		if (target.closest('.' + _css.folder).length > 0) {
+		if (target.prop('type') !== 'checkbox') {
+			if (target.hasClass(_css.folderRow) || target.closest('.' + _css.folderRow).length > 0) {
+				
+				tbody = target.closest('tbody');
+				subRows = tbody.find('.' + _css.subRow);
+				folderIcons = tbody.find('.' + _css.folderIcon);
+				isHide = false;
 			
-			tbody = target.closest('tbody');
-			subRows = tbody.find('.' + _css.subRow);
-			folderIcons = tbody.find('.' + _css.folderIcon);
-			isHide = false;
-		
-			// Toggle this hidden rows
-			subRows.each(function(index, el) {
-				if ($(el).is(':visible')) {
-					$(el).hide();
-					isHide = true;
+				// Toggle this hidden rows
+				subRows.each(function(index, el) {
+					if ($(el).is(':visible')) {
+						$(el).hide();
+						isHide = true;
+					}
+					else {
+						$(el).show();
+						isHide = false;
+					}
+				});
+	
+				// Toggle the folder icons
+				if (isHide) {
+					folderIcons.each(function(index, el) {
+						$(el).removeClass(_css.open);
+					});
 				}
 				else {
-					$(el).show();
-					isHide = false;
+					folderIcons.each(function(index, el) {
+						$(el).addClass(_css.open);
+					});
 				}
-			});
-
-			// Toggle the folder icons
-			if (isHide) {
-				folderIcons.each(function(index, el) {
-					$(el).removeClass(_css.open);
-				});
-			}
-			else {
-				folderIcons.each(function(index, el) {
-					$(el).addClass(_css.open);
-				});
 			}
 		}
 	};
 
 	$scope.handleCheckboxCtrls = function($event) {
 		var input, files, folder, fileClass, folderClass, allChecked;
-		
-		if ($event.target.nodeName === 'INPUT') {
+
+		if ($event.target.nodeName === 'INPUT' && $event.target.type === 'checkbox') {
 			input = $($event.target);
 			
 			//

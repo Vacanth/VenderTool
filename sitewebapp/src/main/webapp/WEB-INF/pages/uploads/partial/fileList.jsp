@@ -36,34 +36,11 @@
 		.rowColor {
 			background-color:#e4f2e6;
 		}
-	</style>
-	<script>
-		function toggle(link) {
-			var i, lastRow, folderIcon, rows = $(link).closest('tbody').find('tr');
-			lastRow = rows[rows.length - 1];
-			
-			if ($(link).hasClass('folderIcon')) {
-				folderIcon = $(link);
-			}
-			else {
-				folderIcon = $(link).siblings('.folderIcon');
-			}
-			
-			if ($(lastRow).is(':visible')) {
-				for (i=1; i<rows.length; i++) {
-					$(rows[i]).hide();
-					folderIcon.removeClass('open');
-				}
-			}
-			else { 
-				for (i=1; i<rows.length; i++) {
-					$(rows[i]).show();
-					folderIcon.addClass('open');
-				}
-			}
+		.folderRow {
+			background-color:red;
 		}
-	
-	</script>
+	</style>
+
 	
 	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)">
 		<tr class="tableHdr">
@@ -75,31 +52,37 @@
 			<th>Processsing Complete</th>
 		</tr>
 		<tbody ng-repeat="job in uploadsRes.jobs">
-			<tr ng-class="{'rowColor': $index % 2 == 1}">
+			<tr ng-class="{'rowColor': $index % 2 == 1}" class="q-folderRow">
 				<td>{{job.jobId}}</td>
 				<td>
+					<%--=============================
+					Uploaded files
+					=================================--%>
 					<div ng-switch on="job.uploadedFiles.length">
+					
+						<%--
+						//Single file
+						--%>
 						<span ng-switch-when="1">
-							<input type="checkbox"/>
+							<input type="checkbox" id="{{job.jobId}}"/>
 							<b class="fileIcon"></b>
 							
 							<span ng-switch on="isNullOrEmpty(job.title)">
-								<span ng-switch-when="false">{{job.title}}</span>
-								<span ng-switch-default>{{job.uploadedFiles[0].name}}</span>
+								<label ng-switch-when="false" for="{{job.jobId}}">{{job.title}}</label>
+								<label ng-switch-default for="{{job.jobId}}">{{job.uploadedFiles[0].name}}</label>
 							</span>
-							
 						</span>
+						
+						<%--
+						// Folder
+						--%>
 						<span ng-switch-default>
-							<input type="checkbox" class="q-uploadedFldrCbx">
-							
-							<span class="folder q-folder">
-								<b class="folderIcon q-folderIcon"></b>
+							<input type="checkbox" class="q-uploadedFldrCbx" id="{{job.jobId}}">
+							<b class="folderIcon q-folderIcon"></b>
 
-								<span ng-switch on="isNullOrEmpty(job.title)">
-									<span ng-switch-when="false">{{job.title}}</span>
-									<span ng-switch-default>{{job.uploadedFiles[0].name}}...</span>
-								</span>
-								
+							<span ng-switch on="isNullOrEmpty(job.title)">
+								<label ng-switch-when="false" for="{{job.jobId}}">{{job.title}}</label>
+								<label ng-switch-default for="{{job.jobId}}">{{job.uploadedFiles[0].name}}...</label>
 							</span>
 						</span>
 					</div>
@@ -107,6 +90,9 @@
 				<td>{{job.createdDate}}</td>
 				<td>{{job.status}}</td>
 				<td>
+					<%--=============================
+					Processed files
+					=================================--%>
 					<div ng-switch on="job.processedFiles.length">
 						<span ng-switch-when="0">
 							--
@@ -119,19 +105,14 @@
 								<span ng-switch-when="false">{{job.title}}</span>
 								<span ng-switch-default>{{job.processedFiles[0].name}}</span>
 							</span>
-							
 						</span>
 						<span ng-switch-default>
 							<input type="checkbox" class="q-processedFldrCbx"/>
+							<b class="folderIcon q-folderIcon"></b>
 							
-							<span class="folder q-folder">
-								<b class="folderIcon q-folderIcon"></b>
-								
-								<span ng-switch on="isNullOrEmpty(job.title)">
-									<span ng-switch-when="false">{{job.title}}</span>
-									<span ng-switch-default>{{job.processedFiles[0].name}}...</span>
-								</span>
-								
+							<span ng-switch on="isNullOrEmpty(job.title)">
+								<span ng-switch-when="false">{{job.title}}</span>
+								<span ng-switch-default>{{job.processedFiles[0].name}}...</span>
 							</span>
 						</span>
 					</div>
@@ -139,9 +120,9 @@
 				</td>
 				<td>{{}}</td>
 			</tr>
-			<%--
-			// Hidden rows
-			--%>
+			<%--=============================================
+			// Hidden subRows
+			=================================================--%>
 			<tr ng-repeat="file in job.uploadedFiles" class="subRow q-subRow">
 				<td>{{}}</td>
 				<td>
