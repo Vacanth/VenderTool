@@ -376,10 +376,10 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 					}
 				}
 				
-				if (doneCount === scope.fileWrappers.length) {
+				if (doneCount > 0 && doneCount === scope.fileWrappers.length) {
 					scope.allUploadsSuccessful = true;
 				}
-
+				
 				scope.$apply();
 			};
 
