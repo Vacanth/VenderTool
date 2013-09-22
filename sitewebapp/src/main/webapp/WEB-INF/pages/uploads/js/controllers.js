@@ -151,6 +151,16 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		}
 	};
 	
+	$scope.isNullOrEmpty = function(someString) {
+		if (someString) {
+			someString = someString.replace(/ /g, '+');
+			if (someString.length <= 0) {
+				return true;
+			}
+		}
+		return false;
+	};
+	
 	_ns.gatherDownloadFileIds = function() {
 		var jobs = $scope.uploadsRes.jobs;
 		var fileIds = [];

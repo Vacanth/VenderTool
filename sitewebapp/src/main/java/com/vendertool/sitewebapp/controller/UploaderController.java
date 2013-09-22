@@ -43,7 +43,7 @@ public class UploaderController {
 		throws IOException {
 		
 		Response serviceRes = null;
-		
+         
 		if (ServletFileUpload.isMultipartContent(request)) {
 	        FileItemFactory factory = new DiskFileItemFactory();
 	        ServletFileUpload upload = new ServletFileUpload(factory);
@@ -51,9 +51,11 @@ public class UploaderController {
 		    try {
 		        List<FileItem> items = upload.parseRequest(request);
 		        Iterator<FileItem> iter = items.iterator();
+		        FileUploadRequest fileUploadReq = new FileUploadRequest();
+		        
 		        while (iter.hasNext()) {
 		            FileItem item = iter.next();
-	
+		            
 		            if (!item.isFormField()) {
 		            	
 		            	FileInformation fileInfo = new FileInformation();
@@ -62,23 +64,30 @@ public class UploaderController {
 		    			fileInfo.setFileSize(item.getSize());
 
 		    			List<FileInformation> fileInfoList = new ArrayList<FileInformation>();
-		    			FileUploadRequest fileUploadReq = new FileUploadRequest();
-		    			
 		    			fileInfoList.add(fileInfo);
 		    			fileUploadReq.setFiles(fileInfoList);
-		    			
-		    			String hostName = RestServiceClientHelper.getServerURL(request);
-		    			String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.FILE_UPLOAD_PATH;
-		    			serviceRes = RestServiceClientHelper.invokeRestService(
-		    							url,
-		    							fileUploadReq,
-		    							null,
-		    							MediaType.APPLICATION_JSON_TYPE,
-		    							HttpMethodEnum.POST);
-		    			
-		    			break; // Only expecting one file
+		            }
+		            else {
+	            	    String name = item.getFieldName();
+	            	    String value = item.getString();
+	            	    
+	            	    if (name.equals("groupId")) {
+	            	    	fileUploadReq.setGroupId(value);
+	            	    }
+	            	    else if (name.equals("uploadTitle")) {
+	            	    	fileUploadReq.setUploadTitle(value);
+	            	    }
 		            }
 		        }
+		        
+		        String hostName = RestServiceClientHelper.getServerURL(request);
+    			String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.FILE_UPLOAD_PATH;
+    			serviceRes = RestServiceClientHelper.invokeRestService(
+								url,
+								fileUploadReq,
+								null,
+								MediaType.APPLICATION_JSON_TYPE,
+								HttpMethodEnum.POST);
 		    }
 		    catch (FileUploadException e) {
 		    	logger.log(Level.ERROR, e.getMessage(), e);

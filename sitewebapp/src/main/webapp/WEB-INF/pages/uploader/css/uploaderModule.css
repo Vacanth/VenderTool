@@ -87,6 +87,15 @@
 	width:100%;
 	text-align:right;
 }
+.upldr-title {
+	display:inline-block;
+	position:relative;
+	top:6px;
+	font-weight:normal;
+}
+.upldr-title input {
+	width:150px;
+}
 
 
 

@@ -82,14 +82,24 @@
 						<span ng-switch-when="1">
 							<input type="checkbox"/>
 							<b class="fileIcon"></b>
-							{{job.uploadedFiles[0].name}}
+							
+							<span ng-switch on="isNullOrEmpty(job.title)">
+								<span ng-switch-when="false">{{job.title}}</span>
+								<span ng-switch-default>{{job.uploadedFiles[0].name}}</span>
+							</span>
+							
 						</span>
 						<span ng-switch-default>
 							<input type="checkbox">
 							
 							<span ng-click="showRows($event)" class="folder">
 								<b class="folderIcon"></b>
-								{{job.uploadedFiles[0].name}}...
+
+								<span ng-switch on="isNullOrEmpty(job.title)">
+									<span ng-switch-when="false">{{job.title}}</span>
+									<span ng-switch-default>{{job.uploadedFiles[0].name}}...</span>
+								</span>
+								
 							</span>
 						</span>
 					</div>
@@ -104,13 +114,23 @@
 						<span ng-switch-when="1">
 							<input type="checkbox"/>
 							<b class="fileIcon"></b>
-							{{job.processedFiles[0].name}}
+							
+							<span ng-switch on="isNullOrEmpty(job.title)">
+								<span ng-switch-when="false">{{job.title}}</span>
+								<span ng-switch-default>{{job.processedFiles[0].name}}</span>
+							</span>
+							
 						</span>
 						<span ng-switch-default>
 							<input type="checkbox"/>
 							<span ng-click="showRows($event)" class="folder">
 								<b class="folderIcon"></b>
-								{{job.processedFiles[0].name}}...
+								
+								<span ng-switch on="isNullOrEmpty(job.title)">
+									<span ng-switch-when="false">{{job.title}}</span>
+									<span ng-switch-default>{{job.processedFiles[0].name}}...</span>
+								</span>
+								
 							</span>
 						</span>
 					</div>

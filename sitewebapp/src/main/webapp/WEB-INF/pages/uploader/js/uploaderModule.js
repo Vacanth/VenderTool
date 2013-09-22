@@ -155,7 +155,9 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 								scope.uploadProgress[fileWrap.id] = {'loaded':0, 'total':0};
 								
 								formData = new FormData();
-								formData.append(scope.groupId, fileWrap.file);
+								formData.append('uploadTitle', scope.uploadTitle);
+								formData.append('groupId', scope.groupId);
+								formData.append('file', fileWrap.file);
 								send(formData, fileWrap);
 							}
 						}

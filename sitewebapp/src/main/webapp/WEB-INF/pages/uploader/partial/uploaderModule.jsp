@@ -26,9 +26,11 @@
 					<i class="icon"></i>
 					<b>Add Files</b>
 				</button>
-				
+
 				<input class="qry-upldr-inp upldr-inp-main" type="file" multiple="multiple" />
 			</div>
+			
+			<label class="upldr-title">Upload Title: <input ng-model="uploadTitle"/></label>
 	
 			<div style="border:1px solid #ccc; min-height:150px">
 				<table class="ftable">
