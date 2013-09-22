@@ -163,6 +163,8 @@ public class MercadolibreListingAdapter implements
 				}
 			}
 		}
+		
+//		item.setVariations(variations);
 		return item;
 	}
 

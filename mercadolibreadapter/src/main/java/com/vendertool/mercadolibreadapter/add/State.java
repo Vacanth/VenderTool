@@ -1,6 +1,7 @@
 
 package com.vendertool.mercadolibreadapter.add;
 
+import java.util.List;
 
 public class State{
    	private String id;

@@ -21,6 +21,7 @@ public class Item{
    	private String id;
    	private Number initial_quantity;
    	private String last_updated;
+   	private String listing_source;
    	private String listing_type_id;
    	private String location;
    	private List non_mercado_pago_payment_methods;
@@ -28,6 +29,7 @@ public class Item{
    	private String permalink;
    	private List pictures;
    	private Number price;
+   	private String secure_thumbnail;
    	private Seller_address seller_address;
    	private String seller_contact;
    	private Number seller_id;
@@ -45,36 +47,8 @@ public class Item{
    	private List variations;
    	private String video_id;
    	private String warranty;
-   	private String message;
-   	private String error;
-   	private String statue;
-   	private List<Cause> cause;
 
- 	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	public String getError() {
-		return error;
-	}
-	public void setError(String error) {
-		this.error = error;
-	}
-	public String getStatue() {
-		return statue;
-	}
-	public void setStatue(String statue) {
-		this.statue = statue;
-	}
-	public List<Cause> getCause() {
-		return cause;
-	}
-	public void setCause(List<Cause> cause) {
-		this.cause = cause;
-	}
-	public boolean getAccepts_mercadopago(){
+ 	public boolean getAccepts_mercadopago(){
 		return this.accepts_mercadopago;
 	}
 	public void setAccepts_mercadopago(boolean accepts_mercadopago){
@@ -176,6 +150,12 @@ public class Item{
 	public void setLast_updated(String last_updated){
 		this.last_updated = last_updated;
 	}
+ 	public String getListing_source(){
+		return this.listing_source;
+	}
+	public void setListing_source(String listing_source){
+		this.listing_source = listing_source;
+	}
  	public String getListing_type_id(){
 		return this.listing_type_id;
 	}
@@ -217,6 +197,12 @@ public class Item{
 	}
 	public void setPrice(Number price){
 		this.price = price;
+	}
+ 	public String getSecure_thumbnail(){
+		return this.secure_thumbnail;
+	}
+	public void setSecure_thumbnail(String secure_thumbnail){
+		this.secure_thumbnail = secure_thumbnail;
 	}
  	public Seller_address getSeller_address(){
 		return this.seller_address;
