@@ -28,5 +28,6 @@ public interface URLConstants {
 	public static final String PROFILE_PASSWORD_SAVE = "profile/password/save";
 	public static final String ACCOUNT_HUB = "accounthub";
 	public static final String UPLOADS = "accounthub/uploads";
+	public static final String UPLOADS_RESPONSE = "accounthub/uploadsResponse";
 	public static final String UPLOADER = "uploader";
 }

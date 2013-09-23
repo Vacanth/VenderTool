@@ -1,6 +1,7 @@
 
 package com.vendertool.mercadolibreadapter.add;
 
+import java.util.List;
 
 public class City{
    	private String id;

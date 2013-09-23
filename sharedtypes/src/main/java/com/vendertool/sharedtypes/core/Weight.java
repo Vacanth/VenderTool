@@ -32,22 +32,22 @@ public class Weight {
 		}
 	}
 	
-	private double value;
+	private Double value;
 	private WeightUnitEnum weightUnit;
 	
 	public Weight() {
-		this(0);
+		this((double) 0);
 	}
 	
-	public Weight(double value) {
+	public Weight(Double value) {
 		setValue(value);
 	}
 
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

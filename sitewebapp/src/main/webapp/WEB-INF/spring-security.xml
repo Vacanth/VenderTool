@@ -44,6 +44,7 @@
   	<sec:http pattern="/sharedNgModules/**" security="none"/>
   	<sec:http pattern="/uploader/**" security="none"/>
   	<sec:http pattern="/uploadFile/**" security="none"/>
+  	<sec:http pattern="/uploadDone/**" security="none"/>
   	<sec:http pattern="/questions/**" security="none"/>
   	
   	<!-- NOTE: IMPORTANT - Ordering of filter pattern is important -->

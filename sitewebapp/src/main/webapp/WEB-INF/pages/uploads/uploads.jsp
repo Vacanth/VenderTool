@@ -14,6 +14,12 @@
 	<jsp:attribute name="scripts">
 		<script src="<c:url value='/wro/uploads.js' />" type="text/javascript"></script>
 	</jsp:attribute>
+	
+	<jsp:attribute name="inlineJs">
+		uploadsApp.factory('Data', function() {
+			return ${modelMapJson};
+		});
+	</jsp:attribute>
 
 	<jsp:body>
 		<t2:layoutTable>

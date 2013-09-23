@@ -8,24 +8,33 @@ import javax.xml.bind.annotation.XmlAccessorType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProductVariation {
 	
-	private String productVariationId;
+	private Long productVariationId;
 	private String title;
 	private String sku;
 	private Amount price;
 	private ProductCodeTypeEnum productCodeType;
 	private String productCode;
-	private int quantity;
+	private Integer quantity;
 	private List<Image> images;
 	private List<NameValuePair> properties;
+	private String productUrl;
 	
 	public ProductVariation(){
 	}
 
-	public String getProductVariationId() {
+	public String getProductUrl() {
+		return productUrl;
+	}
+
+	public void setProductUrl(String productUrl) {
+		this.productUrl = productUrl;
+	}
+
+	public Long getProductVariationId() {
 		return productVariationId;
 	}
 
-	public void setProductVariationId(String productVariationId) {
+	public void setProductVariationId(Long productVariationId) {
 		this.productVariationId = productVariationId;
 	}
 
@@ -69,11 +78,11 @@ public class ProductVariation {
 		this.productCode = productCode;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

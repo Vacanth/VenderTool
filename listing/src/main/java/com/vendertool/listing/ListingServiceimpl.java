@@ -169,9 +169,9 @@ public class ListingServiceimpl extends BaseVenderToolServiceImpl implements
 	}
 
 	private void process(BaseRequest request, BaseResponse response,
-			ListingProcessorTypeEnum helperType) {
+			ListingProcessorTypeEnum processorType) {
 		BaseListingProcessor processor = ListingProcessorFactory
-				.getListingProcessor(helperType);
+				.getListingProcessor(processorType);
 		processor.validate(request, response);
 		if (!response.hasErrors()) {
 			processor.performOperation(request, response);

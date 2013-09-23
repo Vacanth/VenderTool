@@ -46,6 +46,10 @@ public class FileMapper implements DALMapper<File> {
 				map.put(f.fileId, file.getFileId());
 			}
 			
+			if(f.fileName.equals(rpath)) {
+				map.put(f.fileName, file.getFileName());
+			}
+			
 			if(f.fileGroupId.equals(rpath)) {
 				map.put(f.fileGroupId, file.getFileGroupId());
 			}
@@ -98,6 +102,7 @@ public class FileMapper implements DALMapper<File> {
 		QBeanFile bean = new QBeanFile();
 		bean.setFileId(file.getFileId());
 		bean.setFileGroupId(file.getFileGroupId());
+		bean.setFileName(file.getFileName());
 		bean.setFilesCountInGroup(file.getFilesCountInGroup());
 		bean.setAccountId(file.getAccountId());
 		bean.setRefUrl(file.getRefUrl());
@@ -142,6 +147,9 @@ public class FileMapper implements DALMapper<File> {
 			if (f.fileGroupId.equals(rpath)) {
 				file.setFileGroupId(row.get(f.fileGroupId));
 			}
+			if (f.fileName.equals(rpath)) {
+				file.setFileName(row.get(f.fileName));
+			}
 			if (f.filesCountInGroup.equals(rpath)) {
 				file.setFilesCountInGroup(row.get(f.filesCountInGroup));
 			}
@@ -160,7 +168,7 @@ public class FileMapper implements DALMapper<File> {
 			if (f.status.equals(rpath)) {
 				file.setStatus(FPSFileStatusEnum.get(row.get(f.status)));
 			}
-				
+			
 			if(f.createdDate.equals(rpath)) {
 				if(row.get(f.createdDate) != null) {
 					file.setCreatedDate(new Date(row.get(f.createdDate).getTime()));

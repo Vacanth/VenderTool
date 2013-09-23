@@ -8,7 +8,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 	return {
 		link: function(scope, element, attrs) {
 
-			var uploadUrl = attrs.uploadUrl,
+			var groupId = attrs.groupId,
+				uploadUrl = attrs.uploadUrl,
 				allDoneUrl = attrs.allDoneUrl,
 				fileInput,
 				uploadBtn,
@@ -37,7 +38,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				scope.dupeNames = [];
 				scope.errors = undefined; // map of fileId to fileName
 				scope.allUploadsSuccessful = false;
-				scope.groupId = makeGroupId();
+				scope.retrySendUploadsDoneMessage = false;
+				scope.groupId = groupId;
 				scope.uploadProgress = {}; // map of fileId to {'loaded':999, 'total':999}
 				scope.uploadInProgress = false;
 			};
@@ -47,7 +49,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			// are files in the list that have not been uploaded.
 			//
 			$(window).bind('beforeunload', function() {
-				if (!scope.allUploadsSuccessful) {
+				if (!scope.allUploadsSuccessful || scope.retrySendUploadsDoneMessage) {
 					
 					var notUploadedCount = 0;
 					
@@ -56,23 +58,17 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 							notUploadedCount++;
 						}
 					}
-
-					if (notUploadedCount == 1) {
+					
+					if (scope.retrySendUploadsDoneMessage) {
+						return 'Upload was not completed.';
+					}
+					else if (notUploadedCount == 1) {
 						return 'A file has not been uploaded.';
 					}
 					else if (notUploadedCount > 1) {
 						return 'Some files have not been uploaded.';
 					}
 				}
-			});
-			
-
-			$(window).bind('unload', function() {
-				// Send ajax flag to say that this group is done
-				$.ajax({
-					url: "http://www.amazon.com",
-					context: "oooo"
-				});
 			});
 
 			initialAdd = function() {
@@ -132,31 +128,38 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				
 				var fileWrap, formData;
 				
-				// Reset the progress bar and errors
-				scope.errors = undefined;
-				scope.dupeNames = [];
-				scope.percentDone = 2; // Give progress bar a head start. Otherwise there's no movement for a second or two.
-				scope.uploadProgress = {};
-				scope.uploadCount = 0;
+				if (scope.retrySendUploadsDoneMessage) {
+					handleUploadsDone();
+				}
+				else {
+					// Reset the progress bar and errors
+					scope.errors = undefined;
+					scope.dupeNames = [];
+					scope.percentDone = 2; // Give progress bar a head start. Otherwise there's no movement for a second or two.
+					scope.uploadProgress = {};
+					scope.uploadCount = 0;
 				
-				scope.uploadInProgress = true;
-				scope.$apply(); // This disables the upload button right away.
-				
-				if (window.FormData){
-					for (var i=0, n=scope.fileWrappers.length; i<n; i++) {
-						fileWrap = scope.fileWrappers[i];
-						
-						// Only upload if not already successfully uploaded.
-						// We allow user to hit uploadBtn again to upload any
-						// files that errored in a previous upload attempt.
-						if (!fileWrap.status || fileWrap.status !== 'success') {
+					scope.uploadInProgress = true;
+					scope.$apply(); // This disables the upload button right away.
+					
+					if (window.FormData){
+						for (var i=0, n=scope.fileWrappers.length; i<n; i++) {
+							fileWrap = scope.fileWrappers[i];
 							
-							// Setup for progress bar
-							scope.uploadProgress[fileWrap.id] = {'loaded':0, 'total':0};
-							
-							formData = new FormData();
-							formData.append(scope.groupId, fileWrap.file);
-							send(formData, fileWrap);
+							// Only upload if not already successfully uploaded.
+							// We allow user to hit uploadBtn again to upload any
+							// files that errored in a previous upload attempt.
+							if (!fileWrap.status || fileWrap.status !== 'success') {
+								
+								// Setup for progress bar
+								scope.uploadProgress[fileWrap.id] = {'loaded':0, 'total':0};
+								
+								formData = new FormData();
+								formData.append('uploadTitle', scope.uploadTitle);
+								formData.append('groupId', scope.groupId);
+								formData.append('file', fileWrap.file);
+								send(formData, fileWrap);
+							}
 						}
 					}
 				}
@@ -190,19 +193,12 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 							// Pause for 2 seconds after progress bar hits 100%
 							setTimeout( function(){
 								//
-								// If all uploads are successful, close popup.
-								// There's a listener on the close event that
-								// sends the the 'done' flag to backend.
+								// If all uploads are successful, send message
+								// to backend that upload is complete.
 								//
 								if (scope.allUploadsSuccessful) {
-
-									// Send message back to parent window
-									if (window.opener) {
-										scope.parentWindow = window.opener.$windowScope;
-										scope.parentWindow.updateFiles(['ted']);
-									}
-
-									window.close();
+									
+									handleUploadsDone();
 								}
 								
 							}, 2000);
@@ -267,6 +263,61 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			};
 			
 			//
+			// Send message to signal that this group of files has finished uploading.
+			//
+			// If message is successfully sent, then call refreshFileList() in parent
+			// window to refresh the list of files shown. It should now have the newly
+			// uploaded files.
+			//
+			// Then close popup.
+			//
+			// If message is not successfully sent, then show error message in popup.
+			//
+			handleUploadsDone = function() {			
+				
+				var msg = {"groupId":scope.groupId};
+				
+				$.ajax({
+					type: 'post',
+					url: allDoneUrl,
+					data: msg,
+					dataType:'json',
+					success: function(data, textStatus, jqXHR) {						
+						//alert('success:' + textStatus);
+						
+						// Send message back to parent window
+						if (window.opener) {
+							scope.parentWindow = window.opener.$windowScope;
+							if (scope.parentWindow) {
+								scope.parentWindow.refreshFileList();
+							}
+						}
+
+						window.close();
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						// If error then backend doesn't know that upload has
+						// completed and thus will not process the files.
+						//
+						// At this point all the files have uploaded successfully,
+						// but the "all Done" message was not received.
+						//
+						// Need to set a flag saying that uploadsDone message was
+						// not sent successfully.
+						//
+						// Need to show error message in popup asking user to 
+						// try clicking upload button again.
+						//
+						
+						alert('error sending all done message');
+						
+						scope.retrySendUploadsDoneMessage = true;
+						scope.$apply();
+					}
+				});
+			};
+			
+			//
 			// Browser prevents altering the file input value, so we need
 			// to replace the file input element with a new one instead.
 			// We need a cleared file input to allow user to upload same
@@ -315,10 +366,6 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				return rand + millis;
 			};
 			
-			makeGroupId = function() {
-				return makeId();
-			};
-			
 			updateUploadStatus = function() {
 				var doneCount = 0;
 				scope.allUploadsSuccessful = false;
@@ -329,10 +376,10 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 					}
 				}
 				
-				if (doneCount === scope.fileWrappers.length) {
+				if (doneCount > 0 && doneCount === scope.fileWrappers.length) {
 					scope.allUploadsSuccessful = true;
 				}
-
+				
 				scope.$apply();
 			};
 

@@ -1,6 +1,9 @@
 package com.vendertool.common.dal.dao;
 
+import java.util.Map;
+
 import com.mysema.query.Tuple;
+import com.mysema.query.sql.RelationalPath;
 import com.mysema.query.sql.dml.Mapper;
 import com.mysema.query.types.Path;
 
@@ -21,4 +24,7 @@ public interface DALMapper<T> extends Mapper<T>{
 	 * @return
 	 */
 	public T convert(Tuple row, Path<?>[] paths);
+	
+	 
+	
 }

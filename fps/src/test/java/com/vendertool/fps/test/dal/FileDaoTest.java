@@ -59,6 +59,7 @@ public class FileDaoTest extends BaseDaoTest{
 		File file = new File();
 		file.setFileGroupId("200000"+idx);
 		file.setAccountId(Long.valueOf(100000));
+		file.setFileName("FileName");
 		file.setCreatedDate(curDate);
 		file.setLastModifiedDate(curDate);
 		file.setStatus(FPSFileStatusEnum.CREATED);
@@ -85,7 +86,7 @@ public class FileDaoTest extends BaseDaoTest{
 							file.getStorageSource()+ ","+ file.getFileGroupId()+","+
 							file.getUseCase() +","+file.getFilesCountInGroup());
 			file.setFileGroupId("new group Id"+ i);
-			dao.update(file,FileUpdateSet.getInstance().UPDATE_FULL);
+			dao.update(file,FileUpdateSet.getInstance().FULL);
 		}
 	}
 	

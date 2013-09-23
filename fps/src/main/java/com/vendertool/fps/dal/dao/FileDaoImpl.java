@@ -103,7 +103,16 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao {
 			closeConnection(con);
 		}
 	}
+	
+	//Need to optimize with batch insert, single connection
+	public void insertFiles(List<File> files) throws DBConnectionException,
+		InsertException, DatabaseException{
 		
+		for (File file : files) {
+			insert(file);
+		}
+	}
+	
 	@Override
 	public void delete(File file) 
 			throws DBConnectionException, DeleteException, DatabaseException{
@@ -136,8 +145,7 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao {
 			closeConnection(con);
 		}
 	}
-	
-	@Override
+
 	public File findByFileId(long fileId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
 	

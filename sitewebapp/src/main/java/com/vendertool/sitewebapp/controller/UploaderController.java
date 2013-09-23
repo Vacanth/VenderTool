@@ -1,10 +1,14 @@
 package com.vendertool.sitewebapp.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
@@ -39,7 +43,7 @@ public class UploaderController {
 		throws IOException {
 		
 		Response serviceRes = null;
-		
+         
 		if (ServletFileUpload.isMultipartContent(request)) {
 	        FileItemFactory factory = new DiskFileItemFactory();
 	        ServletFileUpload upload = new ServletFileUpload(factory);
@@ -47,34 +51,43 @@ public class UploaderController {
 		    try {
 		        List<FileItem> items = upload.parseRequest(request);
 		        Iterator<FileItem> iter = items.iterator();
+		        FileUploadRequest fileUploadReq = new FileUploadRequest();
+		        
 		        while (iter.hasNext()) {
 		            FileItem item = iter.next();
-	
+		            
 		            if (!item.isFormField()) {
 		            	
 		            	FileInformation fileInfo = new FileInformation();
 		    			fileInfo.setFileData(item.get());
 		    			fileInfo.setFileName(item.getName());
 		    			fileInfo.setFileSize(item.getSize());
-		    			
+
 		    			List<FileInformation> fileInfoList = new ArrayList<FileInformation>();
-		    			FileUploadRequest fileUploadReq = new FileUploadRequest();
-		    			
 		    			fileInfoList.add(fileInfo);
 		    			fileUploadReq.setFiles(fileInfoList);
-		    			
-		    			String hostName = RestServiceClientHelper.getServerURL(request);
-		    			String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.FILE_UPLOAD_PATH;
-		    			serviceRes = RestServiceClientHelper.invokeRestService(
-		    							url,
-		    							fileUploadReq,
-		    							null,
-		    							MediaType.APPLICATION_JSON_TYPE,
-		    							HttpMethodEnum.POST);
-		    			
-		    			break; // Only expecting one file
+		            }
+		            else {
+	            	    String name = item.getFieldName();
+	            	    String value = item.getString();
+	            	    
+	            	    if (name.equals("groupId")) {
+	            	    	fileUploadReq.setGroupId(value);
+	            	    }
+	            	    else if (name.equals("uploadTitle")) {
+	            	    	fileUploadReq.setUploadTitle(value);
+	            	    }
 		            }
 		        }
+		        
+		        String hostName = RestServiceClientHelper.getServerURL(request);
+    			String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.FILE_UPLOAD_PATH;
+    			serviceRes = RestServiceClientHelper.invokeRestService(
+								url,
+								fileUploadReq,
+								null,
+								MediaType.APPLICATION_JSON_TYPE,
+								HttpMethodEnum.POST);
 		    }
 		    catch (FileUploadException e) {
 		    	logger.log(Level.ERROR, e.getMessage(), e);
@@ -94,9 +107,24 @@ public class UploaderController {
 		return modelMap;
 	}
 	
+	
+	@RequestMapping(value = "uploadDone", method = RequestMethod.POST)
+	protected @ResponseBody Map<String, String> uploadDone(HttpServletRequest req) {
+		
+		String groupId = req.getParameter("groupId");
+		
+		System.err.println("groupId: " + groupId);
+		
+		Map<String, String> msg = new HashMap<String, String>();
+		msg.put("statusMessage", "success");
+		return msg;
+	}
+	
 	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)
 	public String getUploaderPopup(ModelMap modelMap, Principal principal) {
 		logger.info("getUploaderPopup controller invoked");
+		
+		modelMap.put("groupId", generateGroupId());
 		return "uploader/uploader";
 	}
 	
@@ -104,6 +132,10 @@ public class UploaderController {
 	public String getUploaderTemplate() {
 		logger.info("getUploaderTemplate controller invoked");
 		return "uploader/partial/uploaderModule";
+	}
+	
+	private static String generateGroupId() {
+		 return new BigInteger(130,  new SecureRandom()).toString(32);
 	}
 	
 }

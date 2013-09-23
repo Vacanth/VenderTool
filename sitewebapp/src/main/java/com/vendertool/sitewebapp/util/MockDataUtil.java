@@ -1,18 +1,28 @@
 package com.vendertool.sitewebapp.util;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.CountryEnum;
+import com.vendertool.sharedtypes.core.PaginationOutput;
 import com.vendertool.sharedtypes.core.Phone;
 import com.vendertool.sharedtypes.core.Phone.PhoneType;
+import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
+import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
+import com.vendertool.sharedtypes.core.fps.File;
+import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sharedtypes.rnr.UploadsResponse;
 
 
 public class MockDataUtil {
@@ -129,6 +139,87 @@ public class MockDataUtil {
 		}
 		
 		return response;
+	}
+	
+	public static UploadsResponse getUploadsResponse() {
+		
+		UploadsResponse res = new UploadsResponse();
+		
+		PaginationOutput pagOut = new PaginationOutput();
+		pagOut.setCurrentPage(3);
+		pagOut.setEntriesPerPage(25);
+		pagOut.setTotalResults(201);
+
+		List<Job> jobs = new ArrayList<Job>();
+		for (int i=0; i<25; i++) {
+			Job job = new Job();
+			job.setAccountId(123L);
+			job.setCreatedDate(new Date());
+			job.setJobId(new Long(i));
+			job.setStatus(FPSJobStatusEnum.SUCCESS);
+			job.setTitle("title " + i);
+			
+			//
+			// Add uploaded files
+			//
+			List<File> uploadedFiles = new ArrayList<File>();
+			if (i % 2 == 0)  {
+				
+				for (int j=0; j<3; j++) {
+					File f = new File();
+					f.setName("name" + j);
+					f.setFileId(new Long(j));
+					f.setAccountId(123L);
+					f.setCreatedDate(new Date());
+					f.setStatus(FPSFileStatusEnum.SUCCESS);
+					uploadedFiles.add(f);
+				}
+			}
+			else {
+				File f = new File();
+				f.setName("name" + i);
+				f.setFileId(new Long(i));
+				f.setAccountId(123L);
+				f.setCreatedDate(new Date());
+				f.setStatus(FPSFileStatusEnum.SUCCESS);
+				uploadedFiles.add(f);
+			}
+			job.setUploadedFiles(uploadedFiles);
+			
+			//
+			// Add processed files
+			//
+			List<File> processedFiles = new ArrayList<File>();
+			if (i % 2 == 0)  {
+				
+				for (int j=0; j<3; j++) {
+					File f = new File();
+					f.setName("name" + j);
+					f.setFileId(new Long(j));
+					f.setAccountId(123L);
+					f.setCreatedDate(new Date());
+					f.setStatus(FPSFileStatusEnum.SUCCESS);
+					processedFiles.add(f);
+				}
+			}
+			else {
+				File f = new File();
+				f.setName("name" + i);
+				f.setFileId(new Long(i));
+				f.setAccountId(123L);
+				f.setCreatedDate(new Date());
+				f.setStatus(FPSFileStatusEnum.SUCCESS);
+				processedFiles.add(f);
+			}
+			job.setProcessedFiles(processedFiles);
+			
+			jobs.add(job);
+		}
+		
+		res.setJobs(jobs);
+		res.setPaginationOutput(pagOut);
+		
+		return res;
 	}
 	
 }

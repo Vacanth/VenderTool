@@ -83,7 +83,7 @@
 	<bean id="inventoryTables" class="com.vendertool.tools.db.codegen.DBCodeGenDetails">
 		<property name="packageName" value="com.vendertool.inventory.dal.dao.codegen" />
 		<property name="targetFolder" value="../inventory/src/main/java" />
-		<property name="tableNamePattern" value="product,product_attribute,product_variation" />
+		<property name="tableNamePattern" value="product,product_attribute,product_variation,image,product_description" />
 	</bean>
 	<!-- inventoryDB **** End ***** -->
 	

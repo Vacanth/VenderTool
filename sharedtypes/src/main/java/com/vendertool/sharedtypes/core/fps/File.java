@@ -9,10 +9,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class File {
 
 	private Long fileId;
+	private String name;
 	private String fileGroupId;
 	private Byte filesCountInGroup;
 	private Long accountId;
 	private String refUrl;
+	private String fileName;
 	private Byte storageSource;
 	private FPSUsecaseEnum useCase;
 	private FPSFileStatusEnum status;
@@ -24,6 +26,12 @@ public class File {
 	}
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getFileGroupId() {
 		return fileGroupId;
@@ -80,4 +88,10 @@ public class File {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 }

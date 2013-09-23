@@ -13,17 +13,24 @@
 				<br/><br/>
 				Please try uploading those files again.
 			</div>
+			<div ng-show="retrySendUploadsDoneMessage" class="alert alert-danger">
+				Sorry, some errors occurred. We could not complete the upload.
+				<br/><br/>
+				Please try clicking the "Upload Files" button again.
+			</div>
 			
 			<div  class="upldr-inp-wrp">
-				<div ng-class="{disabledAddBtn: uploadInProgress}"></div>
+				<div ng-class="{disabledAddBtn: uploadInProgress || allUploadsSuccessful}"></div>
 
 				<button type="button" class="btn btn-primary iconBtn addFiles">
-					<div class="bg"></div><i class="icon"></i>
+					<i class="icon"></i>
 					<b>Add Files</b>
 				</button>
-				
+
 				<input class="qry-upldr-inp upldr-inp-main" type="file" multiple="multiple" />
 			</div>
+			
+			<label class="upldr-title">Upload Title: <input ng-model="uploadTitle"/></label>
 	
 			<div style="border:1px solid #ccc; min-height:150px">
 				<table class="ftable">
@@ -51,7 +58,7 @@
 			</div>
 			
 			<button ng-click="closePopup()" type="button" class="btn btn-default">Cancel</button>
-			<button ng-class="{disabled: allUploadsSuccessful || !fileWrappers || uploadInProgress}" type="button" class="qry-upldr-upBtn btn btn-primary">Upload Files</button>
+			<button ng-class="{disabled: !fileWrappers || uploadInProgress}" type="button" class="qry-upldr-upBtn btn btn-primary">Upload Files</button>
 		</div>
 	</div><!-- upldr-content -->
 </div><!-- End of file-uploader directive -->

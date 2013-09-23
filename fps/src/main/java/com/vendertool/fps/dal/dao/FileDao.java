@@ -16,6 +16,9 @@ public interface FileDao extends BaseDao {
 	public long insert (File file) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
+	public void insertFiles(List<File> list) throws DBConnectionException,
+			InsertException, DatabaseException;
+	
 	public void update(File file, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	

@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vendertool.mercadolibreadapter.MLConstants;
 import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.sharedtypes.core.Classification;
 import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
@@ -34,40 +35,38 @@ public class MercadolibreListingAdapter implements
 	private static class MercadolibreListingAdapterHolder {
 		private static final MercadolibreListingAdapter INSTANCE = new MercadolibreListingAdapter();
 	}
-	
+
 	public static MercadolibreListingAdapter getInstance() {
 		return MercadolibreListingAdapterHolder.INSTANCE;
 	}
 
-	public BaseResponse execute(BaseRequest request) {
+	public void execute(BaseRequest request, BaseResponse response) {
 		AddListingRequest listingRequest = (AddListingRequest) request;
 		Item item = adaptToRequest(listingRequest);
-		//Call Verify
+		// Call Verify
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
 		communicatorVO.setTargetURL(VERIFY_LISTING_URL);
-		MercadolibreCommunicator communicator = MercadolibreCommunicator.getInstance();
-		Response response = communicator.call(communicatorVO);
+		MercadolibreCommunicator communicator = MercadolibreCommunicator
+				.getInstance();
+		Response resp = communicator.call(communicatorVO);
 
-		if (response.getStatus() != 200) {
+		if (resp.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 		}
 
-		String output = response.readEntity(String.class);
+		String output = resp.readEntity(String.class);
 		Item responseItem = readItem(output);
-		
-		//Call Add listing
+
+		// Call Add listing
 		communicatorVO.setTargetURL(LISTING_URL);
-		AddListingResponse addListingResponse = adaptTOResponse(responseItem);
-		return addListingResponse;
+		adaptTOResponse(responseItem, (AddListingResponse) response);
 	}
 
-	private AddListingResponse adaptTOResponse(Item responseItem) {
-		AddListingResponse response = new AddListingResponse();
+	private void adaptTOResponse(Item responseItem, AddListingResponse response) {
 		response.setListingId(responseItem.getId());
-		return response;
 	}
 
 	private Item readItem(String output) {
@@ -134,22 +133,22 @@ public class MercadolibreListingAdapter implements
 		// Set Price
 		if (listing.getPrice() != null) {
 			item.setPrice(listing.getPrice().getValue());
-			item.setCurrency_id("ARS");// TODO remove this hardcoding
+			item.setCurrency_id(listing.getPrice().getCurrency().getCurrencyCode());// TODO remove this hardcoding
 		}
 
 		ListingFormatEnum listingFormate = listing.getListingFormat();
 		if (listingFormate != null) {
-			String buyingMode = "buy_it_now";
+			String buyingMode = MLConstants.ListingConstants.BUY_IT_NOW;
 			if (listingFormate == ListingFormatEnum.AD) {
-				buyingMode = "classified";
+				buyingMode = MLConstants.ListingConstants.CLASSIFIEDS;
 			} else if (ListingFormatEnum.AUCTION == listingFormate) {
-				buyingMode = "auction";
+				buyingMode = MLConstants.ListingConstants.AUCTION;
 			}
 			item.setBuying_mode(buyingMode);
 		}
 
 		item.setCondition(listing.getCondition());
-//		item.setListing_type_id(listing.getListingId());// TODO listing
+		// item.setListing_type_id(listing.getListingId());// TODO listing
 		item.setAvailable_quantity(listing.getQuantity());
 		// Set Payment menthods.
 		List<PaymentMethod> paymentMethods = listing.getPaymentMethods();
@@ -164,6 +163,8 @@ public class MercadolibreListingAdapter implements
 				}
 			}
 		}
+		
+//		item.setVariations(variations);
 		return item;
 	}
 
@@ -174,6 +175,6 @@ public class MercadolibreListingAdapter implements
 	}
 
 	private boolean isProductIDAvailalbe(Product product) {
-		return product != null && product.getProductId()  > 0;
+		return product != null && product.getProductId() > 0;
 	}
 }
