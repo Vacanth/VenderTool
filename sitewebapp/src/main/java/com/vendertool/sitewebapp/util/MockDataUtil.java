@@ -1,11 +1,13 @@
 package com.vendertool.sitewebapp.util;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.Address;
@@ -144,6 +146,8 @@ public class MockDataUtil {
 	public static UploadsResponse getUploadsResponse() {
 		
 		UploadsResponse res = new UploadsResponse();
+
+		Random rand = new Random();
 		
 		PaginationOutput pagOut = new PaginationOutput();
 		pagOut.setCurrentPage(3);
@@ -155,7 +159,7 @@ public class MockDataUtil {
 			Job job = new Job();
 			job.setAccountId(123L);
 			job.setCreatedDate(new Date());
-			job.setJobId(new Long(i));
+			job.setJobId(rand.nextLong());
 			job.setStatus(FPSJobStatusEnum.SUCCESS);
 			job.setTitle("title " + i);
 			
@@ -168,7 +172,7 @@ public class MockDataUtil {
 				for (int j=0; j<3; j++) {
 					File f = new File();
 					f.setName("name" + j);
-					f.setFileId(new Long(j));
+					f.setFileId(rand.nextLong());
 					f.setAccountId(123L);
 					f.setCreatedDate(new Date());
 					f.setStatus(FPSFileStatusEnum.SUCCESS);
@@ -178,7 +182,7 @@ public class MockDataUtil {
 			else {
 				File f = new File();
 				f.setName("name" + i);
-				f.setFileId(new Long(i));
+				f.setFileId(rand.nextLong());
 				f.setAccountId(123L);
 				f.setCreatedDate(new Date());
 				f.setStatus(FPSFileStatusEnum.SUCCESS);
@@ -195,7 +199,7 @@ public class MockDataUtil {
 				for (int j=0; j<3; j++) {
 					File f = new File();
 					f.setName("name" + j);
-					f.setFileId(new Long(j));
+					f.setFileId(rand.nextLong());
 					f.setAccountId(123L);
 					f.setCreatedDate(new Date());
 					f.setStatus(FPSFileStatusEnum.SUCCESS);
@@ -205,7 +209,7 @@ public class MockDataUtil {
 			else {
 				File f = new File();
 				f.setName("name" + i);
-				f.setFileId(new Long(i));
+				f.setFileId(rand.nextLong());
 				f.setAccountId(123L);
 				f.setCreatedDate(new Date());
 				f.setStatus(FPSFileStatusEnum.SUCCESS);
@@ -220,6 +224,10 @@ public class MockDataUtil {
 		res.setPaginationOutput(pagOut);
 		
 		return res;
+	}
+	
+	private static String makeId() {
+		 return new BigInteger(130,  new SecureRandom()).toString(32);
 	}
 	
 }
