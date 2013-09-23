@@ -90,33 +90,6 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-appCtx</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>${project.build.directory}/src/resources/emailtemplates</outputDirectory>
-							<overwrite>true</overwrite>
-							<resources>
-								<resource>
-									<directory>../registration/src/main/resources/emailtemplates</directory>
-									<includes>
-										<include>ConfirmRegistration.vm</include>
-										<include>RegistrationComplete.vm</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -152,7 +125,16 @@
 											todir="${project.build.outputDirectory}/dal" />	
 										<copy file="../registration/src/main/resources/RegistrationDAL.xml"
 											todir="${project.build.outputDirectory}/dal" />	
-											
+										<copy file="../common/src/main/resources/common-application-context.xml"
+											todir="${project.build.outputDirectory}" />
+										<copy file="../registration/src/main/resources/registration-application-context.xml"
+											todir="${project.build.outputDirectory}" />
+										<copy todir="${project.build.outputDirectory}/l10n">
+											<fileset dir="../registration/src/main/resources/l10n" includes="**/*" />
+										</copy>
+										<copy todir="${project.build.outputDirectory}/emailtemplates">
+											<fileset dir="../registration/src/main/resources/emailtemplates" includes="**/*" />
+										</copy>
 									</tasks>
 								</configuration>
 							</execution>

@@ -13,6 +13,7 @@ public class AccountConfirmation {
 	private String confirmSessionId;
 	private Integer confirmCode;
 	private int confirmationAttempts;
+	private Date expiryDate;
 	private Date confirmationDate;
 	private Date createDate;
 	
@@ -28,15 +29,19 @@ public class AccountConfirmation {
 	public String getConfirmSessionId() {
 		return confirmSessionId;
 	}
+	
 	public void setConfirmSessionId(String confirmSessionId) {
 		this.confirmSessionId = confirmSessionId;
 	}
+	
 	public Integer getConfirmCode() {
 		return confirmCode;
 	}
+	
 	public void setConfirmCode(Integer confirmCode) {
 		this.confirmCode = confirmCode;
 	}
+	
 	public int getConfirmationAttempts() {
 		return confirmationAttempts;
 	}
@@ -65,17 +70,26 @@ public class AccountConfirmation {
 		this.createDate = createDate;
 	}
 	
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
 	@JsonIgnore
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("AccountConfirmation=[[")
+		sb.append("\nAccountConfirmation=[[")
 			.append("\n\tID=").append(getId())
 			.append("\n\tCONFIRM SESSION ID=").append(getConfirmSessionId())
 			.append("\n\tCONFIRM CODE=").append(getConfirmCode())
 			.append("\n\tCONFIRMATION ATTEMPTS=").append(getConfirmationAttempts())
 			.append("\n\tCONFIRMATION DATE=").append(getConfirmationDate())
-			.append("\n\tCREATION DATE=").append(getCreateDate());
-			
+			.append("\n\tCREATION DATE=").append(getCreateDate())
+			.append("\n\tEXPIRY DATE=").append(getExpiryDate())
+		.append("]]");
 		return sb.toString();
 	}
 }

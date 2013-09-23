@@ -29,15 +29,10 @@ public class AccountReadSet {
 		ACCOUNT.picture, 
 		ACCOUNT.registrationAddrId, 
 		ACCOUNT.roles, 
-		ACCOUNT.status
-	};
-	
-	public final Path<?>[] SIGNIN = {
-		ACCOUNT.accountId, 
-		ACCOUNT.emailAddr, 
-		ACCOUNT.roles, 
-		ACCOUNT.status, 
-		ACCOUNT.password
+		ACCOUNT.status,
+		ACCOUNT.contactPhoneHome,
+		ACCOUNT.contactPhoneMobile,
+		ACCOUNT.contactPhoneWork
 	};
 	
 	public final Path<?>[] EMAIL = {
@@ -50,6 +45,8 @@ public class AccountReadSet {
 		ACCOUNT.emailAddr,
 		ACCOUNT.password,
 		ACCOUNT.salt,
-		ACCOUNT.status
+		ACCOUNT.roles,
+		ACCOUNT.status,
+		ACCOUNT.firstName
 	};
 }

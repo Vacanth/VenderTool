@@ -3,6 +3,7 @@ package com.vendertool.sharedtypes.core;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -33,6 +34,7 @@ public class Account {
 	private Set<AccountRoleEnum> roles;
 	private AccountStatusEnum accountStatus;
 	private AccountConfirmation accountConf;
+	private List<AccountSecurityQuestion> securityQuestions;
 	
 	public Account(){}
 	
@@ -239,6 +241,14 @@ public class Account {
 		roles.add(role);
 	}
 	
+	public List<AccountSecurityQuestion> getSecurityQuestions() {
+		return securityQuestions;
+	}
+
+	public void setSecurityQuestions(List<AccountSecurityQuestion> securityQuestions) {
+		this.securityQuestions = securityQuestions;
+	}
+
 	@JsonIgnore
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -256,6 +266,7 @@ public class Account {
 			.append("\n\tROLES=").append(normalize(getRoles()))
 			.append("\n\tPASSWORD=").append(getPassword())
 			.append("\n\tSALT=").append(getPasswordSalt())
+			.append("\n\tSECURITY QUESTIONS=").append(getSecurityQuestions())
 		.append("]]");
 		
 		return sb.toString();

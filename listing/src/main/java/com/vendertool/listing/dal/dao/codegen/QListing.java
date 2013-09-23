@@ -33,7 +33,7 @@ public class QListing extends com.mysema.query.sql.RelationalPathBase<QBeanListi
 
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> currencyId = createNumber("currency_id", Byte.class);
+    public final StringPath currencyCodeIso3 = createString("currency_code_iso3");
 
     public final NumberPath<java.math.BigDecimal> fixedPrice = createNumber("fixed_price", java.math.BigDecimal.class);
 

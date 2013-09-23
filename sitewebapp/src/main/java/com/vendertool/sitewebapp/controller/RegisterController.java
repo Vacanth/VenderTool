@@ -1,6 +1,5 @@
 package com.vendertool.sitewebapp.controller;
 
-import java.nio.charset.Charset;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Language;
@@ -93,7 +91,6 @@ public class RegisterController {
 			
 			Locale locale = RequestContextUtils.getLocale(request);
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
-			System.out.println("**** Default charset is: " + Charset.defaultCharset());
 
 			modelMap.addAttribute("account", responseAccount);
 			modelMap.addAttribute("errorResponse", errorResponse);
@@ -101,40 +98,10 @@ public class RegisterController {
 			
 			modelMap.addAttribute("langOptions", MenuBuilder.getLanguageOptions(locale));
 			modelMap.addAttribute("selectedLang", request.getParameter("lang"));
-			//Added for debugging purpose, need to remove this
-			addJsonOutput(responseAccount, errorResponse, modelMap);
 			
 			return "register/register";
 		}
 		
 		return "register/registersuccesspreconfirm";
 	}
-	
-	private void addJsonOutput(Account account, ErrorResponse errorResponse, ModelMap modelMap) {
-		/*****************************************************************************/
-		/* THIS IS A TEST, NEED TO REMOVE THIS CODE AFTER THE UI DESIGN IS FINALIZED */
-		/*****************************************************************************/
-		
-		// Add JSON for Angular
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			//Do this only if you want to pretty print the output to the html <textarea> or <pre>
-			String jsonAccountString = mapper
-					.writerWithDefaultPrettyPrinter().writeValueAsString(
-							account);
-			
-			//Do this only if you want to pretty print the output to the html <textarea> or <pre>
-			String jsonErrorResponse = mapper
-					.writerWithDefaultPrettyPrinter().writeValueAsString(
-							errorResponse);
-			
-			modelMap.put("json_account_output", jsonAccountString);
-			modelMap.put("json_err_res_output", jsonErrorResponse);
-		}
-		catch (Exception e) {
-			logger.debug("JSON marshalling exception", e);
-			e.printStackTrace();
-		}
-	}
-	
 }

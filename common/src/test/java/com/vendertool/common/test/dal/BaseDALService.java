@@ -7,10 +7,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.vendertool.common.dal.exception.DBConnectionException;
 
-public class BaseDALService {
+public class BaseDALService extends BaseTest {
 	public ApplicationContext context;
 	
 	protected BaseDALService() {
+		super();
 		try {
 			initialize();
 		} catch (DBConnectionException e) {
@@ -18,6 +19,11 @@ public class BaseDALService {
 		} catch (SQLException e) {
 			log(e);
 		}
+	}
+	
+	@Override
+	public String getApplicationContextFileName() {
+		return null;
 	}
 	
 	public void initialize() throws DBConnectionException, SQLException {

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="classpath:common-application-context.xml" />
+	
+	<bean id="confirmRegistrationEmailService" class="com.vendertool.common.email.EmailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="templateLocation" value="emailtemplates/ConfirmRegistration.vm" />
+	</bean>
+	
+	<bean id="registrationCompleteEmailService" class="com.vendertool.common.email.EmailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="templateLocation" value="emailtemplates/RegistrationComplete.vm" />
+	</bean>
+	
+	<bean id="changeEmailService" class="com.vendertool.common.email.EmailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="templateLocation" value="emailtemplates/EmailChange.vm" />
+	</bean>
+	
+	<bean id="passwordChangeEmailService" class="com.vendertool.common.email.EmailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="templateLocation" value="emailtemplates/PasswordChange.vm" />
+	</bean>
+</beans>	   					 

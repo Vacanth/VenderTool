@@ -21,11 +21,9 @@ public class QProduct extends com.mysema.query.sql.RelationalPathBase<QBeanProdu
 
     public final NumberPath<Long> accountId = createNumber("account_id", Long.class);
 
-    public final NumberPath<Integer> availbleQuantity = createNumber("availble_quantity", Integer.class);
-
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
 
-    public final StringPath descriptionText = createString("description_text");
+    public final StringPath currencyCodeIso3 = createString("currency_code_iso3");
 
     public final NumberPath<Byte> dimensionUnit = createNumber("dimension_unit", Byte.class);
 
@@ -47,7 +45,7 @@ public class QProduct extends com.mysema.query.sql.RelationalPathBase<QBeanProdu
 
     public final StringPath productUrl = createString("product_url");
 
-    public final StringPath productcol = createString("productcol");
+    public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
     public final StringPath sku = createString("sku");
 

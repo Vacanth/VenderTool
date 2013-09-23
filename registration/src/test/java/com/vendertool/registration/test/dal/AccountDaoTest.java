@@ -21,7 +21,7 @@ import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
 
-public class AccountDaoTest extends BaseDaoTest{
+public class AccountDaoTest extends BaseDaoTest {
 	private static final int ACCOUNT_COUNT = 2;
 	Account[] accounts;
 	AccountDao dao;
@@ -108,7 +108,7 @@ public class AccountDaoTest extends BaseDaoTest{
 		
 		//DAL find by readset
 		log("======== FIND WITH READ SET TEST =======");
-		dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.SIGNIN);
+		dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.PASSWORD);
 		
 		//JUnit assert read set
 		Assert.assertNull(dbaccount.getContactDetails());
@@ -169,5 +169,10 @@ public class AccountDaoTest extends BaseDaoTest{
 		}
 		
 		return dao;
+	}
+	
+	@Override
+	public String getApplicationContextFileName() {
+		return "test-app-context.xml";
 	}
 }

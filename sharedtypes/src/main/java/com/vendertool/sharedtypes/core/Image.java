@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlEnum;
 
-import com.vendertool.sharedtypes.core.Dimension.DimensionUnitEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Image {
@@ -90,5 +90,20 @@ public class Image {
 
 	public void setImgurl(String imgurl) {
 		this.imgurl = imgurl;
+	}
+	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Account=[[")
+			.append("\n\tID=").append(getImageId())
+			.append("\n\tBYTES NOT NULL=").append((getBytes() != null))
+			.append("\n\tSIZE=").append(getSize())
+			.append("\n\\tFORMAT=").append(getFormat())
+			.append("\n\tNAME=").append(getName())
+			.append("\n\tURL=").append(getImgurl())
+		.append("]]");
+		
+		return sb.toString();
 	}
 }

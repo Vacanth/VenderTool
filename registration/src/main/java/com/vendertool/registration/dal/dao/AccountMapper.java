@@ -22,6 +22,8 @@ import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.Image;
 import com.vendertool.sharedtypes.core.Language;
+import com.vendertool.sharedtypes.core.Phone;
+import com.vendertool.sharedtypes.core.Phone.PhoneType;
 
 public class AccountMapper implements DALMapper<Account> {
 //	private static final Logger logger = Logger.getLogger(AccountMapper.class);
@@ -146,6 +148,36 @@ public class AccountMapper implements DALMapper<Account> {
 			if(a.status.equals(rpath)) {
 				map.put(a.status, new Byte(account.getAccountStatus().getId()+""));
 			}
+			
+			if(a.contactPhoneHome.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.HOME);
+					if(phone != null) {
+						map.put(a.contactPhoneHome, phone.getNumber()+"");
+					}
+				}
+			}
+			
+			if(a.contactPhoneMobile.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.MOBILE);
+					if(phone != null) {
+						map.put(a.contactPhoneMobile, phone.getNumber()+"");
+					}
+				}
+			}
+			
+			if(a.contactPhoneWork.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.WORK);
+					if(phone != null) {
+						map.put(a.contactPhoneWork, phone.getNumber()+"");
+					}
+				}
+			}
 		}
 		
 		return map;
@@ -181,12 +213,31 @@ public class AccountMapper implements DALMapper<Account> {
 		
 		bean.setEmailAddr(account.getEmailId());
 		
-		if(account.getContactDetails() != null) {
-			bean.setFirstName(account.getContactDetails().getFirstName());
-			bean.setLastName(account.getContactDetails().getLastName());
-			bean.setMiddleName(account.getContactDetails().getMiddleName());
-			if(account.getContactDetails().getAddress() != null) {
-				bean.setRegistrationAddrId(account.getContactDetails().getAddress().getId());
+		ContactDetails cd = account.getContactDetails();
+		if(VUTIL.isNotNull(cd)) {
+			bean.setFirstName(cd.getFirstName());
+			bean.setLastName(cd.getLastName());
+			bean.setMiddleName(cd.getMiddleName());
+			if(cd.getAddress() != null) {
+				bean.setRegistrationAddrId(cd.getAddress().getId());
+			}
+			
+			Map<PhoneType, Phone> phoneMap = cd.getPhones();
+			if(VUTIL.isNotNull(phoneMap)) {
+				Phone p = phoneMap.get(PhoneType.HOME);
+				if(p != null) {
+					bean.setContactPhoneHome(p.getNumber().toString());
+				}
+				
+				p = phoneMap.get(PhoneType.WORK);
+				if(p != null) {
+					bean.setContactPhoneWork(p.getNumber().toString());
+				}
+				
+				p = phoneMap.get(PhoneType.MOBILE);
+				if(p != null) {
+					bean.setContactPhoneMobile(p.getNumber().toString());
+				}
 			}
 		}
 		
@@ -364,6 +415,48 @@ public class AccountMapper implements DALMapper<Account> {
 					if(se != null) {
 						account.setAccountStatus(se);
 					}
+				}
+			}
+			
+			if(a.contactPhoneHome.equals(rpath)) {
+				if(row.get(a.contactPhoneHome) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneHome)));
+					
+					cd.addPhone(PhoneType.HOME, p);
+				}
+			}
+			
+			if(a.contactPhoneWork.equals(rpath)) {
+				if(row.get(a.contactPhoneWork) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneWork)));
+					
+					cd.addPhone(PhoneType.WORK, p);
+				}
+			}
+			
+			if(a.contactPhoneMobile.equals(rpath)) {
+				if(row.get(a.contactPhoneMobile) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneMobile)));
+					
+					cd.addPhone(PhoneType.MOBILE, p);
 				}
 			}
 		}

@@ -78,6 +78,34 @@ public class VTError implements Serializable {
 	public void setArguments(Object[] arguments) {
 		this.arguments = arguments;
 	}
+	
+	@JsonIgnore
+	public VTError addArguments(Object... arguments) {
+		if(arguments == null) {
+			return this;
+		}
+		
+		Object[] args = getArguments();
+		if(args == null) {
+			setArguments(arguments);
+			return this;
+		}
+		
+		int existinglength = args.length;
+		int inputlength = arguments.length;
+		
+		Object[] argsNew = new Object[existinglength + inputlength];
+		for(int i=0; i<existinglength; i++) {
+			argsNew[i] = args[i];
+		}
+		
+		for(int i=0; i<inputlength; i++) {
+			argsNew[i] = arguments[i];
+		}
+		
+		setArguments(argsNew);
+		return this;
+	}
 
 	@JsonIgnore
 	public String getErrorCodeAsString() {

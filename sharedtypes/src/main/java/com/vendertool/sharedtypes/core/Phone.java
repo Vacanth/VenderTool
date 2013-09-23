@@ -14,34 +14,34 @@ public class Phone {
 		MOBILE, HOME, WORK, PUBLIC, FAX;
 	}
 	
-	private int countryCode;
-	private int areaCode;
-	private int number;
+//	private Integer countryCode;
+//	private Integer areaCode;
+	private Integer number;
 	private PhoneType type;
 	
 	public Phone(){}
 
-	public int getCountryCode() {
-		return countryCode;
-	}
+//	public Integer getCountryCode() {
+//		return countryCode;
+//	}
+//
+//	public void setCountryCode(Integer countryCode) {
+//		this.countryCode = countryCode;
+//	}
+//
+//	public Integer getAreaCode() {
+//		return areaCode;
+//	}
+//
+//	public void setAreaCode(Integer areaCode) {
+//		this.areaCode = areaCode;
+//	}
 
-	public void setCountryCode(int countryCode) {
-		this.countryCode = countryCode;
-	}
-
-	public int getAreaCode() {
-		return areaCode;
-	}
-
-	public void setAreaCode(int areaCode) {
-		this.areaCode = areaCode;
-	}
-
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 
@@ -58,8 +58,8 @@ public class Phone {
 		StringBuffer sb = new StringBuffer();
 		sb.append("PHONE=[")
 			.append("\n\tTYPE=").append(getType())
-			.append("\n\tCOUNTRY CODE=").append(getCountryCode())
-			.append("\n\tAREA CODE=").append(getAreaCode())
+//			.append("\n\tCOUNTRY CODE=").append(getCountryCode())
+//			.append("\n\tAREA CODE=").append(getAreaCode())
 			.append("\n\tNUMBER=").append(getNumber());
 	
 		return sb.toString();

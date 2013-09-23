@@ -22,6 +22,7 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QAccount;
 import com.vendertool.sharedtypes.core.Account;
+import com.vendertool.sharedtypes.core.AccountStatusEnum;
 
 public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 	private static final Logger logger = Logger.getLogger(AccountDaoImpl.class);
@@ -180,9 +181,9 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 	}
 
 	@Override
-	public void updateEmail(String oldEmail, String newEmail)
+	public void updateEmail(String oldEmail, String newEmail, AccountStatusEnum status)
 			throws DBConnectionException, UpdateException {
-		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(newEmail)) {
+		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(newEmail) || VUTIL.isNull(status)) {
 			UpdateException ue = new UpdateException("Cannot update null account");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
@@ -196,6 +197,7 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 			QAccount a = QAccount.account;
 			SQLUpdateClause s = update(con, a)
 					.set(a.emailAddr, newEmail)
+					.set(a.status, new Byte(status.getId()+""))
 					.where(a.emailAddr.eq(oldEmail));
 			
 	    	//Always log the query before executing it

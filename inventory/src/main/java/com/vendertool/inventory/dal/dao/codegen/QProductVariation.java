@@ -19,9 +19,9 @@ public class QProductVariation extends com.mysema.query.sql.RelationalPathBase<Q
 
     public static final QProductVariation productVariation = new QProductVariation("product_variation");
 
-    public final NumberPath<Integer> availbleQuantity = createNumber("availble_quantity", Integer.class);
-
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
+
+    public final StringPath currencyCodeIso3 = createString("currency_code_iso3");
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
@@ -30,6 +30,10 @@ public class QProductVariation extends com.mysema.query.sql.RelationalPathBase<Q
     public final NumberPath<Long> productId = createNumber("product_id", Long.class);
 
     public final NumberPath<Long> productVariationId = createNumber("product_variation_id", Long.class);
+
+    public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
+
+    public final StringPath sku = createString("sku");
 
     public final StringPath title = createString("title");
 

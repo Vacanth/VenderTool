@@ -2,6 +2,8 @@ package com.vendertool.registration.dal.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -196,7 +198,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			SQLQuery query = from(con, ac)
 					.groupBy(ac.accountId)
 					.innerJoin(new SQLSubQuery().from(ac).where(ac.accountId.eq(accountId)).list(ac.createdDate.max()), ac)
-					.where(ac.accountId.eq(accountId));
+					.where(ac.accountId.eq(accountId).and(ac.expiryDate.after(new Timestamp(new Date().getTime()))));
 			
 //			SQLQuery query = from(con, ac)
 //					.where(ac.accountId.eq(accountId));

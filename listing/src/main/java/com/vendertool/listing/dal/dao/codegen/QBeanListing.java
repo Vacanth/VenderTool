@@ -22,7 +22,7 @@ public class QBeanListing {
 
     private java.sql.Timestamp createdDate;
 
-    private Byte currencyId;
+    private String currencyCodeIso3;
 
     private java.math.BigDecimal fixedPrice;
 
@@ -106,12 +106,12 @@ public class QBeanListing {
         this.createdDate = createdDate;
     }
 
-    public Byte getCurrencyId() {
-        return currencyId;
+    public String getCurrencyCodeIso3() {
+        return currencyCodeIso3;
     }
 
-    public void setCurrencyId(Byte currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrencyCodeIso3(String currencyCodeIso3) {
+        this.currencyCodeIso3 = currencyCodeIso3;
     }
 
     public java.math.BigDecimal getFixedPrice() {

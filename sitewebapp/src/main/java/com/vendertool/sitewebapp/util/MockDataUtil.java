@@ -34,32 +34,32 @@ public class MockDataUtil {
 		acct.setContactDetails(contact);
 		
 		Phone workPhone = new Phone();
-		workPhone.setAreaCode(408);
-		workPhone.setCountryCode(011);
+//		workPhone.setAreaCode(408);
+//		workPhone.setCountryCode(011);
 		workPhone.setNumber(1111111);
 		workPhone.setType(PhoneType.WORK);
 		
 		Phone mobilePhone = new Phone();
-		mobilePhone.setAreaCode(408);
-		mobilePhone.setCountryCode(011);
+//		mobilePhone.setAreaCode(408);
+//		mobilePhone.setCountryCode(011);
 		mobilePhone.setNumber(2222222);
 		mobilePhone.setType(PhoneType.MOBILE);
 		
 		Phone homePhone = new Phone();
-		homePhone.setAreaCode(408);
-		homePhone.setCountryCode(011);
+//		homePhone.setAreaCode(408);
+//		homePhone.setCountryCode(011);
 		homePhone.setNumber(3333333);
 		homePhone.setType(PhoneType.HOME);
 		
 		Phone faxPhone = new Phone();
-		faxPhone.setAreaCode(408);
-		faxPhone.setCountryCode(011);
+//		faxPhone.setAreaCode(408);
+//		faxPhone.setCountryCode(011);
 		faxPhone.setNumber(4444444);
 		faxPhone.setType(PhoneType.FAX);
 		
 		Phone publicPhone = new Phone();
-		publicPhone.setAreaCode(408);
-		publicPhone.setCountryCode(011);
+//		publicPhone.setAreaCode(408);
+//		publicPhone.setCountryCode(011);
 		publicPhone.setNumber(5555555);
 		publicPhone.setType(PhoneType.PUBLIC);
 		

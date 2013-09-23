@@ -16,6 +16,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,6 +28,7 @@ import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sitewebapp.security.CleintCredentials;
 import com.vendertool.sitewebapp.security.CleintCredentialsUtil;
+import com.vendertool.sitewebapp.security.CustomUserDetails;
 
 public class RestServiceClientHelper {
 	
@@ -47,6 +50,12 @@ public class RestServiceClientHelper {
 		if(obj != null) {
 			logger.log(Level.INFO, "Service Invocation: \n\t" + httpMethod
 					+ ": " + url + "\n\t Payload: \n\t" + obj);
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if((auth != null) && (auth.getPrincipal() != null)) {
+				CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+				obj.setEmailId(user.getAccount().getEmailId());
+				obj.setAccountId(user.getAccount().getId());
+			}
 		}
 		
 		ClientConfig clientConfig = new ClientConfig();

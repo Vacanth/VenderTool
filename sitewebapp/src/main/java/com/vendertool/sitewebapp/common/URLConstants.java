@@ -9,6 +9,7 @@ public interface URLConstants {
 	
 	public static final String WEB_SERVICE_PATH = "/services";
 	public static final String WS_REGISTRATION_GET_ACCOUNT_PATH = "/registration/getAccount";
+	public static final String WS_REGISTRATION_GET_ACCOUNT_PWD_PATH = "/registration/getAccountPassword";
 	public static final String WS_REGISTRATION_REGISTER_PATH = "/registration/register";
 	public static final String WS_REGISTRATION_CONFIRM_PATH = "/registration/confirmRegistration";
 	public static final String CONFIRM_ACCOUNT_PATH = "/confirmaccount";

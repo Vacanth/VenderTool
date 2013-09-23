@@ -277,7 +277,7 @@ public class Address {
 	@JsonIgnore
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("ADDRESS=[")
+		sb.append("\nADDRESS=[")
 			.append("\n\tID=").append(getId())
 			.append("\n\tFIRST NAME=").append(getFirstName())
 			.append("\n\tLAST NAME=").append(getLastName())
@@ -291,8 +291,9 @@ public class Address {
 			.append("\n\tADDRESS TYPE=").append(getAddressType())
 			.append("\n\tUSECASE=").append(getAddressUseCase())
 			.append("\n\tSTATUS=").append(getStatus())
-			.append("\n\tCREATED DATE=").append(getCreatedDate());
-			
+			.append("\n\tCREATED DATE=").append(getCreatedDate())
+		.append("]]");
+		
 		return sb.toString();
 	}
 }

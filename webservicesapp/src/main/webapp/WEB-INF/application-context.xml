@@ -4,50 +4,19 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
  
+ 	<import resource="classpath:common-application-context.xml" />
+ 	<import resource="classpath:registration-application-context.xml" />
+ 	
   <bean id="applicationContextUtils" class="com.vendertool.common.SpringApplicationContextUtils"></bean>
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-				<value>classpath:l10n/email</value>
+				<value>classpath:l10n/registration_messages</value>
 			</list>
 		</property>
 		<property name="defaultEncoding" value="UTF-8" />
-	</bean>
-  
-  	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="vendertool@gmail.com" />
-		<property name="password" value="vendert00l" />
-
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-			</props>
-		</property>
-	</bean>
-
-	<bean id="confirmRegistrationService" class="com.vendertool.registration.email.ConfirmRegistrationEmailService">
-		<property name="mailSender" ref="mailSender" />
-		<property name="velocityEngine" ref="velocityEngine" />
-	</bean>
-	
-	<bean id="registrationCompleteService" class="com.vendertool.registration.email.RegistrationCompleteEmailService">
-		<property name="mailSender" ref="mailSender" />
-		<property name="velocityEngine" ref="velocityEngine" />
-	</bean>
-
-	<bean id="velocityEngine"
-		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="velocityProperties">
-			<value>
-				resource.loader=class
-				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-			</value>
-		</property>
 	</bean>
  
  	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">

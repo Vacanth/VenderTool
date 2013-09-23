@@ -27,6 +27,8 @@ public class QFile extends com.mysema.query.sql.RelationalPathBase<QBeanFile> {
 
     public final NumberPath<Long> fileId = createNumber("file_id", Long.class);
 
+    public final StringPath fileName = createString("file_name");
+
     public final NumberPath<Byte> filesCountInGroup = createNumber("files_count_in_group", Byte.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);

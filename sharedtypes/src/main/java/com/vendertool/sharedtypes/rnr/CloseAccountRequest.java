@@ -6,16 +6,16 @@ import com.vendertool.sharedtypes.core.AccountClosureReasonCodeEnum;
 
 @XmlRootElement
 public class CloseAccountRequest extends BaseRequest {
-	private String username;
+	private String email;
 	private AccountClosureReasonCodeEnum reasonCode;
 	private String reasonMessage;
 	
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 	
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	public AccountClosureReasonCodeEnum getReasonCode() {

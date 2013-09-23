@@ -1,5 +1,7 @@
 package com.vendertool.registration.dal;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.vendertool.common.dal.dao.AddressDao;
@@ -13,11 +15,14 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.AccountConfirmationDao;
 import com.vendertool.registration.dal.dao.AccountDao;
+import com.vendertool.registration.dal.dao.AccountSecurityQuestionDao;
 import com.vendertool.registration.dal.dao.PasswordHistoryDao;
 import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
 import com.vendertool.registration.dal.fieldset.FieldSets;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
+import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 
@@ -28,12 +33,14 @@ public class RegistrationDALService {
 	AccountConfirmationDao accountConfDao;
 	PasswordHistoryDao pwdHistoryDao;
 	AddressDao addrDao;
+	AccountSecurityQuestionDao secQuestionDao;
 	
 	private RegistrationDALService() {
 		accountDao = RegistrationDaoFactory.getInstance().getAccountDao();
 		accountConfDao = RegistrationDaoFactory.getInstance().getAccountConfirmationDao();
 		pwdHistoryDao = RegistrationDaoFactory.getInstance().getPasswordHistoryDao();
 		addrDao = AddressDaoFactory.getInstance().getAddressDao();
+		secQuestionDao = RegistrationDaoFactory.getInstance().getAccountSecurityQuestionDao();
 	}
 	
 	private static class RegistrationDALServiceHolder {
@@ -189,14 +196,22 @@ public class RegistrationDALService {
 	}
 	
 	
-	public boolean updateEmail(String oldEmail, String newEmail)
+	public boolean updateEmail(String oldEmail, Account account)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
-		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(newEmail)) {
+		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(account) || 
+				(account.getId() <= 0) || VUTIL.isNull(account.getAccountConf())) {
 			return false;
 		}
 		
-		accountDao.updateEmail(oldEmail, newEmail);
+		try {
+			accountConfDao.insert(account.getId(), account.getAccountConf());
+		} catch (InsertException e) {
+			logger.debug(e.getMessage(), e);
+			return false;
+		}
+		accountDao.updateEmail(oldEmail, account.getEmailId(), account.getAccountStatus());
+		
 		return true;
 	}
 	
@@ -230,6 +245,41 @@ public class RegistrationDALService {
 		}
 		
 		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
+	}
+	
+	public AccountConfirmation getAccountConfirmation(Long accountId)
+			throws DBConnectionException, FinderException, DatabaseException {
+		
+		if(VUTIL.isNull(accountId)) {
+			return null;
+		}
+		
+		return accountConfDao.findLatestActive(accountId);
+	}
+	
+	public void updateAccountStatus(Long accountId, AccountStatusEnum status)
+			throws DBConnectionException, UpdateException, DatabaseException {
+		
+		if(VUTIL.isNull(accountId) || VUTIL.isNull(status)) {
+			return;
+		}
+		
+		Account a = new Account();
+		a.setId(accountId);
+		a.setAccountStatus(status);
+		
+		accountDao.update(a, FieldSets.ACCOUNT_UPDATESET.STATUS);
+	}
+	
+	public void updateConfirmationAttempts(Long accountId, Long pkId,
+			int attempts) throws DBConnectionException, UpdateException,
+			DatabaseException {
+		
+		if(VUTIL.isNull(accountId) || VUTIL.isNull(pkId)) {
+			return;
+		}
+		
+		accountConfDao.updateConfirmationAttempts(accountId, pkId, attempts);
 	}
 	
 	
@@ -274,15 +324,43 @@ public class RegistrationDALService {
 		
 		accountConfDao.delete(accId);
 		
+		secQuestionDao.deleteByAccountId(accId);
+		
 		addrDao.deleteByAccountId(accId, true);
 	}
 	
 	
-//	public List<AccountSecurityQuestion> getAccountSecurityQuestions(String email) {
-//		
-//	}
-//	
-//	public void updateAccountSecurityQuestions(String email, List<AccountSecurityQuestion>) {
-//		
-//	}
+	public void updateAccountSecurityQuestions(String email,
+			List<AccountSecurityQuestion> questions) throws UpdateException,
+			DBConnectionException, FinderException, DatabaseException, DeleteException, InsertException {
+		
+		if(VUTIL.isEmpty(email) || (questions == null) || (questions.isEmpty())) {
+			throw new UpdateException("Cannot update security questions with null account email or question set");
+		}
+		
+		Long accountId = accountDao.findAccountId(email);
+		if(accountId == null) {
+			throw new UpdateException("Unable to find account for email: " + email);
+		}
+		
+		secQuestionDao.deleteByAccountId(accountId);
+		
+		secQuestionDao.insert(accountId, questions);
+	}
+	
+	
+	public List<AccountSecurityQuestion> getAccountSecurityQuestions(String email)
+			throws FinderException, DBConnectionException, DatabaseException {
+		
+		if(VUTIL.isEmpty(email)) {
+			throw new FinderException("Cannot find security questions with null email");
+		}
+		
+		Long accountId = accountDao.findAccountId(email);
+		if(accountId == null) {
+			throw new FinderException("Unable to find account for email: " + email);
+		}
+		
+		return secQuestionDao.findAllByAccountId(accountId);
+	}
 }

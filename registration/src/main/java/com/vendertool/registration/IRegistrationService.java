@@ -11,13 +11,17 @@ import com.vendertool.sharedtypes.rnr.CloseAccountRequest;
 import com.vendertool.sharedtypes.rnr.CloseAccountResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
+import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountResponse;
+import com.vendertool.sharedtypes.rnr.GetAccountSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteRequest;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteResponse;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
 
 
 public interface IRegistrationService extends IVenderToolService {
@@ -44,7 +48,15 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @param request
 	 * @return
 	 */
-	public GetAccountResponse getAccount(String username);
+	public GetAccountResponse getAccount(String email);
+	
+	/**
+	 * HTTP GET call to get the account password
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public GetAccountPasswordResponse getAccountPassword(String email);
 	
 	/**
 	 * HTTP POST to update the account details/profile
@@ -93,4 +105,21 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @return
 	 */
 	public LinkOtherSiteResponse linkOtherSite(LinkOtherSiteRequest request);
+	
+	/**
+	 * HTTP POST to update security questions.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public UpdateAccountSecurityQuestionsResponse updateSecurityQuestions(
+			UpdateAccountSecurityQuestionsRequest request);
+	
+	/**
+	 * HTTP GET call to get the account security details
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public GetAccountSecurityQuestionsResponse getSecurityQuestions(String email);
 }

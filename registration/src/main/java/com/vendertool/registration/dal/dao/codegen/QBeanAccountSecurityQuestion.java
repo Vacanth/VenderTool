@@ -20,7 +20,7 @@ public class QBeanAccountSecurityQuestion {
 
     private String securityAnswer;
 
-    private Integer securityQuestionId;
+    private String securityQuestionCode;
 
     public Long getAccountId() {
         return accountId;
@@ -70,12 +70,12 @@ public class QBeanAccountSecurityQuestion {
         this.securityAnswer = securityAnswer;
     }
 
-    public Integer getSecurityQuestionId() {
-        return securityQuestionId;
+    public String getSecurityQuestionCode() {
+        return securityQuestionCode;
     }
 
-    public void setSecurityQuestionId(Integer securityQuestionId) {
-        this.securityQuestionId = securityQuestionId;
+    public void setSecurityQuestionCode(String securityQuestionCode) {
+        this.securityQuestionCode = securityQuestionCode;
     }
 
 }
