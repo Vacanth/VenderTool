@@ -14,29 +14,7 @@
 		<b>Download Files</b>
 	</a>
 	
-	<style>
-		.uploadTable tbody+tbody {
-			margin:0;
-			padding:0;
-			border-top:0;
-		}
-		table.uploadTable tbody tr td {
-			padding-top:10px;
-			padding-bottom:10px;
-		}
-		.tableHdr {
-			background-color:#ddd;
-		}
-		.subRow {
-			display:none;
-		}
-		.rowColor {
-			background-color:#e4f2e6;
-		}
-	</style>
-
-	
-	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)">
+	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)" cellspacing="0" cellpadding="0">
 		<tr class="tableHdr">
 			<th>Job Id</th>
 			<th>Uploaded Files</th>
