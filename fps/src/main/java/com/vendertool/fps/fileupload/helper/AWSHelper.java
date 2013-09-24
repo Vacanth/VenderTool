@@ -31,7 +31,7 @@ import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
 
 public class AWSHelper {
-	private static final String UPLOAD_REQ_BUCKET = "uploadBucket";
+	private static final String UPLOAD_REQ_BUCKET = "vtuploadreqbucket";
 	private static AWSHelper s_self = null;
     private static AmazonS3 s3 = null;
 
@@ -103,7 +103,8 @@ public class AWSHelper {
         for (FileInformation file : files) {
             Long contentLength = Long.valueOf(file.getFileSize());
 
-    		String key = "userName/"+ new Date().getTime()+ "_"+ file.getFileName();
+    		//String key = "userName/"+ new Date().getTime()+ "_"+ file.getFileName()+"/";
+            String key = "username_"+file.getFileName();
             fileRefMap.put(file.getFileName(), key);
             
             ObjectMetadata metadata = new ObjectMetadata();

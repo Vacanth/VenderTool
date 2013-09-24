@@ -111,7 +111,8 @@ public class FPSService extends BaseVenderToolServiceImpl {
         	File fileObj = new File();
         	fileObj.setFileName(file.getFileName());
         	fileObj.setAccountId(Long.valueOf(accountId));
-        	fileObj.setFileGroupId(file.getFileGroupId());
+        	//fileObj.setFileGroupId(file.getFileGroupId());   // Need to uncomment
+        	fileObj.setFileGroupId("Testing files");
         	fileObj.setRefUrl(refMap.get(file.getFileName()));
         	fileObj.setStorageSource(new Byte(FPSStorageSourceEnum.AWS_CLOUD.ordinal()+""));
         	fileObj.setUseCase(FPSUsecaseEnum.ADD_LISTING);
