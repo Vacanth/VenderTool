@@ -88,7 +88,7 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 	public static VTErrorCode CONFIRM_EMAIL_MISMATCH = new RegistrationErrorCode(
 			"CONFIRM_EMAIL_MISMATCH");
 	public static VTErrorCode UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION = new RegistrationErrorCode(
-			"CONFIRM_EMAIL_MISMATCH");
+			"UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION");
 	public static VTErrorCode UNABLE_TO_CLOSE_ACCOUNT = new RegistrationErrorCode(
 			"UNABLE_TO_CLOSE_ACCOUNT");
 	public static VTErrorCode UNABLE_TO_UPDATE_SEC_QUESTIONS = new RegistrationErrorCode(

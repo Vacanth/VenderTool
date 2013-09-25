@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
@@ -24,7 +25,7 @@ import com.vendertool.sitewebapp.common.URLConstants;
 public class CustomUserDetailsService implements UserDetailsService {
 	
 	private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
-	private static final String USERNAME_KEY = "username";
+	private static final String USERNAME_KEY = "email";
 	
 	@Override
 	public UserDetails loadUserByUsername(String username)
@@ -60,8 +61,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		//HTTP error code 200
 		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
-			UsernameNotFoundException ex = new UsernameNotFoundException("Unable to fetch user details, web service HTTP response code not okay.");
-			logger.log(Level.DEBUG, "Unable to fetch user details, web service HTTP response code not okay.", ex);
+			UsernameNotFoundException ex = new UsernameNotFoundException(
+					"Unable to fetch account details, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
 			throw ex;
 		}
 		

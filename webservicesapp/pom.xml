@@ -125,6 +125,10 @@
 											todir="${project.build.outputDirectory}/dal" />	
 										<copy file="../registration/src/main/resources/RegistrationDAL.xml"
 											todir="${project.build.outputDirectory}/dal" />	
+										<copy file="../fps/src/main/resources/FpsDAL.xml"
+											todir="${project.build.outputDirectory}/dal" />
+										<copy file="../listing/src/main/resources/ListingDAL.xml"
+											todir="${project.build.outputDirectory}/dal" />											
 										<copy file="../common/src/main/resources/common-application-context.xml"
 											todir="${project.build.outputDirectory}" />
 										<copy file="../registration/src/main/resources/registration-application-context.xml"
@@ -139,15 +143,6 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-					
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.16</version>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
 					</plugin>
 					
 				</plugins>

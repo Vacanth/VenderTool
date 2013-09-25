@@ -78,7 +78,11 @@ public class RegisterController {
 		
 		//HTTP error code 200
 		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
-			throw new VTRuntimeException("Unable to register");
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to register, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
 		}
 		
 		RegisterAccountResponse registerAccountresponse = response.readEntity(RegisterAccountResponse.class);

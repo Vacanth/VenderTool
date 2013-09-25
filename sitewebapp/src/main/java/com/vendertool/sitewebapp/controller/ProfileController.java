@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +21,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendertool.sharedtypes.core.Account;
+import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
+import com.vendertool.sharedtypes.rnr.ChangeEmailResponse;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sharedtypes.rnr.GetAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
+import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
+import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.util.MenuBuilder;
 import com.vendertool.sitewebapp.util.MockDataUtil;
@@ -30,14 +38,54 @@ import com.vendertool.sitewebapp.util.MockDataUtil;
 @Controller
 public class ProfileController {
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
+	private static final String USERNAME_KEY = "email";
 
 	@RequestMapping(value=URLConstants.PROFILE, method=RequestMethod.GET)
 	public String getProfileView(ModelMap modelMap, HttpServletRequest request) {
 		logger.info("getProfileView controller invoked");
-
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
+		
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if(email == null) {
+			return "redirect:errors/unexpectedError";
+		}
+		
+		String hostName = RestServiceClientHelper.getServerURL(request);
+		
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_REGISTRATION_GET_ACCOUNT_PATH + URLConstants.QUERY_START + 
+				USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
+		
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.GET);
+		
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".getProfileView(" + email + ")' is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to fetch account details, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		GetAccountResponse accountresponse = response.readEntity(GetAccountResponse.class);
+		if(accountresponse.hasErrors()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Web service response has errors, unable to fetch account details: "
+							+ accountresponse.getFieldBindingErrors().toString());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		Account account = accountresponse.getAccount();
+		
+		
 		Account account = MockDataUtil.getAccount();
 		
 		ErrorResponse errorResponse = new ErrorResponse();
@@ -119,6 +167,7 @@ public class ProfileController {
 		/***
 		 * TODO: Getting the real data needs to be implemented.
 		 */
+		ChangeEmailResponse response = new ChangeEmailResponse();
 		ChangeEmailRequest changeEmailRequest = MockDataUtil.getEmail();
 		ErrorResponse errorResponse = new ErrorResponse();
 		

@@ -35,11 +35,11 @@
 		<div>
 			<h2>$msgSource.getMessage('email.registration.confirmreg.heading', $msgparams, $locale)</h2>
 			
-			<p>$msgSource.getMessage('email.greeting', $msgparams, $locale) ${emailData.toName}! </p>
+			<p>$msgSource.getMessage('email.greeting', $msgparams, $locale) ${emailData.toName}! <br/></p>
 			
-			<p>$msgSource.getMessage('email.registration.confirmreg.introduction', $msgparams, $locale)</p>
+			<p>$msgSource.getMessage('email.registration.confirmreg.introduction', $msgparams, $locale)<br/></p>
 			
-			<p>$msgSource.getMessage('email.registration.confirmreg.instruction', $msgparams, $locale)</p>
+			<p>$msgSource.getMessage('email.registration.confirmreg.instruction', $msgparams, $locale)<br/></p>
 		   	
 		   	<p>${emailData.confirmationUrl}<br/></p>
 			
