@@ -2,7 +2,7 @@ package com.vendertool.common.dal.fieldset;
 
 
 import com.mysema.query.types.Path;
-import com.vendertool.inventory.dal.dao.codegen.QImage;
+import com.vendertool.common.dal.dao.codegen.QImage;
 
 public class ImageReadSet {
 	private static final QImage IMAGE = QImage.image;
