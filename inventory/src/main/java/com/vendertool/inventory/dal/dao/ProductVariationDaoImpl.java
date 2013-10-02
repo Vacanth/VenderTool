@@ -21,6 +21,7 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
+import com.vendertool.inventory.dal.dao.codegen.QBeanProductVariation;
 import com.vendertool.inventory.dal.dao.codegen.QProductVariation;
 import com.vendertool.sharedtypes.core.ProductVariation;
 
@@ -43,6 +44,11 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 		try {
 			con = getConnection();
 			QProductVariation a = QProductVariation.productVariation;
+			ProductVariationMapper productVariationMapper = new ProductVariationMapper(a.all());
+			QBeanProductVariation qBeanProductVariation = productVariationMapper.populateBean(productVariation);
+			qBeanProductVariation.setProductId(productId);
+			dfgdf;
+			
 			Long seq = generateNextSequence(con);
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 				
@@ -54,8 +60,9 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 				productVariation.setProductVariationId(seq);
 			}
 			
-	    	SQLInsertClause s = insert(con, a)
-    				.populate(new ProductVariationMapper(a.all()).populateBean(productVariation));
+	 /*   	SQLInsertClause s = insert(con, a)
+    				.populate(new ProductVariationMapper(a.all()).populateBean(productVariation));*/
+			SQLInsertClause s = insert(con, a).populate(productVariation);
     	logger.info("DAL QUERY: " + s.toString());
     	
     	try {

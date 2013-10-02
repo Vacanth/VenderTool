@@ -51,7 +51,8 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-			//productDescription.setP.setProductDescriptionId(seq);
+				//Auto increment
+		//	productDescription.setProductDescriptionId(seq);
 			}
 			
 	    	SQLInsertClause s = insert(con, a)
@@ -86,11 +87,11 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 	@Override
 	public void delete(Product productDescription) throws DBConnectionException,
 			DeleteException, DatabaseException {
-	//	delete(productDescription.getProductDescriptionId());
+		delete(productDescription.getProductId());
 		
 	}
 	@Override
-	public void delete(long productDescriptionId) throws DBConnectionException,
+	public void delete(long productId) throws DBConnectionException,
 			DeleteException {
 		Connection con = null;
 		
@@ -98,7 +99,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 			con = getConnection();
 			QProductDescription a = QProductDescription.productDescription;
 			SQLDeleteClause s = delete(con, a)
-				.where(a.productDescriptionId.eq(productDescriptionId));
+				.where(a.productId.eq(productId));
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
 	    	try {
