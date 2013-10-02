@@ -51,7 +51,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-				productDescription.setProductDescriptionId(seq);
+			//productDescription.setP.setProductDescriptionId(seq);
 			}
 			
 	    	SQLInsertClause s = insert(con, a)
@@ -86,7 +86,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 	@Override
 	public void delete(Product productDescription) throws DBConnectionException,
 			DeleteException, DatabaseException {
-		delete(productDescription.getProductDescriptionId());
+	//	delete(productDescription.getProductDescriptionId());
 		
 	}
 	@Override
