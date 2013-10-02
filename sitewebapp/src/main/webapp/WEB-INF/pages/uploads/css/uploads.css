@@ -79,12 +79,10 @@
 .table tbody>tr>td {
 	padding:0 8px;
 	line-height:36px;
-	vertical-align:middle;
 	border-top:0;
 }
 .layout .mainRow td {
 	padding:0 8px;
-	vertical-align:middle;
 }
 
 
