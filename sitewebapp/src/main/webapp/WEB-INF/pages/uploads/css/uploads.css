@@ -51,6 +51,13 @@
 .uploadTable .folderRow, .uploadTable label, .uploadTable input {
 	cursor:pointer;
 }
+.uploadTable td {
+	border-right:1px solid #ddd;
+}
+.uploadTable .rowColor {
+	background-color:#eee;
+}
+
 .uploadTable tbody+tbody {
 	margin:0;
 	padding:0;
