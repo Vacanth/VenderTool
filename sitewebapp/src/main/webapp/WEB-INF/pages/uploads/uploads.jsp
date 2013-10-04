@@ -44,7 +44,7 @@
 							<b>Download Files</b>
 						</a>
 						
-						<table class="table uploadTable" cellspacing="0" cellpadding="0" border="0">
+						<table ng-click="handleCheckboxCtrls($event); toggleRows($event)" class="table uploadTable" cellspacing="0" cellpadding="0" border="0">
 							<tr class="tableHdr">
 								<th>Job Id</th>
 								<th>Uploaded Files</th>
@@ -169,16 +169,30 @@
 							</c:forEach>
 							
 						</table>
-						<%--
+						
 						<ul class="pagination">
+							
+							<c:choose>
+								<c:when test="${uploadsResponse.paginationOutput.currentPage == 1}">
+								
+								</c:when>
+								<c:otherwise>
+								
+								</c:otherwise>
+							</c:choose>
+							<%-- 
 							<li ng-class="{'disabled': getPreviousPage() == null}"><a href="#/files/{{getPreviousPage()}}">&laquo;</a></li>
+						
 							<li ng-repeat="i in makeArray(getNumOfPages())"
 								ng-class="{'active': uploadsRes.paginationOutput.currentPage == ($index + 1)}">
 								<a  href="#/files/{{$index + 1}}">{{$index + 1}}</a>
 							</li>
+							
+							
 							<li ng-class="{'disabled': getNextPage() == null}"><a href="#/files/{{getNextPage()}}">&raquo;</a></li>
+							--%>
 						</ul>
-						 --%>
+						
 					</div>
 
 				</div>

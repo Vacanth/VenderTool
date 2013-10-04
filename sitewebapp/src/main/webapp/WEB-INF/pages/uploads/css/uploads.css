@@ -37,6 +37,9 @@
 	position:relative;
 	top:4px;
 }
+.folderIcon:hover {
+	cursor:pointer;
+}
 .folderIcon.open {
 	background:url('../resources/img/icons.png') no-repeat -157px 1px;
 }
@@ -47,6 +50,9 @@
 	background:url('../resources/img/icons.png') no-repeat -178px 1px;
 	position:relative;
 	top:4px;
+}
+.fileIcon:hover {
+	cursor:pointer;
 }
 .uploadTable .folderRow, .uploadTable label, .uploadTable input {
 	cursor:pointer;
