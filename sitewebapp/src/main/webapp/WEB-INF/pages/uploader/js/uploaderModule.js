@@ -434,7 +434,6 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			uploadBtn.bind('click', uploadFiles);
 		
 		},
-		templateUrl:'uploader/partial/uploaderModule',
 		scope: true
 		
 	};// End of returned statement

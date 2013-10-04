@@ -144,26 +144,29 @@
 										<td></td>
 									</tr>
 									<%--=============================================
-									// Hidden subRows
+									// Hidden subRows.
+									// Only for jobs with more than one file.
 									=================================================--%>
-									<c:forEach var="file" items="${job.uploadedFiles}" varStatus="status">
-										<tr class="subRow q-subRow">
-											<td></td>
-											<td>
-												<b class="fileIcon"></b>
-												<input type="checkbox"  class="q-uploadedCbx" id="${file.fileId}"/>
-												<label for="${file.fileId}">${file.name}</label>
-											</td>
-											<td></td>
-											<td></td>
-											<td>
-												<b class="fileIcon"></b>
-												<input type="checkbox" class="q-processedCbx" id="${file.fileId}_p" />
-												<label for="${file.fileId}_p">${file.name}</label>
-											</td>
-											<td></td>
-										</tr>
-									</c:forEach>
+									<c:if test="${fn:length(job.uploadedFiles) > 1}">
+										<c:forEach var="file" items="${job.uploadedFiles}" varStatus="status">
+											<tr class="subRow q-subRow">
+												<td></td>
+												<td>
+													<b class="fileIcon"></b>
+													<input type="checkbox"  class="q-uploadedCbx" id="${file.fileId}"/>
+													<label for="${file.fileId}">${file.name}</label>
+												</td>
+												<td></td>
+												<td></td>
+												<td>
+													<b class="fileIcon"></b>
+													<input type="checkbox" class="q-processedCbx" id="${file.fileId}_p" />
+													<label for="${file.fileId}_p">${file.name}</label>
+												</td>
+												<td></td>
+											</tr>
+										</c:forEach>
+									</c:if>
 	
 								</tbody>
 							</c:forEach>

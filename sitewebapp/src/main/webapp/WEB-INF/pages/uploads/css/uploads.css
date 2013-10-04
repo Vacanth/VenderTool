@@ -51,9 +51,6 @@
 	position:relative;
 	top:4px;
 }
-.fileIcon:hover {
-	cursor:pointer;
-}
 .uploadTable .folderRow, .uploadTable label, .uploadTable input {
 	cursor:pointer;
 }
