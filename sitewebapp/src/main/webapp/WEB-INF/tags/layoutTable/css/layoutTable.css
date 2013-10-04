@@ -17,6 +17,7 @@
 }
 .layout .mainRow td {
 	padding-top: 0;
+	vertical-align:top;
 }
 
 

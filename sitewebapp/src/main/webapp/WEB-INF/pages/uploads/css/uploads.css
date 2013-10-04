@@ -37,6 +37,9 @@
 	position:relative;
 	top:4px;
 }
+.folderIcon:hover {
+	cursor:pointer;
+}
 .folderIcon.open {
 	background:url('../resources/img/icons.png') no-repeat -157px 1px;
 }
@@ -48,9 +51,19 @@
 	position:relative;
 	top:4px;
 }
+.fileIcon:hover {
+	cursor:pointer;
+}
 .uploadTable .folderRow, .uploadTable label, .uploadTable input {
 	cursor:pointer;
 }
+.uploadTable td {
+	border-right:1px solid #ddd;
+}
+.uploadTable .rowColor {
+	background-color:#eee;
+}
+
 .uploadTable tbody+tbody {
 	margin:0;
 	padding:0;
@@ -79,12 +92,10 @@
 .table tbody>tr>td {
 	padding:0 8px;
 	line-height:36px;
-	vertical-align:middle;
 	border-top:0;
 }
 .layout .mainRow td {
 	padding:0 8px;
-	vertical-align:middle;
 }
 
 

@@ -33,6 +33,7 @@ public class UploadsController {
 		modelMap.addAttribute("errorResponse", new ErrorResponse());
 		
 		// Add JSON for Angular
+		/*
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			String modelMapJson= mapper.writeValueAsString(modelMap);
@@ -42,7 +43,7 @@ public class UploadsController {
 			logger.log(Level.ERROR, e.getMessage(), e);
 			e.printStackTrace();
 			throw new VTRuntimeException("Cannot convert modelMap to json");
-		}
+		}*/
 		
 		return "uploads/uploads";
 	}
