@@ -47,7 +47,6 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 			ProductVariationMapper productVariationMapper = new ProductVariationMapper(a.all());
 			QBeanProductVariation qBeanProductVariation = productVariationMapper.populateBean(productVariation);
 			qBeanProductVariation.setProductId(productId);
-			dfgdf;
 			
 			Long seq = generateNextSequence(con);
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
