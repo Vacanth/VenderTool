@@ -48,13 +48,44 @@
 	position:relative;
 	top:4px;
 }
+.uploadTable .folderRow, .uploadTable label, .uploadTable input {
+	cursor:pointer;
+}
+.uploadTable tbody+tbody {
+	margin:0;
+	padding:0;
+	border-top:0;
+}
+.uploadTable td input, .uploadTable td label {
+	position:relative;
+	top:3px;
+}
+.uploadTable .fileIcon, .uploadTable .folderIcon {
+	position:relative;
+	top:6px;
+}
+.tableHdr {
+	background-color:#cdcdcd;
+}
+.subRow {
+	display:none;
+}
+.rowColor {
+	background-color:#eee;
+}
 
 
-
-
-
-
-
+/** override styles from page.css **/
+.table tbody>tr>td {
+	padding:0 8px;
+	line-height:36px;
+	vertical-align:middle;
+	border-top:0;
+}
+.layout .mainRow td {
+	padding:0 8px;
+	vertical-align:middle;
+}
 
 
 

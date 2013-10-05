@@ -18,7 +18,9 @@ import com.vendertool.sharedtypes.core.MarketEnum;
 import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 import com.vendertool.sharedtypes.error.Errors;
+import com.vendertool.sharedtypes.rnr.GetSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.GetSupportedCountriesResponse;
+import com.vendertool.sharedtypes.rnr.GetSupportedLanguagesResponse;
 import com.vendertool.sharedtypes.rnr.GetSupportedLocalesResponse;
 
 @Path("/metadata")
@@ -55,8 +57,12 @@ public class MetadataServiceImpl extends BaseVenderToolServiceImpl implements
 		return response;
 	}
 
+	
+	@GET
+	@Path("/getSecurityQuestions")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public List<SecurityQuestion> getSecurityQuestions(Locale locale) {
+	public GetSecurityQuestionsResponse getSecurityQuestions(Locale locale) {
 		SecurityQuestionCodeEnum[] questionEnums = SecurityQuestionCodeEnum.values();
 		MsgSource msgsrc = new MsgSource();
 		List<SecurityQuestion> questions = new ArrayList<SecurityQuestion>();
@@ -70,12 +76,21 @@ public class MetadataServiceImpl extends BaseVenderToolServiceImpl implements
 			questions.add(question);
 		}
 		
-		return questions;
+		GetSecurityQuestionsResponse response = new GetSecurityQuestionsResponse();
+		response.setSecurityQuestions(questions);
+		return response;
 	}
 
+	
+	@GET
+	@Path("/getSupportedLanguages")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public Set<Language> getSupportedLanguages() {
+	public GetSupportedLanguagesResponse getSupportedLanguages() {
 		//TODO trim this to the ones we support
-		return Language.getLanguages();
+		
+		GetSupportedLanguagesResponse response = new GetSupportedLanguagesResponse();
+		response.setSupportedLanguages(Language.getLanguages());
+		return response;
 	}
 }

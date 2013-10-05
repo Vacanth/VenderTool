@@ -14,35 +14,7 @@
 		<b>Download Files</b>
 	</a>
 	
-	<style>
-		.uploadTable tbody+tbody {
-			margin:0;
-			padding:0;
-			border-top:0;
-		}
-		table.uploadTable tbody tr td {
-			padding-top:10px;
-			padding-bottom:10px;
-		}
-		.tableHdr {
-			background-color:#ddd;
-		}
-		.subRow {
-			display:none;
-		}
-		.folder {
-			cursor:pointer;
-		}
-		.rowColor {
-			background-color:#e4f2e6;
-		}
-		.folderRow {
-			background-color:red;
-		}
-	</style>
-
-	
-	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)">
+	<table class="table  uploadTable" ng-click="handleCheckboxCtrls($event); toggleRows($event)" cellspacing="0" cellpadding="0">
 		<tr class="tableHdr">
 			<th>Job Id</th>
 			<th>Uploaded Files</th>
@@ -52,7 +24,7 @@
 			<th>Processsing Complete</th>
 		</tr>
 		<tbody ng-repeat="job in uploadsRes.jobs">
-			<tr ng-class="{'rowColor': $index % 2 == 1}" class="q-folderRow">
+			<tr ng-class="{'rowColor': $index % 2 == 1, 'folderRow': job.uploadedFiles.length > 1}" class="q-folderRow">
 				<td>{{job.jobId}}</td>
 				<td>
 					<%--=============================
@@ -64,9 +36,10 @@
 						//Single file
 						--%>
 						<span ng-switch-when="1">
-							<input type="checkbox" id="{{job.jobId}}"/>
 							<b class="fileIcon"></b>
 							
+							<input type="checkbox" id="{{job.jobId}}"/>
+
 							<span ng-switch on="isNullOrEmpty(job.title)">
 								<label ng-switch-when="false" for="{{job.jobId}}">{{job.title}}</label>
 								<label ng-switch-default for="{{job.jobId}}">{{job.uploadedFiles[0].name}}</label>
@@ -77,9 +50,10 @@
 						// Folder
 						--%>
 						<span ng-switch-default>
-							<input type="checkbox" class="q-uploadedFldrCbx" id="{{job.jobId}}">
 							<b class="folderIcon q-folderIcon"></b>
-
+							
+							<input type="checkbox" class="q-uploadedFldrCbx" id="{{job.jobId}}">
+							
 							<span ng-switch on="isNullOrEmpty(job.title)">
 								<label ng-switch-when="false" for="{{job.jobId}}">{{job.title}}</label>
 								<label ng-switch-default for="{{job.jobId}}">{{job.uploadedFiles[0].name}}...</label>
@@ -98,21 +72,23 @@
 							--
 						</span>
 						<span ng-switch-when="1">
-							<input type="checkbox"/>
 							<b class="fileIcon"></b>
+							<input type="checkbox" id="{{job.jobId}}_p"/>
+							
 							
 							<span ng-switch on="isNullOrEmpty(job.title)">
-								<span ng-switch-when="false">{{job.title}}</span>
-								<span ng-switch-default>{{job.processedFiles[0].name}}</span>
+								<label ng-switch-when="false" for="{{job.jobId}}_p">{{job.title}}</label>
+								<label ng-switch-default for="{{job.jobId}}_p">{{job.processedFiles[0].name}}</label>
 							</span>
 						</span>
 						<span ng-switch-default>
-							<input type="checkbox" class="q-processedFldrCbx"/>
 							<b class="folderIcon q-folderIcon"></b>
+							<input type="checkbox" class="q-processedFldrCbx" id="{{job.jobId}}_p"/>
+							
 							
 							<span ng-switch on="isNullOrEmpty(job.title)">
-								<span ng-switch-when="false">{{job.title}}</span>
-								<span ng-switch-default>{{job.processedFiles[0].name}}...</span>
+								<label ng-switch-when="false" for="{{job.jobId}}_p">{{job.title}}</label>
+								<label ng-switch-default for="{{job.jobId}}_p">{{job.processedFiles[0].name}}...</label>
 							</span>
 						</span>
 					</div>
@@ -123,22 +99,23 @@
 			<%--=============================================
 			// Hidden subRows
 			=================================================--%>
-			<tr ng-repeat="file in job.uploadedFiles" class="subRow q-subRow">
+			<tr ng-repeat="file in job.filesInFolder" class="subRow q-subRow">
 				<td>{{}}</td>
 				<td>
-					<input type="checkbox" ng-model="file.checked" class="q-uploadedCbx" style="margin-left:15px"/>
 					<b class="fileIcon"></b>
-					{{file.name}}
+					<input type="checkbox" ng-model="file.checked" class="q-uploadedCbx" id="{{file.fileId}}"/>
+					<label for="{{file.fileId}}">{{file.name}}</label>
 				</td>
 				<td>{{}}</td>
 				<td>{{}}</td>
 				<td>
-					<input type="checkbox" ng-model="job.processedFiles[$index].checked" class="q-processedCbx" style="margin-left:15px"/>
 					<b class="fileIcon"></b>
-					{{job.processedFiles[$index].name}}
+					<input type="checkbox" ng-model="job.processedFiles[$index].checked" class="q-processedCbx" id="{{file.fileId}}_p" />
+					<label for="{{file.fileId}}_p">{{job.processedFiles[$index].name}}</label>
 				</td>
 				<td>{{}}</td>
 			</tr>
+
 		</tbody>
 	</table>
 	

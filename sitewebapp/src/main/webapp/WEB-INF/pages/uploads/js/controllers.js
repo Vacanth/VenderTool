@@ -24,7 +24,25 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
 	$scope.errorResponse = Data.errorResponse;
 	
-
+	//
+	// Creating filesInFolder array to help render subRows for jobs
+	// with more than one file (jobs that have folder icons).
+	//
+	// Jobs with only one file will not have a filesInFolder array
+	// created. This is to prevent a subRow from being rendered.
+	// 
+	// Only needed because can't figure out another way to PREVENT
+	// rendering a subRow if job has only one file.
+	//
+	$($scope.uploadsRes.jobs).each(function(index, job) {
+		if (job.uploadedFiles.length > 1) {
+			job.filesInFolder = [];
+			
+			$(job.uploadedFiles).each(function(index, file) {
+				job.filesInFolder.push(file);
+			});
+		}
+	});
 
 	
 	//
@@ -144,7 +162,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 		
 		target = $($event.target);
 		
-		if (target.prop('type') !== 'checkbox') {
+		if (target.prop('type') !== 'checkbox' && $event.target.nodeName !== 'LABEL') {
 			if (target.hasClass(_css.folderRow) || target.closest('.' + _css.folderRow).length > 0) {
 				
 				tbody = target.closest('tbody');

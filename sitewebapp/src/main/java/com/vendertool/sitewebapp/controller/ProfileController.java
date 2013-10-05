@@ -1,8 +1,7 @@
 package com.vendertool.sitewebapp.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +10,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendertool.sharedtypes.core.Account;
@@ -26,20 +25,24 @@ import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangeEmailResponse;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
+import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountResponse;
+import com.vendertool.sharedtypes.rnr.GetSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
+import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
+import com.vendertool.sitewebapp.common.VTErrorUtil;
 import com.vendertool.sitewebapp.util.MenuBuilder;
-import com.vendertool.sitewebapp.util.MockDataUtil;
 
 @Controller
 public class ProfileController {
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
-	private static final String USERNAME_KEY = "email";
 
+	
 	@RequestMapping(value=URLConstants.PROFILE, method=RequestMethod.GET)
 	public String getProfileView(ModelMap modelMap, HttpServletRequest request) {
 		logger.info("getProfileView controller invoked");
@@ -53,7 +56,7 @@ public class ProfileController {
 		
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
 				URLConstants.WS_REGISTRATION_GET_ACCOUNT_PATH + URLConstants.QUERY_START + 
-				USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
+				URLConstants.USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
 		
 		Response response = RestServiceClientHelper
 				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
@@ -84,14 +87,8 @@ public class ProfileController {
 		}
 		
 		Account account = accountresponse.getAccount();
-		
-		
-		Account account = MockDataUtil.getAccount();
-		
-		ErrorResponse errorResponse = new ErrorResponse();
 
 		modelMap.addAttribute("account", account);
-		modelMap.addAttribute("errorResponse", errorResponse);
 		modelMap.addAttribute("countryOptions", MenuBuilder.getCountryOptions(request));
 		
 		// Add JSON for Angular
@@ -109,176 +106,266 @@ public class ProfileController {
 		return "profile/profile";
 	}
 
+	
 	@RequestMapping(value=URLConstants.PROFILE_SAVE, method=RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveProfile(@RequestBody Account account, HttpServletRequest request) {
+	public @ResponseBody
+	Map<String, Object> saveProfile(@RequestBody Account account,
+			HttpServletRequest request) {
 		logger.info("saveProfile controller invoked");
 		
 		if (account == null) {
 			throw new VTRuntimeException("Cannot update account. Account is null.");
 		}
 
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
+		
+		String inputEmail = account.getEmailId();
+		if((inputEmail == null) || (inputEmail.trim().isEmpty())) {
+			account.setEmailId(email);
+		}
+		
 		UpdateAccountRequest updateAccountReq = new UpdateAccountRequest();
 		updateAccountReq.setAccount(account);
+		updateAccountReq.setEmailId(email);
 		
-		/********* This needs to be implemented ***********
-		Response response = RestServiceClientHelper.post(
-				updateAccountReq,
-				"NEED_THIS_SERVICE_PATH",
-				request);
+		String hostName = RestServiceClientHelper.getServerURL(request);
 		
-		UpdateAccountResponse updateAccountRes = response.readEntity(UpdateAccountResponse.class);
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_REGISTRATION_UPDATE_PROFILE_PATH;
 		
-		Account responseAccount = updateAccountRes.getAccount();
-		responseAccount.clearPassword();
-		ErrorResponse errorResponse = new ErrorResponse();
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, updateAccountReq, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.POST);
 		
-		if(updateAccountRes.hasErrors()) {
-			logger.error("Update account failed with errors: " + updateAccountRes.getFieldBindingErrors());
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".saveProfile(" + account + ")' is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to update account profile, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		UpdateAccountResponse accountresponse = response.readEntity(UpdateAccountResponse.class);
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(accountresponse.hasErrors()) {
+			logger.error("Update account profile failed with errors: " + accountresponse.getFieldBindingErrors());
 
-			errorResponse = new ErrorResponse(updateAccountRes);
+			ErrorResponse errorResponse = new ErrorResponse(accountresponse);
 			
 			Locale locale = RequestContextUtils.getLocale(request);
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
-			System.out.println("**** Default charset is: " + Charset.defaultCharset());
-
 			
-			//Added for debugging purpose, need to remove this
-			//addJsonOutput(responseAccount, errorResponse, modelMap);
+			Account responseAccount = accountresponse.getAccount();
+			
+			map.put("account", responseAccount);
+			map.put("errorResponse", errorResponse);
+			
+			return map;
 		}
-		************************************************/
 		
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
-		Account responseAccount = account;
-		ErrorResponse errorResponse = MockDataUtil.getUpdateAccountErrors(account);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("account", responseAccount);
-		map.put("errorResponse", errorResponse);
-		
+		map.put("account", accountresponse.getAccount());
 		return map;
 	}
+	
 	
 	@RequestMapping(value=URLConstants.PROFILE_EMAIL, method=RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getEmailView() {
 		logger.info("getEmailView controller invoked");
 
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
-		ChangeEmailResponse response = new ChangeEmailResponse();
-		ChangeEmailRequest changeEmailRequest = MockDataUtil.getEmail();
-		ErrorResponse errorResponse = new ErrorResponse();
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("changeEmailRequest", changeEmailRequest);
-		map.put("errorResponse", errorResponse);
-		
 		return map;
 	}
 	
+	
 	@RequestMapping(value=URLConstants.PROFILE_EMAIL_SAVE, method=RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveEmailChange(@RequestBody ChangeEmailRequest changeEmailRequest, HttpServletRequest request) {
+	public @ResponseBody
+	Map<String, Object> saveEmailChange(
+			@RequestBody ChangeEmailRequest changeEmailRequest,
+			HttpServletRequest request) {
 		logger.info("saveEmailChange controller invoked");
 		
 		if (changeEmailRequest == null) {
 			throw new VTRuntimeException("Cannot update email. changeEmailRequest is null.");
 		}
 		
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
-		ErrorResponse errorResponse = MockDataUtil.getUpdateEmailErrors(changeEmailRequest);
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
 		
+		changeEmailRequest.setEmailId(email);
+		
+		String hostName = RestServiceClientHelper.getServerURL(request);
+		
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_REGISTRATION_CHANGE_EMAIL_PATH;
+		
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, changeEmailRequest, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.POST);
+		
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".saveEmailChange(" + changeEmailRequest + ")' is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to change email, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		ChangeEmailResponse changeEmailResponse = response.readEntity(ChangeEmailResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("changeEmailRequest", changeEmailRequest);
-		map.put("errorResponse", errorResponse);
 		
+		if(changeEmailResponse.hasErrors()) {
+			logger.error("Change email failed with errors: " + changeEmailResponse.getFieldBindingErrors());
+
+			ErrorResponse errorResponse = new ErrorResponse(changeEmailResponse);
+			
+			Locale locale = RequestContextUtils.getLocale(request);
+			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
+			
+			map.put("errorResponse", errorResponse);
+			
+			return map;
+		}
+		
+		map.put("changedEmail", changeEmailResponse.getEmail());
 		return map;
 	}
 
+	
 	@RequestMapping(value=URLConstants.PROFILE_PASSWORD, method=RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getPasswordView() {
 		logger.info("getPasswordView controller invoked");
-
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
-		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
-		ErrorResponse errorResponse = new ErrorResponse();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("changePasswordRequest", changePasswordRequest);
-		map.put("errorResponse", errorResponse);
+		map.put("showOldPasswordField", true);
 		
 		return map;
 	}
 	
+	
 	@RequestMapping(value=URLConstants.PROFILE_PASSWORD_SAVE, method=RequestMethod.POST)
-	public @ResponseBody Map<String, Object> savePasswordChange(@RequestBody ChangePasswordRequest changePasswordRequest, HttpServletRequest request) {
+	public @ResponseBody
+	Map<String, Object> savePasswordChange(
+			@RequestBody ChangePasswordRequest changePasswordRequest,
+			HttpServletRequest request) {
 		logger.info("savePasswordChange controller invoked");
 		
 		if (changePasswordRequest == null) {
 			throw new VTRuntimeException("Cannot update password. changePasswordRequest is null.");
 		}
 		
-		/***
-		 * TODO: Getting the real data needs to be implemented.
-		 */
-		ErrorResponse errorResponse = MockDataUtil.getUpdatePasswordErrors(changePasswordRequest);
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
 		
+		changePasswordRequest.setEmail(email);
+		
+		String hostName = RestServiceClientHelper.getServerURL(request);
+		
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_REGISTRATION_CHANGE_PASSWORD_PATH;
+		
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, changePasswordRequest, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.POST);
+		
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".savePasswordChange(" + changePasswordRequest + ")' is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to change password, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		ChangePasswordResponse changePasswordResponse = response.readEntity(ChangePasswordResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("changePasswordRequest", changePasswordRequest);
-		map.put("errorResponse", errorResponse);
+		
+		if(changePasswordResponse.hasErrors()) {
+			logger.error("Change email failed with errors: " + changePasswordResponse.getFieldBindingErrors());
+
+			ErrorResponse errorResponse = new ErrorResponse(changePasswordResponse);
+			
+			Locale locale = RequestContextUtils.getLocale(request);
+			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
+			
+			map.put("errorResponse", errorResponse);
+			
+			return map;
+		}
 		
 		return map;
 	}
 	
 	@RequestMapping(value="profile/questions", method=RequestMethod.GET)
-	public @ResponseBody SecurityQuestionsResponse getSecurityQuestionsView(ModelMap modelMap, HttpServletRequest request){
+	public @ResponseBody
+	GetSecurityQuestionsResponse getSecurityQuestionsView(ModelMap modelMap,
+			HttpServletRequest request) {
 		logger.info("getSecurityQuestionsView GET controller invoked");
 		
-		// Add the questions
-		SecurityQuestion q1 = new SecurityQuestion();
-		q1.setId(1);
-		q1.setText("What is the name of your favorite pet?");
-		SecurityQuestion q2 = new SecurityQuestion();
-		q2.setId(2);
-		q2.setText("What is the name of your high school?");
-		SecurityQuestion q3 = new SecurityQuestion();
-		q3.setId(3);
-		q3.setText("What is your favorite color");
-		SecurityQuestion q4 = new SecurityQuestion();
-		q4.setId(4);
-		q4.setText("What street did you grow up on");
-		List<SecurityQuestion> questionList = new ArrayList<SecurityQuestion>();
-		questionList.add(q1);
-		questionList.add(q2);
-		questionList.add(q3);
-		questionList.add(q4);
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
 		
-		// Add the answers
-		SecurityQuestionAnswer sqa1 = new SecurityQuestionAnswer();
-		sqa1.setQuestionId(2);
-		sqa1.setAnswer("Alameda high");
-		SecurityQuestionAnswer sqa2 = new SecurityQuestionAnswer();
-		sqa2.setQuestionId(4);
-		sqa2.setAnswer("Main St.");
-		List<SecurityQuestionAnswer> questionAnswers = new ArrayList<SecurityQuestionAnswer>();
-		questionAnswers.add(sqa1);
-		questionAnswers.add(sqa2);
-		
-		
-		SecurityQuestionsResponse resp = new SecurityQuestionsResponse();
-		resp.setQuestions(questionList);
-		resp.setQuestionAnswers(questionAnswers);
-
-		
-		return resp;
+		SecurityQuestionsController sqcontroller = new SecurityQuestionsController();
+		return sqcontroller.getSecurityQuestionsResponse(email, modelMap, request);
 	}
 	
 	
+	@RequestMapping(value="profile/questions/save", method=RequestMethod.POST)
+	public @ResponseBody
+	Map<String, Object> saveSecurityQuestions(
+			@RequestBody UpdateAccountSecurityQuestionsRequest updateSecQuestionsRequest,
+			HttpServletRequest request) {
+		
+		logger.info("save security questions controller invoked");
+		
+		if (updateSecQuestionsRequest == null) {
+			throw new VTRuntimeException("Cannot update security questions. updateSecQuestionsRequest is null.");
+		}
+		
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
+		
+		updateSecQuestionsRequest.setEmail(email);
+		
+		return new SecurityQuestionsController()
+				.updateSecurityQuestions(request, updateSecQuestionsRequest);
+	}
 
 	
 	

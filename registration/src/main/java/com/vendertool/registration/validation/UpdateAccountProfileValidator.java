@@ -21,6 +21,7 @@ import com.vendertool.sharedtypes.core.Phone.PhoneType;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
+import com.vendertool.sharedtypes.rnr.GetSupportedLanguagesResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
@@ -65,7 +66,8 @@ public class UpdateAccountProfileValidator implements Validator {
 		}
 		
 		IMetadataService service = new MetadataServiceImpl();
-		Set<Language> languages = service.getSupportedLanguages();
+		GetSupportedLanguagesResponse langResponse = service.getSupportedLanguages();
+		Set<Language> languages = langResponse.getSupportedLanguages();
 		if(!languages.contains(lang)) {
 			response.addFieldBindingError(
 					Errors.REGISTRATION.LANGUAGE_NOT_SUPPORTED, account
