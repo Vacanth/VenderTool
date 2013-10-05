@@ -146,7 +146,9 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.status.equals(rpath)) {
-				map.put(a.status, new Byte(account.getAccountStatus().getId()+""));
+				if(VUTIL.isNotNull(account.getAccountStatus())) {
+					map.put(a.status, new Byte(account.getAccountStatus().getId()+""));
+				}
 			}
 			
 			if(a.contactPhoneHome.equals(rpath)) {
