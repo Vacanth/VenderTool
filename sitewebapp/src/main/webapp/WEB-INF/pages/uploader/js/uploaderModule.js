@@ -165,6 +165,10 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				}
 			};
 			
+			//
+			// Ajax to post a single file.
+			//
+			//
 			send = function(formData, fileWrap) {
 				
 				var progressPercentToWaitAt = 95;
@@ -275,7 +279,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			//
 			handleUploadsDone = function() {			
 				
-				var msg = {"groupId":scope.groupId};
+				var msg = {"groupId":scope.groupId, "uploadTitle":scope.uploadTitle};
 				
 				$.ajax({
 					type: 'post',
@@ -434,7 +438,6 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			uploadBtn.bind('click', uploadFiles);
 		
 		},
-		templateUrl:'uploader/partial/uploaderModule',
 		scope: true
 		
 	};// End of returned statement

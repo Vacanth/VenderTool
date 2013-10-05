@@ -2,25 +2,18 @@ package com.vendertool.inventory.dal;
 
 import org.apache.log4j.Logger;
 
-import com.vendertool.common.dal.dao.AddressDaoFactory;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
-import com.vendertool.common.dal.fieldset.FieldSets;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.inventory.dal.dao.ProductDao;
 import com.vendertool.inventory.dal.dao.ProductDaoFactory;
 import com.vendertool.inventory.dal.dao.ProductVariationDao;
 import com.vendertool.inventory.dal.dao.ProductVariationDaoFactory;
-import com.vendertool.sharedtypes.core.Account;
-import com.vendertool.sharedtypes.core.AccountConfirmation;
-import com.vendertool.sharedtypes.core.Address;
-import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.Product;
-import com.vendertool.sharedtypes.core.ProductVariation;
 
 public class InventoryDALService {
 	private static final Logger logger = Logger.getLogger(InventoryDALService.class);

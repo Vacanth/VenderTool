@@ -5,7 +5,7 @@
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams', '$location', function(Data, $scope, $http, $routeParams, $location) {
+uploadsApp.controller('UploadsCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
 	
 	var _ns = {},
 		_css = {
@@ -21,8 +21,8 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 	;
 	
 	
-	$scope.uploadsRes = angular.copy(Data.uploadsResponse);
-	$scope.errorResponse = Data.errorResponse;
+	//$scope.uploadsRes = angular.copy(Data.uploadsResponse);
+	//$scope.errorResponse = Data.errorResponse;
 	
 	//
 	// Creating filesInFolder array to help render subRows for jobs
@@ -34,6 +34,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 	// Only needed because can't figure out another way to PREVENT
 	// rendering a subRow if job has only one file.
 	//
+	/*
 	$($scope.uploadsRes.jobs).each(function(index, job) {
 		if (job.uploadedFiles.length > 1) {
 			job.filesInFolder = [];
@@ -42,7 +43,7 @@ uploadsApp.controller('UploadsCtrl', ['Data', '$scope', '$http', '$routeParams',
 				job.filesInFolder.push(file);
 			});
 		}
-	});
+	});*/
 
 	
 	//

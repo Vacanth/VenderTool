@@ -27,9 +27,7 @@ public interface ProductDao extends BaseDao {
 	public void update(Product product, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
-	public void updateHostedUrl(Long accountId,Long productId,String hostedUrl)
-			throws DBConnectionException, UpdateException, DatabaseException;
-
+	
 	public List<Product> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	

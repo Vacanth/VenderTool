@@ -11,26 +11,26 @@ import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
-import com.vendertool.sharedtypes.core.ProductVariation;
+import com.vendertool.sharedtypes.core.Product;
 
-public interface ProductVariationDao extends BaseDao {
+public interface ProductDescriptionDao extends BaseDao {
 	
-	public long insert(ProductVariation productVariation,Long productId) throws DBConnectionException,
+	public long insert(Product productDescription,Long productId) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
-	public void delete(ProductVariation productVariation)
+	public void delete(Product productDescription)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
-	public void delete(long productVariationId)
+	public void delete(long productDescriptionId)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
-	public void update(ProductVariation productVariation, Path<?>[] updateSet)
+	public void update(Product productDescription, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
-	public List<ProductVariation> findByProductId(Long productId, Path<?>[] readSet)
+	public List<Product> findByProductId(Long productId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public ProductVariation findByProductIdAndProductVariationId(Long productId,Long productVariationId, Path<?>[] readSet)
+	public Product findByProductIdAndAccountId(Long productId,Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 
 

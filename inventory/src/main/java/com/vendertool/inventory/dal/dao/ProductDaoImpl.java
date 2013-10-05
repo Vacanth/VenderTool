@@ -144,38 +144,7 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 		}
 	}
 
-	@Override
-	public void updateHostedUrl(Long accountId, Long productId,String hostedUrl)
-			throws DBConnectionException, UpdateException, DatabaseException {
-		if(VUTIL.isNull(accountId) || VUTIL.isNull(productId) || VUTIL.isNull(hostedUrl)){
-			UpdateException ue = new UpdateException("Cannot update null product");
-			logger.debug(ue.getMessage(), ue);
-			throw ue;
-		}
-		
-		Connection con = null;
-		
-		try {
-			con = getConnection();
-			QProduct a = QProduct.product;
-			SQLUpdateClause s = update(con, a)
-					.set(a.productUrl, hostedUrl)
-					.where(a.accountId.eq(accountId),a.productId.eq(productId));
-
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		UpdateException ue = new UpdateException(e);
-				logger.debug(ue.getMessage(), ue);
-				throw ue;
-	    	}
-		} finally {
-			closeConnection(con);
-		}
-		
-	}
+	
 
 	@Override
 	public List<Product> findByAccountId(Long accountId, Path<?>[] readSet)

@@ -56,17 +56,17 @@ public class ProductVariationMapper implements DALMapper<ProductVariation> {
 			}
 			
 			if(a.price.equals(rpath)) {
-				if (productVariation.getTitle() != null) 
+				if (productVariation.getPrice() != null) 
 				map.put(a.price, productVariation.getPrice());
 				map.put(a.currencyCodeIso3, productVariation.getPrice().getCurrency());
 			}
 		
 			if(a.url.equals(rpath)) {
-				if (productVariation.getTitle() != null) 
+				if (productVariation.getProductUrl() != null) 
 				map.put(a.url, productVariation.getProductUrl());
 			}
 			if(a.sku.equals(rpath)) {
-				if (productVariation.getTitle() != null) 
+				if (productVariation.getSku() != null) 
 				map.put(a.sku, productVariation.getSku());
 			}		
 

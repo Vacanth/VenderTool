@@ -21,20 +21,19 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
-import com.vendertool.inventory.dal.dao.codegen.QBeanProductVariation;
-import com.vendertool.inventory.dal.dao.codegen.QProductVariation;
-import com.vendertool.sharedtypes.core.ProductVariation;
+import com.vendertool.inventory.dal.dao.codegen.QProductDescription;
+import com.vendertool.sharedtypes.core.Product;
 
-public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVariationDao {
-	private static final Logger logger = Logger.getLogger(ProductVariationDaoImpl.class);
+public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDescriptionDao {
+	private static final Logger logger = Logger.getLogger(ProductDescriptionDaoImpl.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 			
 	@Override
-	public long insert(ProductVariation productVariation,Long productId) throws DBConnectionException,
+	public long insert(Product productDescription,Long productId) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
-		if(VUTIL.isNull(productVariation)) {
-			InsertException ie = new InsertException("Cannot insert null productVariation");
+		if(VUTIL.isNull(productDescription)) {
+			InsertException ie = new InsertException("Cannot insert null productDescription");
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
 		}
@@ -43,11 +42,7 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 		
 		try {
 			con = getConnection();
-			QProductVariation a = QProductVariation.productVariation;
-			ProductVariationMapper productVariationMapper = new ProductVariationMapper(a.all());
-			QBeanProductVariation qBeanProductVariation = productVariationMapper.populateBean(productVariation);
-			qBeanProductVariation.setProductId(productId);
-			
+			QProductDescription a = QProductDescription.productDescription;
 			Long seq = generateNextSequence(con);
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 				
@@ -56,12 +51,12 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-				productVariation.setProductVariationId(seq);
+				//Auto increment
+		//	productDescription.setProductDescriptionId(seq);
 			}
 			
-	 /*   	SQLInsertClause s = insert(con, a)
-    				.populate(new ProductVariationMapper(a.all()).populateBean(productVariation));*/
-			SQLInsertClause s = insert(con, a).populate(productVariation);
+	    	SQLInsertClause s = insert(con, a)
+    				.populate(new ProductDescriptionMapper(a.all()).populateBean(productDescription));
     	logger.info("DAL QUERY: " + s.toString());
     	
     	try {
@@ -86,25 +81,25 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 	@Override
 	public String getSequenceProcedureName() {
 		// TODO Auto-generated method stub
-		return "nextvalForProductVariation()";
+		return "nextvalForProductDescription()";
 	}
 
 	@Override
-	public void delete(ProductVariation productVariation) throws DBConnectionException,
+	public void delete(Product productDescription) throws DBConnectionException,
 			DeleteException, DatabaseException {
-		delete(productVariation.getProductVariationId());
+		delete(productDescription.getProductId());
 		
 	}
 	@Override
-	public void delete(long productVariationId) throws DBConnectionException,
+	public void delete(long productId) throws DBConnectionException,
 			DeleteException {
 		Connection con = null;
 		
 		try {
 			con = getConnection();
-			QProductVariation a = QProductVariation.productVariation;
+			QProductDescription a = QProductDescription.productDescription;
 			SQLDeleteClause s = delete(con, a)
-				.where(a.productVariationId.eq(productVariationId));
+				.where(a.productId.eq(productId));
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
 	    	try {
@@ -120,10 +115,10 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 	}
 
 	@Override
-	public void update(ProductVariation productVariation, Path<?>[] updateSet)
+	public void update(Product productDescription, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException {
-		if(VUTIL.isNull(productVariation) || VUTIL.isNull(updateSet)){
-			UpdateException ue = new UpdateException("Cannot update null productVariation");
+		if(VUTIL.isNull(productDescription) || VUTIL.isNull(updateSet)){
+			UpdateException ue = new UpdateException("Cannot update null productDescription");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
@@ -132,9 +127,9 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 		
 		try {
 			con = getConnection();
-			QProductVariation a = QProductVariation.productVariation;
+			QProductDescription a = QProductDescription.productDescription;
 	    	SQLUpdateClause s = update(con, a)
-					.populate(productVariation, new ProductVariationMapper(updateSet));
+					.populate(productDescription, new ProductDescriptionMapper(updateSet));
 
 	    	logger.info("DAL QUERY: " + s.toString());
 	    	
@@ -151,13 +146,13 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 	}
 
 	@Override
-	public List<ProductVariation> findByProductId(Long productId, Path<?>[] readSet)
+	public List<Product> findByProductId(Long productId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
 	Connection con = null;
 		
 		try { 
 			con = getConnection();
-			QProductVariation a = QProductVariation.productVariation;
+			QProductDescription a = QProductDescription.productDescription;
 			SQLQuery query = from(con, a)
 					.where(a.productId.eq(productId.longValue()));
 
@@ -170,52 +165,19 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 	    		return null;
 	    	}
 	    	
-			List<ProductVariation> productVariation = (List<ProductVariation>) new ProductVariationMapper(readSet).convert(rows.get(0), readSet);
-			if(productVariation == null) {
-				FinderException fe = new FinderException("Cannot find productVariation for given productId : "+productId.longValue());
+			List<Product> productDescription = (List<Product>) new ProductDescriptionMapper(readSet).convert(rows.get(0), readSet);
+			if(productDescription == null) {
+				FinderException fe = new FinderException("Cannot find productDescription for given productId : "+productId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
 			
-			return productVariation;
+			return productDescription;
 		} finally {
 			closeConnection(con);
 		}
 	}
 
-	@Override
-	public ProductVariation findByProductIdAndProductVariationId(Long productId, Long productVariationId,
-			Path<?>[] readSet) throws DBConnectionException, FinderException,
-			DatabaseException {
-	Connection con = null;
-		
-		try { 
-			con = getConnection();
-			QProductVariation a = QProductVariation.productVariation;
-			SQLQuery query = from(con, a)
-					.where(a.productId.eq(productId.longValue()) , a.productVariationId.eq(productVariationId.longValue()));
-
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
-			ProductVariation productVariation =  new ProductVariationMapper(readSet).convert(rows.get(0), readSet);
-			if(productVariation == null) {
-				FinderException fe = new FinderException("Cannot find productVariation for given product  "+productId.longValue()+" and variation  : " +productId.longValue());
-				logger.debug(fe.getMessage(), fe);
-				throw fe;
-			}
-			
-			return productVariation;
-		} finally {
-			closeConnection(con);
-		}
-	}
 	
 	private void closeConnection(Connection con) {
 		try {
@@ -225,5 +187,14 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 		} catch (SQLException e){
 			logger.debug(e.getMessage(), e);
 		}
+	}
+
+	
+	@Override
+	public Product findByProductIdAndAccountId(Long productId, Long accountId,
+			Path<?>[] readSet) throws DBConnectionException, FinderException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

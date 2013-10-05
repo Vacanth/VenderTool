@@ -9,7 +9,25 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class NameValuePair {
 	private String name;
 	private List<String> values;
+/*	private Long refId;
+	private RefTypeEnum refType;*/
 	
+	/*public Long getRefId() {
+		return refId;
+	}
+
+	public void setRefId(Long refId) {
+		this.refId = refId;
+	}
+
+	public RefTypeEnum getRefType() {
+		return refType;
+	}
+
+	public void setRefType(RefTypeEnum refType) {
+		this.refType = refType;
+	}
+*/
 	public NameValuePair(){}
 
 	public String getName() {

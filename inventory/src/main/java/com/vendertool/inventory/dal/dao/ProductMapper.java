@@ -1,9 +1,7 @@
 package com.vendertool.inventory.dal.dao;
 
 
-import java.sql.Timestamp;
 import java.util.Currency;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
