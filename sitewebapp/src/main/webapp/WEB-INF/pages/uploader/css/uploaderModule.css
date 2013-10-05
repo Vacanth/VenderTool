@@ -90,7 +90,7 @@
 .upldr-title {
 	display:inline-block;
 	position:relative;
-	top:-20px;
+	top:5px;
 	font-weight:normal;
 }
 .upldr-title input {

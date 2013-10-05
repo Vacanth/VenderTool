@@ -112,8 +112,10 @@ public class UploaderController {
 	protected @ResponseBody Map<String, String> uploadDone(HttpServletRequest req) {
 		
 		String groupId = req.getParameter("groupId");
+		String uploadTitle = req.getParameter("uploadTitle");
 		
 		System.err.println("groupId: " + groupId);
+		System.err.println("uploadTitle: " + uploadTitle);
 		
 		Map<String, String> msg = new HashMap<String, String>();
 		msg.put("statusMessage", "success");
