@@ -27,8 +27,7 @@ public class AccountUpdateSet {
 		ACCOUNT.registrationAddrId,
 		ACCOUNT.contactPhoneHome,
 		ACCOUNT.contactPhoneMobile,
-		ACCOUNT.contactPhoneWork, 
-		ACCOUNT.status
+		ACCOUNT.contactPhoneWork
 	};
 	
 	public final Path<?>[] PASSWORD = {

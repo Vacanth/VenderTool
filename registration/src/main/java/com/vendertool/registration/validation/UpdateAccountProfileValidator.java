@@ -93,6 +93,7 @@ public class UpdateAccountProfileValidator implements Validator {
 
 	private void validateAddress(UpdateAccountResponse response, Address addr) {
 		CountryEnum country = addr.getCountry();
+		
 		if(VUTIL.isNull(country)) {
 			response.addFieldBindingError(
 					Errors.REGISTRATION.INVALID_ADDRESS_COUNTRY_ZIP, 

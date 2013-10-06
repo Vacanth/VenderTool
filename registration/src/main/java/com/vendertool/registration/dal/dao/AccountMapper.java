@@ -293,13 +293,16 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 
 			if(a.billingAddrId.equals(rpath)) {
-				Address baddr = account.getBillingAddress();
-				if(baddr == null) {
-					baddr = new Address();
-					account.setBillingAddress(baddr);
-				}
 				
-				baddr.setId(row.get(a.billingAddrId));
+				if(row.get(a.billingAddrId) != null) {
+					Address baddr = account.getBillingAddress();
+					if(baddr == null) {
+						baddr = new Address();
+						account.setBillingAddress(baddr);
+					}
+					
+					baddr.setId(row.get(a.billingAddrId));
+				}
 			}
 			
 			if(a.createdDate.equals(rpath)) {
@@ -324,12 +327,14 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.firstName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.firstName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setFirstName(row.get(a.firstName));
 				}
-				cd.setFirstName(row.get(a.firstName));
 			}
 
 			if(a.language.equals(rpath)) {
@@ -354,21 +359,25 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 
 			if(a.lastName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.lastName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setLastName(row.get(a.lastName));
 				}
-				cd.setLastName(row.get(a.lastName));
 			}
 			
 			if(a.middleName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.middleName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setMiddleName(row.get(a.middleName));
 				}
-				cd.setMiddleName(row.get(a.middleName));
 			}
 
 			if(a.password.equals(rpath)) {
