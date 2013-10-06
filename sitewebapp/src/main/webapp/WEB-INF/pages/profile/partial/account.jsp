@@ -26,35 +26,35 @@
 		<td class="col1"><label>Address 1:</label></td>
 		<td class="col2">
 			<input ng-model="accountEdit.contactDetails.address.addressLine1" class="form-control" />
-			<div error-response field="addressLine1" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+			<div error-response field="addressLine1" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">
 		<td class="col1"><label>Address 2:</label></td>
 		<td class="col2">
 			<input ng-model="accountEdit.contactDetails.address.addressLine2" class="form-control" />
-			<div error-response field="addressLine2" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+			<div error-response field="addressLine2" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">
 		<td class="col1"><label>City:</label></td>
 		<td class="col2">
 			<input ng-model="accountEdit.contactDetails.address.city" class="form-control" />
-			<div error-response field="city" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+			<div error-response field="city" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">
 		<td class="col1"><label>State:</label></td>
 		<td class="col2">
 			<input ng-model="accountEdit.contactDetails.address.state" class="form-control" />
-			<div error-response field="state" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+			<div error-response field="state" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">
 		<td class="col1"><label>Zip:</label></td>
 		<td class="col2">
-			<input ng-model="accountEdit.contactDetails.address.zip" class="form-control" />
-			<div error-response field="zip" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+			<input ng-model="accountEdit.contactDetails.address.postalCode" class="form-control" />
+			<div error-response field="postalCode" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">
@@ -71,7 +71,7 @@
 				</c:forEach>
     		</select>
     		--%>
-    		<div error-response field="country" clss="com.vendertool.sharedtypes.core.ContactDetails"></div>
+    		<div error-response field="country" clss="com.vendertool.sharedtypes.core.Address"></div>
 		</td>
 	</tr>
 	<tr class="fldWrp">

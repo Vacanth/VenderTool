@@ -6,7 +6,7 @@
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 <%@ taglib prefix="t2" tagdir="/WEB-INF/tags/layoutTable" %>
 
-<t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.emailId}" >
+<t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.email}" >
 	
 	<jsp:attribute name="css">
 		<link href="<c:url value='/wro/profile.css' />" rel="stylesheet" type="text/css" />

@@ -77,9 +77,11 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 	hidePageMsg();
 	
 	$scope.changeEmailRequest = {};
+	$scope.changeEmailResponse = {};
 
 	$http.get('profile/email').success(function(data) {
-		$scope.changeEmailRequest = data.changeEmailRequest;
+		$scope.changeEmailResponse = data.changeEmailResponse;
+		$scope.changeEmailRequest = angular.copy(data.changeEmailResponse);
 	});
 
 	$scope.saveEmail = function() {
