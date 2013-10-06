@@ -255,7 +255,7 @@ public class ProfileController {
 		}
 		
 		map.put("updated", true);
-		map.put("changedEmail", changeEmailResponse.getEmail());
+		map.put("changeEmailResponse", changeEmailResponse);
 		return map;
 	}
 

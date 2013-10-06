@@ -16,6 +16,7 @@ profileApp.controller('NavCtrl', ['$scope', '$location',  function($scope, $loca
 	};
 }]);
 
+
 /*******************
 Using the array notation requires the listing of
 all the function params as strings in same order.
@@ -23,7 +24,7 @@ all the function params as strings in same order.
 profileApp.controller('AccountCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.accountOrig = Data.account;
 	$scope.accountEdit = angular.copy(Data.account);
@@ -40,7 +41,7 @@ profileApp.controller('AccountCtrl', ['$scope', '$http', '$routeParams', '$locat
 				$scope.accountEdit = data.account;
 				$scope.errorResponse = data.errorResponse;
 				
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					showPageErrorMsg();
 				}
 				else {
@@ -66,7 +67,6 @@ profileApp.controller('AccountCtrl', ['$scope', '$http', '$routeParams', '$locat
   	};
 }]);
 
-
 /*******************
 Using the array notation requires the listing of
 all the function params as strings in same order.
@@ -74,35 +74,35 @@ all the function params as strings in same order.
 profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.changeEmailRequest = {};
 	$scope.changeEmailResponse = {};
 
 	$http.get('profile/email').success(function(data) {
 		$scope.changeEmailResponse = data.changeEmailResponse;
-		$scope.changeEmailRequest = angular.copy(data.changeEmailResponse);
 	});
 
 	$scope.saveEmail = function() {
 		
 		$http.post('profile/email/save', $scope.changeEmailRequest).
 			success(function (data, status, headers, config) {
-				
-				$scope.changeEmailRequest = data.changeEmailRequest;
+
 				$scope.errorResponse = data.errorResponse;
 
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
 					showPageErrorMsg();
+					
 				}
 				else {
 					// Only update this if no errors
-					$scope.changeEmailRequest.oldEmailId = data.changeEmailRequest.newEmail;
+					$scope.changeEmailResponse = data.changeEmailResponse;
+					
 					$scope.changeEmailRequest.newEmail = '';
 					$scope.changeEmailRequest.confirmEmail = '';
 					$scope.errorResponse = undefined;
-
+					
 					showPageSuccessMsg('email');
 				}
 			}).
@@ -126,7 +126,7 @@ all the function params as strings in same order.
 profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.changePasswordRequest = {};
 
@@ -138,7 +138,7 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 				$scope.changePasswordRequest = data.changePasswordRequest;
 				$scope.errorResponse = data.errorResponse;
 
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
 					showPageErrorMsg();
 				}
@@ -171,7 +171,7 @@ all the function params as strings in same order.
 profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.securityQuestionsResponse;
 	$scope.questionList1;

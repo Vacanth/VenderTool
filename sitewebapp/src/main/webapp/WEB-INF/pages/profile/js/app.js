@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var profileApp = angular.module('profileApp', ['errorResponseModule']);
+var profileApp = angular.module('profileApp', ['pageErrorModule', 'fieldErrorModule']);
 
 profileApp.config(['$routeProvider', function($routeProvider) {
 	

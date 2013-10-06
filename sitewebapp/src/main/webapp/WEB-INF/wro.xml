@@ -18,9 +18,10 @@
 		<js>/resources/js/lib/bootstrap.js</js>
 	</group>
 	
-	<group name="errorResponseModule">
-		<css>/resources/css/sharedNgModules/errorResponseModule.css</css>
-		<js>/resources/js/sharedNgModules/errorResponseModule.js</js>
+	<group name="errorModules">
+		<css>/resources/css/sharedNgModules/fieldErrorModule.css</css>
+		<js>/resources/js/sharedNgModules/fieldErrorModule.js</js>
+		<js>/resources/js/sharedNgModules/pageErrorModule.js</js>
 	</group>
 	
 	<group name="errorResponseTag">
@@ -40,7 +41,7 @@
 	</group>
 	
 	<group name="profile">
-		<group-ref>errorResponseModule</group-ref>
+		<group-ref>errorModules</group-ref>
 		<css>/WEB-INF/pages/profile/css/profile.css</css>
 		<css>/WEB-INF/tags/layoutTable/css/layoutTable.css</css>
 		<js>/WEB-INF/pages/profile/js/app.js</js>
@@ -55,7 +56,7 @@
 	</group>
 	
 	<group name="securityQuestions">
-		<group-ref>errorResponseModule</group-ref>
+		<group-ref>errorModules</group-ref>
 		<css>/WEB-INF/pages/register/css/register.css</css>
 		<css>/WEB-INF/pages/securityQuestions/css/securityQuestions.css</css>
 		<js>/WEB-INF/pages/securityQuestions/js/app.js</js>

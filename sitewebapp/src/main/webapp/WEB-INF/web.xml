@@ -106,6 +106,10 @@
 			<param-name>postProcessors</param-name>
 			<param-value>cssVariables,googleClosureSimple,yuiCssMin</param-value>
 		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>WebResourceOptimizer</filter-name>
