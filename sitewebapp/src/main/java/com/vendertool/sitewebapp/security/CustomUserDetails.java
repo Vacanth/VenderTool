@@ -53,7 +53,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
 	@Override
 	public String getUsername() {
-		return account.getEmailId();
+		return account.getEmail();
 	}
 
 	@Override

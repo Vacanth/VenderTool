@@ -42,7 +42,7 @@ public class MockDataUtil {
 		contact.setFirstName("Ted");
 		contact.setLastName("Szeto");
 		Account acct = new Account();
-		acct.setEmailId("ted@gmail.com");
+		acct.setEmail("ted@gmail.com");
 		acct.setContactDetails(contact);
 		
 		Phone workPhone = new Phone();
@@ -111,7 +111,7 @@ public class MockDataUtil {
 	
 	public static ChangeEmailRequest getEmail(){ 
 		ChangeEmailRequest req = new ChangeEmailRequest();
-		req.setOldEmailId("ted@gmail.com");
+		req.setOldEmail("ted@gmail.com");
 		return req;
 	}
 	

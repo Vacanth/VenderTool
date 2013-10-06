@@ -31,11 +31,11 @@ public class CachedRegistrationAccountDatasource {
 	}
 	
 	public Status addAccount(Account account) {
-		if((account == null) || (account.getEmailId() == null) || (account.getPassword() == null)) {
+		if((account == null) || (account.getEmail() == null) || (account.getPassword() == null)) {
 			return Status.INVALID;
 		}
 		
-		String username = account.getEmailId();
+		String username = account.getEmail();
 		if(ACCOUNT_DIRECTORY.containsKey(username)){
 			return Status.EXISTING;
 		}
@@ -57,11 +57,11 @@ public class CachedRegistrationAccountDatasource {
 	}
 	
 	public boolean updateAccount(Account account) {
-		if((account == null) || (account.getEmailId() == null)) {
+		if((account == null) || (account.getEmail() == null)) {
 			return false;
 		}
 		
-		String username = account.getEmailId();
+		String username = account.getEmail();
 		if(ACCOUNT_DIRECTORY.containsKey(username)){
 			removeAccount(username);
 			ACCOUNT_DIRECTORY.put(username, account);

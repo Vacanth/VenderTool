@@ -48,26 +48,26 @@ public class RegistrationEmailSender {
 		MsgSource msgSource = new MsgSource();
 		
     	ConfirmRegistrationEmailDataModel emailModel = new ConfirmRegistrationEmailDataModel();
-    	emailModel.setToEmail(account.getEmailId());
+    	emailModel.setToEmail(account.getEmail());
 		if (validationUtil.isNotNull(account.getContactDetails())
 				&& (validationUtil.isNotNull(account.getContactDetails().getFirstName()))) {
 			emailModel.setToName(account.getContactDetails().getFirstName());
 		} else {
-			emailModel.setToName(account.getEmailId());
+			emailModel.setToName(account.getEmail());
 		}
 		emailModel.setFromName(msgSource.getMessage(PROPERTY_COMPANY_NAME, null,
 				locale));
 		emailModel.setSubject(msgSource.getMessage(PROPERTY_CONFIRM_REG_SUBJECT, null,
 				locale));
     	
-    	String emailId = account.getEmailId();
+    	String email = account.getEmail();
     	String sessiontoken = account.getAccountConf().getConfirmSessionId();
     	Integer confCode = account.getAccountConf().getConfirmCode();
     	
 		String confirmRegUrl = baseurl + URLConstants.WEB_APP_PATH
 				+ URLConstants.CONFIRM_ACCOUNT_PATH
 				+ URLConstants.QUERY_PARAM_SEPARATOR + "email"
-				+ URLConstants.VALUE_SEPARATOR + emailId
+				+ URLConstants.VALUE_SEPARATOR + email
 				+ URLConstants.FIELD_SEPARATOR + "sessiontoken"
 				+ URLConstants.VALUE_SEPARATOR + sessiontoken
 				+ URLConstants.FIELD_SEPARATOR + "confirmationcode"
@@ -78,7 +78,7 @@ public class RegistrationEmailSender {
 //		try {
 //			encodedConfirmRegUrl = URLEncoder.encode(confirmRegUrl, "UTF-8");
 //		} catch (UnsupportedEncodingException e) {
-//			logger.debug("UNABLE TO SEND EMAIL TO: '" + emailId + "'. Error msg: " + e.getMessage(), e);
+//			logger.debug("UNABLE TO SEND EMAIL TO: '" + email + "'. Error msg: " + e.getMessage(), e);
 //			return;
 //		}
     	
@@ -93,7 +93,7 @@ public class RegistrationEmailSender {
 	private boolean isValid(Account account, String baseurl) {
 		return validationUtil.isNotNull(account) && validationUtil.isNotNull(baseurl)
 				&& (!validationUtil.isEmpty(baseurl))
-				&& validationUtil.isNotNull(account.getEmailId());
+				&& validationUtil.isNotNull(account.getEmail());
 	}
 	
 	
@@ -106,13 +106,13 @@ public class RegistrationEmailSender {
 		}
 		
 		ContactUsEmailDataModel emailModel = new ContactUsEmailDataModel();
-    	emailModel.setToEmail(account.getEmailId());
+    	emailModel.setToEmail(account.getEmail());
     	emailModel.setContactusEmail(CONTACT_EMAIL);
 		if (validationUtil.isNotNull(account.getContactDetails())
 				&& (validationUtil.isNotNull(account.getContactDetails().getFirstName()))) {
 			emailModel.setToName(account.getContactDetails().getFirstName());
 		} else {
-			emailModel.setToName(account.getEmailId());
+			emailModel.setToName(account.getEmail());
 		}
 		Object[] params = new Object[]{CONTACT_EMAIL};
 		emailModel.setMsgParams(params);
@@ -139,17 +139,17 @@ public class RegistrationEmailSender {
 		
 		//sendToNewEmail
 		ChangeEmailDataModel emailModel = new ChangeEmailDataModel();
-    	emailModel.setToEmail(account.getEmailId());
+    	emailModel.setToEmail(account.getEmail());
     	boolean fnExists = validationUtil.isNotNull(account.getContactDetails())
 				&& (validationUtil.isNotNull(account.getContactDetails().getFirstName()));
     	
 		if (fnExists) {
 			emailModel.setToName(account.getContactDetails().getFirstName());
 		} else {
-			emailModel.setToName(account.getEmailId());
+			emailModel.setToName(account.getEmail());
 		}
 		
-		Object[] params = new Object[]{account.getEmailId(), CONTACT_EMAIL};
+		Object[] params = new Object[]{account.getEmail(), CONTACT_EMAIL};
 		emailModel.setMsgParams(params);
 		
 		MsgSource msgSource = new MsgSource();
@@ -159,7 +159,7 @@ public class RegistrationEmailSender {
 		emailModel.setSubject(msgSource.getMessage(PROPERTY_CHANGE_EMAIL_SUBJECT, null,
 				locale));
 		emailModel.setContactusEmail(CONTACT_EMAIL);
-		emailModel.setPreviousEmail(account.getEmailId());
+		emailModel.setPreviousEmail(account.getEmail());
 		
     	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
     	
@@ -173,7 +173,7 @@ public class RegistrationEmailSender {
     	if(!fnExists) {
     		emailModel.setToName(oldemail);
     	}
-    	emailModel.setPreviousEmail(account.getEmailId());
+    	emailModel.setPreviousEmail(account.getEmail());
     	emailService.sendEmail(emailModel, locale);
 	}
 	
@@ -186,7 +186,7 @@ public class RegistrationEmailSender {
 		}
 		
 		ContactUsEmailDataModel emailModel = new ContactUsEmailDataModel();
-    	emailModel.setToEmail(account.getEmailId());
+    	emailModel.setToEmail(account.getEmail());
     	emailModel.setContactusEmail(CONTACT_EMAIL);
     	boolean fnExists = validationUtil.isNotNull(account.getContactDetails())
 				&& (validationUtil.isNotNull(account.getContactDetails().getFirstName()));
@@ -194,7 +194,7 @@ public class RegistrationEmailSender {
 		if (fnExists) {
 			emailModel.setToName(account.getContactDetails().getFirstName());
 		} else {
-			emailModel.setToName(account.getEmailId());
+			emailModel.setToName(account.getEmail());
 		}
 		
 		Object[] params = new Object[]{CONTACT_EMAIL};

@@ -51,7 +51,7 @@ public class UpdateAccountProfileValidator implements Validator {
 		
 		Account account = request.getAccount();
 		
-		validateAlternateEmailId(account, response);
+		validateAlternateEmail(account, response);
 		validateContactDetails(account, response);
 		validateBillingAddress(account, response);
 		validateCurrency(account, response);
@@ -170,16 +170,16 @@ public class UpdateAccountProfileValidator implements Validator {
 //		}
 	}
 
-	private void validateAlternateEmailId(Account account,
+	private void validateAlternateEmail(Account account,
 			UpdateAccountResponse response) {
 		
-		if(VUTIL.isNullOrEmpty(account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "emailId");
+		if(VUTIL.isNullOrEmpty(account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "email");
 			return;
 		}
 		
-		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "emailId");
+		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "email");
 		}
 	}
 

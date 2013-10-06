@@ -42,7 +42,7 @@ public class RegistrationDALServiceTest extends BaseDALService {
 
 	private Account createAccount() {
 		Account a = new Account();
-		a.setEmailId("testemail@vendertooltest.com");
+		a.setEmail("testemail@vendertooltest.com");
 		a.setPassword("TestPassword");
 		a.setPasswordSalt("passwordsalt");
 		a.addRole(AccountRoleEnum.ROLE_USER);
@@ -94,19 +94,19 @@ public class RegistrationDALServiceTest extends BaseDALService {
 		log("Register account");
 		dalservice.registerAccount(account);
 		
-		findAccountProfile(account.getEmailId(), false);
+		findAccountProfile(account.getEmail(), false);
 		
 		log("Update account profile");
 		account.getContactDetails().setFirstName("UpdatedTestFirstName");
 		account.getContactDetails().setLastName("UpdatedTestLastName");
 		dalservice.updateAccountProfile(account);
 		
-		findAccountProfile(account.getEmailId(), false);
+		findAccountProfile(account.getEmail(), false);
 		
 		log("Update email");
-		String updatedEmail = "Updated"+account.getEmailId();
+		String updatedEmail = "Updated"+account.getEmail();
 		account.setAccountStatus(AccountStatusEnum.EMAIL_CHANGE_NOT_VERIFIED);
-		dalservice.updateEmail(account.getEmailId(), account);
+		dalservice.updateEmail(account.getEmail(), account);
 		
 		findAccountProfile(updatedEmail, false);
 		

@@ -30,7 +30,7 @@ public class RegistrationEmailTest extends BaseTest
 	
     private Account createLocalAccount() {
 		Account a = new Account();
-		a.setEmailId(TEST_EMAIL);
+		a.setEmail(TEST_EMAIL);
 		a.setPassword("TestPassword");
 		a.setPasswordSalt("passwordsalt");
 		a.addRole(AccountRoleEnum.ROLE_USER);

@@ -2,24 +2,15 @@ package com.vendertool.sharedtypes.rnr;
 
 public class BaseRequest implements Request {
 
-	private String emailId;
-	private Long accountId;
+	private String signedInEmail;
 
 	public BaseRequest(){}
 
-	public String getEmailId() {
-		return emailId;
+	public String getSignedInEmail() {
+		return signedInEmail;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public Long getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
+	public void setSignedInEmail(String signedInEmail) {
+		this.signedInEmail = signedInEmail;
 	}
 }

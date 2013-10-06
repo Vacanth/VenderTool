@@ -53,8 +53,7 @@ public class RestServiceClientHelper {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if((auth != null) && (auth.getPrincipal() != null)) {
 				CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
-				obj.setEmailId(user.getAccount().getEmailId());
-				obj.setAccountId(user.getAccount().getId());
+				obj.setSignedInEmail(user.getAccount().getEmail());
 			}
 		}
 		

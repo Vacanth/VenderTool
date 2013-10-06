@@ -80,7 +80,7 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.emailAddr.equals(rpath)) {
-				map.put(a.emailAddr, account.getEmailId());
+				map.put(a.emailAddr, account.getEmail());
 			}
 			
 			if(a.firstName.equals(rpath)) {
@@ -213,7 +213,7 @@ public class AccountMapper implements DALMapper<Account> {
 			bean.setCurrencyCodeIso3(account.getCurrency().getCurrencyCode());
 		}
 		
-		bean.setEmailAddr(account.getEmailId());
+		bean.setEmailAddr(account.getEmail());
 		
 		ContactDetails cd = account.getContactDetails();
 		if(VUTIL.isNotNull(cd)) {
@@ -323,7 +323,7 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.emailAddr.equals(rpath)) {
-				account.setEmailId(row.get(a.emailAddr));
+				account.setEmail(row.get(a.emailAddr));
 			}
 			
 			if(a.firstName.equals(rpath)) {

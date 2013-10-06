@@ -122,14 +122,10 @@ public class ProfileController {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
-		String inputEmail = account.getEmailId();
-		if((inputEmail == null) || (inputEmail.trim().isEmpty())) {
-			account.setEmailId(email);
-		}
+		account.setEmail(email);
 		
 		UpdateAccountRequest updateAccountReq = new UpdateAccountRequest();
 		updateAccountReq.setAccount(account);
-		updateAccountReq.setEmailId(email);
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
@@ -190,7 +186,11 @@ public class ProfileController {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
+		ChangeEmailResponse response = new ChangeEmailResponse();
+		response.setEmail(email);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("changeEmailResponse", response);
 		return map;
 	}
 	
@@ -211,7 +211,7 @@ public class ProfileController {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
-		changeEmailRequest.setEmailId(email);
+		changeEmailRequest.setOldEmail(email);
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		

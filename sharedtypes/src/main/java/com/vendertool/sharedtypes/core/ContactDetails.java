@@ -14,7 +14,7 @@ public class ContactDetails {
 	private String firstName;
 	private String middleName;
 	private String lastName;
-	private String emailId;
+	private String email;
 	private String alternateEmailId;
 	private Address address;
 	private Map<PhoneType, Phone> phones;
@@ -45,12 +45,12 @@ public class ContactDetails {
 		this.lastName = lastName;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getAlternateEmailId() {
@@ -107,7 +107,7 @@ public class ContactDetails {
 			.append("\n\tFIRST NAME=").append(getFirstName())
 			.append("\n\tMIDDLE NAME=").append(getMiddleName())
 			.append("\n\tLAST NAME=").append(getLastName())
-			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tEMAIL=").append(getEmail())
 			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
 			.append("\n\tADDRESS=").append((getAddress() != null) ? getAddress().toString() : null)
 			.append("\n\tPhones=").append((getPhones() != null) ? getPhones().toString() : null)

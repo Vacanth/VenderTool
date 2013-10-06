@@ -1,18 +1,21 @@
 package com.vendertool.sharedtypes.rnr.fps;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 
+@XmlRootElement
 public class GetJobsRequest extends BaseRequest {
 
 	private long[] jobIds;
-	private String emailId;
+	private String email;
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public long[] getFiles() {

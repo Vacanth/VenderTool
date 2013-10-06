@@ -108,23 +108,23 @@ public class RegistrationValidator implements Validator {
 	}
 
 	private void validateEmail(Account account, BaseResponse response) {
-		if(VUTIL.isNullOrEmpty(account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "emailId");
+		if(VUTIL.isNullOrEmpty(account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "email");
 			return;
 		}
 		
-		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "emailId");
+		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "email");
 		}
 		
 		try {
-			Long id = dalservice.getAccountId(account.getEmailId());
+			Long id = dalservice.getAccountId(account.getEmail());
 			if(id != null) {
-				logger.debug("Username: '" + account.getEmailId()
+				logger.debug("Username: '" + account.getEmail()
 						+ "' already exists");
 				response.addFieldBindingError(
 						Errors.REGISTRATION.EMAIL_ALREADY_REGISTERED, account
-								.getClass().getName(), "emailId");
+								.getClass().getName(), "email");
 			}
 		} catch (DBConnectionException | FinderException | DatabaseException e) {
 			logger.debug(e.getMessage(), e);

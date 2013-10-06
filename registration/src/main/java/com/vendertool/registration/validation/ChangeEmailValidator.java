@@ -39,7 +39,7 @@ public class ChangeEmailValidator implements Validator {
 			return;
 		}
 		
-		String oldemail = request.getOldEmailId();
+		String oldemail = request.getOldEmail();
 		if (VUTIL.isEmpty(oldemail)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(

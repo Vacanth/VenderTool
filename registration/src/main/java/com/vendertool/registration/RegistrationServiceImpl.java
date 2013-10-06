@@ -228,16 +228,16 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		ConfirmRegistrationResponse response = new ConfirmRegistrationResponse();
 
 		if (VUTIL.isNull(request)
-				|| (VUTIL.isEmpty(request.getEmailId()))) {
+				|| (VUTIL.isEmpty(request.getEmail()))) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.COMMON.NULL_ARGUMENT_PASSED, null, (String[])null);
 			return response;
 		}
 		
-		String emailId = request.getEmailId();
+		String email = request.getEmail();
 		Account account;
 		try {
-			account = dalservice.getAccountProfile(emailId);
+			account = dalservice.getAccountProfile(email);
 		} catch (DBConnectionException | FinderException | DatabaseException e) {
 			logger.debug(e.getMessage(), e);
 			account = null;
@@ -413,15 +413,15 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	public UpdateAccountResponse updateAccount(UpdateAccountRequest request) {
 		
 		UpdateAccountResponse response = new UpdateAccountResponse();
+		Account account = request.getAccount();
 		
 		UpdateAccountProfileValidator validator = new UpdateAccountProfileValidator();
 		validator.validate(request, response);
 		if(response.hasErrors()){
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.setAccount(account);
 			return response;
 		}
-		
-		Account account = request.getAccount();
 		
 		try {
 			dalservice.updateAccountProfile(account);
@@ -430,12 +430,10 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			logger.debug(e.getMessage(), e);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.setAccount(account);
-			response.setEmailId(account.getEmailId());
 			response.addFieldBindingError(Errors.SYSTEM.INTERNAL_DATABASE_DOWN, null, (String[])null);
 			return response;
 		}
 		
-		response.setEmailId(account.getEmailId());
 		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 		return response;
 	}
@@ -531,11 +529,11 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		validator.validate(request, response);
 		if(response.hasErrors()) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
-			response.setEmail(request.getOldEmailId());
+			response.setEmail(request.getOldEmail());
 			return response;
 		}
 		
-		String oldInputEmail = request.getOldEmailId();
+		String oldInputEmail = request.getOldEmail();
 		Account account = null;
 		try {
 			account = dalservice.getAccountProfile(oldInputEmail);
@@ -543,18 +541,18 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			logger.debug(e.getMessage(), e);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CHANGE_EMAIL, null, (String[])null);
-			response.setEmail(request.getOldEmailId());
+			response.setEmail(request.getOldEmail());
 			return response;
 		}
 		
 		if(VUTIL.isNull(account)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
-			response.setEmail(request.getOldEmailId());
+			response.setEmail(request.getOldEmail());
 			return response;
 		}
 		
-		account.setEmailId(request.getNewEmail());
+		account.setEmail(request.getNewEmail());
 		AccountConfirmation ac = prepareAccountConfirmation();
 		account.setAccountConf(ac);
 		account.setAccountStatus(AccountStatusEnum.EMAIL_CHANGE_NOT_VERIFIED);
@@ -571,7 +569,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		if(! updated) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CHANGE_EMAIL, null, (String[])null);
-			response.setEmail(request.getOldEmailId());
+			response.setEmail(request.getOldEmail());
 			return response;
 		}
 		

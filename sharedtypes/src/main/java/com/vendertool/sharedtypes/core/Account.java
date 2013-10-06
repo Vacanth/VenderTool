@@ -18,7 +18,7 @@ public class Account {
 	private static final String VALUE_DELIMITER = ",";
 	
 	private Long id;
-	private String emailId;
+	private String email;
 	private String alternateEmailId;
 	private String password;
 	private String confirmPassword;
@@ -46,12 +46,12 @@ public class Account {
 		this.id = id;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getAlternateEmailId() {
@@ -254,7 +254,7 @@ public class Account {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Account=[[")
 			.append("\n\tID=").append(getId())
-			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tEMAIL=").append(getEmail())
 			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
 			.append("\n\tSTATUS=").append(getAccountStatus())
 			.append("\n\tBILLING ADDRESS=").append((getBillingAddress() != null) ? getBillingAddress().toString() : null)

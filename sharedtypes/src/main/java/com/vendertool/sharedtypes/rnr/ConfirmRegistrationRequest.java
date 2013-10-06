@@ -6,14 +6,14 @@ import com.vendertool.sharedtypes.core.AccountConfirmation;
 
 @XmlRootElement
 public class ConfirmRegistrationRequest extends BaseRequest {
-	private String emailId;
+	private String email;
 	private AccountConfirmation accountConf;
 	
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public AccountConfirmation getAccountConf() {
 		return accountConf;

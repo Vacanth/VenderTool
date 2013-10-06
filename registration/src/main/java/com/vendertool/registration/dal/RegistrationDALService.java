@@ -73,7 +73,7 @@ public class RegistrationDALService {
 			accountDao.insert(account);
 		} catch (Exception e) {
 			//manually rollback
-			Long aid = accountDao.findAccountId(account.getEmailId());
+			Long aid = accountDao.findAccountId(account.getEmail());
 			if(aid == null) { //if not null just return the response, because the account is already created
 				try {
 					accountConfDao.delete(accountId);
@@ -132,7 +132,7 @@ public class RegistrationDALService {
 		} catch (FinderException e) {
 			UpdateException ue = new UpdateException(
 					"Unable to update account profile for "
-							+ account.getEmailId(), e);
+							+ account.getEmail(), e);
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
@@ -148,7 +148,7 @@ public class RegistrationDALService {
 		} catch (InsertException e) {
 			UpdateException ue = new UpdateException(
 					"Unable to update account profile for "
-							+ account.getEmailId(), e);
+							+ account.getEmail(), e);
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
@@ -210,7 +210,7 @@ public class RegistrationDALService {
 			logger.debug(e.getMessage(), e);
 			return false;
 		}
-		accountDao.updateEmail(oldEmail, account.getEmailId(), account.getAccountStatus());
+		accountDao.updateEmail(oldEmail, account.getEmail(), account.getAccountStatus());
 		
 		return true;
 	}
