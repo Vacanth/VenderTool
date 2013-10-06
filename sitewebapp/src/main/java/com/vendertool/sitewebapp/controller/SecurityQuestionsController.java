@@ -163,10 +163,12 @@ public class SecurityQuestionsController {
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
 			
 			map.put("errorResponse", errorResponse);
+			map.put("updated", false);
 			
 			return map;
 		}
 		
+		map.put("updated", true);
 		return map;
 		
 	}

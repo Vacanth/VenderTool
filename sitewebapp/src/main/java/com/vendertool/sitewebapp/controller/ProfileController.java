@@ -170,11 +170,13 @@ public class ProfileController {
 			
 			map.put("account", responseAccount);
 			map.put("errorResponse", errorResponse);
+			map.put("updated", false);
 			
 			return map;
 		}
 		
 		map.put("account", accountresponse.getAccount());
+		map.put("updated", true);
 		return map;
 	}
 	
@@ -247,10 +249,12 @@ public class ProfileController {
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
 			
 			map.put("errorResponse", errorResponse);
+			map.put("updated", false);
 			
 			return map;
 		}
 		
+		map.put("updated", true);
 		map.put("changedEmail", changeEmailResponse.getEmail());
 		return map;
 	}
@@ -321,10 +325,12 @@ public class ProfileController {
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
 			
 			map.put("errorResponse", errorResponse);
+			map.put("updated", false);
 			
 			return map;
 		}
 		
+		map.put("updated", true);
 		return map;
 	}
 	
