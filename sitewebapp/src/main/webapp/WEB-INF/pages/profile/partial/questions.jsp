@@ -20,7 +20,7 @@
 		<tr class="fldWrp">
 			<td class="col1"><label>Question 1:</label></td>
 			<td class="col2">
-				<select ng-model="question1" ng-options="q.id as q.text for q in questionList1">
+				<select ng-model="question1" ng-options="q.questionCode as q.questionDisplayName for q in questionList1">
 					<option value="">- Select a question -</option>
 				</select>
 				<div field-error field="question1" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
@@ -41,7 +41,7 @@
 		<tr class="fldWrp">
 			<td class="col1"><label>Question 2:</label></td>
 			<td class="col2">
-				<select ng-model="question2" ng-options="q.id as q.text for q in questionList2">
+				<select ng-model="question2" ng-options="q.questionCode as q.questionDisplayName for q in questionList2">
 					<option value="">- Select a second question -</option>
 				</select>
 				<div field-error field="question2" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>

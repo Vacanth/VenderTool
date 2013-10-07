@@ -29,9 +29,6 @@ This is a sample page level errorResponse:
 angular.module('pageErrorModule', []).directive("pageError", function() {
 	'use strict';
 	
-	
-	alert('sssssssssssssssssssssssss');
-	
 	var _css = {
 			pageAlert:'alert',
 			pageError:'alert-danger'
@@ -76,9 +73,7 @@ angular.module('pageErrorModule', []).directive("pageError", function() {
 			getErrorMsgs = function() {
 
 				scope.errorMsgs = _ns.getPageErrorMsgs(scope.errorResponse);
-				
-				alert(scope.errorMsgs[0]);
-				
+
 				//
 				// For page errors, this directive is a child of an element with _css.pageAlert.
 				// Need to change the display attribute of that element to show the page error.

@@ -33,6 +33,8 @@
   	<sec:http pattern="/confirmaccountfailed" security="none"/>
   	<sec:http pattern="/wro/**" security="none"/>
   	
+  	<sec:http pattern="/unexpectedException/**" security="none"/>
+  	
   	<!--
   	IMPORTANT!!!! 
   	REMOVE LATER: ADDING ONLY FOR DEV WORK.

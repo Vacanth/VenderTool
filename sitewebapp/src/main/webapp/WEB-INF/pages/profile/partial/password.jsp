@@ -5,6 +5,7 @@
 	<div class="pg-msg">
 		<div class="alert alert-success password">Password has been updated.</div>
 		<div class="alert alert-danger">Sorry, there's been an error.</div>
+		<div page-error></div>
 	</div>
 
 	<table class="info" cellspacing="0" cellpadding="0">
@@ -12,14 +13,14 @@
 		<tr>
 			<td class="col1"><label>Email:</label></td>
 			<td class="col2"><input ng-model="accountOrig.emailId" class="form-control readonly" readonly/></td>
-		</tr>--%>
+		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
 				<input ng-model="changePasswordRequest.oldPassword" class="form-control" type="password"/>
 				<div field-error field="oldPassword" clss="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
 			</td>
-		</tr>
+		</tr>--%>
 		<tr class="fldWrp">
 			<td class="col1"><label>New password:</label></td>
 			<td class="col2">
