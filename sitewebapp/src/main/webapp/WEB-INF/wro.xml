@@ -20,6 +20,7 @@
 	
 	<group name="errorModules">
 		<css>/resources/css/sharedNgModules/fieldErrorModule.css</css>
+		<js>/resources/js/ErrorResponseUtil.js</js>
 		<js>/resources/js/sharedNgModules/fieldErrorModule.js</js>
 		<js>/resources/js/sharedNgModules/pageErrorModule.js</js>
 	</group>

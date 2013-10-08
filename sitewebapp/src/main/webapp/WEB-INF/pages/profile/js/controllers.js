@@ -20,7 +20,7 @@ profileApp.controller('NavCtrl', ['$scope', '$location',  function($scope, $loca
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'Data', function($rootScope, $scope, $http, $routeParams, $location, Data) {
+profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($rootScope, $scope, $http, $routeParams, $location, Data, Content) {
 	
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();
@@ -45,7 +45,7 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 				$scope.errorResponse = data.errorResponse;
 				
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
-					showPageErrorMsg();
+					handlePageErrorMsg();
 				}
 				else {
 					// Only update this if no errors
@@ -59,7 +59,7 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 				}
 			}).
 			error(function(data, status, headers, config) {
-				
+				handlePageErrorMsg(status);
 			});
 	};
 
@@ -98,8 +98,7 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
-					showPageErrorMsg();
-					
+					handlePageErrorMsg();
 				}
 				else {
 					// Only update this if no errors
@@ -113,7 +112,7 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 				}
 			}).
 			error(function(data, status, headers, config) {
-				
+				handlePageErrorMsg(status);
 			});
 	};
 	
@@ -145,7 +144,7 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
-					showPageErrorMsg();
+					handlePageErrorMsg();
 				}
 				else {
 					// Only update this if no errors
@@ -157,7 +156,7 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 				}
 			}).
 			error(function(data, status, headers, config) {
-				
+				handlePageErrorMsg(status);
 			});
 	};
 	
@@ -173,7 +172,7 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
+profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($scope, $http, $routeParams, $location, Data, Content) {
 	
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();
@@ -186,7 +185,14 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 	$scope.answer1;
 	$scope.answer2;
 
-
+	//
+	// securityQuestions model:
+	//
+	// "securityQuestions":[
+	//		{"questionCode":"FIRST_OWNED_PET", "questionDisplayName":"What is the name of your first owned pet?"},
+	//		{"questionCode":"FAVORITE_SCHOOL_TEACHER","questionDisplayName":"Who is your favorite school teacher?"}
+	//	]
+	//
 	$http.get('profile/questions').success(function(data) {
 		
 		$scope.securityQuestions = data.securityQuestions;
@@ -228,28 +234,34 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 			}
 		}
 	});
-
+	
+	//
+	// UpdateAccountSecurityQuestionsRequest model:
+	//
+	// "questions":[{
+	//		"id":"000", 
+	//		"questionCode":"000",
+	//		"answer":"Hello world",
+	//		"createdDate":"000"
+	// }]
+	//
 	$scope.saveQuestionAnswers = function() {
 		
-		var questionsResp = {};
+		var questionsReq = {};
+		questionsReq.questions = [{"questionCode":$scope.question1, "answer":$scope.answer1}, {"questionCode":$scope.question2, "answer":$scope.answer2}];
 		
-		questionsResp.questionAnswers = [{"questionId":$scope.question1, "answer":$scope.answer1}, {"questionId":$scope.question2, "answer":$scope.answer2}];
+		//console.log($scope.question1 + ":" + $scope.question2);
 		
-		console.log($scope.question1 + ":" + $scope.question2);
-		
-		$http.post('questions/save', questionsResp).
+		$http.post('profile/questions/save', questionsReq).
 			success(function (data, status, headers, config) {
-
-				var r = data.securityQuestionsResponse;
+				
 				$scope.errorResponse = data.errorResponse;
 				
-				$scope.question1 = r.questionAnswers[0].questionId;
-				$scope.question2 = r.questionAnswers[1].questionId;
-				$scope.answer1 = r.questionAnswers[0].answer;
-				$scope.answer2 = r.questionAnswers[1].answer;
-				
+				// data.updated will be true or false. Not sure if we need this.
+				//alert(data.updated);
+
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
-					showPageErrorMsg();
+					handlePageErrorMsg();
 				}
 				else {
 					// Only update this if no errors
@@ -260,18 +272,17 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 				}
 			}).
 			error(function(data, status, headers, config) {
-				alert('error');
+				handlePageErrorMsg(status);
 			});
 	};
 	
 	$scope.resetQuestionAnswers = function() {
-  		var r = $scope.securityQuestions;
+
+		$scope.question1 = undefined;
+		$scope.question2 = undefined;
 		
-		$scope.question1 = angular.copy($scope.securityQuestions[0].questionCode);
-		$scope.question2 = angular.copy($scope.securityQuestions[1].questionCode);
-		
-		//$scope.answer1 = angular.copy$scope.securityQuestions[0].answer);
-		//$scope.answer2 = angular.copy($scope.securityQuestions[1].answer);
+		$scope.answer1 = '';
+		$scope.answer2 = '';
 		
 		// Clear errors
 		$scope.errorResponse = undefined;
@@ -295,7 +306,9 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 }]);
 
 function showPageSuccessMsg(type) {
+	
 	$('.alert-danger').hide();
+	
 	if (type === 'profile') {
 		$('.alert-success.profile').show().delay(1500).fadeOut(300);
 	}
@@ -310,10 +323,24 @@ function showPageSuccessMsg(type) {
 	}
 };
 
-function showPageErrorMsg() {
+//
+// Errors from the errorResponse json are shown by the angular page-error directive
+// and are not handled here.
+//
+// But request errors are handled here. The request error message is passed in and
+// is inserted into the 'alert-danger' div.
+//
+// Also need to hide success messages if any.
+//
+function handlePageErrorMsg(statusCode) {
 	$('.alert-success').hide();
-	$('.alert-danger').show();
+	
+	if (message) {
+		$('.pg-msg .qry-httpError').html(Content.httpError + ' ' + statusCode).show();
+	}
 };
+
+
 
 function hidePageMsg() {
 	$('.alert-success').hide();
@@ -326,154 +353,6 @@ function hidePageMsg() {
 
 
 
-/*******************
-Using the array notation requires the listing of
-all the function params as strings in same order.
-
-profileApp.controller('ProfileCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
-	
-	$scope.accountOrig = Data.account;
-	$scope.accountEdit = angular.copy(Data.account);
-	$scope.errorResponse = Data.errorResponse;
-	$scope.countryOptions = Data.countryOptions;
-	$scope.changeEmailRequest = {};
-	$scope.changePasswordRequest = {};
-
-	if ($location.path() === '/email' || $location.path() === '/password') {
-		
-		$('.alert-danger').hide();
-		
-		$http.get('profile/email').success(function(data) {
-			$scope.changeEmailRequest = data.changeEmailRequest;
-		});
-	}
-
-	$scope.saveAccount = function() {
-		
-		$http.post('profile/save', $scope.accountEdit).
-			success(function (data, status, headers, config) {
-
-				$scope.accountEdit = data.account;
-				$scope.errorResponse = data.errorResponse;
-				
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
-					showPageErrorMsg();
-				}
-				else {
-					// Only update this if no errors
-					$scope.accountOrig = data.account;
-					$scope.errorResponse = undefined;
-					
-					// Take user to profile page
-					//$location.path('/profile'); // path not hash
-					showPageSuccessMsg('profile');
-				}
-			}).
-			error(function(data, status, headers, config) {
-				
-			});
-	};
-
-	$scope.resetAccount = function() {
-    	$scope.accountEdit = angular.copy($scope.accountOrig);
-    	$scope.errorResponse = undefined;
-    	$('.alert-danger').hide();
-
-    	//$location.path('/'); // path not hash
-  	};
-
-	$scope.saveEmail = function() {
-		
-		$http.post('profile/email/save', $scope.changeEmailRequest).
-			success(function (data, status, headers, config) {
-				
-				$scope.changeEmailRequest = data.changeEmailRequest;
-				$scope.errorResponse = data.errorResponse;
-
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
-					// Show error message at the top of page
-					showPageErrorMsg();
-				}
-				else {
-					// Only update this if no errors
-					$scope.changeEmailRequest.oldEmailId = data.changeEmailRequest.newEmail;
-					$scope.changeEmailRequest.newEmail = '';
-					$scope.changeEmailRequest.confirmEmail = '';
-					$scope.errorResponse = undefined;
-
-					showPageSuccessMsg('email');
-				}
-			}).
-			error(function(data, status, headers, config) {
-				
-			});
-	};
-	
-	$scope.resetEmail = function() { 
-    	$scope.changeEmailRequest.newEmail = '';
-    	$scope.changeEmailRequest.confirmEmail = '';
-    	$scope.errorResponse = undefined;
-    	$('.alert-danger').hide();
-  	};
-  	
-  	$scope.savePassword = function() {
-		
-		$http.post('profile/password/save', $scope.changePasswordRequest).
-			success(function (data, status, headers, config) {
-				
-				$scope.changePasswordRequest = data.changePasswordRequest;
-				$scope.errorResponse = data.errorResponse;
-
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
-					// Show error message at the top of page
-					showPageErrorMsg();
-				}
-				else {
-					// Only update this if no errors
-					$scope.changePasswordRequest.newPassword = '';
-					$scope.changePasswordRequest.confirmPassword = '';
-					$scope.errorResponse = undefined;
-
-					showPageSuccessMsg('password');
-				}
-			}).
-			error(function(data, status, headers, config) {
-				
-			});
-	};
-	
-	$scope.resetPassword = function() { 
-    	$scope.changePasswordRequest.newPassword = '';
-    	$scope.changePasswordRequest.confirmPassword = '';
-    	$scope.errorResponse = undefined;
-    	$('.alert-danger').hide();
-  	};
-
-  	var showPageErrorMsg = function() {
-  		$('.alert-success').hide();
-  		$('.alert-danger').show();
-  	};
-  	
-  	var hidePageMsg = function() {
-  		$('.alert-success').hide();
-  		$('.alert-danger').hide();
-  	};
-  	
-	var showPageSuccessMsg = function(type) {
-		$('.alert-danger').hide();
-		if (type === 'profile') {
-			$('.alert-success.profile').show().delay(1500).fadeOut(300);
-		}
-		else if (type === 'email') {
-			$('.alert-success.email').show().delay(1500).fadeOut(300);
-		}
-		else if (type === 'password') {
-			$('.alert-success.password').show().delay(1500).fadeOut(300);
-		}
-  	};
-
-}]);
-********************/
 
 
 
