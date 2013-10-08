@@ -30,6 +30,8 @@ public class QBeanAccount {
 
     private String language;
 
+    private java.sql.Timestamp lastLoginDate;
+
     private Byte lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
@@ -136,6 +138,14 @@ public class QBeanAccount {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public java.sql.Timestamp getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(java.sql.Timestamp lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
 
     public Byte getLastModifiedApp() {

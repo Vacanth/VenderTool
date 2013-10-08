@@ -41,6 +41,8 @@ public class QAccount extends com.mysema.query.sql.RelationalPathBase<QBeanAccou
 
     public final StringPath language = createString("language");
 
+    public final DateTimePath<java.sql.Timestamp> lastLoginDate = createDateTime("last_login_date", java.sql.Timestamp.class);
+
     public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
