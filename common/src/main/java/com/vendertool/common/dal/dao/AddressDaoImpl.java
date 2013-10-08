@@ -267,7 +267,7 @@ public class AddressDaoImpl extends BaseDaoImpl implements AddressDao {
 			
 			QAddress a = QAddress.address;
 	    	SQLUpdateClause s = update(con, a)
-					.populate(addr, new AddressMapper(FieldSets.ADDRESS_UPDATESET.METADATA));
+					.populate(addr, new AddressMapper(FieldSets.ADDRESS_UPDATESET.METADATA)).where(a.addressId.eq(addr.getId()));
 			
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + s.toString());

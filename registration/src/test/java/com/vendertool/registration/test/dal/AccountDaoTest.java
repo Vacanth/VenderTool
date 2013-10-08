@@ -111,7 +111,7 @@ public class AccountDaoTest extends BaseDaoTest {
 		dbaccount = dao.findByEmail(accounts[0].getEmail(), FieldSets.ACCOUNT_READSET.PASSWORD);
 		
 		//JUnit assert read set
-		Assert.assertNull(dbaccount.getContactDetails());
+		Assert.assertNotNull(dbaccount.getContactDetails());
 		Assert.assertNotNull(dbaccount.getEmail());
 		Assert.assertNotNull(dbaccount.getPassword());
 		Assert.assertNotNull(dbaccount.getRoles());
