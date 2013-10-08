@@ -23,12 +23,12 @@
 		<div id="pgBg"><img src="resources/img/cafe.jpg" alt=""></div>
 	
 		<spring:message code="form.registration.title" var="title"/>
-		<c:set var="email" value="${account.emailId}"/>
+		<c:set var="email" value="${account.email}"/>
 		<div class="reg main input-group">
 			<h3 class="ttl"><spring:message code="form.registration.signup"/></h3>
 			<spring:message code='form.registration.firstname' var="firstname"/>
 			<spring:message code='form.registration.lastname' var="lastname"/>
-			<spring:message code='form.registration.email' var="emailId"/>
+			<spring:message code='form.registration.email' var="email"/>
 			<spring:message code='form.registration.password' var="password"/>
 			<spring:message code='form.registration.confirmpassword' var="confirmpassword"/>
 			<spring:message code='form.submit' var="submit"/>
@@ -57,9 +57,9 @@
 					<t2:errorResponse model="${errorResponse}" field="lastName" clss="com.vendertool.sharedtypes.core.ContactDetails"/>
 				</div>
 				<div class="fldWrp">
-					<c:set var="emailIdpath" value="emailId" />
-					<form:input id="emailId" class="form-control info-msg-available" placeholder="${emailId}" path="${emailIdpath}" data-content="${emailInfo}"/>
-					<t2:errorResponse model="${errorResponse}" field="${emailIdpath}" clss="com.vendertool.sharedtypes.core.Account"/>
+					<c:set var="emailpath" value="email" />
+					<form:input id="email" class="form-control info-msg-available" placeholder="${email}" path="${emailpath}" data-content="${emailInfo}"/>
+					<t2:errorResponse model="${errorResponse}" field="${emailpath}" clss="com.vendertool.sharedtypes.core.Account"/>
 				</div>
 				<div class="fldWrp">
 					<c:set var="passwordpath" value="password" />

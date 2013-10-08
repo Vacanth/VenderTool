@@ -272,7 +272,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			response.addFieldBindingError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			try {
-				dalservice.updateAccountStatus(accountId, AccountStatusEnum.SUSPENDED);
+				dalservice.updateAccountStatus(email, AccountStatusEnum.SUSPENDED);
 				dalservice.updateConfirmationAttempts(accountId,
 						accountConf.getId(), accountConf.getConfirmationAttempts());
 			} catch (Exception e) {
@@ -302,7 +302,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		}
 		
 		try {
-			dalservice.updateAccountStatus(accountId, AccountStatusEnum.VERIFIED);
+			dalservice.updateAccountStatus(email, AccountStatusEnum.VERIFIED);
 		} catch (DBConnectionException | UpdateException | DatabaseException e) {
 			logger.debug(e.getMessage(), e);
 			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_REGISTER, null, (String[])null);

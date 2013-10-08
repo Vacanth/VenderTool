@@ -197,7 +197,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			
 			SQLQuery query = from(con, ac)
 					.groupBy(ac.accountId)
-					.innerJoin(new SQLSubQuery().from(ac).where(ac.accountId.eq(accountId)).list(ac.createdDate.max()), ac)
+					.innerJoin(new SQLSubQuery().from(ac).where(ac.accountId.eq(accountId)).list(ac.createdDate.min()), ac)
 					.where(ac.accountId.eq(accountId).and(ac.expiryDate.after(new Timestamp(new Date().getTime()))));
 			
 //			SQLQuery query = from(con, ac)

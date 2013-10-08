@@ -157,7 +157,7 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 			QAccount a = QAccount.account;
 	
 	    	SQLUpdateClause s = update(con, a)
-					.populate(account, new AccountMapper(updateSet)).where(a.emailAddr.eq(account.getEmail()));
+					.where(a.emailAddr.eq(account.getEmail())).populate(account, new AccountMapper(updateSet));
 	    	
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + s.toString());

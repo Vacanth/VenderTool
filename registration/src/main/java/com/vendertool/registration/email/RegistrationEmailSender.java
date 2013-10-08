@@ -164,17 +164,19 @@ public class RegistrationEmailSender {
     	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
     	
     	//send to new email
-    	EmailService emailService = (EmailService) ctx.getBean("changeEmailService");
-    	emailService.sendEmail(emailModel, locale);
+    	sendConfirmRegistrationEmail(account, baseurl, locale);
+//    	EmailService emailService = (EmailService) ctx.getBean("changeEmailService");
+//    	emailService.sendEmail(emailModel, locale);
     	
     	
     	//Now send to the old email
+    	EmailService oldEmailService = (EmailService) ctx.getBean("changeEmailService");
     	emailModel.setToEmail(oldemail);
     	if(!fnExists) {
     		emailModel.setToName(oldemail);
     	}
     	emailModel.setPreviousEmail(account.getEmail());
-    	emailService.sendEmail(emailModel, locale);
+    	oldEmailService.sendEmail(emailModel, locale);
 	}
 	
 	

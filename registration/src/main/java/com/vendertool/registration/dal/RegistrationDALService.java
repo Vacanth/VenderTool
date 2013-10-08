@@ -24,6 +24,7 @@ import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.Address;
+import com.vendertool.sharedtypes.core.Address.AddressUsecaseEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
 
 public class RegistrationDALService {
@@ -114,6 +115,7 @@ public class RegistrationDALService {
 		
 		Long id = address.getId();
 		if((address.getId() == null) || (address.getId().longValue() <= 0)) {
+			address.setAddressUseCase(AddressUsecaseEnum.REGISTRATION);
 			Long addrId = insertAddress(account, address);
 			address.setId(addrId);
 			return true;
@@ -257,15 +259,15 @@ public class RegistrationDALService {
 		return accountConfDao.findLatestActive(accountId);
 	}
 	
-	public void updateAccountStatus(Long accountId, AccountStatusEnum status)
+	public void updateAccountStatus(String email, AccountStatusEnum status)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
-		if(VUTIL.isNull(accountId) || VUTIL.isNull(status)) {
+		if(VUTIL.isEmpty(email) || VUTIL.isNull(status)) {
 			return;
 		}
 		
 		Account a = new Account();
-		a.setId(accountId);
+		a.setEmail(email);
 		a.setAccountStatus(status);
 		
 		accountDao.update(a, FieldSets.ACCOUNT_UPDATESET.STATUS);
