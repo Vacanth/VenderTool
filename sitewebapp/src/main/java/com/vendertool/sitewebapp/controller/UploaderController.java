@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.rnr.FileUploadRequest;
+import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 
@@ -51,7 +51,7 @@ public class UploaderController {
 		    try {
 		        List<FileItem> items = upload.parseRequest(request);
 		        Iterator<FileItem> iter = items.iterator();
-		        FileUploadRequest fileUploadReq = new FileUploadRequest();
+		        UploadFileRequest fileUploadReq = new UploadFileRequest();
 		        
 		        while (iter.hasNext()) {
 		            FileItem item = iter.next();
@@ -113,12 +113,31 @@ public class UploaderController {
 		
 		String groupId = req.getParameter("groupId");
 		String uploadTitle = req.getParameter("uploadTitle");
+     
+        UploadFileRequest fileUploadReq = new UploadFileRequest();
+        fileUploadReq.setGroupId(groupId);
+        fileUploadReq.setUploadTitle("uploadTitle");
+        
+        String hostName = RestServiceClientHelper.getServerURL(req);
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_CREATE_PATH;
+		Response serviceRes = RestServiceClientHelper.invokeRestService(
+						url,
+						fileUploadReq,
+						null,
+						MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.POST);
 		
 		System.err.println("groupId: " + groupId);
 		System.err.println("uploadTitle: " + uploadTitle);
 		
 		Map<String, String> msg = new HashMap<String, String>();
-		msg.put("statusMessage", "success");
+		if (serviceRes == null || serviceRes.getStatus() != 200) {
+			msg.put("statusMessage", "error");
+		}
+		else {
+			msg.put("statusMessage", "success");
+		}
+
 		return msg;
 	}
 	

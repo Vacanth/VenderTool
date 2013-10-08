@@ -39,23 +39,18 @@ public class FpsDALService {
 		return FpsDALServiceHolder.INSTANCE;
 	}
 	
-	public void uploadFiles(List<File> files, 
-			long accountId, String fileGroupId, String title) {
-		
-		Date curDate = new Date();
+	public void uploadFiles(List<File> files) {
 		try {
 			fileDao.insertFiles(files);
-			Job job = new Job();
-			job.setAccountId(accountId);
-			job.setReqFileGroupId(fileGroupId);
-			job.setStatus(FPSJobStatusEnum.CREATED);
-			job.setCreatedDate(curDate);
-			job.setLastModifiedDate(curDate);
-			job.setIsoCountryCode("USA");
-			job.setTitle(title);
-			job.setUsecase(FPSUsecaseEnum.ADD_LISTING);
+		} catch (DBConnectionException e) {
+		} catch (InsertException e) {
+		} catch (DatabaseException e) {
+		}
+	}
+	
+	public void createJob(Job job) {
+		try {
 			jobDao.insert(job);
-			
 		} catch (DBConnectionException e) {
 		} catch (InsertException e) {
 		} catch (DatabaseException e) {

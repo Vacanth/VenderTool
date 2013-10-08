@@ -11,9 +11,9 @@ import com.vendertool.sharedtypes.rnr.BaseRequest;
 public class UploadFileRequest extends BaseRequest {
 
 	private List<FileInformation> files;
-	private String fileGroupId;
-	private String title;
-
+	private String groupId;
+	private String uploadTitle;
+	
 	public List<FileInformation> getFiles() {
 		return files;
 	}
@@ -21,21 +21,20 @@ public class UploadFileRequest extends BaseRequest {
 	public void setFiles(List<FileInformation> files) {
 		this.files = files;
 	}
-
-	public String getFileGroupId() {
-		return fileGroupId;
+	public String getGroupId() {
+		return groupId;
 	}
 
-	public void setFileGroupId(String fileGroupId) {
-		this.fileGroupId = fileGroupId;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getUploadTitle() {
+		return uploadTitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setUploadTitle(String uploadTitle) {
+		this.uploadTitle = uploadTitle;
 	}
 	
 }

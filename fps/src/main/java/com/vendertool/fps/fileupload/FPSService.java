@@ -17,9 +17,11 @@ import com.vendertool.fps.dal.FpsDALService;
 import com.vendertool.fps.fileupload.helper.AWSHelper;
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
+import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSStorageSourceEnum;
 import com.vendertool.sharedtypes.core.fps.FPSUsecaseEnum;
 import com.vendertool.sharedtypes.core.fps.File;
+import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
 
 @Path("/fps")
@@ -111,8 +113,7 @@ public class FPSService extends BaseVenderToolServiceImpl {
         	File fileObj = new File();
         	fileObj.setFileName(file.getFileName());
         	fileObj.setAccountId(Long.valueOf(accountId));
-        	//fileObj.setFileGroupId(file.getFileGroupId());   // Need to uncomment
-        	fileObj.setFileGroupId("Testing files");
+        	fileObj.setFileGroupId(uploadRequest.getGroupId());   
         	fileObj.setRefUrl(refMap.get(file.getFileName()));
         	fileObj.setStorageSource(new Byte(FPSStorageSourceEnum.AWS_CLOUD.ordinal()+""));
         	fileObj.setUseCase(FPSUsecaseEnum.ADD_LISTING);
@@ -121,7 +122,29 @@ public class FPSService extends BaseVenderToolServiceImpl {
         	fileObj.setLastModifiedDate(new Date());
         	dbFiles.add(fileObj);
         }
-        FpsDALService.getInstance().uploadFiles(dbFiles, accountId, "testing", "title");
+        FpsDALService.getInstance().uploadFiles(dbFiles);
+		return Response.status(200).entity("").build();
+	}
+	
+	@POST
+	@Path("/uploadDone")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response uploadDone(UploadFileRequest uploadRequest) {
+        Date curDate = new Date();
+        
+        long accountId = 10000;     //Need to change this one once baserequest populates
+        Job jobObj = new Job();
+        jobObj.setAccountId(accountId);
+        jobObj.setTitle(uploadRequest.getUploadTitle());
+        jobObj.setReqFileGroupId(uploadRequest.getGroupId());
+        jobObj.setCreatedDate(curDate);
+        jobObj.setLastModifiedDate(curDate);
+        jobObj.setStatus(FPSJobStatusEnum.CREATED);
+		jobObj.setIsoCountryCode("USA");
+		jobObj.setUsecase(FPSUsecaseEnum.ADD_LISTING);
+		
+        FpsDALService.getInstance().createJob(jobObj);
 		return Response.status(200).entity("").build();
 	}
 }
