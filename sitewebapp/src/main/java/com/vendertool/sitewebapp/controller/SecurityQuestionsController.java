@@ -1,12 +1,13 @@
 package com.vendertool.sitewebapp.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -19,9 +20,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vendertool.sharedtypes.error.Errors;
+import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sharedtypes.rnr.GetSecurityQuestionsResponse;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
+import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
+import com.vendertool.sitewebapp.common.RestServiceClientHelper;
+import com.vendertool.sitewebapp.common.URLConstants;
+import com.vendertool.sitewebapp.common.VTErrorUtil;
 
 @Controller
 public class SecurityQuestionsController {
@@ -31,29 +40,17 @@ public class SecurityQuestionsController {
 	public String getSecurityQuestionsView(ModelMap modelMap, HttpServletRequest request){
 		logger.info("getSecurityQuestionsView GET controller invoked");
 		
-		Locale locale = RequestContextUtils.getLocale(request);
-
-		// Add mock data
-		SecurityQuestion q1 = new SecurityQuestion();
-		q1.setId(1);
-		q1.setText("What is the name of your favorite pet?");
-		SecurityQuestion q2 = new SecurityQuestion();
-		q2.setId(2);
-		q2.setText("What is the name of your high school?");
-		SecurityQuestion q3 = new SecurityQuestion();
-		q3.setId(3);
-		q3.setText("What is your favorite color");
-		SecurityQuestion q4 = new SecurityQuestion();
-		q4.setId(4);
-		q4.setText("What street did you grow up on");
-		List<SecurityQuestion> questionList = new ArrayList<SecurityQuestion>();
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
+		}
 		
-		questionList.add(q1);
-		questionList.add(q2);
-		questionList.add(q3);
-		questionList.add(q4);
-		modelMap.addAttribute("questionList", questionList);
-
+		SecurityQuestionsController sqcontroller = new SecurityQuestionsController();
+		GetSecurityQuestionsResponse secquesResponse = 
+				sqcontroller.getSecurityQuestionsResponse(email, modelMap, request);
+		
+		modelMap.addAttribute("secquesResponse", secquesResponse);
+		
 		// Add JSON for Angular
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -70,41 +67,112 @@ public class SecurityQuestionsController {
 	}
 	
 	@RequestMapping(value="questions/save", method=RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveQuestionAnswers(@RequestBody SecurityQuestionsResponse resp) {
+	public @ResponseBody Map<String, Object> updateAccountSecurityQuestions(
+			@RequestBody UpdateAccountSecurityQuestionsRequest updateSecQuestionsRequest, 
+			HttpServletRequest request) {
 		
-		ErrorResponse errorResponse = new ErrorResponse();
+		logger.info("updateAccountSecurityQuestions POST controller invoked");
 		
-		if (resp != null && !resp.getQuestionAnswers().isEmpty()) {
-			int count = 1;
-			for (SecurityQuestionAnswer qa : resp.getQuestionAnswers()) {
-				
-				if (qa.getQuestionId() == null) {
-					errorResponse.addFieldBindingError(
-							Errors.REGISTRATION.MISSING_SECURITY_QUESTION, 
-							SecurityQuestionAnswer.class.getName(),
-							"question" + count);
-				}
-				
-				if (qa.getAnswer() == null || qa.getAnswer().isEmpty()) {
-					errorResponse.addFieldBindingError(
-							Errors.REGISTRATION.MISSING_SECURITY_ANSWER,
-							SecurityQuestionAnswer.class.getName(),
-							"answer" + count);
-				} 
-				
-				count++;
-				System.err.println("id:" + qa.getQuestionId() + " " + qa.getAnswer());
-			}
+		String email = ContainerBootstrapContext.getSignedInEmail();
+		if((email == null) || (email.trim().isEmpty())) {
+			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("errorResponse", errorResponse);
-		map.put("securityQuestionsResponse", resp);
+		updateSecQuestionsRequest.setEmail(email);
 		
+		return updateSecurityQuestions(request, updateSecQuestionsRequest);
+	}
+	
+	public GetSecurityQuestionsResponse getSecurityQuestionsResponse(String signedInEmail, ModelMap modelMap, HttpServletRequest request) {
+		
+		String hostName = RestServiceClientHelper.getServerURL(request);
+		
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_METADATA_GET_SEC_QUESTIONS_PATH;
+		
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.GET);
+		
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".getSecurityQuestionsView() is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to fetch security questions from metadata service, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		GetSecurityQuestionsResponse secQuestionsResponse = response
+				.readEntity(GetSecurityQuestionsResponse.class);
+		
+		List<SecurityQuestion> secQuestions = secQuestionsResponse.getSecurityQuestions();
+		if((secQuestions == null) || (secQuestions.isEmpty())) {
+			throw new VTRuntimeException("Security questions are not available");
+		}
+		
+		return secQuestionsResponse;
+		
+	}
+	
+	public Map<String, Object> updateSecurityQuestions(HttpServletRequest request, 
+			UpdateAccountSecurityQuestionsRequest updateSecQuestionsRequest) {
+		
+		String hostName = RestServiceClientHelper.getServerURL(request);
+		
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.WS_REGISTRATION_UPDATE_SEC_QUESTIONS_PATH;
+		
+		Response response = RestServiceClientHelper
+				.invokeRestService(url, updateSecQuestionsRequest, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.POST);
+		
+		int responseCode = response.getStatus();
+		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
+				+ url + "' from '" + getClass().getName()
+				+ ".saveSecurityQuestions(" + updateSecQuestionsRequest + ")' is '" + responseCode
+				+ "'.");
+		
+		//HTTP error code 200
+		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
+			VTRuntimeException ex = new VTRuntimeException(
+					"Unable to update security questions, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
+			throw ex;
+		}
+		
+		UpdateAccountSecurityQuestionsResponse updateSecQuesResponse = response
+				.readEntity(UpdateAccountSecurityQuestionsResponse.class);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(updateSecQuesResponse.hasErrors()) {
+			logger.error("Update security questions failed with errors: "
+					+ updateSecQuesResponse.getFieldBindingErrors());
+
+			ErrorResponse errorResponse = new ErrorResponse(updateSecQuesResponse);
+			
+			Locale locale = RequestContextUtils.getLocale(request);
+			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
+			
+			map.put("errorResponse", errorResponse);
+			map.put("updated", false);
+			
+			return map;
+		}
+		
+		map.put("updated", true);
 		return map;
+		
 	}
 
-	
 	/******************************************
 	 * 
 	 * Get partial pages for Angular
@@ -121,80 +189,4 @@ public class SecurityQuestionsController {
 		logger.info("getSuccessPartial controller invoked");
 		return "securityQuestions/partial/success";
 	}
-
-	
-
 }
-
-/** Mock classes. Replace later **/
-class SecurityQuestion {
-	private Integer id;
-	private String text;
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-}
-
-class SecurityQuestionAnswer {
-	
-	private Integer questionId;
-	private String answer;
-	
-	public Integer getQuestionId() {
-		return questionId;
-	}
-	public void setQuestionId(Integer questionId) {
-		this.questionId = questionId;
-	}
-	public String getAnswer() {
-		return answer;
-	}
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
-}
-
-class SecurityQuestionsResponse {
-	private List<SecurityQuestion> questions;
-	private List<SecurityQuestionAnswer> questionAnswers;
-	public List<SecurityQuestion> getQuestions() {
-		return questions;
-	}
-	public void setQuestions(List<SecurityQuestion> questions) {
-		this.questions = questions;
-	}
-	public List<SecurityQuestionAnswer> getQuestionAnswers() {
-		return questionAnswers;
-	}
-	public void setQuestionAnswers(List<SecurityQuestionAnswer> questionAnswers) {
-		this.questionAnswers = questionAnswers;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

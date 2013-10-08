@@ -9,7 +9,8 @@ public enum AccountStatusEnum {
 	CLOSED(3),
 	SUSPENDED(4),
 	DELINQUENT(5), 
-	PASSWORD_EXPIRED(6);
+	PASSWORD_EXPIRED(6),
+	EMAIL_CHANGE_NOT_VERIFIED(7);
 	
 	private int id;
 	

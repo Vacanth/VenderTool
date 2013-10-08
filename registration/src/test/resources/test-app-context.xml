@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+ 	<import resource="classpath:registration-application-context.xml" />
+ 	
+ 	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:l10n/registration_messages</value>
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+        <constructor-arg index="0" value="256"/>
+    </bean>
+	
+ </beans>

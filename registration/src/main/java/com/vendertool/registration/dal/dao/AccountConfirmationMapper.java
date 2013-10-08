@@ -51,7 +51,9 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 			}
 			
 			if(ac.confirmationDate.equals(rpath)) {
-				map.put(ac.confirmationCode, accConf.getConfirmationDate());
+				map.put(ac.confirmationDate,
+						(accConf.getConfirmationDate() != null) ? new Timestamp(
+								accConf.getConfirmationDate().getTime()) : null);
 			}
 			
 			if(ac.sessionId.equals(rpath)) {
@@ -64,6 +66,12 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 			
 			if(ac.accountConfirmationId.equals(rpath)) {
 				map.put(ac.accountConfirmationId, accConf.getId());
+			}
+			
+			if(ac.expiryDate.equals(rpath)) {
+				map.put(ac.expiryDate,
+						(accConf.getExpiryDate() != null) ? new Timestamp(
+								accConf.getExpiryDate().getTime()) : null);
 			}
 		}
 		
@@ -95,6 +103,11 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 			cdate = new Date();
 		}
 		accbean.setCreatedDate(new Timestamp(cdate.getTime()));
+		
+		Date edate = accConf.getExpiryDate();
+		if(edate != null) {
+			accbean.setExpiryDate(new Timestamp(edate.getTime()));
+		}
 		
 		return accbean;
 		
@@ -148,6 +161,12 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 			if(ac.numberOfAttempts.equals(rpath)) {
 				if(VUTIL.isNotNull(row.get(ac.numberOfAttempts))) {
 					accConf.setConfirmationAttempts(row.get(ac.numberOfAttempts));
+				}
+			}
+			
+			if(ac.expiryDate.equals(rpath)) {
+				if(VUTIL.isNotNull(row.get(ac.expiryDate))) {
+					accConf.setExpiryDate(new Date(row.get(ac.expiryDate).getTime()));
 				}
 			}
 		}

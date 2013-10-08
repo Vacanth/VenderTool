@@ -24,7 +24,10 @@ public class AccountUpdateSet {
 		ACCOUNT.lastName, 
 		ACCOUNT.middleName, 
 		ACCOUNT.picture, 
-		ACCOUNT.registrationAddrId
+		ACCOUNT.registrationAddrId,
+		ACCOUNT.contactPhoneHome,
+		ACCOUNT.contactPhoneMobile,
+		ACCOUNT.contactPhoneWork
 	};
 	
 	public final Path<?>[] PASSWORD = {
@@ -41,4 +44,9 @@ public class AccountUpdateSet {
 		ACCOUNT.roles, 
 		ACCOUNT.lastModifiedDate
 	};
+	
+	public final Path<?>[] STATUS = {
+			ACCOUNT.status, 
+			ACCOUNT.lastModifiedDate
+		};
 }

@@ -1,5 +1,6 @@
 package com.vendertool.sharedtypes.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,7 +14,7 @@ public class ContactDetails {
 	private String firstName;
 	private String middleName;
 	private String lastName;
-	private String emailId;
+	private String email;
 	private String alternateEmailId;
 	private Address address;
 	private Map<PhoneType, Phone> phones;
@@ -44,12 +45,12 @@ public class ContactDetails {
 		this.lastName = lastName;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getAlternateEmailId() {
@@ -76,6 +77,28 @@ public class ContactDetails {
 		this.phones = phones;
 	}
 
+	@JsonIgnore
+	public void addPhone(PhoneType type, Phone phone) {
+		if((type == null) || (phone == null)) {
+			return;
+		}
+		
+		Map<PhoneType, Phone> phones = getPhones();
+		if(phones == null) {
+			phones = new HashMap<Phone.PhoneType, Phone>();
+			setPhones(phones);
+		}
+		
+		phones.put(type, phone);
+	}
+	
+	public Phone getPhone(PhoneType type) {
+		if((getPhones() == null) || (type == null)) {
+			return null;
+		}
+		
+		return getPhones().get(type);
+	}
 	
 	@JsonIgnore
 	public String toString() {
@@ -84,11 +107,11 @@ public class ContactDetails {
 			.append("\n\tFIRST NAME=").append(getFirstName())
 			.append("\n\tMIDDLE NAME=").append(getMiddleName())
 			.append("\n\tLAST NAME=").append(getLastName())
-			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tEMAIL=").append(getEmail())
 			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
 			.append("\n\tADDRESS=").append((getAddress() != null) ? getAddress().toString() : null)
-			.append("\n\tPhones=").append((getPhones() != null) ? getPhones().toString() : null);
-	
+			.append("\n\tPhones=").append((getPhones() != null) ? getPhones().toString() : null)
+		.append("]]");
 		return sb.toString();
 	}
 }

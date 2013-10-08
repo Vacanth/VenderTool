@@ -25,6 +25,8 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 		return ALL_ERROR_CODES;
 	}
 
+	public static VTErrorCode UNABLE_TO_REGISTER = new RegistrationErrorCode(
+			"UNABLE_TO_REGISTER");
 	public static VTErrorCode EMAIL_MISSING = new RegistrationErrorCode(
 			"EMAIL_REQUIRED");
 	public static VTErrorCode INVALID_EMAIL_ID = new RegistrationErrorCode(
@@ -33,8 +35,8 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"INVALID_LASTNAME");
 	public static VTErrorCode INVALID_FIRSTNAME = new RegistrationErrorCode(
 			"INVALID_FIRSTNAME");
-	public static VTErrorCode INVALID_PHONE_FORMAT = new RegistrationErrorCode(
-			"INVALID_PHONE_FORMAT");
+	public static VTErrorCode INVALID_PHONE_NUMBER = new RegistrationErrorCode(
+			"INVALID_PHONE_NUMBER");
 	public static VTErrorCode MISSING_ADDRESS_FIRSTLINE = new RegistrationErrorCode(
 			"MISSING_ADDRESS_FIRSTLINE");
 	public static VTErrorCode INVALID_ADDRESS_COUNTRY_ZIP = new RegistrationErrorCode(
@@ -69,5 +71,28 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"MISSING_SECURITY_QUESTION");
 	public static VTErrorCode MISSING_SECURITY_ANSWER = new RegistrationErrorCode(
 			"MISSING_SECURITY_ANSWER");
-	
+	public static VTErrorCode LANGUAGE_NOT_SUPPORTED = new RegistrationErrorCode(
+			"LANGUAGE_NOT_SUPPORTED");
+	public static VTErrorCode PWD_CHANGE_MISSING_OLD_PWD = new RegistrationErrorCode(
+			"PWD_CHANGE_MISSING_OLD_PWD");
+	public static VTErrorCode UNABLE_TO_CHANGE_PASSWORD = new RegistrationErrorCode(
+			"UNABLE_TO_CHANGE_PASSWORD");
+	public static VTErrorCode UNABLE_TO_CHANGE_EMAIL = new RegistrationErrorCode(
+			"UNABLE_TO_CHANGE_EMAIL");
+	public static VTErrorCode INVALID_OLD_PASSWORD = new RegistrationErrorCode(
+			"INVALID_OLD_PASSWORD");
+	public static VTErrorCode MISSING_OLD_EMAIL = new RegistrationErrorCode(
+			"MISSING_OLD_EMAIL");
+	public static VTErrorCode MISSING_CONFIRM_EMAIL = new RegistrationErrorCode(
+			"MISSING_CONFIRM_EMAIL");
+	public static VTErrorCode CONFIRM_EMAIL_MISMATCH = new RegistrationErrorCode(
+			"CONFIRM_EMAIL_MISMATCH");
+	public static VTErrorCode UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION = new RegistrationErrorCode(
+			"UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION");
+	public static VTErrorCode UNABLE_TO_CLOSE_ACCOUNT = new RegistrationErrorCode(
+			"UNABLE_TO_CLOSE_ACCOUNT");
+	public static VTErrorCode UNABLE_TO_UPDATE_SEC_QUESTIONS = new RegistrationErrorCode(
+			"UNABLE_TO_UPDATE_SEC_QUESTIONS");
+	public static VTErrorCode UNABLE_TO_GET_SEC_QUESTIONS = new RegistrationErrorCode(
+			"UNABLE_TO_GET_SEC_QUESTIONS");
 }

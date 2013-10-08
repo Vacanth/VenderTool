@@ -6,7 +6,7 @@
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 <%@ taglib prefix="t2" tagdir="/WEB-INF/tags/layoutTable" %>
 
-<t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.emailId}" >
+<t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.email}" >
 	
 	<jsp:attribute name="css">
 		<link href="<c:url value='/wro/profile.css' />" rel="stylesheet" type="text/css" />
@@ -38,14 +38,6 @@
 			</jsp:attribute>
 			
 			<jsp:attribute name="content">
-				<div class="pg-msg">
-					<div class="alert alert-success profile" 	style="display:none;">Profile has been updated.</div>
-					<div class="alert alert-success email" 		style="display:none;">Email has been updated.</div>
-					<div class="alert alert-success password" 	style="display:none;">Password has been updated.</div>
-					<div class="alert alert-success questions" 	style="display:none;">Questions and answers have been updated.</div>
-					<div class="alert alert-danger"  			style="display:none;">Sorry, there's been an error.</div>
-				</div>
-
 				<div ng-view></div>
 			</jsp:attribute>
 		</t2:layoutTable>

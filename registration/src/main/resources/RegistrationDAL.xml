@@ -17,4 +17,8 @@
 	<bean id="passwordHistoryDAO" class="com.vendertool.registration.dal.dao.PasswordHistoryDaoImpl">
 		<property name="dataSource" ref="invdbdataSource" />
 	</bean>
+	
+	<bean id="accountSecurityQuestionDAO" class="com.vendertool.registration.dal.dao.AccountSecurityQuestionDaoImpl">
+		<property name="dataSource" ref="invdbdataSource" />
+	</bean>
 </beans>

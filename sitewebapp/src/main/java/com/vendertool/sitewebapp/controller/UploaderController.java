@@ -112,6 +112,7 @@ public class UploaderController {
 	protected @ResponseBody Map<String, String> uploadDone(HttpServletRequest req) {
 		
 		String groupId = req.getParameter("groupId");
+		String uploadTitle = req.getParameter("uploadTitle");
      
         UploadFileRequest fileUploadReq = new UploadFileRequest();
         fileUploadReq.setGroupId(groupId);
@@ -127,6 +128,7 @@ public class UploaderController {
 						HttpMethodEnum.POST);
 		
 		System.err.println("groupId: " + groupId);
+		System.err.println("uploadTitle: " + uploadTitle);
 		
 		Map<String, String> msg = new HashMap<String, String>();
 		if (serviceRes == null || serviceRes.getStatus() != 200) {

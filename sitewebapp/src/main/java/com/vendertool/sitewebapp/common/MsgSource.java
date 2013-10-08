@@ -5,10 +5,9 @@ import java.util.Locale;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * This is how you get access to resource like messages.properties 
@@ -22,8 +21,9 @@ public class MsgSource {
 	private static final Logger logger = Logger.getLogger(MsgSource.class);
 	
 	private MessageSource getMessageSource() {
-		WebApplicationContext webAppContext = ContextLoader.getCurrentWebApplicationContext();
-		MessageSource ms = (MessageSource) webAppContext.getBean("messageSource");
+//		WebApplicationContext webAppContext = ContextLoader.getCurrentWebApplicationContext();
+		ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
+		MessageSource ms = (MessageSource) ctx.getBean("messageSource");
 		return ms;
 	}
 	

@@ -3,6 +3,7 @@ package com.vendertool.sharedtypes.core;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -17,7 +18,7 @@ public class Account {
 	private static final String VALUE_DELIMITER = ",";
 	
 	private Long id;
-	private String emailId;
+	private String email;
 	private String alternateEmailId;
 	private String password;
 	private String confirmPassword;
@@ -33,6 +34,7 @@ public class Account {
 	private Set<AccountRoleEnum> roles;
 	private AccountStatusEnum accountStatus;
 	private AccountConfirmation accountConf;
+	private List<AccountSecurityQuestion> securityQuestions;
 	
 	public Account(){}
 	
@@ -44,12 +46,12 @@ public class Account {
 		this.id = id;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getAlternateEmailId() {
@@ -239,12 +241,20 @@ public class Account {
 		roles.add(role);
 	}
 	
+	public List<AccountSecurityQuestion> getSecurityQuestions() {
+		return securityQuestions;
+	}
+
+	public void setSecurityQuestions(List<AccountSecurityQuestion> securityQuestions) {
+		this.securityQuestions = securityQuestions;
+	}
+
 	@JsonIgnore
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Account=[[")
 			.append("\n\tID=").append(getId())
-			.append("\n\tEMAIL=").append(getEmailId())
+			.append("\n\tEMAIL=").append(getEmail())
 			.append("\n\tALTERNATE EMAIL=").append(getAlternateEmailId())
 			.append("\n\tSTATUS=").append(getAccountStatus())
 			.append("\n\tBILLING ADDRESS=").append((getBillingAddress() != null) ? getBillingAddress().toString() : null)
@@ -256,6 +266,7 @@ public class Account {
 			.append("\n\tROLES=").append(normalize(getRoles()))
 			.append("\n\tPASSWORD=").append(getPassword())
 			.append("\n\tSALT=").append(getPasswordSalt())
+			.append("\n\tSECURITY QUESTIONS=").append(getSecurityQuestions())
 		.append("]]");
 		
 		return sb.toString();

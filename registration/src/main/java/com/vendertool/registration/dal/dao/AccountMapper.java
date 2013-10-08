@@ -22,6 +22,8 @@ import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.Image;
 import com.vendertool.sharedtypes.core.Language;
+import com.vendertool.sharedtypes.core.Phone;
+import com.vendertool.sharedtypes.core.Phone.PhoneType;
 
 public class AccountMapper implements DALMapper<Account> {
 //	private static final Logger logger = Logger.getLogger(AccountMapper.class);
@@ -78,7 +80,7 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.emailAddr.equals(rpath)) {
-				map.put(a.emailAddr, account.getEmailId());
+				map.put(a.emailAddr, account.getEmail());
 			}
 			
 			if(a.firstName.equals(rpath)) {
@@ -144,7 +146,39 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.status.equals(rpath)) {
-				map.put(a.status, new Byte(account.getAccountStatus().getId()+""));
+				if(VUTIL.isNotNull(account.getAccountStatus())) {
+					map.put(a.status, new Byte(account.getAccountStatus().getId()+""));
+				}
+			}
+			
+			if(a.contactPhoneHome.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.HOME);
+					if(phone != null) {
+						map.put(a.contactPhoneHome, phone.getNumber()+"");
+					}
+				}
+			}
+			
+			if(a.contactPhoneMobile.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.MOBILE);
+					if(phone != null) {
+						map.put(a.contactPhoneMobile, phone.getNumber()+"");
+					}
+				}
+			}
+			
+			if(a.contactPhoneWork.equals(rpath)) {
+				ContactDetails cd = account.getContactDetails();
+				if (VUTIL.isNotNull(cd) && VUTIL.isNotNull(cd.getPhones())) {
+					Phone phone = cd.getPhones().get(PhoneType.WORK);
+					if(phone != null) {
+						map.put(a.contactPhoneWork, phone.getNumber()+"");
+					}
+				}
 			}
 		}
 		
@@ -179,14 +213,33 @@ public class AccountMapper implements DALMapper<Account> {
 			bean.setCurrencyCodeIso3(account.getCurrency().getCurrencyCode());
 		}
 		
-		bean.setEmailAddr(account.getEmailId());
+		bean.setEmailAddr(account.getEmail());
 		
-		if(account.getContactDetails() != null) {
-			bean.setFirstName(account.getContactDetails().getFirstName());
-			bean.setLastName(account.getContactDetails().getLastName());
-			bean.setMiddleName(account.getContactDetails().getMiddleName());
-			if(account.getContactDetails().getAddress() != null) {
-				bean.setRegistrationAddrId(account.getContactDetails().getAddress().getId());
+		ContactDetails cd = account.getContactDetails();
+		if(VUTIL.isNotNull(cd)) {
+			bean.setFirstName(cd.getFirstName());
+			bean.setLastName(cd.getLastName());
+			bean.setMiddleName(cd.getMiddleName());
+			if(cd.getAddress() != null) {
+				bean.setRegistrationAddrId(cd.getAddress().getId());
+			}
+			
+			Map<PhoneType, Phone> phoneMap = cd.getPhones();
+			if(VUTIL.isNotNull(phoneMap)) {
+				Phone p = phoneMap.get(PhoneType.HOME);
+				if(p != null) {
+					bean.setContactPhoneHome(p.getNumber().toString());
+				}
+				
+				p = phoneMap.get(PhoneType.WORK);
+				if(p != null) {
+					bean.setContactPhoneWork(p.getNumber().toString());
+				}
+				
+				p = phoneMap.get(PhoneType.MOBILE);
+				if(p != null) {
+					bean.setContactPhoneMobile(p.getNumber().toString());
+				}
 			}
 		}
 		
@@ -240,13 +293,16 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 
 			if(a.billingAddrId.equals(rpath)) {
-				Address baddr = account.getBillingAddress();
-				if(baddr == null) {
-					baddr = new Address();
-					account.setBillingAddress(baddr);
-				}
 				
-				baddr.setId(row.get(a.billingAddrId));
+				if(row.get(a.billingAddrId) != null) {
+					Address baddr = account.getBillingAddress();
+					if(baddr == null) {
+						baddr = new Address();
+						account.setBillingAddress(baddr);
+					}
+					
+					baddr.setId(row.get(a.billingAddrId));
+				}
 			}
 			
 			if(a.createdDate.equals(rpath)) {
@@ -267,16 +323,18 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 			
 			if(a.emailAddr.equals(rpath)) {
-				account.setEmailId(row.get(a.emailAddr));
+				account.setEmail(row.get(a.emailAddr));
 			}
 			
 			if(a.firstName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.firstName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setFirstName(row.get(a.firstName));
 				}
-				cd.setFirstName(row.get(a.firstName));
 			}
 
 			if(a.language.equals(rpath)) {
@@ -301,21 +359,25 @@ public class AccountMapper implements DALMapper<Account> {
 			}
 
 			if(a.lastName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.lastName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setLastName(row.get(a.lastName));
 				}
-				cd.setLastName(row.get(a.lastName));
 			}
 			
 			if(a.middleName.equals(rpath)) {
-				ContactDetails cd = account.getContactDetails();
-				if(cd == null) {
-					cd = new ContactDetails();
-					account.setContactDetails(cd);
+				if(row.get(a.middleName) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					cd.setMiddleName(row.get(a.middleName));
 				}
-				cd.setMiddleName(row.get(a.middleName));
 			}
 
 			if(a.password.equals(rpath)) {
@@ -364,6 +426,48 @@ public class AccountMapper implements DALMapper<Account> {
 					if(se != null) {
 						account.setAccountStatus(se);
 					}
+				}
+			}
+			
+			if(a.contactPhoneHome.equals(rpath)) {
+				if(row.get(a.contactPhoneHome) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneHome)));
+					
+					cd.addPhone(PhoneType.HOME, p);
+				}
+			}
+			
+			if(a.contactPhoneWork.equals(rpath)) {
+				if(row.get(a.contactPhoneWork) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneWork)));
+					
+					cd.addPhone(PhoneType.WORK, p);
+				}
+			}
+			
+			if(a.contactPhoneMobile.equals(rpath)) {
+				if(row.get(a.contactPhoneMobile) != null) {
+					ContactDetails cd = account.getContactDetails();
+					if(cd == null) {
+						cd = new ContactDetails();
+						account.setContactDetails(cd);
+					}
+					Phone p = new Phone();
+					p.setNumber(Integer.getInteger(row.get(a.contactPhoneMobile)));
+					
+					cd.addPhone(PhoneType.MOBILE, p);
 				}
 			}
 		}

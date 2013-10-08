@@ -19,6 +19,7 @@ import com.vendertool.common.validation.ValidationUtil;
 public class RegistrationCompleteEmailService extends VenderToolEmailService {
 	private static final Logger logger = Logger.getLogger(RegistrationCompleteEmailService.class);
 	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
+	private static String UTF8 = "UTF-8";
 
 	@Override
 	public void sendEmail(final EmailDataModel dataModel, final Locale locale) {
@@ -42,7 +43,7 @@ public class RegistrationCompleteEmailService extends VenderToolEmailService {
 				modelMap.put("locale", locale);
 				
 				String text = VelocityEngineUtils.mergeTemplateIntoString(
-						getVelocityEngine(), "emailtemplates/RegistrationComplete.vm",
+						getVelocityEngine(), "emailtemplates/RegistrationComplete.vm", UTF8,
 						modelMap);
 				message.setText(text, IS_HTML);
 			}

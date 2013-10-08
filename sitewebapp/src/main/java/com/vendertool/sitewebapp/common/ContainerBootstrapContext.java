@@ -3,8 +3,12 @@ package com.vendertool.sitewebapp.common;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.vendertool.sitewebapp.security.CustomUserDetails;
 
 public class ContainerBootstrapContext {
 	   
@@ -67,4 +71,16 @@ public class ContainerBootstrapContext {
 	    public ServletContext getServletContext() {
 	    	return this.servletContext;
 	    }
+	    
+	    public static String getSignedInEmail() {
+	    	if((SecurityContextHolder.getContext() == null) || 
+	    			(SecurityContextHolder.getContext().getAuthentication() == null)) {
+	    		return null;
+	    	}
+	    	
+			CustomUserDetails user = (CustomUserDetails) SecurityContextHolder
+					.getContext().getAuthentication().getPrincipal();
+			return user.getUsername();
+	    }
+	    
 }

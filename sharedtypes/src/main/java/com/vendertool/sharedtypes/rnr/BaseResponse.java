@@ -13,7 +13,7 @@ public class BaseResponse implements Response {
 	
 	private List<VTErrorFieldBindingMap> fieldBindingErrors;
 	private ResponseAckStatusEnum status;
-	private String emailId;
+	private String signedInEmail;
 
 	
 	public BaseResponse() {
@@ -176,11 +176,11 @@ public class BaseResponse implements Response {
 		this.status = status;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getSignedInEmail() {
+		return signedInEmail;
 	}
-	
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+
+	public void setSignedInEmail(String signedInEmail) {
+		this.signedInEmail = signedInEmail;
 	}
 }

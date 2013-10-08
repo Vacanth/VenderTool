@@ -9,11 +9,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.vendertool.common.dal.dao.BaseDao;
 import com.vendertool.common.dal.exception.DBConnectionException;
 
-public abstract class BaseDaoTest {
+public abstract class BaseDaoTest extends BaseTest {
 
 	public ApplicationContext context;
 	
 	protected BaseDaoTest() {
+		super();
 		try {
 			initialize();
 		} catch (DBConnectionException e) {
@@ -21,6 +22,10 @@ public abstract class BaseDaoTest {
 		} catch (SQLException e) {
 			log(e);
 		}
+	}
+	
+	public String getApplicationContextFileName() {
+		return null;
 	}
 	
 	public void initialize() throws DBConnectionException, SQLException {
@@ -51,13 +56,5 @@ public abstract class BaseDaoTest {
 		} finally {
 			c.close();
 		}
-	}
-	
-	protected void log(String msg) {
-		System.err.println(msg);
-	}
-	
-	protected void log(Throwable t) {
-		t.printStackTrace();
 	}
 }

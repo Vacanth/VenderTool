@@ -1,7 +1,9 @@
 package com.vendertool.registration.test.dal;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -17,9 +19,14 @@ import com.vendertool.registration.dal.RegistrationDALService;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
+import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
+import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
+import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 
-public class RegistrationDALServiceTest extends BaseDALService{
+public class RegistrationDALServiceTest extends BaseDALService {
+	private static final int SEC_QUESTION_COUNT = 2;
+	
 	Account account;
 	RegistrationDALService dalservice;
 	
@@ -35,7 +42,7 @@ public class RegistrationDALServiceTest extends BaseDALService{
 
 	private Account createAccount() {
 		Account a = new Account();
-		a.setEmailId("testemail@vendertooltest.com");
+		a.setEmail("testemail@vendertooltest.com");
 		a.setPassword("TestPassword");
 		a.setPasswordSalt("passwordsalt");
 		a.addRole(AccountRoleEnum.ROLE_USER);
@@ -58,6 +65,18 @@ public class RegistrationDALServiceTest extends BaseDALService{
 		a.setCreateDate(now);
 		a.setLastModifiedDate(now);
 		
+		List<AccountSecurityQuestion> questions = new ArrayList<AccountSecurityQuestion>();
+		for(int i=0; i<SEC_QUESTION_COUNT; i++) {
+			AccountSecurityQuestion q = new AccountSecurityQuestion();
+			q.setId(i + 0L);
+			q.setQuestionCode(SecurityQuestionCodeEnum.getByIndex(i % 10));
+			q.setAnswer("MyAnswer"+i);
+			q.setCreatedDate(now);
+			
+			questions.add(q);
+		}
+		a.setSecurityQuestions(questions);
+		
 		return a;
 	}
 	
@@ -75,18 +94,19 @@ public class RegistrationDALServiceTest extends BaseDALService{
 		log("Register account");
 		dalservice.registerAccount(account);
 		
-		findAccountProfile(account.getEmailId(), false);
+		findAccountProfile(account.getEmail(), false);
 		
 		log("Update account profile");
 		account.getContactDetails().setFirstName("UpdatedTestFirstName");
 		account.getContactDetails().setLastName("UpdatedTestLastName");
 		dalservice.updateAccountProfile(account);
 		
-		findAccountProfile(account.getEmailId(), false);
+		findAccountProfile(account.getEmail(), false);
 		
 		log("Update email");
-		String updatedEmail = "Updated"+account.getEmailId();
-		dalservice.updateEmail(account.getEmailId(), updatedEmail);
+		String updatedEmail = "Updated"+account.getEmail();
+		account.setAccountStatus(AccountStatusEnum.EMAIL_CHANGE_NOT_VERIFIED);
+		dalservice.updateEmail(account.getEmail(), account);
 		
 		findAccountProfile(updatedEmail, false);
 		
@@ -106,11 +126,27 @@ public class RegistrationDALServiceTest extends BaseDALService{
 			dalservice.isPreviouslyUsedPassword(updatedEmail, account.getPassword());
 		log("Is previously used password = " + val);
 		
+		log("Add security questions");
+		dalservice.updateAccountSecurityQuestions(updatedEmail, account.getSecurityQuestions());
+		
+		log("Find security questions");
+		List<AccountSecurityQuestion> dbsecQues = dalservice.getAccountSecurityQuestions(updatedEmail);
+		Assert.assertNotNull(dbsecQues);
+		log(dbsecQues.toString());
 		
 		log("****** Remove account *******");
 		dalservice.removeAccount(updatedEmail);
 		
 		findAccountProfile(updatedEmail, true);
+		
+		boolean exceptionThrown = false;
+		try {
+			dbsecQues = dalservice.getAccountSecurityQuestions(updatedEmail);
+		} catch (FinderException fe) {
+			exceptionThrown = true;
+			log("AccountSecurityQuestions not found (as expected) after deleting security questions");
+		}
+		Assert.assertEquals(exceptionThrown, true);
 		
 		log("********* TEST COMPLETE **********");
 	}
@@ -129,5 +165,10 @@ public class RegistrationDALServiceTest extends BaseDALService{
 		Assert.assertNotNull(dbaccount);
 		log("ACCOUNT PROFILE: ");
 		log(dbaccount.toString());
+	}
+	
+	@Override
+	public String getApplicationContextFileName() {
+		return "test-app-context.xml";
 	}
 }

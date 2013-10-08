@@ -3,7 +3,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>$msgSource.getMessage('email.registration.confirmreg.subject', null, $locale)</title>
+	<title>$msgSource.getMessage('email.registration.confirmreg.subject', $msgparams, $locale)</title>
 	<style>
 		body
 		{
@@ -33,18 +33,18 @@
 <body>
 	<div class="container">
 		<div>
-			<h2>$msgSource.getMessage('email.registration.confirmreg.heading', null, $locale)</h2> <br/>
+			<h2>$msgSource.getMessage('email.registration.confirmreg.heading', $msgparams, $locale)</h2>
 			
-			<p>$msgSource.getMessage('email.greeting', null, $locale) ${emailData.toName}! </p><br/><br/>
+			<p>$msgSource.getMessage('email.greeting', $msgparams, $locale) ${emailData.toName}! <br/></p>
 			
-			<p>$msgSource.getMessage('email.registration.confirmreg.introduction', null, $locale)<br/></p>
+			<p>$msgSource.getMessage('email.registration.confirmreg.introduction', $msgparams, $locale)<br/></p>
 			
-			<p>$msgSource.getMessage('email.registration.confirmreg.instruction', null, $locale)<br/></p>
+			<p>$msgSource.getMessage('email.registration.confirmreg.instruction', $msgparams, $locale)<br/></p>
 		   	
-		   	<p>${emailData.confirmationUrl}<br/><br/></p>
+		   	<p>${emailData.confirmationUrl}<br/></p>
 			
-			<p>$msgSource.getMessage('email.thankyou', null, $locale),<br/>
-			$msgSource.getMessage('email.company.name', null, $locale)</p>
+			<p>$msgSource.getMessage('email.thankyou', $msgparams, $locale),<br/>
+			$msgSource.getMessage('email.company.name', $msgparams, $locale)</p>
 		</div>
 	</div>
 </body>

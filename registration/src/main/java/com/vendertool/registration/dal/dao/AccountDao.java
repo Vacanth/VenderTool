@@ -9,6 +9,7 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.sharedtypes.core.Account;
+import com.vendertool.sharedtypes.core.AccountStatusEnum;
 
 public interface AccountDao extends BaseDao {
 	
@@ -21,7 +22,7 @@ public interface AccountDao extends BaseDao {
 	public void update(Account account, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
-	public void updateEmail(String oldEmail, String newEmail)
+	public void updateEmail(String oldEmail, String newEmail, AccountStatusEnum status)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
 	public void updatePassword(String email, String password) 

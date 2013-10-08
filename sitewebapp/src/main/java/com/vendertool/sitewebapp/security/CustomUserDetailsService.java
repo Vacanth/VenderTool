@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.rnr.GetAccountResponse;
+import com.vendertool.sharedtypes.exception.VTRuntimeException;
+import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
@@ -24,7 +25,7 @@ import com.vendertool.sitewebapp.common.URLConstants;
 public class CustomUserDetailsService implements UserDetailsService {
 	
 	private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
-	private static final String USERNAME_KEY = "username";
+	private static final String USERNAME_KEY = "email";
 	
 	@Override
 	public UserDetails loadUserByUsername(String username)
@@ -42,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_GET_ACCOUNT_PATH + URLConstants.QUERY_START + 
+				URLConstants.WS_REGISTRATION_GET_ACCOUNT_PWD_PATH + URLConstants.QUERY_START + 
 				USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + username;
 		
 //		Map<String, String[]> queryParams = new HashMap<String, String[]>();
@@ -60,19 +61,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		//HTTP error code 200
 		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
-			UsernameNotFoundException ex = new UsernameNotFoundException("Unable to fetch user details, web service HTTP response code not okay.");
-			logger.log(Level.DEBUG, "Unable to fetch user details, web service HTTP response code not okay.", ex);
+			UsernameNotFoundException ex = new UsernameNotFoundException(
+					"Unable to fetch account details, web service HTTP response code: "
+							+ response.getStatus());
+			logger.debug(ex.getMessage(), ex);
 			throw ex;
 		}
 		
-		GetAccountResponse getAccountresponse = response.readEntity(GetAccountResponse.class);
-		if(getAccountresponse.hasErrors()) {
+		GetAccountPasswordResponse accountresponse = response.readEntity(GetAccountPasswordResponse.class);
+		if(accountresponse.hasErrors()) {
 			throw new UsernameNotFoundException(
 					"Web service response has errors, unable to fetch user details: "
-							+ getAccountresponse.getFieldBindingErrors().toString());
+							+ accountresponse.getFieldBindingErrors().toString());
 		}
 		
-		Account account = getAccountresponse.getAccount();
+		Account account = accountresponse.getAccount();
 		if(account == null) {
 			UsernameNotFoundException ex = new UsernameNotFoundException("Unable to locate user");
 			logger.log(Level.DEBUG, "Unable to locate user", ex);
@@ -80,14 +83,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		
 		UserDetails userDetails = new CustomUserDetails(account);
-//	    return new User(
-//	    		userDetails.getUsername(),
-//	    		userDetails.getPassword().toLowerCase(),
-//	    		userDetails.isEnabled(),
-//	    		userDetails.isAccountNonExpired(),
-//	    		userDetails.isCredentialsNonExpired(),
-//	    		userDetails.isAccountNonLocked(),
-//	    		userDetails.getAuthorities());
 		
 		return userDetails;
 	}

@@ -20,33 +20,40 @@ profileApp.controller('NavCtrl', ['$scope', '$location',  function($scope, $loca
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('AccountCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
+profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'Data', function($rootScope, $scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
-	$scope.accountOrig = Data.account;
-	$scope.accountEdit = angular.copy(Data.account);
+	if ($rootScope.accountUpdated) {
+		$scope.accountOrig = $rootScope.accountUpdated;
+		$scope.accountEdit = angular.copy($rootScope.accountUpdated);
+	}
+	else {
+		$scope.accountOrig = Data.account;
+		$scope.accountEdit = angular.copy(Data.account);
+	}
+	
 	$scope.errorResponse = Data.errorResponse;
 	$scope.countryOptions = Data.countryOptions;
-	$scope.changeEmailRequest = {};
-	$scope.changePasswordRequest = {};
 
 	$scope.saveAccount = function() {
 		
 		$http.post('profile/save', $scope.accountEdit).
 			success(function (data, status, headers, config) {
 
-				$scope.accountEdit = data.account;
 				$scope.errorResponse = data.errorResponse;
 				
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					showPageErrorMsg();
 				}
 				else {
 					// Only update this if no errors
 					$scope.accountOrig = data.account;
+					$scope.accountEdit = angular.copy(data.account);
 					$scope.errorResponse = undefined;
+					
+					$rootScope.accountUpdated = angular.copy(data.account);
 					
 					showPageSuccessMsg('profile');
 				}
@@ -66,7 +73,6 @@ profileApp.controller('AccountCtrl', ['$scope', '$http', '$routeParams', '$locat
   	};
 }]);
 
-
 /*******************
 Using the array notation requires the listing of
 all the function params as strings in same order.
@@ -74,33 +80,35 @@ all the function params as strings in same order.
 profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.changeEmailRequest = {};
+	$scope.changeEmailResponse = {};
 
 	$http.get('profile/email').success(function(data) {
-		$scope.changeEmailRequest = data.changeEmailRequest;
+		$scope.changeEmailResponse = data.changeEmailResponse;
 	});
 
 	$scope.saveEmail = function() {
 		
 		$http.post('profile/email/save', $scope.changeEmailRequest).
 			success(function (data, status, headers, config) {
-				
-				$scope.changeEmailRequest = data.changeEmailRequest;
+
 				$scope.errorResponse = data.errorResponse;
 
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
 					showPageErrorMsg();
+					
 				}
 				else {
 					// Only update this if no errors
-					$scope.changeEmailRequest.oldEmailId = data.changeEmailRequest.newEmail;
+					$scope.changeEmailResponse = data.changeEmailResponse;
+					
 					$scope.changeEmailRequest.newEmail = '';
 					$scope.changeEmailRequest.confirmEmail = '';
 					$scope.errorResponse = undefined;
-
+					
 					showPageSuccessMsg('email');
 				}
 			}).
@@ -124,7 +132,7 @@ all the function params as strings in same order.
 profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.changePasswordRequest = {};
 
@@ -133,10 +141,9 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 		$http.post('profile/password/save', $scope.changePasswordRequest).
 			success(function (data, status, headers, config) {
 				
-				$scope.changePasswordRequest = data.changePasswordRequest;
 				$scope.errorResponse = data.errorResponse;
 
-				if ($scope.errorResponse.fieldBindingErrors.length > 0) {
+				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					// Show error message at the top of page
 					showPageErrorMsg();
 				}
@@ -169,7 +176,7 @@ all the function params as strings in same order.
 profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
 	
 	// Hide error or success messages that may be left over from previous view.
-	hidePageMsg();
+	//hidePageMsg();
 	
 	$scope.securityQuestionsResponse;
 	$scope.questionList1;
@@ -182,15 +189,16 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 
 	$http.get('profile/questions').success(function(data) {
 		
-		$scope.securityQuestionsResponse = data;
-		var r = $scope.securityQuestionsResponse;
+		$scope.securityQuestions = data.securityQuestions;
 		
-		$scope.questionList1 = angular.copy(r.questions);
-		$scope.questionList2 = angular.copy(r.questions);
-		$scope.question1 = angular.copy(r.questionAnswers[0].questionId);
-		$scope.question2 = angular.copy(r.questionAnswers[1].questionId);
-		$scope.answer1 = angular.copy(r.questionAnswers[0].answer);
-		$scope.answer2 = angular.copy(r.questionAnswers[1].answer);
+		$scope.questionList1 = angular.copy($scope.securityQuestions);
+		$scope.questionList2 = angular.copy($scope.securityQuestions);
+		
+		$scope.question1 = angular.copy($scope.questionList1[0].questionId);
+		$scope.question2 = angular.copy($scope.questionList1[1].questionId);
+		
+		//$scope.answer1 = angular.copy(r.questionAnswers[0].answer);
+		//$scope.answer2 = angular.copy(r.questionAnswers[1].answer);
 	});
 
 	//
@@ -200,23 +208,23 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 	// list of options.
 	//
 	$scope.$watch("question1", function() {
-		if ($scope.securityQuestionsResponse) {
+		if ($scope.securityQuestions) {
 			if ($scope.question1) {
-				$scope.questionList2 = removeQuestion($scope.question1,  $scope.securityQuestionsResponse.questions);
+				$scope.questionList2 = removeQuestion($scope.question1,  $scope.securityQuestions);
 			}
 			else {
-				$scope.questionList2 = angular.copy($scope.securityQuestionsResponse.questions);
+				$scope.questionList2 = angular.copy($scope.securityQuestions);
 			}
 		}
 	});
 
 	$scope.$watch("question2", function() {
-		if ($scope.securityQuestionsResponse) {
+		if ($scope.securityQuestions) {
 			if ($scope.question2) {
-				 $scope.questionList1 = removeQuestion($scope.question2, $scope.securityQuestionsResponse.questions);
+				 $scope.questionList1 = removeQuestion($scope.question2, $scope.securityQuestions);
 			}
 			else {
-				$scope.questionList1 = angular.copy($scope.securityQuestionsResponse.questions);
+				$scope.questionList1 = angular.copy($scope.securityQuestions);
 			}
 		}
 	});
@@ -257,12 +265,13 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 	};
 	
 	$scope.resetQuestionAnswers = function() {
-  		var r = $scope.securityQuestionsResponse;
+  		var r = $scope.securityQuestions;
 		
-		$scope.question1 = angular.copy(r.questionAnswers[0].questionId);
-		$scope.question2 = angular.copy(r.questionAnswers[1].questionId);
-		$scope.answer1 = angular.copy(r.questionAnswers[0].answer);
-		$scope.answer2 = angular.copy(r.questionAnswers[1].answer);
+		$scope.question1 = angular.copy($scope.securityQuestions[0].questionCode);
+		$scope.question2 = angular.copy($scope.securityQuestions[1].questionCode);
+		
+		//$scope.answer1 = angular.copy$scope.securityQuestions[0].answer);
+		//$scope.answer2 = angular.copy($scope.securityQuestions[1].answer);
 		
 		// Clear errors
 		$scope.errorResponse = undefined;
@@ -275,7 +284,7 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 		
 		if (questions) {
 			for (var i=0, n=questions.length; i<n; i++) {
-				if (questionId === questions[i].id) {
+				if (questionId === questions[i].questionCode) {
 					questions.splice(i, 1);
 					return questions;
 				}

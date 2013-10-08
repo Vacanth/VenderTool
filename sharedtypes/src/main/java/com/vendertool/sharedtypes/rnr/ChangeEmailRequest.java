@@ -4,17 +4,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ChangeEmailRequest extends BaseRequest {
-	private String oldEmailId;
+	private String oldEmail;
 	private String newEmail;
 	private String confirmEmail;
 	private String password;
 	
-	public String getOldEmailId() {
-		return oldEmailId;
+	public String getOldEmail() {
+		return oldEmail;
 	}
 	
-	public void setOldEmailId(String oldEmailId) {
-		this.oldEmailId = oldEmailId;
+	public void setOldEmail(String oldEmail) {
+		this.oldEmail = oldEmail;
 	}
 	
 	public String getNewEmail() {

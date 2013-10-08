@@ -130,4 +130,9 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		
 		return dao;
 	}
+	
+	@Override
+	public String getApplicationContextFileName() {
+		return "test-app-context.xml";
+	}
 }

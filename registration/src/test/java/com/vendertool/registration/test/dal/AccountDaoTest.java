@@ -21,7 +21,7 @@ import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
 
-public class AccountDaoTest extends BaseDaoTest{
+public class AccountDaoTest extends BaseDaoTest {
 	private static final int ACCOUNT_COUNT = 2;
 	Account[] accounts;
 	AccountDao dao;
@@ -51,7 +51,7 @@ public class AccountDaoTest extends BaseDaoTest{
 
 	private Account createAccount(int idx) {
 		Account a = new Account();
-		a.setEmailId("testemail"+idx+"@vendertooltest.com");
+		a.setEmail("testemail"+idx+"@vendertooltest.com");
 		a.setPassword("TestPassword"+idx);
 		a.setPasswordSalt("passwordsalt"+idx);
 		a.addRole(AccountRoleEnum.ROLE_USER);
@@ -79,7 +79,7 @@ public class AccountDaoTest extends BaseDaoTest{
 		//DAL find & JUnit assert
 		log("======== FIND AND ASSERT TEST =======");
 		for(Account account : accounts) {
-			Account dbaccount = dao.findByEmail(account.getEmailId(),
+			Account dbaccount = dao.findByEmail(account.getEmail(),
 					FieldSets.ACCOUNT_READSET.PROFILE);
 			assertAccount(account, dbaccount);
 			log(dbaccount.toString());
@@ -95,24 +95,24 @@ public class AccountDaoTest extends BaseDaoTest{
 		
 		//DAL find
 		log("======== FIND PROFILE TEST =======");
-		Account dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.PROFILE);
+		Account dbaccount = dao.findByEmail(accounts[0].getEmail(), FieldSets.ACCOUNT_READSET.PROFILE);
 		assertAccount(accounts[0], dbaccount);
 		log(dbaccount.toString());
 		
 		
 		//DAL find PK
 		log("======== FIND BY PK TEST =======");
-		Long pk = dao.findAccountId(accounts[0].getEmailId());
+		Long pk = dao.findAccountId(accounts[0].getEmail());
 		Assert.assertEquals(dbaccount.getId(), pk);
 		log("find by id=" + pk);
 		
 		//DAL find by readset
 		log("======== FIND WITH READ SET TEST =======");
-		dbaccount = dao.findByEmail(accounts[0].getEmailId(), FieldSets.ACCOUNT_READSET.SIGNIN);
+		dbaccount = dao.findByEmail(accounts[0].getEmail(), FieldSets.ACCOUNT_READSET.PASSWORD);
 		
 		//JUnit assert read set
 		Assert.assertNull(dbaccount.getContactDetails());
-		Assert.assertNotNull(dbaccount.getEmailId());
+		Assert.assertNotNull(dbaccount.getEmail());
 		Assert.assertNotNull(dbaccount.getPassword());
 		Assert.assertNotNull(dbaccount.getRoles());
 		log("Account info after find with sign in readset");
@@ -121,13 +121,13 @@ public class AccountDaoTest extends BaseDaoTest{
 		//DAL delete
 		log("======== DELETE TEST =======");
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
-			dao.delete(accounts[idx].getEmailId());
+			dao.delete(accounts[idx].getEmail());
 		}
 		
 		//DAL find
 		log("======== FIND AFTER DELETE TEST =======");
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
-			pk = dao.findAccountId(accounts[idx].getEmailId());
+			pk = dao.findAccountId(accounts[idx].getEmail());
 			Assert.assertNull(pk);
 		}
 		
@@ -145,7 +145,7 @@ public class AccountDaoTest extends BaseDaoTest{
 	private void assertAccount(Account expected, Account actual) {
 		Assert.assertNotNull(expected);
 		Assert.assertNotNull(actual);
-		Assert.assertEquals(expected.getEmailId(), actual.getEmailId());
+		Assert.assertEquals(expected.getEmail(), actual.getEmail());
 		Assert.assertEquals(expected.getContactDetails().getFirstName(), actual.getContactDetails().getFirstName());
 	}
 	
@@ -169,5 +169,10 @@ public class AccountDaoTest extends BaseDaoTest{
 		}
 		
 		return dao;
+	}
+	
+	@Override
+	public String getApplicationContextFileName() {
+		return "test-app-context.xml";
 	}
 }

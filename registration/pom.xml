@@ -33,6 +33,12 @@
 			</dependency>
 			
 			<dependency>
+				<groupId>com.vendertool.metadata</groupId>
+				<artifactId>metadata</artifactId>
+				<version>${vendertool-version}</version>
+			</dependency>
+			
+			<dependency>
 				<groupId>com.vendertool.common</groupId>
 				<artifactId>common</artifactId>
 				<version>${vendertool-version}</version>
@@ -72,6 +78,8 @@
 									todir="${project.build.outputDirectory}/dal" />
 								<copy file="src/main/resources/dal-module.xml"
 									todir="${project.build.outputDirectory}/dal" />
+								<copy file="../common/src/main/resources/common-application-context.xml"
+									todir="${project.build.outputDirectory}" />
 							</tasks>
 						</configuration>
 					</execution>

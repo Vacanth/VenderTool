@@ -14,6 +14,12 @@ public class RegistrationErrors {
 	private RegistrationErrors(){}
 	
 	//Define errors here
+	public VTError UNABLE_TO_REGISTER = new VTError(
+			RegistrationErrorCode.UNABLE_TO_REGISTER, 
+			"Unable to register", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
 	public VTError EMAIL_MISSING = new VTError(
 			RegistrationErrorCode.EMAIL_MISSING, 
 			"Email is required", 
@@ -38,9 +44,9 @@ public class RegistrationErrors {
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
-	public VTError INVALID_PHONE_FORMAT = new VTError(
-			RegistrationErrorCode.INVALID_PHONE_FORMAT, 
-			"Invalid phone number fomat", 
+	public VTError INVALID_PHONE_NUMBER = new VTError(
+			RegistrationErrorCode.INVALID_PHONE_NUMBER, 
+			"Invalid phone number", 
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
@@ -146,4 +152,75 @@ public class RegistrationErrors {
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
+	public VTError LANGUAGE_NOT_SUPPORTED = new VTError(
+			RegistrationErrorCode.LANGUAGE_NOT_SUPPORTED, 
+			"Language is not supported", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError PWD_CHANGE_MISSING_OLD_PWD = new VTError(
+			RegistrationErrorCode.PWD_CHANGE_MISSING_OLD_PWD, 
+			"Missing old password", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_CHANGE_PASSWORD = new VTError(
+			RegistrationErrorCode.UNABLE_TO_CHANGE_PASSWORD, 
+			"Unable to change password", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_CHANGE_EMAIL = new VTError(
+			RegistrationErrorCode.UNABLE_TO_CHANGE_EMAIL, 
+			"Unable to change email", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError INVALID_OLD_PASSWORD = new VTError(
+			RegistrationErrorCode.INVALID_OLD_PASSWORD, 
+			"Invalid old password", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError MISSING_OLD_EMAIL = new VTError(
+			RegistrationErrorCode.MISSING_OLD_EMAIL, 
+			"Missing old email", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError MISSING_CONFIRM_EMAIL = new VTError(
+			RegistrationErrorCode.MISSING_CONFIRM_EMAIL, 
+			"Missing confirm email", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError CONFIRM_EMAIL_MISMATCH = new VTError(
+			RegistrationErrorCode.CONFIRM_EMAIL_MISMATCH, 
+			"Email and confirm email are not matching", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION = new VTError(
+			RegistrationErrorCode.UNABLE_TO_RETRIEVE_ACCOUNT_INFORMATION, 
+			"Email and confirm email are not matching", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_CLOSE_ACCOUNT = new VTError(
+			RegistrationErrorCode.UNABLE_TO_CLOSE_ACCOUNT, 
+			"Unable to close account", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_UPDATE_SEC_QUESTIONS = new VTError(
+			RegistrationErrorCode.UNABLE_TO_UPDATE_SEC_QUESTIONS, 
+			"Unable to update the security questions", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_GET_SEC_QUESTIONS = new VTError(
+			RegistrationErrorCode.UNABLE_TO_GET_SEC_QUESTIONS, 
+			"Unable to get security questions", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
 }

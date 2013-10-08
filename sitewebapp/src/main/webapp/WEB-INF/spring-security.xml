@@ -33,10 +33,12 @@
   	<sec:http pattern="/confirmaccountfailed" security="none"/>
   	<sec:http pattern="/wro/**" security="none"/>
   	
+  	<sec:http pattern="/unexpectedException/**" security="none"/>
+  	
   	<!--
   	IMPORTANT!!!! 
   	REMOVE LATER: ADDING ONLY FOR DEV WORK.
-  	-->
+  	
   	<sec:http pattern="/profile/**" security="none"/>
   	<sec:http pattern="/accounthub/**" security="none"/>
   	<sec:http pattern="/uploads/**" security="none"/>
@@ -46,6 +48,7 @@
   	<sec:http pattern="/uploadFile/**" security="none"/>
   	<sec:http pattern="/uploadDone/**" security="none"/>
   	<sec:http pattern="/questions/**" security="none"/>
+  	-->
   	
   	<!-- NOTE: IMPORTANT - Ordering of filter pattern is important -->
   	<!-- 

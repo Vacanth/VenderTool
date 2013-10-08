@@ -2,41 +2,51 @@ package com.vendertool.registration.validation;
 
 import org.apache.log4j.Logger;
 
+import com.vendertool.common.dal.exception.DBConnectionException;
+import com.vendertool.common.dal.exception.DatabaseException;
+import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.validation.EmailRegexValidator;
 import com.vendertool.common.validation.ValidationUtil;
+import com.vendertool.common.validation.Validator;
+import com.vendertool.registration.dal.RegistrationDALService;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.error.Errors;
-import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
+import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 
-public class RegistrationValidator implements com.vendertool.common.validation.Validator {
+public class RegistrationValidator implements Validator {
 	
 	private static final Logger logger = Logger.getLogger(RegistrationValidator.class);
-	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
-	private static int MIN_PASSWORD_LENGTH = 8;
-	private static int MAX_PASSWORD_LENGTH = 25;
+	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
+	public static int MIN_PASSWORD_LENGTH = 8;
+	public static int MAX_PASSWORD_LENGTH = 25;
 //	private static String PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
 	
 	//keep it simple for now (1 upper, 1 lower & a digit)
-	private static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{7,24}$";
+	public static String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{7,24}$";
+	private RegistrationDALService dalservice;
 	
 	
 	public RegistrationValidator() {
+		dalservice = RegistrationDALService.getInstance();
 	}
 	
 	public void validate(BaseRequest _request, BaseResponse response) {
+		logger.info(RegistrationValidator.class.getName() + ".validate()");
+		
 		RegisterAccountRequest request = (RegisterAccountRequest) _request;
 		
-		if (validationUtil.isNull(request)
-				|| validationUtil.isNull(response)
-				|| validationUtil.isNull(request.getAccount())
-				|| validationUtil.isNull(request.getAccount()
+		if (VUTIL.isNull(request)
+				|| VUTIL.isNull(response)
+				|| VUTIL.isNull(request.getAccount())
+				|| VUTIL.isNull(request.getAccount()
 						.getContactDetails())) {
-			VTRuntimeException ex = new VTRuntimeException("NULL value passed to register an account");
-			logger.debug("NULL value passed to register an account", ex);
-			throw ex;
+			logger.debug("NULL value passed to register an account");
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.COMMON.NULL_ARGUMENT_PASSED, null, (String[])null);
+			return;
 		}
 		
 		
@@ -48,14 +58,14 @@ public class RegistrationValidator implements com.vendertool.common.validation.V
 
 	private void validateName(Account account, BaseResponse response) {
 		//combine both errors together before returning
-		if(validationUtil.isNullOrEmpty(account.getContactDetails().getFirstName())) {
+		if(VUTIL.isNullOrEmpty(account.getContactDetails().getFirstName())) {
 			response.addFieldBindingError(
 					Errors.REGISTRATION.MISSING_FIRSTNAME, 
 					account.getContactDetails().getClass().getName(),
 					"firstName");
 		}
 		
-		if(validationUtil.isNullOrEmpty(account.getContactDetails().getLastName())) {
+		if(VUTIL.isNullOrEmpty(account.getContactDetails().getLastName())) {
 			response.addFieldBindingError(
 					Errors.REGISTRATION.MISSING_LASTNAME,
 					account.getContactDetails().getClass().getName(),
@@ -70,23 +80,23 @@ public class RegistrationValidator implements com.vendertool.common.validation.V
 		String confirmPassword = account.getConfirmPassword();
 		
 		//First validate password field & then the confirm password
-		if(validationUtil.isNullOrEmpty(password)) {
+		if(VUTIL.isNullOrEmpty(password)) {
 			response.addFieldBindingError(Errors.REGISTRATION.MISSING_PASSWORD, account.getClass().getName(), "password");
 			return;
 		}
 		
-		if(!validationUtil.checkStringSize(password, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)) {
+		if(!VUTIL.checkStringSize(password, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)) {
 			response.addFieldBindingError(Errors.REGISTRATION.PASSWORD_LENGTH_INCORRECT, account.getClass().getName(), "password");
 			return;
 		}
 		
-		if(!validationUtil.matchesPattern(PASSWORD_REGEX, password)) {
+		if(!VUTIL.matchesPattern(PASSWORD_REGEX, password)) {
 			response.addFieldBindingError(Errors.REGISTRATION.INVALID_PASSWORD, account.getClass().getName(), "password");
 			return;
 		}
 		
 		//Now validate confirm password
-		if(validationUtil.isNullOrEmpty(confirmPassword)) {
+		if(VUTIL.isNullOrEmpty(confirmPassword)) {
 			response.addFieldBindingError(Errors.REGISTRATION.MISSING_CONFIRM_PASSWORD, account.getClass().getName(), "confirmPassword");
 			return;
 		}
@@ -98,13 +108,27 @@ public class RegistrationValidator implements com.vendertool.common.validation.V
 	}
 
 	private void validateEmail(Account account, BaseResponse response) {
-		if(validationUtil.isNullOrEmpty(account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "emailId");
+		if(VUTIL.isNullOrEmpty(account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "email");
 			return;
 		}
 		
-		if(!validationUtil.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmailId())) {
-			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "emailId");
+		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "email");
+		}
+		
+		try {
+			Long id = dalservice.getAccountId(account.getEmail());
+			if(id != null) {
+				logger.debug("Username: '" + account.getEmail()
+						+ "' already exists");
+				response.addFieldBindingError(
+						Errors.REGISTRATION.EMAIL_ALREADY_REGISTERED, account
+								.getClass().getName(), "email");
+			}
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_REGISTER, null, (String[])null);
 		}
 	}
 }

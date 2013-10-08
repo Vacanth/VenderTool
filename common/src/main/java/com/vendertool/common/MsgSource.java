@@ -5,10 +5,9 @@ import java.util.Locale;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.vendertool.common.validation.ValidationUtil;
 
@@ -24,10 +23,22 @@ public class MsgSource {
 	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
 	private static final Logger logger = Logger.getLogger(MsgSource.class);
 	
+	public MsgSource(){
+	}
+	
+	public MsgSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 	private MessageSource getMessageSource() {
-		WebApplicationContext webAppContext = ContextLoader.getCurrentWebApplicationContext();
-		MessageSource ms = (MessageSource) webAppContext.getBean("messageSource");
-		return ms;
+		if(this.messageSource != null) {
+			return this.messageSource;
+		}
+		
+		//WebApplicationContext webAppContext = ContextLoader.getCurrentWebApplicationContext();
+		ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
+		this.messageSource = (MessageSource) ctx.getBean("messageSource");
+		return this.messageSource;
 	}
 	
 	/**

@@ -35,7 +35,7 @@ public class ConfirmAccountController {
 		boolean emptyRequest = true;
 		String[] emails = reqMap.get("email");
 		if(emails != null) {
-			confirmRegRequest.setEmailId(emails[0]);
+			confirmRegRequest.setEmail(emails[0]);
 			emptyRequest = false;
 		}
 		
@@ -79,6 +79,6 @@ public class ConfirmAccountController {
 			return "confirmaccountfailed";
 		}
 		
-		return "redirect:signin?justConfAccount=true";
+		return "redirect:signIn?justConfAccount=true";
 	}
 }
