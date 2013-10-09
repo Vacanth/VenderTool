@@ -31,7 +31,18 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 	}
 	else {
 		$scope.accountOrig = Data.account;
-		$scope.accountEdit = angular.copy(Data.account);
+		
+		// Init null properties
+		if (!$scope.accountOrig.contactDetails.phones) {
+			$scope.accountOrig.contactDetails.phones = {};
+			$scope.accountOrig.contactDetails.phones.WORK = {};
+			$scope.accountOrig.contactDetails.phones.MOBILE = {};
+			$scope.accountOrig.contactDetails.phones.PUBLIC = {};
+			$scope.accountOrig.contactDetails.phones.HOME = {};
+			$scope.accountOrig.contactDetails.phones.FAX = {};
+		}
+		
+		$scope.accountEdit = angular.copy($scope.accountOrig);
 	}
 	
 	$scope.errorResponse = Data.errorResponse;
@@ -59,7 +70,7 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 				}
 			}).
 			error(function(data, status, headers, config) {
-				handlePageErrorMsg(status);
+				handlePageErrorMsg(status, Content);
 			});
 	};
 
@@ -112,7 +123,7 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 				}
 			}).
 			error(function(data, status, headers, config) {
-				handlePageErrorMsg(status);
+				handlePageErrorMsg(status, Content);
 			});
 	};
 	
@@ -156,7 +167,7 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 				}
 			}).
 			error(function(data, status, headers, config) {
-				handlePageErrorMsg(status);
+				handlePageErrorMsg(status, Content);
 			});
 	};
 	
@@ -272,7 +283,7 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 				}
 			}).
 			error(function(data, status, headers, config) {
-				handlePageErrorMsg(status);
+				handlePageErrorMsg(status, Content);
 			});
 	};
 	
@@ -332,10 +343,10 @@ function showPageSuccessMsg(type) {
 //
 // Also need to hide success messages if any.
 //
-function handlePageErrorMsg(statusCode) {
+function handlePageErrorMsg(statusCode, Content) {
 	$('.alert-success').hide();
 	
-	if (statusCode) {
+	if (statusCode && Content) {
 		$('.pg-msg .qry-httpError').html(Content.httpError + ' ' + statusCode).show();
 	}
 };
