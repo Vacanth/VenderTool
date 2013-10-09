@@ -335,7 +335,7 @@ function showPageSuccessMsg(type) {
 function handlePageErrorMsg(statusCode) {
 	$('.alert-success').hide();
 	
-	if (message) {
+	if (statusCode) {
 		$('.pg-msg .qry-httpError').html(Content.httpError + ' ' + statusCode).show();
 	}
 };
