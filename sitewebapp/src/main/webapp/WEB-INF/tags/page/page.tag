@@ -77,7 +77,14 @@ Variables
 			<jsp:invoke fragment="inlineJs"/>
 		</script>
 		
-	
+		<div id="pageSpinner">
+			<div class="mask"></div>
+			<div class="spinnerWrp">
+				<div class="spinnerBg"></div>
+				<div class="spinner"><img src="resources/img/spnnr38w.gif"/><b>Loading...</b></div>
+			</div>
+		</div>
+		
 	</body>
 </html>
 

@@ -50,6 +50,8 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 
 	$scope.saveAccount = function() {
 		
+		PageUtil.showSpinner();
+		
 		$http.post('profile/save', $scope.accountEdit).
 			success(function (data, status, headers, config) {
 
@@ -68,9 +70,15 @@ profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routePa
 					
 					showPageSuccessMsg('profile');
 				}
+				
+				PageUtil.hideSpinner();
+				PageUtil.scrollTop();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
+				
+				PageUtil.hideSpinner();
+				PageUtil.scrollTop();
 			});
 	};
 
@@ -102,6 +110,8 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 
 	$scope.saveEmail = function() {
 		
+		PageUtil.showSpinner();
+		
 		$http.post('profile/email/save', $scope.changeEmailRequest).
 			success(function (data, status, headers, config) {
 
@@ -121,9 +131,13 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 					
 					showPageSuccessMsg('email');
 				}
+				
+				PageUtil.hideSpinner();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
+				
+				PageUtil.hideSpinner();
 			});
 	};
 	
@@ -148,6 +162,8 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 
   	$scope.savePassword = function() {
 		
+  		PageUtil.showSpinner();
+  		
 		$http.post('profile/password/save', $scope.changePasswordRequest).
 			success(function (data, status, headers, config) {
 				
@@ -165,9 +181,13 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 
 					showPageSuccessMsg('password');
 				}
+				
+				PageUtil.hideSpinner();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
+				
+				PageUtil.hideSpinner();
 			});
 	};
 	
@@ -258,6 +278,8 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 	//
 	$scope.saveQuestionAnswers = function() {
 		
+		PageUtil.showSpinner();
+		
 		var questionsReq = {};
 		questionsReq.questions = [{"questionCode":$scope.question1, "answer":$scope.answer1}, {"questionCode":$scope.question2, "answer":$scope.answer2}];
 		
@@ -281,9 +303,13 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 					// Show success message
 					showPageSuccessMsg('questions');
 				}
+				
+				PageUtil.hideSpinner();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
+				
+				PageUtil.hideSpinner();
 			});
 	};
 	
@@ -321,16 +347,16 @@ function showPageSuccessMsg(type) {
 	$('.alert-danger').hide();
 	
 	if (type === 'profile') {
-		$('.alert-success.profile').show().delay(1500).fadeOut(300);
+		$('.alert-success.profile').show().delay(10000).fadeOut(300);
 	}
 	else if (type === 'email') {
-		$('.alert-success.email').show().delay(1500).fadeOut(300);
+		$('.alert-success.email').show().delay(10000).fadeOut(300);
 	}
 	else if (type === 'password') {
-		$('.alert-success.password').show().delay(1500).fadeOut(300);
+		$('.alert-success.password').show().delay(10000).fadeOut(300);
 	}
 	else if (type === 'questions') {
-		$('.alert-success.questions').show().delay(1500).fadeOut(300);
+		$('.alert-success.questions').show().delay(10000).fadeOut(300);
 	}
 };
 

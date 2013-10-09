@@ -34,6 +34,7 @@
    		<group-ref>bootstrap</group-ref>
 		<css>/WEB-INF/tags/page/css/page.css</css>
 		<js>/WEB-INF/tags/page/js/header.js</js>
+		<js>/WEB-INF/tags/page/js/page.js</js>
 	</group>
 	
 	<group name="popupTag">
