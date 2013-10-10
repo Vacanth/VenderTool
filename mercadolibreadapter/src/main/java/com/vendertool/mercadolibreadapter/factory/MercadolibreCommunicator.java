@@ -27,15 +27,14 @@ public class MercadolibreCommunicator {
 	}
 	
 	public Response call(MercadolibreCommunicatorVO communicatorVO){
-		ClientConfig clientConfig = new ClientConfig();
-		clientConfig.getClasses().add(JacksonJsonProvider.class);
+		ClientConfig clientConfig = new ClientConfig(JacksonJsonProvider.class);
 		Client client = ClientBuilder.newClient(clientConfig);
-		Entity<BaseRequest> entity = null;
+		Entity<Object> entity = null;
 		
 		String url = communicatorVO.getTargetURL();
 		WebTarget resource = client.target(url);
 		MediaType mediaType = communicatorVO.getMediaType();
-		BaseRequest request = (BaseRequest) communicatorVO.getRequestObject();
+		Object request =  communicatorVO.getRequestObject();
 
 		Response response = null;
 		if (communicatorVO.getMethodEnum() == HttpMethodEnum.GET) {

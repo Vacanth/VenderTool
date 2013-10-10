@@ -3,9 +3,9 @@ package com.vendertool.listing.processor;
 import org.apache.log4j.Logger;
 
 import com.vendertool.common.MarketCountryKey;
+import com.vendertool.common.marketplace.IMarketListingAdapter;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.listing.ListingMarketAdapterRegistry;
-import com.vendertool.mercadolibreadapter.IMarketListingAdapter;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.error.Errors;

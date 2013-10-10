@@ -1,5 +1,9 @@
 package com.vendertool.mercadolibreadapter.add;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class Cause {
 	private String code;
 	private String message;

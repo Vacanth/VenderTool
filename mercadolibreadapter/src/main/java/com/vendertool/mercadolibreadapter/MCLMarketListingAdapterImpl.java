@@ -1,5 +1,6 @@
 package com.vendertool.mercadolibreadapter;
 
+import com.vendertool.common.marketplace.IMarketListingAdapter;
 import com.vendertool.mercadolibreadapter.factory.IBaseMercadolibreOperationAdapter;
 import com.vendertool.mercadolibreadapter.factory.MercadolibreAdapterFactory;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
@@ -13,19 +14,22 @@ import com.vendertool.sharedtypes.rnr.UpdateListingResponse;
 import com.vendertool.sharedtypes.rnr.VerifyListingRequest;
 import com.vendertool.sharedtypes.rnr.VerifyListingResponse;
 
-public class MarketListingAdapterImpl implements IMarketListingAdapter {
+public class MCLMarketListingAdapterImpl implements IMarketListingAdapter {
 
-	public void addListing(AddListingRequest request, AddListingResponse response) {
-		IBaseMercadolibreOperationAdapter adapter = MercadolibreAdapterFactory
-				.getInstance().getOperationAdapter(request);
+	private static MercadolibreAdapterFactory s_adapter = MercadolibreAdapterFactory
+			.getInstance();
+
+	public void addListing(AddListingRequest request,
+			AddListingResponse response) {
+		IBaseMercadolibreOperationAdapter adapter = s_adapter
+				.getOperationAdapter(request);
 		adapter.execute(request, response);
 	}
 
-	public GetListingResponse  getListing(String marketListingId) {
+	public GetListingResponse getListing(String marketListingId) {
 		GetListingRequest request = new GetListingRequest();
 		request.setListingId(marketListingId);
-		IBaseMercadolibreOperationAdapter adapter = MercadolibreAdapterFactory
-				.getInstance().getOperationAdapter(request);
+		IBaseMercadolibreOperationAdapter adapter = s_adapter.getOperationAdapter(request);
 		GetListingResponse response = new GetListingResponse();
 		adapter.execute(request, response);
 		return response;

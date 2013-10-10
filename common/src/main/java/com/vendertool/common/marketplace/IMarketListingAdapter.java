@@ -1,4 +1,4 @@
-package com.vendertool.mercadolibreadapter;
+package com.vendertool.common.marketplace;
 
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
 import com.vendertool.sharedtypes.rnr.AddListingResponse;

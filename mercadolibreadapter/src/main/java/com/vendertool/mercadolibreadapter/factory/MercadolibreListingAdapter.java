@@ -1,8 +1,10 @@
 package com.vendertool.mercadolibreadapter.factory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -26,8 +28,7 @@ import com.vendertool.sharedtypes.rnr.BaseResponse;
 public class MercadolibreListingAdapter implements
 		IBaseMercadolibreOperationAdapter {
 
-	private static String VERIFY_LISTING_URL = "https://api.mercadolibre.com/items/validate?access_token=$APP_USR-9773-041316-013619f30678959c46bbda5f211aff75__C_N__-107245974";
-	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=$APP_USR-9773-041316-013619f30678959c46bbda5f211aff75__C_N__-107245974";
+	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-100922-284582fa55b9dc63c1f4a9ff69c8b8d4__F_I__-141983227";
 
 	private MercadolibreListingAdapter() {
 	}
@@ -40,6 +41,9 @@ public class MercadolibreListingAdapter implements
 		return MercadolibreListingAdapterHolder.INSTANCE;
 	}
 
+	private static MercadolibreCommunicator s_communicator = MercadolibreCommunicator
+			.getInstance();
+
 	public void execute(BaseRequest request, BaseResponse response) {
 		AddListingRequest listingRequest = (AddListingRequest) request;
 		Item item = adaptToRequest(listingRequest);
@@ -47,11 +51,11 @@ public class MercadolibreListingAdapter implements
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
-		communicatorVO.setTargetURL(VERIFY_LISTING_URL);
-		MercadolibreCommunicator communicator = MercadolibreCommunicator
-				.getInstance();
-		Response resp = communicator.call(communicatorVO);
+		communicatorVO.setTargetURL(LISTING_URL);
+		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
+		Response resp = s_communicator.call(communicatorVO);
 
+		// Handle the error codes
 		if (resp.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
@@ -61,7 +65,6 @@ public class MercadolibreListingAdapter implements
 		Item responseItem = readItem(output);
 
 		// Call Add listing
-		communicatorVO.setTargetURL(LISTING_URL);
 		adaptTOResponse(responseItem, (AddListingResponse) response);
 	}
 
@@ -133,9 +136,10 @@ public class MercadolibreListingAdapter implements
 		// Set Price
 		if (listing.getPrice() != null) {
 			item.setPrice(listing.getPrice().getValue());
-			item.setCurrency_id(listing.getPrice().getCurrency().getCurrencyCode());// TODO remove this hardcoding
+			item.setCurrency_id(listing.getPrice().getCurrency()
+					.getCurrencyCode());// TODO remove this hardcoding
 		}
-
+		item.setListing_type_id("bronze");
 		ListingFormatEnum listingFormate = listing.getListingFormat();
 		if (listingFormate != null) {
 			String buyingMode = MLConstants.ListingConstants.BUY_IT_NOW;
@@ -163,8 +167,8 @@ public class MercadolibreListingAdapter implements
 				}
 			}
 		}
-		
-//		item.setVariations(variations);
+
+		// item.setVariations(variations);
 		return item;
 	}
 
@@ -175,6 +179,40 @@ public class MercadolibreListingAdapter implements
 	}
 
 	private boolean isProductIDAvailalbe(Product product) {
-		return product != null && product.getProductId() > 0;
+		return product != null && product.getProductId() != null && product.getProductId() > 0;
+	}
+
+	// ********** Dev Testing *******
+	public static void main(String args[]) {
+		AddListingRequest input = new AddListingRequest();
+		Listing listing = new Listing();
+		listing.setWarranty("Yes");
+		
+		Product product = new Product();
+		product.setTitle("Anteojos Ray Ban Wayfare");
+
+		List<Classification> classList = new ArrayList<Classification>();
+		Classification clasif = new Classification();
+		clasif.setClassifierId("MLA5529");
+		clasif.setClassificationType(ClassificationTypeEnum.CATEGORY);
+		classList.add(clasif);
+		listing.setClassifications(classList);
+		listing.setProduct(product);
+		input.setListing(listing);
+
+		/*
+		 * Response r = m.post("/items", params,
+		 * "{\"title\":\"Anteojos Ray Ban Wayfare\",\"subtitle\":\"Some subtitle here\",\"category_id\":\"MLA5529\",
+		 * \"price\":10,\"currency_id\":\"ARS\",\"available_quantity\":1,\"buying_mode\":\"buy_it_now\",\"listing_type_id\":\"bronze\",
+		 * \"condition\":\"new\",\"description\": 
+		 * \"Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. 
+		 * Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box\",
+		 * \"video_id\":\"YOUTUBE_ID_HERE\",\"warranty\":\"12 month by Ray Ban\",
+		 * \"pictures\":[{\"source\":\"http://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg\"},
+		 * {\"source\":\"http://en.wikipedia.org/wiki/File:Teashades.gif\"}]}"
+		 * );
+		 */
+		MercadolibreListingAdapterHolder.INSTANCE.execute(input,
+				new AddListingResponse());
 	}
 }

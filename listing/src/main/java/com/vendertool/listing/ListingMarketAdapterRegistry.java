@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.vendertool.common.MarketCountryKey;
-import com.vendertool.mercadolibreadapter.IMarketListingAdapter;
-import com.vendertool.mercadolibreadapter.MarketListingAdapterImpl;
+import com.vendertool.common.marketplace.IMarketListingAdapter;
+import com.vendertool.mercadolibreadapter.MCLMarketListingAdapterImpl;
 import com.vendertool.sharedtypes.core.CountryEnum;
 import com.vendertool.sharedtypes.core.MarketEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
@@ -27,7 +27,7 @@ public class ListingMarketAdapterRegistry {
 		  register(new MarketCountryKey(
 				  	CountryEnum.ALL, 
 				  	MarketEnum.MERCADO_LIBRE), 
-				  	MarketListingAdapterImpl.class.getName());
+				  	MCLMarketListingAdapterImpl.class.getName());
 		  
 	  }
 	  
