@@ -1,5 +1,7 @@
 package com.vendertool.registration.dal.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +75,21 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 						(accConf.getExpiryDate() != null) ? new Timestamp(
 								accConf.getExpiryDate().getTime()) : null);
 			}
+			
+			if(ac.createdDate.equals(rpath)) {
+				Date dt = accConf.getCreateDate();
+				if(dt == null) {
+					dt = new Date();
+				}
+				
+				map.put(ac.createdDate, new Timestamp(dt.getTime()));
+			}
+			
+			if(ac.lastModifiedDate.equals(rpath)) {
+				Date dt = new Date();
+				
+				map.put(ac.lastModifiedDate, new Timestamp(dt.getTime()));
+			}
 		}
 		
 		return map;
@@ -108,6 +125,9 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		if(edate != null) {
 			accbean.setExpiryDate(new Timestamp(edate.getTime()));
 		}
+		
+		Date lmdate = new Date();
+		accbean.setLastModifiedDate(new Timestamp(lmdate.getTime()));
 		
 		return accbean;
 		
@@ -172,5 +192,35 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		}
 		
 		return accConf;
+	}
+	
+	public AccountConfirmation convertRestultSet(ResultSet rs) throws SQLException {
+		if(rs == null) {
+			return null;
+		}
+		
+		AccountConfirmation ac = new AccountConfirmation();
+
+		ac.setId(rs.getLong("account_confirmation_id"));
+		ac.setConfirmCode(rs.getInt("confirmation_code"));
+		ac.setConfirmationAttempts(rs.getInt("number_of_attempts"));
+		ac.setConfirmSessionId(rs.getString("session_id"));
+		
+		Timestamp ts = rs.getTimestamp("confirmation_date");
+		if(ts != null) {
+			ac.setConfirmationDate(new Date(ts.getTime()));
+		}
+		
+		ts = rs.getTimestamp("created_date");
+		if(ts != null) {
+			ac.setCreateDate(new Date(ts.getTime()));
+		}
+		
+		ts = rs.getTimestamp("expiry_date");
+		if(ts != null) {
+			ac.setExpiryDate(new Date(ts.getTime()));
+		}
+		
+		return ac;
 	}
 }

@@ -1,16 +1,12 @@
 package com.vendertool.registration.dal.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.mysema.query.Tuple;
-import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
@@ -188,33 +184,46 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			throw fe;
 		}
 		
+		QAccountConfirmation ac = QAccountConfirmation.accountConfirmation;
+		
 		Connection con = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
 		
 		try { 
 			con = getConnection();
 			
-			QAccountConfirmation ac = QAccountConfirmation.accountConfirmation;
-			
-			SQLQuery query = from(con, ac)
-					.groupBy(ac.accountId)
-					.innerJoin(new SQLSubQuery().from(ac).where(ac.accountId.eq(accountId)).list(ac.createdDate.min()), ac)
-					.where(ac.accountId.eq(accountId).and(ac.expiryDate.after(new Timestamp(new Date().getTime()))));
-			
-//			SQLQuery query = from(con, ac)
-//					.where(ac.accountId.eq(accountId));
+			String sql = "select * from account_confirmation as AC " +
+							"INNER JOIN (select account_id, max(created_date) as maxc from account_confirmation where account_id = ? and expiry_date > now() " +
+											"GROUP BY account_id) IAC " +
+							"ON AC.account_id = IAC.account_id AND AC.created_date = IAC.maxc ";
 			
 	    	//Always log the query before executing it
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	List<Tuple> rows = query.list(ac.all());
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
-	    	return new AccountConfirmationMapper(ac.all()).convert(rows.get(0), ac.all());
+	    	logger.info("DAL QUERY: " + sql);
+			
+			statement = con.prepareStatement(sql);
+			statement.setLong(1, accountId);
+			
+			rs = statement.executeQuery();
+			
+			if(rs.next()) {
+				return new AccountConfirmationMapper(ac.all()).convertRestultSet(rs);
+			}
+			
+			return null;
+		} catch (SQLException e) {
+			logger.debug(e.getMessage(), e);
+			throw new FinderException(e);
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(statement != null) {
+					statement.close();
+				}
+				
 				if(con != null) {
 					con.close();
 				}

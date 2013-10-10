@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;

@@ -46,13 +46,25 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		accConfs = new AccountConfirmation[ACCOUNT_COUNT];
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
 			accConfs[idx] = createAccountConf(idx);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				log(e);
+			}
 		}
 	}
 
 	private AccountConfirmation createAccountConf(int idx) {
 		AccountConfirmation accConf = new AccountConfirmation();
 		accConf.setConfirmationAttempts(0);
-		accConf.setCreateDate(new Date());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR, idx); 
+		
+		accConf.setCreateDate(cal.getTime());
+		cal.add(Calendar.DATE, 7);
+		accConf.setExpiryDate(cal.getTime());
+		
 		accConf.setConfirmCode(SessionIdGenerator.getInstance().getRandomNumber(5));
 		accConf.setConfirmSessionId(idx+"2347234jlswnwei879807sd832nk9wfw");
 		
@@ -71,12 +83,14 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 				dao.findLatestActive(ACCOUNT_ID);
 		Assert.assertNotNull(dbaccConf);
 		log(dbaccConf.toString());
+		Long id1 = dbaccConf.getId();
 		
 		log("======== DAL update attempts for one account =======");
-		long id = dbaccConf.getId();
-		dao.updateConfirmationAttempts(ACCOUNT_ID, id, 1);
+		dao.updateConfirmationAttempts(ACCOUNT_ID, id1, 1);
 		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
 		Assert.assertNotNull(dbaccConf);
+		Long id2 = dbaccConf.getId();
+		Assert.assertEquals(id1, id2);
 		log(dbaccConf.toString());
 		
 		
@@ -92,6 +106,8 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		log("======== DAL find latest account confirmation after new insert =======");
 		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
 		Assert.assertNotNull(dbaccConf);
+		Long id3 = dbaccConf.getId();
+		Assert.assertNotSame(id1, id3);
 		log(dbaccConf.toString());
 		
 		
@@ -112,7 +128,7 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		
 		long aid = ACCOUNT_ID;
 		for (AccountConfirmation aconf : accConfs) {
-			dao.insert(aid++, aconf);
+			dao.insert(aid, aconf);
 		}
 	}
 	

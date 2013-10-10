@@ -121,7 +121,6 @@ public class UpdateAccountProfileValidator implements Validator {
 					Errors.REGISTRATION.MISSING_FIRSTNAME, 
 					account.getContactDetails().getClass().getName(),
 					"firstName");
-			return;
 		}
 		
 		if(VUTIL.isEmpty(cd.getLastName())) {
@@ -146,11 +145,17 @@ public class UpdateAccountProfileValidator implements Validator {
 	}
 
 	private void validatePhone(Phone phone, UpdateAccountResponse response) {
-		if((VUTIL.isNull(phone.getNumber())) || phone.getNumber() <= 0) {
-			response.addFieldBindingError(
-					Errors.REGISTRATION.INVALID_PHONE_NUMBER,
-					phone.getClass().getName(),
-					"number");
+		Integer num = phone.getNumber();
+		if((VUTIL.isNotNull(num))) {
+			
+			boolean validNumFormat = isInteger(num);
+			
+			if(! validNumFormat) {
+				response.addFieldBindingError(
+						Errors.REGISTRATION.INVALID_PHONE_NUMBER,
+						phone.getClass().getName(),
+						"number");
+			}
 		}
 		
 //		Integer countryCode = phone.getCountryCode();
@@ -168,6 +173,17 @@ public class UpdateAccountProfileValidator implements Validator {
 //					phone.getClass().getName(),
 //					"areaCode");
 //		}
+	}
+
+	private boolean isInteger(Integer num) {
+		boolean validNumFormat = false;
+		try {
+			Integer.parseInt(num+"");
+			validNumFormat = true;
+		} catch (NumberFormatException e) {
+			validNumFormat = false;;
+		}
+		return validNumFormat;
 	}
 
 	private void validateAlternateEmail(Account account,

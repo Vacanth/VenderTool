@@ -77,7 +77,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 	@Override
 	public boolean isEnabled() {
 		AccountStatusEnum status = account.getAccountStatus();
-		return (isAccountNonExpired() && (status != AccountStatusEnum.DELINQUENT));
+		return (status == AccountStatusEnum.VERIFIED);
 	}
 	
 	public Account getAccount() {
