@@ -236,7 +236,19 @@ public class RegistrationDALService {
 			return null;
 		}
 		
-		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PROFILE);
+		Account a = accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PROFILE);
+		if((a != null) && (a.getContactDetails().getAddress() != null)) {
+			Long id = a.getContactDetails().getAddress().getId();
+			if(id != null) {
+				Address addr = addrDao.findById(id);
+				if(addr != null) {
+					//since contact details should not be null we can safely add w/o a null check
+					a.getContactDetails().setAddress(addr);
+				}
+			}
+		}
+		
+		return a;
 	}
 	
 	public Account getAccountPassword(String email)
