@@ -4,7 +4,7 @@
 <div ng-controller="PasswordCtrl">
 	<div class="pg-msg">
 		<div class="alert alert-success password">Password has been updated.</div>
-		<div class="alert alert-danger">Sorry, there's been an error.</div>
+		<div class="alert alert-danger qry-httpError"></div>
 		<div page-error></div>
 	</div>
 

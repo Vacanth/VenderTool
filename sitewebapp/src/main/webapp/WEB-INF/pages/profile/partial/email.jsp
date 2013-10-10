@@ -5,7 +5,7 @@
 <div ng-controller="EmailCtrl">
 	<div class="pg-msg">
 		<div class="alert alert-success email">Email has been updated.</div>
-		<div class="alert alert-danger">Sorry, there's been an error.</div>
+		<div class="alert alert-danger qry-httpError"></div>
 		<div page-error></div>
 	</div>
 	<table class="info" cellspacing="0" cellpadding="0">

@@ -39,48 +39,12 @@ angular.module('fieldErrorModule', []).directive("fieldError", function() {
 		_ns = {}
 	;
 	
-	_ns.getFieldErrors = function(className, fieldName, errorResponse) {
-		var fldErrors = [], fldError, fields, i, n, j, m;
-		
-		if (errorResponse && errorResponse.fieldBindingErrors) {
-			for (i=0, n=errorResponse.fieldBindingErrors.length; i<n; i++) {
-				fldError = errorResponse.fieldBindingErrors[i];
-				
-				// If bindingFieldMap is NOT null, then it's a field error
-				if (fldError.bindingFieldMap !== null) {
-					fields = fldError.bindingFieldMap[className];
-					
-					if (fields) {
-						for (j=0, m=fields.length; j<m; j++) {
-							if (fields[j] === fieldName) {
-								fldErrors.push(fldError);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return fldErrors;
-	};
-	
-	_ns.getFieldErrorMsgs = function(className, fieldName, errorResponse) {
-		var i, j, fldErrors, errorMsgs = [];
-		
-		fldErrors = _ns.getFieldErrors(className, fieldName, errorResponse);
-		for (i=0, j=fldErrors.length; i<j; i++) {
-			errorMsgs.push(fldErrors[i].error.message);
-		}
-		
-		return errorMsgs;
-	},
-	
 	_ns.getErrorMap = function(className, fieldNames, errorResponse) {
 		var i, j, fldName, fldErrors, errorMap = {};
 		
 		for (i=0, j=fieldNames.length; i<j; i++) {
 			fldName =  fieldNames[i];
-			fldErrors = _ns.getFieldErrorMsgs(className, fldName, errorResponse);
+			fldErrors = ErrorResponseUtil.getFieldErrorMsgs(className, fldName, errorResponse);
 			if (fldErrors.length > 0) {
 				errorMap[fldName] = fldErrors;
 			}
@@ -99,7 +63,7 @@ angular.module('fieldErrorModule', []).directive("fieldError", function() {
 				// Field errors
 				//
 				if (attrs.clss && attrs.field) {
-					scope.errorMsgs = _ns.getFieldErrorMsgs(attrs.clss, attrs.field, scope.errorResponse);
+					scope.errorMsgs = ErrorResponseUtil.getFieldErrorMsgs(attrs.clss, attrs.field, scope.errorResponse);
 					
 					//
 					// For field errors, this directive is a child of an element with _css.fieldWrap.

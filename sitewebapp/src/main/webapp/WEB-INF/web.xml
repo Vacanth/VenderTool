@@ -110,6 +110,10 @@
 			<param-name>debug</param-name>
 			<param-value>true</param-value>
 		</init-param>
+		<init-param>
+			<param-name>disableCache</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>WebResourceOptimizer</filter-name>

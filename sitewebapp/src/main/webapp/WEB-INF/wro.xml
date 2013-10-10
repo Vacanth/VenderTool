@@ -20,6 +20,7 @@
 	
 	<group name="errorModules">
 		<css>/resources/css/sharedNgModules/fieldErrorModule.css</css>
+		<js>/resources/js/ErrorResponseUtil.js</js>
 		<js>/resources/js/sharedNgModules/fieldErrorModule.js</js>
 		<js>/resources/js/sharedNgModules/pageErrorModule.js</js>
 	</group>
@@ -33,6 +34,7 @@
    		<group-ref>bootstrap</group-ref>
 		<css>/WEB-INF/tags/page/css/page.css</css>
 		<js>/WEB-INF/tags/page/js/header.js</js>
+		<js>/WEB-INF/tags/page/js/page.js</js>
 	</group>
 	
 	<group name="popupTag">

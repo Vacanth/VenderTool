@@ -6,6 +6,8 @@
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 <%@ taglib prefix="t2" tagdir="/WEB-INF/tags/layoutTable" %>
 
+<spring:message code='HTTP.ERROR' var="c_httpError"/>
+
 <t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.email}" >
 	
 	<jsp:attribute name="css">
@@ -19,6 +21,10 @@
 	<jsp:attribute name="inlineJs">
 		profileApp.factory('Data', function() {
 			return ${modelMapJson};
+		});
+
+		profileApp.factory('Content', function() {
+			return {"httpError":"${c_httpError}"};
 		});
 	</jsp:attribute>
 

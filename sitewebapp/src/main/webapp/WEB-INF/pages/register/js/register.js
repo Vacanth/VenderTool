@@ -1,5 +1,4 @@
 
-
-$('#emailId').popover({trigger:'focus'});
+$('#email').popover({trigger:'focus'});
 $('#password').popover({trigger:'focus'});
 $('#confirmpassword').popover({trigger:'focus'});

@@ -3,6 +3,9 @@ package com.vendertool.mercadolibreadapter.add;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+@JsonInclude(Include.NON_NULL)
 public class Shipping{
    	private String dimensions;
    	private boolean free_shipping;
