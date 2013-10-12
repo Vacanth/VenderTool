@@ -9,30 +9,25 @@
 	</div>
 
 	<table class="info" cellspacing="0" cellpadding="0">
-		<%--
-		<tr>
-			<td class="col1"><label>Email:</label></td>
-			<td class="col2"><input ng-model="accountOrig.emailId" class="form-control readonly" readonly/></td>
-		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
 				<input ng-model="changePasswordRequest.oldPassword" class="form-control" type="password"/>
-				<div field-error field="oldPassword" clss="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
+				<div field-error field="oldPassword" type="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
 			</td>
-		</tr>--%>
+		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>New password:</label></td>
 			<td class="col2">
 				<input ng-model="changePasswordRequest.newPassword" class="form-control" type="password"/>
-				<div field-error field="newPassword" clss="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
+				<div field-error field="newPassword" type="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Confirm new password:</label></td>
 			<td class="col2">
 				<input ng-model="changePasswordRequest.confirmPassword" class="form-control" type="password"/>
-				<div field-error field="confirmPassword" clss="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
+				<div field-error field="confirmPassword" type="com.vendertool.sharedtypes.rnr.ChangePasswordRequest"></div>
 			</td>
 		</tr>
 		<tr>

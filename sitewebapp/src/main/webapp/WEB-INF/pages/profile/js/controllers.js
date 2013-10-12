@@ -20,7 +20,7 @@ profileApp.controller('NavCtrl', ['$scope', '$location',  function($scope, $loca
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('AccountCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($rootScope, $scope, $http, $routeParams, $location, Data, Content) {
+profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($rootScope, $scope, $http, $routeParams, $location, Data, Content) {
 	
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();

@@ -24,14 +24,14 @@
 				<select ng-model="question1" ng-options="q.questionCode as q.questionDisplayName for q in questionList1">
 					<option value="">- Select a question -</option>
 				</select>
-				<div field-error field="question1" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+				<div field-error field="question1" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Answer:</label></td>
 			<td class="col2">
 				<input class="form-control" ng-model="answer1" autocomplete="off"/>
-				<div field-error field="answer1" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+				<div field-error field="answer1" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 			</td>
 		</tr>
 		<tr>
@@ -45,14 +45,14 @@
 				<select ng-model="question2" ng-options="q.questionCode as q.questionDisplayName for q in questionList2">
 					<option value="">- Select a second question -</option>
 				</select>
-				<div field-error field="question2" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+				<div field-error field="question2" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Answer:</label></td>
 			<td class="col2">
 				<input class="form-control" ng-model="answer2" autocomplete="off"/>
-				<div field-error field="answer2" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+				<div field-error field="answer2" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 			</td>
 		</tr>
 		<tr>
@@ -64,7 +64,7 @@
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
 				<input ng-model="changeEmailRequest.password" class="form-control" type="password"/>
-				<div field-error field="password" clss="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
+				<div field-error field="password" type="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
 			</td>
 		</tr>
 	

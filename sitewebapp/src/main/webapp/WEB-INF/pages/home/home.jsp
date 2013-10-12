@@ -5,7 +5,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 
-<c:set var="email" value="ted@gmail.com"/>
 
 <t1:page title="VendorTool" currentPage="home" email="${email}">
 

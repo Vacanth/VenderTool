@@ -62,8 +62,8 @@ angular.module('fieldErrorModule', []).directive("fieldError", function() {
 				//
 				// Field errors
 				//
-				if (attrs.clss && attrs.field) {
-					scope.errorMsgs = ErrorResponseUtil.getFieldErrorMsgs(attrs.clss, attrs.field, scope.errorResponse);
+				if (attrs.type && attrs.field) {
+					scope.errorMsgs = ErrorResponseUtil.getFieldErrorMsgs(attrs.type, attrs.field, scope.errorResponse);
 					
 					//
 					// For field errors, this directive is a child of an element with _css.fieldWrap.
