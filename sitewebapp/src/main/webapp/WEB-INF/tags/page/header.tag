@@ -24,8 +24,11 @@ Attributes
 	<div class="hdr">
 		<div class="topnav inline">
 			<a href="${homeUrl}" class="home"><spring:message code="form.header.logo"/></a>
-			<a href="${accountHubUrl}" class="accounthub">Account Hub</a>
-			<a href="settings" class="settings">Settings</a>
+			
+			<c:if test="${!empty email}">
+				<a href="${accountHubUrl}" class="accounthub">Account Hub</a>
+				<a href="settings" class="settings">Settings</a>
+			</c:if>
 			
 			<%-- 
 			<a href="#"><spring:message code="form.header.platform"/></a>

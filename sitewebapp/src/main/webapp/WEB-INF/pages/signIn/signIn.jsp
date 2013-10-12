@@ -67,7 +67,7 @@
 	            
 	            <div class="forgotRemember">
 					<input id="rememberMe" type="checkbox"/> <label for="rememberMe">Remember me</label>
-					<a id="forgotPsswd" href="#">Forgot password</a>
+					<a id="forgotPsswd" href="forgotPassword">Forgot password</a>
 				</div>
 				
 				

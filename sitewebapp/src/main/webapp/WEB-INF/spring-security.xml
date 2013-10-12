@@ -32,6 +32,7 @@
   	<sec:http pattern="/confirmaccountsuccess" security="none"/>
   	<sec:http pattern="/confirmaccountfailed" security="none"/>
   	<sec:http pattern="/wro/**" security="none"/>
+  	<sec:http pattern="/forgotPassword/**" security="none"/>
   	
   	<sec:http pattern="/unexpectedException/**" security="none"/>
   	
