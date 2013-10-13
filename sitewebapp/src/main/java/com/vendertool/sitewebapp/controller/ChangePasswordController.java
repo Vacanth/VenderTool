@@ -19,30 +19,31 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.Language;
 import com.vendertool.sharedtypes.error.Errors;
+import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sitewebapp.util.MenuBuilder;
 
 @Controller
-public class ForgotPasswordController {
-	private static final Logger logger = Logger.getLogger(ForgotPasswordController.class);
+public class ChangePasswordController {
+	private static final Logger logger = Logger.getLogger(ChangePasswordController.class);
 	
-	@RequestMapping(value="forgotPassword", method=RequestMethod.GET)
-	public String getForgotPasswordView(Model model, HttpServletRequest request){
-		logger.info("getForgotPasswordView GET controller invoked");
+	@RequestMapping(value="changePassword", method=RequestMethod.GET)
+	public String getChangePasswordView(Model model, HttpServletRequest request){
+		logger.info("getChangePasswordView GET controller invoked");
 		
 		Locale locale = RequestContextUtils.getLocale(request);
 		
-		Account account = new Account();
-		model.addAttribute("account", account);
+		ChangePasswordRequest changePasswordReq = new ChangePasswordRequest();
+		model.addAttribute("changePasswordReq", changePasswordReq);
 		model.addAttribute("languages", Language.getLanguages());
 		model.addAttribute("langOptions", MenuBuilder.getLanguageOptions(locale));
 		model.addAttribute("selectedLang", request.getParameter("lang"));
 		
-		return "forgotPassword/forgotPassword";
+		return "changePassword/changePassword";
 	}
 	
 
-	@RequestMapping(value="forgotPassword", method=RequestMethod.POST)
+	@RequestMapping(value="changePassword", method=RequestMethod.POST)
 	public String validateEmail(
 			ModelMap modelMap, 
 			HttpServletRequest req,
@@ -52,14 +53,21 @@ public class ForgotPasswordController {
 		logger.info("validateEmail POST controller invoked");
 		
 		//
-		// Email not valid error
+		// Validate password
 		//
 		ErrorResponse errorResponse = validateEmail(account);
 		if (errorResponse != null) {
 			modelMap.addAttribute("errorResponse", errorResponse);
 		}
 		else {
-			return "forward:askSecurityQuestions";
+			RequestDispatcher rd = req.getRequestDispatcher("askSecurityQuestions");
+			try {
+				rd.forward(req, res);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				logger.log(Priority.ERROR, e.getMessage(), e);
+			}
 		}
 		
 		return "forgotPassword/forgotPassword";

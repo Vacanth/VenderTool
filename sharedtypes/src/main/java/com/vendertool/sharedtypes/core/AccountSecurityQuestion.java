@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AccountSecurityQuestion {
 	private Long id;
-	private SecurityQuestionCodeEnum questionCode;
+	private SecurityQuestion question;
 	private String answer;
 	private Date createdDate;
 	
@@ -21,13 +21,13 @@ public class AccountSecurityQuestion {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public SecurityQuestionCodeEnum getQuestionCode() {
-		return questionCode;
+
+	public SecurityQuestion getQuestion() {
+		return question;
 	}
 
-	public void setQuestionCode(SecurityQuestionCodeEnum questionCode) {
-		this.questionCode = questionCode;
+	public void setQuestion(SecurityQuestion question) {
+		this.question = question;
 	}
 
 	public String getAnswer() {
@@ -51,7 +51,8 @@ public class AccountSecurityQuestion {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nAccountSecurityQuestion=[[")
 			.append("\n\tID=").append(getId())
-			.append("\n\tQUESTION CODE=").append(getQuestionCode())
+			.append("\n\tQUESTION CODE=").append(question.getQuestionCode())
+			.append("\n\tQUESTION DISPLAY NAME=").append(question.getQuestionDisplayName())
 			.append("\n\tANSWER=").append(getAnswer())
 			.append("\n\tCREATED DATE=").append(getCreatedDate())
 		.append("]]");

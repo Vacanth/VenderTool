@@ -27,7 +27,7 @@
 	    	<spring:message code="form.signin.signin" var="signintitle"/>
 	    	<spring:message code='form.submit' var="submit"/>
 	    	
-	        <h3 class="ttl">Please submit your email</h3>
+	        <h3 class="ttl">Please create a new password</h3>
 
 			<c:if test="${errorResponse.hasErrors()}">
 				<div class="pg-msg">
@@ -39,10 +39,12 @@
 				</div>
 			</c:if>
 			
-			<form:form method="post" commandName="account">
+			<form:form method="post" commandName="changePasswordReq">
 	            <div class="fldWrp">
-	            	<form:input class="form-control" placeholder="Email"  path="email"/>
-	            	<error:errorResponse model="${errorResponse}" field="email" clss="com.vendertool.sharedtypes.core.Account"/>
+	            	<form:input path="newPassword" class="form-control" placeholder="Password" />
+	            </div>
+	             <div class="fldWrp">
+	            	<form:input path="confirmPassword" class="form-control" placeholder="Confirm password" />
 	            </div>
 	            <div class="submit">
 	            	<input type="submit" class="btn btn-primary grn" value="${submit}" />

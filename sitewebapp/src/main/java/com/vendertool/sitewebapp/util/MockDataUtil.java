@@ -10,12 +10,15 @@ import java.util.Map;
 import java.util.Random;
 
 import com.vendertool.sharedtypes.core.Account;
+import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.Address;
 import com.vendertool.sharedtypes.core.ContactDetails;
 import com.vendertool.sharedtypes.core.CountryEnum;
 import com.vendertool.sharedtypes.core.PaginationOutput;
 import com.vendertool.sharedtypes.core.Phone;
 import com.vendertool.sharedtypes.core.Phone.PhoneType;
+import com.vendertool.sharedtypes.core.SecurityQuestion;
+import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
 import com.vendertool.sharedtypes.core.fps.File;
@@ -226,8 +229,48 @@ public class MockDataUtil {
 		return res;
 	}
 	
+	
+	
+	public static List<AccountSecurityQuestion> getUsersAccountSecurityQuestions() {
+		
+		SecurityQuestion sq1 = new SecurityQuestion();
+		sq1.setQuestionCode(SecurityQuestionCodeEnum.FIRST_OWNED_PET);
+		sq1.setQuestionDisplayName("What is the name of your first owned pet?");
+
+		SecurityQuestion sq2 = new SecurityQuestion();
+		sq2.setQuestionCode(SecurityQuestionCodeEnum.FAVORITE_SCHOOL_TEACHER);
+		sq2.setQuestionDisplayName("Who is your favorite school teacher?");
+		
+		AccountSecurityQuestion q1 = new AccountSecurityQuestion();
+		q1.setQuestion(sq1);
+		AccountSecurityQuestion q2 = new AccountSecurityQuestion();
+		q2.setQuestion(sq2);
+		
+		List<AccountSecurityQuestion> list = new ArrayList<AccountSecurityQuestion>();
+		list.add(q1);
+		list.add(q2);
+		
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private static String makeId() {
 		 return new BigInteger(130,  new SecureRandom()).toString(32);
 	}
-	
 }

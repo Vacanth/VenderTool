@@ -19,6 +19,7 @@ import com.vendertool.registration.dal.dao.AccountSecurityQuestionDao;
 import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
 import com.vendertool.registration.dal.dao.codegen.QAccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
+import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 
 public class AccountSecurityQuestionDaoTest extends BaseDaoTest{
@@ -66,7 +67,9 @@ public class AccountSecurityQuestionDaoTest extends BaseDaoTest{
 	private AccountSecurityQuestion createAccountSecurityQuestion(int idx) {
 		AccountSecurityQuestion q = new AccountSecurityQuestion();
 		q.setId(idx + 0L);
-		q.setQuestionCode(SecurityQuestionCodeEnum.getByIndex(idx % 10));
+		SecurityQuestion sq = new SecurityQuestion();
+		sq.setQuestionCode(SecurityQuestionCodeEnum.getByIndex(idx % 10));
+		q.setQuestion(sq);
 		q.setAnswer("MyAnswer"+idx);
 		q.setCreatedDate(new Date());
 		

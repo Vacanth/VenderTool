@@ -5,7 +5,7 @@
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 <%@ taglib prefix="error" tagdir="/WEB-INF/tags/errorResponse" %>
 
-<t1:page title="Forgot password" currentPage="forgotPassword" email="">
+<t1:page title="Security Questions" currentPage="askSecurityQuestions" email="">
 
 	<jsp:attribute name="css">
 		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
@@ -24,10 +24,9 @@
 		
 		
 	    <div class="reg main input-group" style="padding-bottom:15px;">
-	    	<spring:message code="form.signin.signin" var="signintitle"/>
 	    	<spring:message code='form.submit' var="submit"/>
 	    	
-	        <h3 class="ttl">Please submit your email</h3>
+	        <h3 class="ttl">Please submit your answers</h3>
 
 			<c:if test="${errorResponse.hasErrors()}">
 				<div class="pg-msg">
@@ -39,11 +38,22 @@
 				</div>
 			</c:if>
 			
-			<form:form method="post" commandName="account">
-	            <div class="fldWrp">
-	            	<form:input class="form-control" placeholder="Email"  path="email"/>
-	            	<error:errorResponse model="${errorResponse}" field="email" clss="com.vendertool.sharedtypes.core.Account"/>
+			<form:form method="post" action="answerSecurityQuestions" commandName="questionsReq">
+				
+				<div>
+	            	${questionsReq.questions[0].question.questionDisplayName}
 	            </div>
+	            <div>
+			       <form:input path="questions[0].answer" class="form-control" placeholder="Answer to question 1"  />
+	            </div>
+	            <br/>
+	            <div>
+	            	${questionsReq.questions[1].question.questionDisplayName}
+	            </div>
+	             <div>
+			       <form:input path="questions[1].answer" class="form-control" placeholder="Answer to question 2"  />
+	            </div>
+
 	            <div class="submit">
 	            	<input type="submit" class="btn btn-primary grn" value="${submit}" />
 	            </div>

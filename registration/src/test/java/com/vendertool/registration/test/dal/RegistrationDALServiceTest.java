@@ -22,6 +22,7 @@ import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
+import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 
 public class RegistrationDALServiceTest extends BaseDALService {
@@ -69,7 +70,9 @@ public class RegistrationDALServiceTest extends BaseDALService {
 		for(int i=0; i<SEC_QUESTION_COUNT; i++) {
 			AccountSecurityQuestion q = new AccountSecurityQuestion();
 			q.setId(i + 0L);
-			q.setQuestionCode(SecurityQuestionCodeEnum.getByIndex(i % 10));
+			SecurityQuestion sq = new SecurityQuestion();
+			sq.setQuestionCode(SecurityQuestionCodeEnum.getByIndex(i % 10));
+			q.setQuestion(sq);
 			q.setAnswer("MyAnswer"+i);
 			q.setCreatedDate(now);
 			
