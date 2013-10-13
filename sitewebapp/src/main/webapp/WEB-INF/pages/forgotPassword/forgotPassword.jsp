@@ -19,39 +19,42 @@
 		$('input').placeholder();
 	</jsp:attribute>
 	
+	
+	
 	<jsp:body>
+		<spring:message code='form.submit' var="submit"/>
+		
 		<div id="pgBg"><img src="resources/img/cafe2.jpg" alt=""></div>
-		
-		
-	    <div class="reg main input-group" style="padding-bottom:15px;">
-	    	<spring:message code="form.signin.signin" var="signintitle"/>
-	    	<spring:message code='form.submit' var="submit"/>
-	    	
-	        <h3 class="ttl">Please submit your email</h3>
 
-			<c:if test="${errorResponse.hasErrors()}">
-				<div class="pg-msg">
-					<div class="alert alert-danger">
-						<c:forEach items="${errorResponse.getVTErrors()}" var="vterror">
-							${vterror.message}<br />
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
-			
-			<form:form method="post" commandName="account">
-	            <div class="fldWrp">
-	            	<form:input class="form-control" placeholder="Email"  path="email"/>
-	            	<error:errorResponse model="${errorResponse}" field="email" clss="com.vendertool.sharedtypes.core.Account"/>
-	            </div>
-	            <div class="submit">
-	            	<input type="submit" class="btn btn-primary grn" value="${submit}" />
-	            </div>
-	        </form:form>
-	       
-	       
+	    <div class="reg main input-group" style="padding-bottom:15px;">
+	    	<c:choose>
+	    		<c:when test="${forgotPasswordReq.emailValid}">
+	    			<h3 class="ttl">Confirmation email sent</h3>
+	    			<p>Please check your email for our message.
+	    			Click the link in the message to continue the password recovery process.</p>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<h3 class="ttl">Please submit your email</h3>
+					<c:if test="${errorResponse.hasErrors()}">
+						<div class="pg-msg">
+							<div class="alert alert-danger">
+								<c:forEach items="${errorResponse.getVTErrors()}" var="vterror">
+									${vterror.message}<br />
+								</c:forEach>
+							</div>
+						</div>
+					</c:if>
+					<form:form method="post" commandName="forgotPasswordReq">
+			            <div class="fldWrp">
+			            	<form:input class="form-control" placeholder="Email"  path="email"/>
+			            </div>
+			            <div class="submit">
+			            	<input type="submit" class="btn btn-primary grn" value="${submit}" />
+			            </div>
+			        </form:form>
+	    		</c:otherwise>
+	    	</c:choose>	       
 	    </div>
-	   
-	    
+
 	</jsp:body>
 </t1:page>

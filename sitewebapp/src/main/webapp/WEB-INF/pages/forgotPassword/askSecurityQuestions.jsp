@@ -38,17 +38,17 @@
 				</div>
 			</c:if>
 			
-			<form:form method="post" action="answerSecurityQuestions" commandName="questionsReq">
-				
+			<form:form method="post" action="answerSecurityQuestions" commandName="forgotPasswordReq">
+				<form:hidden path="emailIsValidToken"/>
 				<div>
-	            	${questionsReq.questions[0].question.questionDisplayName}
+	            	${forgotPasswordReq.questions[0].question.questionDisplayName}
 	            </div>
 	            <div>
 			       <form:input path="questions[0].answer" class="form-control" placeholder="Answer to question 1"  />
 	            </div>
 	            <br/>
 	            <div>
-	            	${questionsReq.questions[1].question.questionDisplayName}
+	            	${forgotPasswordReq.questions[1].question.questionDisplayName}
 	            </div>
 	             <div>
 			       <form:input path="questions[1].answer" class="form-control" placeholder="Answer to question 2"  />

@@ -20,13 +20,12 @@
 	</jsp:attribute>
 	
 	<jsp:body>
+		<spring:message code='form.submit' var="submit"/>
+		
 		<div id="pgBg"><img src="resources/img/cafe2.jpg" alt=""></div>
-		
-		
+
 	    <div class="reg main input-group" style="padding-bottom:15px;">
-	    	<spring:message code="form.signin.signin" var="signintitle"/>
-	    	<spring:message code='form.submit' var="submit"/>
-	    	
+
 	        <h3 class="ttl">Please create a new password</h3>
 
 			<c:if test="${errorResponse.hasErrors()}">
@@ -39,7 +38,8 @@
 				</div>
 			</c:if>
 			
-			<form:form method="post" commandName="changePasswordReq">
+			<form:form method="post" action="processChangePassword" commandName="forgotPasswordReq">
+				<form:hidden path="emailIsValidToken"/>
 	            <div class="fldWrp">
 	            	<form:input path="newPassword" class="form-control" placeholder="Password" />
 	            </div>
@@ -50,10 +50,7 @@
 	            	<input type="submit" class="btn btn-primary grn" value="${submit}" />
 	            </div>
 	        </form:form>
-	       
-	       
 	    </div>
-	   
-	    
+
 	</jsp:body>
 </t1:page>
