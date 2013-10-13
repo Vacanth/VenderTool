@@ -39,7 +39,7 @@
 			</c:if>
 			
 			<form:form method="post" action="answerSecurityQuestions" commandName="forgotPasswordReq">
-				<form:hidden path="emailIsValidToken"/>
+				<form:hidden path="emailToken"/>
 				<div>
 	            	${forgotPasswordReq.questions[0].question.questionDisplayName}
 	            </div>

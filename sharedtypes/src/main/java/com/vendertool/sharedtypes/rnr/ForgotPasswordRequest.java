@@ -14,7 +14,7 @@ public class ForgotPasswordRequest extends BaseRequest {
 	private String newPassword;
 	private String confirmPassword;
 	private boolean isEmailValid;
-	private String emailIsValidToken;
+	private String emailToken;
 	
 	public String getEmail() {
 		return email;
@@ -46,11 +46,11 @@ public class ForgotPasswordRequest extends BaseRequest {
 	public void setEmailValid(boolean isEmailValid) {
 		this.isEmailValid = isEmailValid;
 	}
-	public String getEmailIsValidToken() {
-		return emailIsValidToken;
+	public String getEmailToken() {
+		return emailToken;
 	}
-	public void setEmailIsValidToken(String emailIsValidToken) {
-		this.emailIsValidToken = emailIsValidToken;
+	public void setEmailToken(String emailToken) {
+		this.emailToken = emailToken;
 	}
 	
 	

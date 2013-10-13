@@ -23,6 +23,11 @@ import com.vendertool.sitewebapp.util.MockDataUtil;
 public class ForgotPasswordController {
 	private static final Logger logger = Logger.getLogger(ForgotPasswordController.class);
 	
+	//============================================
+	//
+	// Enter email page
+	//
+	//============================================
 	@RequestMapping(value="forgotPassword", method=RequestMethod.GET)
 	public String getForgotPasswordView(Model model){
 		logger.info("getForgotPasswordView GET controller invoked");
@@ -32,7 +37,6 @@ public class ForgotPasswordController {
 		return "forgotPassword/forgotPassword";
 	}
 	
-
 	@RequestMapping(value="forgotPassword", method=RequestMethod.POST)
 	public String validateEmail(
 			Model model, 
@@ -42,14 +46,12 @@ public class ForgotPasswordController {
 		
 		logger.info("validateEmail POST controller invoked");
 		
-		//
-		// Email not valid error
-		//
 		ErrorResponse errorResponse = validateEmail(forgotPasswordReq.getEmail());
-		if (errorResponse != null) {
+		if (errorResponse != null) { // Error
 			model.addAttribute("errorResponse", errorResponse);
 		}
-		else {
+		
+		else { // All good
 			forgotPasswordReq.setEmailValid(true);
 			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
 		}
@@ -57,24 +59,33 @@ public class ForgotPasswordController {
 		return "forgotPassword/forgotPassword";
 	}
 	
+	//============================================
+	//
+	// Ask and process security questions
+	//
+	//============================================
 	@RequestMapping(value="askSecurityQuestions", method=RequestMethod.GET)
 	public String getAskQuestionsView(Model model, HttpServletRequest request){
 		logger.info("getAskQuestionsView POST controller invoked");
 
-		String emailIsValidToken = request.getParameter("t");
-		if (emailIsValidToken != null && !emailIsValidToken.trim().isEmpty()) {
-			
-			ForgotPasswordRequest forgotPasswordReq = new ForgotPasswordRequest();
-			forgotPasswordReq.setEmailIsValidToken(emailIsValidToken);
-			List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-			forgotPasswordReq.setQuestions(questions);
-
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
-			return "forgotPassword/askSecurityQuestions";
-		}
-		else {
+		String emailToken = request.getParameter("t");
+		
+		// Not good
+		if (!isEmailTokenValid(emailToken)) {
 			return "unauthorized/unauthorized";
 		}
+		else if (isTooManyAttempts(emailToken)) {
+			return "accountLocked/accountLocked";
+		}
+		
+		// All good
+		ForgotPasswordRequest forgotPasswordReq = new ForgotPasswordRequest();
+		forgotPasswordReq.setEmailToken(emailToken);
+		List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
+		forgotPasswordReq.setQuestions(questions);
+
+		model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+		return "forgotPassword/askSecurityQuestions";
 	}
 	
 	@RequestMapping(value="answerSecurityQuestions", method=RequestMethod.POST)
@@ -85,36 +96,41 @@ public class ForgotPasswordController {
 			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 		
-		String emailIsValidToken = forgotPasswordReq.getEmailIsValidToken();
-		if (emailIsValidToken != null && !emailIsValidToken.trim().isEmpty()) {
-			
-			//
-			// Validate answers
-			//
-			ErrorResponse errorResponse = validateAnswers(forgotPasswordReq.getQuestions());
-			if (errorResponse != null) {
-				// Error case
-				model.addAttribute("errorResponse", errorResponse);
-				
-				 // Echo back the questions
-				List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-				forgotPasswordReq.setQuestions(questions);
-				model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+		String emailToken = forgotPasswordReq.getEmailToken();
+		
+		// Not good
+		if (!isEmailTokenValid(emailToken)) {
+			return "unauthorized/unauthorized";
+		}
+		else if (isTooManyAttempts(emailToken)) {
+			return "accountLocked/accountLocked";
+		}
 
-				return "forgotPassword/askSecurityQuestions";
-			}
-			else {
-				// Answers are good
-				model.addAttribute("forgotPasswordReq", forgotPasswordReq);
-				
-				return "forgotPassword/changePassword";
-			}
+		// Validate answers
+		ErrorResponse errorResponse = validateAnswers(forgotPasswordReq.getQuestions());
+		if (errorResponse != null) {
+			model.addAttribute("errorResponse", errorResponse);
+			
+			 // Echo back the questions
+			List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
+			forgotPasswordReq.setQuestions(questions);
+			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+
+			return "forgotPassword/askSecurityQuestions";
 		}
 		else {
-			return "unauthorized/unauthorized";
+			// Answers are good
+			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			
+			return "forgotPassword/changePassword";
 		}
 	}
 	
+	//============================================
+	//
+	// Process changed password
+	//
+	//============================================
 	@RequestMapping(value="processChangePassword", method=RequestMethod.POST)
 	public String processChangePassword(
 			Model model,
@@ -123,30 +139,46 @@ public class ForgotPasswordController {
 			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 		
-		String emailIsValidToken = forgotPasswordReq.getEmailIsValidToken();
-		if (emailIsValidToken != null && !emailIsValidToken.trim().isEmpty()) {
-			
-			//
-			// Validate password
-			//
-			ErrorResponse errorResponse = validatePassword(forgotPasswordReq);
-			if (errorResponse != null) {
-				// Error case
-				model.addAttribute("errorResponse", errorResponse);
-				model.addAttribute("forgotPasswordReq", forgotPasswordReq);
-
-				return "forgotPassword/changePassword";
-			}
-			else {
-				// Passwords are good
-				model.addAttribute("forgotPasswordReq", forgotPasswordReq);
-				
-				return "forgotPassword/success";
-			}
-		}
-		else {
+		String emailToken = forgotPasswordReq.getEmailToken();
+		
+		// Not good
+		if (!isEmailTokenValid(emailToken)) {
 			return "unauthorized/unauthorized";
 		}
+		else if (isTooManyAttempts(emailToken)) {
+			return "accountLocked/accountLocked";
+		}
+		
+		// Validate password
+		ErrorResponse errorResponse = validatePassword(forgotPasswordReq);
+		if (errorResponse != null) {
+			model.addAttribute("errorResponse", errorResponse);
+			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+
+			return "forgotPassword/changePassword";
+		}
+		else {
+			// Passwords are good
+			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			
+			return "forgotPassword/success";
+		}
+	}
+	
+	
+	
+	//
+	// Replace with real validation
+	//
+	private boolean isEmailTokenValid(String emailToken) {
+		return emailToken != null && !emailToken.trim().isEmpty();
+	}
+	
+	//
+	// Replace with real validation
+	//
+	private boolean isTooManyAttempts(String emailToken) {
+		return false;
 	}
 	
 	//

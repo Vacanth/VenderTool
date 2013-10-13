@@ -39,7 +39,7 @@
 			</c:if>
 			
 			<form:form method="post" action="processChangePassword" commandName="forgotPasswordReq">
-				<form:hidden path="emailIsValidToken"/>
+				<form:hidden path="emailToken"/>
 	            <div class="fldWrp">
 	            	<form:input path="newPassword" class="form-control" placeholder="Password" />
 	            </div>
