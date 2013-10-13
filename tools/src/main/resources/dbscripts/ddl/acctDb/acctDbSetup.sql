@@ -11,8 +11,7 @@ USE `acctdb` ;
 DROP TABLE IF EXISTS `acctdb`.`address` ;
 
 CREATE  TABLE IF NOT EXISTS `acctdb`.`address` (
-  `address_id` BIGINT NOT NULL ,
-  `account_id` BIGINT NOT NULL ,
+  `address_id` BIGINT NOT NULL  ,
   `use_case` TINYINT NOT NULL ,
   `addr_type` TINYINT NULL ,
   `contact_first_name` VARCHAR(64) NULL DEFAULT NULL ,
@@ -28,8 +27,7 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`address` (
   `status` TINYINT NULL DEFAULT NULL ,
   `created_date` DATETIME NULL DEFAULT NULL ,
   `last_modified_date` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`address_id`) ,
-  INDEX `accountindex` (`account_id` ASC) )
+  PRIMARY KEY (`address_id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -48,9 +46,6 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`account` (
   `first_name` VARCHAR(64) NOT NULL ,
   `last_name` VARCHAR(64) NULL ,
   `middle_name` VARCHAR(64) NULL ,
-  `contact_phone_mobile` VARCHAR(32) NULL ,
-  `contact_phone_home` VARCHAR(32) NULL ,
-  `contact_phone_work` VARCHAR(32) NULL ,
   `picture` BLOB NULL ,
   `registration_addr_id` BIGINT NULL ,
   `billing_addr_id` BIGINT NULL ,
@@ -64,7 +59,8 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`account` (
   PRIMARY KEY (`account_id`) ,
   UNIQUE INDEX `email_addr_unique` (`email_addr` ASC) ,
   INDEX `fk_account_address1_idx` (`registration_addr_id` ASC) ,
-  INDEX `fk_account_address2_idx` (`billing_addr_id` ASC) )
+  INDEX `fk_account_address2_idx` (`billing_addr_id` ASC) 
+  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -77,6 +73,8 @@ DROP TABLE IF EXISTS `acctdb`.`account_confirmation` ;
 CREATE  TABLE IF NOT EXISTS `acctdb`.`account_confirmation` (
   `account_confirmation_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `account_id` BIGINT NOT NULL ,
+  `email_addr` VARCHAR(128) NOT NULL ,
+  `status` TINYINT NULL ,
   `confirmation_code` SMALLINT NULL ,
   `number_of_attempts` TINYINT NULL ,
   `session_id` VARCHAR(1024) NULL ,
@@ -87,6 +85,18 @@ CREATE  TABLE IF NOT EXISTS `acctdb`.`account_confirmation` (
   `last_modified_app` TINYINT NULL ,
   PRIMARY KEY (`account_confirmation_id`) ,
   INDEX `accountindex` (`account_id` ASC) )
+ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `acctdb`.`forgot_password` ;
+CREATE  TABLE IF NOT EXISTS `acctdb`.`forgot_password` (
+  `forgot_password_id` BIGINT NOT NULL ,
+  `email_addr` VARCHAR(128) NULL ,
+  `account_id` BIGINT NULL ,
+  `status` TINYINT NULL ,
+  `ip_addr` VARCHAR(64) NULL ,
+  `created_date` DATETIME NULL ,
+  `last_modified_date` DATETIME NULL ,
+  PRIMARY KEY (`forgot_password_id`) )
 ENGINE = InnoDB;
 
 
@@ -111,17 +121,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `acctdb`.`accout_security_question` ;
 
-CREATE  TABLE IF NOT EXISTS `acctdb`.`accout_security_question` (
-  `accout_security_question_id` BIGINT NOT NULL ,
+CREATE  TABLE IF NOT EXISTS `acctdb`.`account_security_question` (
+  `account_security_question_id` BIGINT NOT NULL AUTO_INCREMENT ,
   `account_id` BIGINT NOT NULL ,
-  `security_question_id` INT NULL ,
+  `security_question_code` VARCHAR(64) NULL ,
   `security_answer` VARCHAR(512) NULL ,
   `created_date` DATETIME NULL ,
   `last_modified_date` DATETIME NULL ,
   `last_modified_app` TINYINT NULL ,
-  PRIMARY KEY (`accout_security_question_id`) )
+  PRIMARY KEY (`account_security_question_id`) ,
+  UNIQUE INDEX `unique` (`account_id` ASC, `security_question_code` ASC) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
 
 USE `acctdb` ;
 
