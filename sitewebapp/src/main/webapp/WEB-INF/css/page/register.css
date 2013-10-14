@@ -1,0 +1,134 @@
+#wrap {
+	
+	/**
+	background:url('../resources/img/cafe.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+  
+	background-color:#f2f1e9;
+
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://localhost:8080/site/resources/img/cafe.jpg',sizingMethod='scale');
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://localhost:8080/site/resources/img/cafe.jpg',sizingMethod='scale')"; 
+**/
+}
+
+
+
+
+#pgBg {
+  position: fixed;
+  z-index:-1;
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+#pgBg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+}
+#rememberMe {
+	color:#666;
+}
+#forgotPsswd {
+	display:block;
+	margin-top:5px;
+}
+.forgotRemember {
+	margin-top:15px;
+}
+
+.reg {
+	position:relative;
+	width:400px;
+	margin-top:50px;
+	padding-right:40px;
+	
+}
+.reg.main {
+	min-height:200px;
+	
+	margin: 30px auto 15px auto;
+	max-width: 1024px;
+	background-color:#fff;
+	border:1px solid #ddd;
+	padding:20px 40px 45px 40px;
+}
+.reg.main .alert {
+	margin-bottom:10px;
+}
+.reg form > div {
+	margin-bottom:10px;
+}
+.reg .form-control {
+	width:320px;
+}
+.reg .opt {
+	width:400px;
+	border-top:1px solid #999;
+	padding-top:5px;
+	margin:20px 0 10px 0;
+	font-size:14px;
+	color:#888;
+}
+.reg .opt > div {
+	margin-bottom:10px;
+}
+.reg .opt input {
+	height:30px;
+}
+
+.reg .w-half {
+	width:198px;
+}
+.reg .w-1quarter {
+	width:99px;
+}
+.reg .w-3quarter {
+	width:297px;
+}
+
+.reg .submit {
+	margin-top:15px;
+}
+.reg .submit .btn {
+	margin-top:15px;
+}
+.reg-cfm {
+	position:relative;
+	width:400px;
+	min-height:180px;
+	top:50px;
+}
+.ref-cfm .msg {
+	margin:0;
+	font-size:16px;
+}
+
+#email-info {
+	display:none;
+}
+
+#pwd-info {
+	display:none;
+}
+
+#conf-pwd-info {
+	display:none;
+}
+
+
+.reg .popover-content {
+	width:250px;
+}
+

@@ -1,0 +1,45 @@
+.layout {
+	margin: 10px auto 15px auto;
+	min-height: 600px;
+	max-width: 1024px;
+	background-color:#fff;
+	border-left:1px solid #ccc;
+	width:1020px;
+	
+	/*
+	-webkit-box-shadow: 1px 1px 10px rgba(50, 50, 50, 0.20);
+	-moz-box-shadow:    1px 1px 10px rgba(50, 50, 50, 0.20);
+	box-shadow:         1px 1px 10px rgba(50, 50, 50, 0.20);*/
+}
+.layout .headRow td {
+	height:20px;
+	padding-bottom: 0;
+}
+.layout .mainRow td {
+	padding-top: 0;
+	vertical-align:top;
+}
+
+
+.layout td {
+	vertical-align: top;
+}
+.layout .c1 {
+	width: 180px;
+	padding: 15px 20px;
+}
+.layout .c2 {
+	padding: 10px;
+}
+.layout .cell-pad {
+	visibility: hidden;
+}
+.layout .c1 .list-group .list-group-item {
+	border:0;
+	border-bottom:1px solid #ddd;
+	border-top:1px solid #ddd;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	white-space:nowrap;
+	padding-right:15px;
+}

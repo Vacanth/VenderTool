@@ -1,0 +1,20 @@
+.err label {
+	color:red !important;
+}
+.err input {
+	border:1px solid red !important;
+}
+.err select {
+	border:1px solid red !important;
+}
+.err .err-msg {
+	display:block;
+	visibility:visible;
+	/**
+	background-color:#FFF391;
+	color:#000;**/
+	color:red;
+	font-size:13px;
+	white-space:nowrap;
+	padding:2px 5px;
+}

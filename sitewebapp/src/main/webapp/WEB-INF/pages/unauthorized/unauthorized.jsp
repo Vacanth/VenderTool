@@ -8,15 +8,11 @@
 <t1:page title="Forgot password" currentPage="forgotPassword" email="">
 
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
-	</jsp:attribute>
-	
-	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/register.js' />" type="text/javascript"></script>
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 
 	<jsp:body>
-		<div id="pgBg"><img src="resources/img/cafe2.jpg" alt=""></div>
+		<div id="pgBg"><img src="<c:url value='/img/cafe2.jpg'/>" alt=""></div>
 	    <div class="reg main" style="padding-bottom:15px;">
    			<h3 class="ttl">Unauthorized access</h3>
 			<p>Sorry, authorization not found.</p>

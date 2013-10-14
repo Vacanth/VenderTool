@@ -7,13 +7,15 @@
 <t1:popup title="File uploader" angularAppName="uploaderModule">
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/uploader.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/lib/bootstrap.css' />" rel="stylesheet" type="text/css"/>
+		<link href="<c:url value='/css/page/uploaderModule.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/uploader.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/lib/bootstrap.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/page/uploaderModule.js' />" type="text/javascript"></script>
 	</jsp:attribute>
-
+	
 	<jsp:body>
 		<div uploader group-id="${groupId}" upload-url="uploadFile" all-done-url="uploadDone">
 			<div class="upldr">

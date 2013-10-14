@@ -22,7 +22,9 @@
     <sec:http pattern="/favicon.ico" security="none"/>
   	<sec:http pattern="/apple-touch-icon.png" security="none"/>
   	<sec:http pattern="/index.jsp" security="none"/>
-  	<sec:http pattern="/resources/**" security="none"/>
+  	<sec:http pattern="/css/**" security="none"/>
+  	<sec:http pattern="/js/**" security="none"/>
+  	<sec:http pattern="/img/**" security="none"/>
   	<sec:http pattern="/signIn" security="none"/>
   	<sec:http pattern="/signOut" security="none"/>
   	<sec:http pattern="/register" security="none"/>
@@ -31,7 +33,6 @@
   	<sec:http pattern="/confirmaccount" security="none"/>
   	<sec:http pattern="/confirmaccountsuccess" security="none"/>
   	<sec:http pattern="/confirmaccountfailed" security="none"/>
-  	<sec:http pattern="/wro/**" security="none"/>
   	<sec:http pattern="/forgotPassword/**" security="none"/>
   	<sec:http pattern="/askSecurityQuestions/**" security="none"/>
   	<sec:http pattern="/answerSecurityQuestions/**" security="none"/>

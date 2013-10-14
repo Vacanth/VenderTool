@@ -8,11 +8,11 @@
 <t1:page title="Forgot password" currentPage="forgotPassword" email="">
 
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/register.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/lib/jquery.placeholder.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">
@@ -20,9 +20,9 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<spring:message code='form.submit' var="submit"/>
+		<div id="pgBg"><img src="<c:url value='/img/cafe2.jpg'/>" alt=""></div>
 		
-		<div id="pgBg"><img src="resources/img/cafe2.jpg" alt=""></div>
+		<spring:message code='form.submit' var="submit"/>
 
 	    <div class="reg main input-group" style="padding-bottom:15px;">
 

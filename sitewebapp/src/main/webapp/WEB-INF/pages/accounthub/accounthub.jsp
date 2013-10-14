@@ -7,7 +7,8 @@
 <t1:page title="Account hub" currentPage="accounthub" email="${email}">
 
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/accounthub.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/tag/layoutTable.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/tag/navbarSection.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:body>

@@ -7,16 +7,17 @@
 
 
 <t1:page title="Uploads" angularAppName="uploadsApp" currentPage="accounthub" email="${email}">
-
-	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/uploads.css' />" rel="stylesheet" type="text/css" />
-	</jsp:attribute>
-
-	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/uploads.js' />" type="text/javascript"></script>
-	</jsp:attribute>
-
 	
+	<jsp:attribute name="css">
+		<link href="<c:url value='/css/page/uploads.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/tag/layoutTable.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/tag/navbarSection.css' />" rel="stylesheet" type="text/css" />
+	</jsp:attribute>
+	
+	<jsp:attribute name="scripts">
+		<script src="<c:url value='/js/page/uploadsApp.js' />" type="text/javascript"></script>
+	</jsp:attribute>
+
 	<jsp:body>
 		<t2:layoutTable>
 		

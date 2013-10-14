@@ -7,10 +7,11 @@
 <t1:page title="VendorTool registration" currentPage="registersuccessconfirm"  email="${email}">
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:body>
+		<div id="pgBg"><img src="<c:url value='/img/cafe.jpg'/>" alt=""></div>
 		<div class="reg main input-group bx-rnd-shdw">
 	        <h3 class="ttl">Thanks for registering!</h3>
 	        <div class="msg">

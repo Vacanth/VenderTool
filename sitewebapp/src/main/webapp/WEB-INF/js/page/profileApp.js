@@ -1,5 +1,24 @@
 'use strict';
 
+// Declare app level module which depends on filters, and services
+var profileApp = angular.module('profileApp', ['pageErrorModule', 'fieldErrorModule']);
+
+profileApp.config(['$routeProvider', function($routeProvider) {
+	
+	// When there is something after the hashtag
+	/*
+	$routeProvider.when('/info',		{templateUrl: 'profile/partial/account',	controller: 'AccountCtrl'});*/
+	
+	$routeProvider.when('/info',		{templateUrl: 'info',						controller: 'InfoCtrl'});
+	$routeProvider.when('/email',		{templateUrl: 'profile/partial/email',		controller: 'EmailCtrl'});
+	$routeProvider.when('/password',	{templateUrl: 'profile/partial/password',	controller: 'PasswordCtrl'});
+	$routeProvider.when('/questions',	{templateUrl: 'profile/partial/questions',	controller: 'QuestionsCtrl'});
+	
+	// Otherwise when no hashtag or hashtag path can't be found, add a hashtag
+	$routeProvider.otherwise({redirectTo: '/info'});
+}]);
+
+
 /*******************
 Using the array notation requires the listing of
 all the function params as strings in same order.
@@ -376,7 +395,6 @@ function handlePageErrorMsg(statusCode, Content) {
 		$('.pg-msg .qry-httpError').html(Content.httpError + ' ' + statusCode).show();
 	}
 };
-
 
 
 function hidePageMsg() {
