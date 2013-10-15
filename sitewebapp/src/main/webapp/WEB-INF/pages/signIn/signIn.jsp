@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
+<%@ taglib prefix="pg" tagdir="/WEB-INF/tags/pageError" %>
 
 <t1:page title="${signintitle}" currentPage="signin" email="${email}">
 
@@ -38,15 +39,8 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="${errorResponse.hasErrors}">
-				<div class="pg-msg">
-					<div class="alert alert-danger">
-						<c:forEach items="${errorResponse.getVTErrors}" var="vterror">
-							${vterror.getMessage}<br/>
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
+			
+			<pg:pageError model="${errorResponse}"/>
 			
 			<form action="<c:url value="/j_spring_security_check" />" method="POST">
 	            <div>

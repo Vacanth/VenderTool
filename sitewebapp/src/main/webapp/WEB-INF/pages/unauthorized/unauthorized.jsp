@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
-<%@ taglib prefix="error" tagdir="/WEB-INF/tags/errorResponse" %>
 
 <t1:page title="Forgot password" currentPage="forgotPassword" email="">
 
