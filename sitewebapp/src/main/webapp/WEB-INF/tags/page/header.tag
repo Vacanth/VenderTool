@@ -24,8 +24,11 @@ Attributes
 	<div class="hdr">
 		<div class="topnav inline">
 			<a href="${homeUrl}" class="home"><spring:message code="form.header.logo"/></a>
-			<a href="${accountHubUrl}" class="accounthub">Account Hub</a>
-			<a href="settings" class="settings">Settings</a>
+			
+			<c:if test="${!empty email}">
+				<a href="${accountHubUrl}" class="accounthub">Account Hub</a>
+				<a href="settings" class="settings">Settings</a>
+			</c:if>
 			
 			<%-- 
 			<a href="#"><spring:message code="form.header.platform"/></a>
@@ -84,7 +87,7 @@ Attributes
 							<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
 								<li role="presentation"><a role="menuitem" tabindex="-1" href="${profileUrl}">Profile</a></li>
 								<li role="presentation" class="divider"></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="j_spring_security_logout" />">Sign-out</a></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/j_spring_security_logout" />">Sign-out</a></li>
 							</ul>
 						</div>
 					

@@ -6,7 +6,10 @@ var profileApp = angular.module('profileApp', ['pageErrorModule', 'fieldErrorMod
 profileApp.config(['$routeProvider', function($routeProvider) {
 	
 	// When there is something after the hashtag
-	$routeProvider.when('/info',		{templateUrl: 'profile/partial/account',	controller: 'AccountCtrl'});
+	/*
+	$routeProvider.when('/info',		{templateUrl: 'profile/partial/account',	controller: 'AccountCtrl'});*/
+	
+	$routeProvider.when('/info',		{templateUrl: 'info',						controller: 'InfoCtrl'});
 	$routeProvider.when('/email',		{templateUrl: 'profile/partial/email',		controller: 'EmailCtrl'});
 	$routeProvider.when('/password',	{templateUrl: 'profile/partial/password',	controller: 'PasswordCtrl'});
 	$routeProvider.when('/questions',	{templateUrl: 'profile/partial/questions',	controller: 'QuestionsCtrl'});

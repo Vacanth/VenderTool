@@ -55,7 +55,7 @@ public class SecurityQuestionsValidator implements Validator {
 		
 		List<AccountSecurityQuestion> questions = request.getQuestions();
 		for(AccountSecurityQuestion question : questions){
-			if(VUTIL.isNull(question.getQuestionCode())) {
+			if(question.getQuestion() == null || VUTIL.isNull(question.getQuestion().getQuestionCode())) {
 				response.setStatus(ResponseAckStatusEnum.FAILURE);
 				response.addFieldBindingError(
 						Errors.REGISTRATION.MISSING_SECURITY_QUESTION, null,

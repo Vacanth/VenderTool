@@ -18,11 +18,11 @@
 <t1:page title="Registration" currentPage="register" email="${account.email}">
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/register.js' />"></script>
+		<script src="<c:url value='/js/lib/jquery.placeholder.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">
@@ -30,7 +30,7 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<div id="pgBg"><img src="resources/img/cafe.jpg" alt=""></div>
+		<div id="pgBg"><img src="<c:url value='/img/cafe.jpg'/>" alt=""></div>
 	
 		<spring:message code="form.registration.title" var="title"/>
 		<c:set var="email" value="${account.email}"/>

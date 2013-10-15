@@ -1,0 +1,40 @@
+DELIMITER |
+DROP TRIGGER IF EXISTS `jobdb`.`file_created`;|
+CREATE TRIGGER `jobdb`.`file_created` BEFORE INSERT ON `jobdb`.`file`
+FOR EACH ROW BEGIN
+SET new.created_date := now();
+SET new.last_modified_date := now();
+END;
+|
+DROP TRIGGER IF EXISTS `jobdb`.`file_updated`;|
+CREATE TRIGGER `jobdb`.`file_updated` BEFORE UPDATE ON `jobdb`.`file`
+FOR EACH ROW BEGIN
+SET new.last_modified_date := now();
+END;
+|
+DROP TRIGGER IF EXISTS `jobdb`.`job_created`;|
+CREATE TRIGGER `jobdb`.`job_created` BEFORE INSERT ON `jobdb`.`job`
+FOR EACH ROW BEGIN
+SET new.created_date := now();
+SET new.last_modified_date := now();
+END;
+|
+DROP TRIGGER IF EXISTS `jobdb`.`job_updated`;|
+CREATE TRIGGER `jobdb`.`job_updated` BEFORE UPDATE ON `jobdb`.`job`
+FOR EACH ROW BEGIN
+SET new.last_modified_date := now();
+END;
+|
+DROP TRIGGER IF EXISTS `jobdb`.`task_created`;|
+CREATE TRIGGER `jobdb`.`task_created` BEFORE INSERT ON `jobdb`.`task`
+FOR EACH ROW BEGIN
+SET new.created_date := now();
+SET new.last_modified_date := now();
+END;
+|
+DROP TRIGGER IF EXISTS `jobdb`.`task_updated`;|
+CREATE TRIGGER `jobdb`.`task_updated` BEFORE UPDATE ON `jobdb`.`task`
+FOR EACH ROW BEGIN
+SET new.last_modified_date := now();
+END;
+|

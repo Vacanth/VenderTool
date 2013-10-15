@@ -17,14 +17,14 @@
 			<td class="col1"><label>New email:</label></td>
 			<td class="col2">
 				<input ng-model="changeEmailRequest.newEmail" class="form-control"/>
-				<div field-error field="newEmail" clss="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
+				<div field-error field="newEmail" type="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Confirm new email:</label></td>
 			<td class="col2">
 				<input ng-model="changeEmailRequest.confirmEmail" class="form-control"/>
-				<div field-error field="confirmEmail" clss="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
+				<div field-error field="confirmEmail" type="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
 			</td>
 		</tr>
 	
@@ -37,7 +37,7 @@
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
 				<input ng-model="changeEmailRequest.password" class="form-control" type="password"/>
-				<div field-error field="password" clss="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
+				<div field-error field="password" type="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
 			</td>
 		</tr>
 		<tr>

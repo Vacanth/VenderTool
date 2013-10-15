@@ -33,8 +33,8 @@ Variables
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>${title}</title>
-		<link href='<c:url value="/wro/popupTag.css" />' rel="stylesheet" type="text/css"/>
-		
+		<link href="<c:url value='/css/tag/popup.css' />" rel="stylesheet" type="text/css"/>
+
 		<%-- Page specific CSS tags --%>
 		<jsp:invoke fragment="css"/>
 		
