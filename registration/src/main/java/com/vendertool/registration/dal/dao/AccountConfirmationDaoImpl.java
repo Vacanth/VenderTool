@@ -21,6 +21,7 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QAccountConfirmation;
 import com.vendertool.registration.dal.dao.codegen.QBeanAccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 
 public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 		AccountConfirmationDao {
@@ -129,7 +130,6 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 				logger.debug(e.getMessage(), e);
 			}
 		}
-		
 	}
 
 	@Override
@@ -175,11 +175,11 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public AccountConfirmation findLatestActive(Long accountId)
+	public AccountConfirmation findLatestActive(Long accountId, String email)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
-		if(VUTIL.isNull(accountId)) {
-			FinderException fe = new FinderException("Cannot find account confirmation data with null account id");
+		if(VUTIL.isNull(accountId) || VUTIL.isEmpty(email)) {
+			FinderException fe = new FinderException("Cannot find account confirmation data with null account id or email");
 			logger.debug(fe.getMessage(), fe);
 			throw fe;
 		}
@@ -194,15 +194,19 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			con = getConnection();
 			
 			String sql = "select * from account_confirmation as AC " +
-							"INNER JOIN (select account_id, max(created_date) as maxc from account_confirmation where account_id = ? and expiry_date > now() " +
+							"INNER JOIN (select account_id, status, email_addr, max(created_date) as maxc from account_confirmation " +
+							"where account_id = ? and email_addr = ? and expiry_date > now() and status = ? " +
 											"GROUP BY account_id) IAC " +
-							"ON AC.account_id = IAC.account_id AND AC.created_date = IAC.maxc ";
+							"ON AC.account_id = IAC.account_id and AC.created_date = IAC.maxc and " +
+							"AC.email_addr = IAC.email_addr and AC.status = IAC.status";
 			
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + sql);
 			
 			statement = con.prepareStatement(sql);
 			statement.setLong(1, accountId);
+			statement.setString(2, email);
+			statement.setInt(3, AccountConfirmationStatusEnum.NOT_VERIFIED.getId());
 			
 			rs = statement.executeQuery();
 			
@@ -231,7 +235,48 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 				logger.debug(e.getMessage(), e);
 			}
 		}
-		
 	}
 
+	@Override
+	public void updateStatus(Long id, AccountConfirmationStatusEnum status)
+			throws DBConnectionException, UpdateException, DatabaseException {
+		
+		if(VUTIL.isNull(id) || VUTIL.isNull(status)) {
+			UpdateException ue = new UpdateException("Cannot update null status or null account");
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
+		
+		Connection con = null;
+		
+		try {
+			con = getConnection();
+			
+			QAccountConfirmation ac = QAccountConfirmation.accountConfirmation;
+			
+			SQLUpdateClause s = update(con, ac)
+					.set(ac.status, new Byte(status.getId()+""))
+					.where(ac.accountConfirmationId.eq(id));
+			
+	    	//Always log the query before executing it
+	    	logger.info("DAL QUERY: " + s.toString());
+	    	
+	    	try {
+	    		s.execute();
+	    	} catch (Exception e) {
+	    		UpdateException ue = new UpdateException(e);
+				logger.debug(ue.getMessage(), ue);
+				throw ue;
+	    	}
+			
+		} finally {
+			try {
+				if(con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
+	}
 }

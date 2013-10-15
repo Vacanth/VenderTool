@@ -36,17 +36,20 @@ import com.vendertool.registration.dal.RegistrationDALService;
 import com.vendertool.registration.email.RegistrationEmailSender;
 import com.vendertool.registration.validation.ChangeEmailValidator;
 import com.vendertool.registration.validation.ChangePasswordValidator;
+import com.vendertool.registration.validation.ConfirmEmailValidator;
 import com.vendertool.registration.validation.RegistrationValidator;
 import com.vendertool.registration.validation.SecurityQuestionsValidator;
 import com.vendertool.registration.validation.UpdateAccountProfileValidator;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketRequest;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketResponse;
+import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangeEmailResponse;
@@ -54,6 +57,8 @@ import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 import com.vendertool.sharedtypes.rnr.CloseAccountRequest;
 import com.vendertool.sharedtypes.rnr.CloseAccountResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
@@ -159,7 +164,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	//Use this for new registration, email change & password change functionality
 	private void prepareAccountForRegistration(Account account) {
 		
-		AccountConfirmation ac = prepareAccountConfirmation();
+		AccountConfirmation ac = prepareAccountConfirmation(account.getEmail());
 		
 		account.setAccountStatus(AccountStatusEnum.NOT_VERIFIED);
 		String passwordSalt = SessionIdGenerator.getInstance()
@@ -170,7 +175,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	}
 
 
-	private AccountConfirmation prepareAccountConfirmation() {
+	private AccountConfirmation prepareAccountConfirmation(String email) {
 		SessionIdGenerator sidg = SessionIdGenerator.getInstance();
 		
 		String sessionId = sidg.generateSessionId(true);
@@ -185,6 +190,9 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
         cal.add(Calendar.DATE, ACCOUNT_CONFIRMATION_EXPIRY_DAYS);
         
 		ac.setExpiryDate(cal.getTime());
+		ac.setStatus(AccountConfirmationStatusEnum.NOT_VERIFIED);
+		ac.setEmail(email);
+		
 		return ac;
 	}
 
@@ -227,14 +235,22 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	public ConfirmRegistrationResponse confirmRegistration(ConfirmRegistrationRequest request) {
 		ConfirmRegistrationResponse response = new ConfirmRegistrationResponse();
 
-		if (VUTIL.isNull(request)
-				|| (VUTIL.isEmpty(request.getEmail()))) {
+		if (VUTIL.isNull(request) || VUTIL.isNull(request.getAccountConf())) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.COMMON.NULL_ARGUMENT_PASSED, null, (String[])null);
 			return response;
 		}
 		
+		if(VUTIL.isEmpty(request.getEmail())) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, null, (String[])null);
+			return response;
+		}
+		
 		String email = request.getEmail();
+		String inputSessionId = request.getAccountConf().getConfirmSessionId();
+		Integer inputCode = request.getAccountConf().getConfirmCode();
+		
 		Account account;
 		try {
 			account = dalservice.getAccountProfile(email);
@@ -249,55 +265,9 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		Long accountId = account.getId();
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode);
 		
-		AccountConfirmation accountConf;
-		try {
-			accountConf = dalservice.getAccountConfirmation(accountId);
-		} catch (DBConnectionException | FinderException | DatabaseException e) {
-			logger.debug(e.getMessage(), e);
-			accountConf = null;
-		}
-		
-		if(VUTIL.isNull(accountConf)) {
-			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
-			response.setStatus(ResponseAckStatusEnum.FAILURE);
-			return response;
-		}
-		
-		//Now increment the attempt count.
-		accountConf.incrementAttempts();
-		
-		if(accountConf.getConfirmationAttempts() > MAX_ACCOUNT_RETRY_ATTEMPTS) {
-			response.addFieldBindingError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED, null, (String[])null);
-			response.setStatus(ResponseAckStatusEnum.FAILURE);
-			try {
-				dalservice.updateAccountStatus(email, AccountStatusEnum.SUSPENDED);
-				dalservice.updateConfirmationAttempts(accountId,
-						accountConf.getId(), accountConf.getConfirmationAttempts());
-			} catch (Exception e) {
-				logger.debug(e.getMessage(), e);
-			}
-			return response;
-		}
-		
-		String sessionId = accountConf.getConfirmSessionId();
-		Integer code = accountConf.getConfirmCode();
-		if( (!sessionId.equals(request.getAccountConf().getConfirmSessionId())) || 
-				(!code.equals(accountConf.getConfirmCode())) ) {
-			
-			//don't set the account to the response
-			response.addFieldBindingError(Errors.REGISTRATION.UNAUTHORIZED_ACCOUNT_CONFIRMATION, null, (String[])null);
-			response.setStatus(ResponseAckStatusEnum.FAILURE);
-			
-			try {
-				dalservice.updateConfirmationAttempts(accountId,
-						accountConf.getId(), accountConf.getConfirmationAttempts());
-			} catch (DBConnectionException | UpdateException
-					| DatabaseException e) {
-				logger.debug(e.getMessage(), e);
-			}
-			
+		if(response.hasErrors()) {
 			return response;
 		}
 		
@@ -417,11 +387,16 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		UpdateAccountProfileValidator validator = new UpdateAccountProfileValidator();
 		validator.validate(request, response);
+		if(! VUTIL.isEmpty(request.getPassword())) {
+			verifyPassword(response, account.getEmail(), request.getPassword());
+		}
+		
 		if(response.hasErrors()){
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.setAccount(account);
 			return response;
 		}
+		
 		
 		try {
 			dalservice.updateAccountProfile(account);
@@ -430,7 +405,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			logger.debug(e.getMessage(), e);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.setAccount(account);
-			response.addFieldBindingError(Errors.SYSTEM.INTERNAL_DATABASE_DOWN, null, (String[])null);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_UPDATE_ACCOUNT, null, (String[])null);
 			return response;
 		}
 		
@@ -472,14 +447,18 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		String oldInputHashedPassword = saltHashPassword(account.getPasswordSalt(),
-				request.getOldPassword());
+		//old password should still be available from the DB in case of forgot password use case
 		String oldDBPassword = account.getPassword();
 		
-		if(!oldDBPassword.equals(oldInputHashedPassword)) {
-			response.setStatus(ResponseAckStatusEnum.FAILURE);
-			response.addFieldBindingError(Errors.REGISTRATION.INVALID_OLD_PASSWORD, null, (String[])null);
-			return response;
+		if(! request.isForgotPasswordUsecase()) {
+			String oldInputHashedPassword = saltHashPassword(account.getPasswordSalt(),
+					request.getOldPassword());
+			
+			if(!oldDBPassword.equals(oldInputHashedPassword)) {
+				response.setStatus(ResponseAckStatusEnum.FAILURE);
+				response.addFieldBindingError(Errors.REGISTRATION.INVALID_OLD_PASSWORD, null, (String[])null);
+				return response;
+			}
 		}
 		
 		String hashedNewPassword = saltHashPassword(account.getPasswordSalt(),
@@ -517,6 +496,35 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		return response;
 	}
 	
+	private void verifyPassword(BaseResponse response, String email, String inputPassword) {
+		Account account = null;
+		
+		try {
+			account = dalservice.getAccountPassword(email);
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_VERIFY_PASSWORD, null, (String[])null);
+			return;
+		}
+		
+		if(VUTIL.isNull(account)) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
+			return;
+		}
+		
+		//old password should still be available from the DB in case of forgot password use case
+		String dbPassword = account.getPassword();
+		
+		String hashedPassword = saltHashPassword(account.getPasswordSalt(), inputPassword);
+			
+		if(!dbPassword.equals(hashedPassword)) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.INVALID_PASSWORD, null, (String[])null);
+			return;
+		}
+	}
 	
 	@POST
 	@Path("/changeEmail")
@@ -527,6 +535,11 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		ChangeEmailValidator validator = new ChangeEmailValidator();
 		validator.validate(request, response);
+		if ((!VUTIL.isEmpty(request.getPassword()))
+				&& (!VUTIL.isEmpty(request.getOldEmail()))) {
+			verifyPassword(response, request.getOldEmail(), request.getPassword());
+		}
+		
 		if(response.hasErrors()) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.setEmail(request.getOldEmail());
@@ -553,7 +566,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		}
 		
 		account.setEmail(request.getNewEmail());
-		AccountConfirmation ac = prepareAccountConfirmation();
+		AccountConfirmation ac = prepareAccountConfirmation(request.getNewEmail());
 		account.setAccountConf(ac);
 		account.setAccountStatus(AccountStatusEnum.EMAIL_CHANGE_NOT_VERIFIED);
 		
@@ -647,6 +660,11 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		SecurityQuestionsValidator validator = new SecurityQuestionsValidator();
 		validator.validate(request, response);
+		if ((!VUTIL.isEmpty(request.getPassword()))
+				&& (!VUTIL.isEmpty(request.getEmail()))) {
+			verifyPassword(response, request.getEmail(), request.getPassword());
+		}
+		
 		if(response.hasErrors()) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.setQuestions(request.getQuestions());
@@ -739,5 +757,118 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 					(String[]) null);
 			return response;
 		}
+	}
+	
+	
+	@POST
+	@Path("/confirmEmail")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Override
+	public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) {
+		ConfirmEmailResponse response = new ConfirmEmailResponse();
+
+		ConfirmEmailValidator validator = new ConfirmEmailValidator();
+		validator.validate(request, response);
+		
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		String email = request.getEmail();
+		String oldemail = request.getOldEmail();
+		String inputSessionId = request.getConfirmSessionId();
+		Integer inputCode = request.getConfirmCode();
+		
+		Account account;
+		try {
+			account = dalservice.getAccountProfile(oldemail);
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			account = null;
+		}
+		
+		if(VUTIL.isNull(account)) {
+			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		_confirmEmail(response, account, oldemail, email, inputSessionId, inputCode);
+		
+		if(response.hasErrors()) {
+			return response;
+		}
+		
+		return response;
+	}
+	
+	private void _confirmEmail(BaseResponse response, Account account,
+			String oldemail, String email, String inputSessionId,
+			Integer inputCode) {
+		
+		Long accountId = account.getId();
+		
+		AccountConfirmation accountConf;
+		try {
+			accountConf = dalservice.getAccountConfirmation(accountId, email);
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			accountConf = null;
+		}
+		
+		if(VUTIL.isNull(accountConf)) {
+			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return;
+		}
+		
+		//Now increment the attempt count.
+		accountConf.incrementAttempts();
+		
+		if(accountConf.getConfirmationAttempts() > MAX_ACCOUNT_RETRY_ATTEMPTS) {
+			response.addFieldBindingError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			try {
+				dalservice.updateAccountStatus(email, AccountStatusEnum.SUSPENDED);
+				dalservice.updateConfirmationAttempts(accountId,
+						accountConf.getId(), accountConf.getConfirmationAttempts());
+			} catch (Exception e) {
+				logger.debug(e.getMessage(), e);
+			}
+			return;
+		}
+		
+		String dbSessionId = accountConf.getConfirmSessionId();
+		Integer dbCode = accountConf.getConfirmCode();
+		if( (!dbSessionId.equals(inputSessionId)) || 
+				(!dbCode.equals(inputCode)) ) {
+			
+			//don't set the account to the response
+			response.addFieldBindingError(Errors.REGISTRATION.UNAUTHORIZED_ACCOUNT_CONFIRMATION, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			
+			try {
+				dalservice.updateConfirmationAttempts(accountId,
+						accountConf.getId(), accountConf.getConfirmationAttempts());
+			} catch (DBConnectionException | UpdateException
+					| DatabaseException e) {
+				logger.debug(e.getMessage(), e);
+			}
+			
+			return;
+		}
+		
+		try {
+			dalservice.updateAccountConfirmationStatus(accountConf.getId(), AccountConfirmationStatusEnum.VERIFIED);
+		} catch (DBConnectionException | UpdateException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CONFIRM_EMAIL, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return;
+		}
+		
+		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 	}
 }

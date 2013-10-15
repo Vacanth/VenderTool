@@ -38,7 +38,7 @@ public class ChangePasswordValidator implements Validator {
 		}
 		
 		String oldpassword = request.getOldPassword();
-		if(VUTIL.isEmpty(oldpassword)) {
+		if((! request.isForgotPasswordUsecase()) && VUTIL.isEmpty(oldpassword)) {
 			response.addFieldBindingError(
 					Errors.REGISTRATION.PWD_CHANGE_MISSING_OLD_PWD, 
 					null, (String[])null);

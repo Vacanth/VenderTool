@@ -24,6 +24,7 @@ import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.Address;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 import com.vendertool.sharedtypes.core.Address.AddressUsecaseEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
 
@@ -97,9 +98,9 @@ public class RegistrationDALService {
 			return;
 		}
 		
-		updateAddress(account);
-		
 		accountDao.update(account, FieldSets.ACCOUNT_UPDATESET.PROFILE);
+		
+		updateAddress(account);
 	}
 
 
@@ -261,14 +262,23 @@ public class RegistrationDALService {
 		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
 	}
 	
-	public AccountConfirmation getAccountConfirmation(Long accountId)
+	public AccountConfirmation getAccountConfirmation(Long accountId, String email)
 			throws DBConnectionException, FinderException, DatabaseException {
 		
 		if(VUTIL.isNull(accountId)) {
 			return null;
 		}
 		
-		return accountConfDao.findLatestActive(accountId);
+		return accountConfDao.findLatestActive(accountId, email);
+	}
+	
+	public void updateAccountConfirmationStatus(Long id, AccountConfirmationStatusEnum status) 
+			throws DBConnectionException, UpdateException, DatabaseException {
+		if(VUTIL.isNull(id) || VUTIL.isNull(status)) {
+			return;
+		}
+		
+		accountConfDao.updateStatus(id, status);
 	}
 	
 	public void updateAccountStatus(String email, AccountStatusEnum status)

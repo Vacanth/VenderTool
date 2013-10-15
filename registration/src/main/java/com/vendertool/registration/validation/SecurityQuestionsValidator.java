@@ -26,15 +26,21 @@ public class SecurityQuestionsValidator implements Validator {
 		UpdateAccountSecurityQuestionsResponse response = (UpdateAccountSecurityQuestionsResponse) _response;
 		UpdateAccountSecurityQuestionsRequest request = (UpdateAccountSecurityQuestionsRequest) _request;
 		
-		if(VUTIL.isNull(request) || VUTIL.isNull(request.getEmail()) 
-				|| VUTIL.isNull(request.getQuestions())) {
+		if(VUTIL.isNull(request)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.COMMON.NULL_ARGUMENT_PASSED, null, (String[])null);
 			return;
 		}
 		
-		List<AccountSecurityQuestion> questions = request.getQuestions();
-		if(questions.isEmpty()) {
+		if (VUTIL.isEmpty(request.getEmail())) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(
+					Errors.REGISTRATION.EMAIL_MISSING, null,
+					(String[]) null);
+			return;
+		}
+		
+		if (VUTIL.isNull(request.getQuestions()) || request.getQuestions().isEmpty()) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(
 					Errors.REGISTRATION.MISSING_SECURITY_QUESTION, null,
@@ -42,13 +48,19 @@ public class SecurityQuestionsValidator implements Validator {
 			return;
 		}
 		
+		if (VUTIL.isEmpty(request.getPassword())) {
+			response.addFieldBindingError(Errors.REGISTRATION.MISSING_PASSWORD,
+					null, (String[])null);
+		}
+		
+		List<AccountSecurityQuestion> questions = request.getQuestions();
 		for(AccountSecurityQuestion question : questions){
 			if(VUTIL.isNull(question.getQuestionCode())) {
 				response.setStatus(ResponseAckStatusEnum.FAILURE);
 				response.addFieldBindingError(
 						Errors.REGISTRATION.MISSING_SECURITY_QUESTION, null,
 						(String[]) null);
-				return;
+				continue;
 			}
 			
 			if(VUTIL.isEmpty(question.getAnswer())) {
@@ -56,7 +68,7 @@ public class SecurityQuestionsValidator implements Validator {
 				response.addFieldBindingError(
 						Errors.REGISTRATION.MISSING_SECURITY_ANSWER, null,
 						(String[]) null);
-				return;
+				continue;
 			}
 		}
 	}

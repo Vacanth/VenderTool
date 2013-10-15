@@ -10,5 +10,5 @@ public interface URLConstants {
 	
 	public static final String WEB_APP_PATH = "/site";
 	public static final String CONFIRM_ACCOUNT_PATH = "/confirmaccount";
-	
+	public static final String CONFIRM_EMAIL_PATH = "/confirmemail";
 }

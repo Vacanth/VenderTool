@@ -265,7 +265,6 @@ public class ProfileController {
 		logger.info("getPasswordView controller invoked");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("showOldPasswordField", true);
 		
 		return map;
 	}
@@ -287,7 +286,9 @@ public class ProfileController {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
+		//always set this & don't accept from the UI input
 		changePasswordRequest.setEmail(email);
+		changePasswordRequest.setForgotPasswordUsecase(false);
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		

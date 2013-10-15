@@ -9,6 +9,8 @@ import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 import com.vendertool.sharedtypes.rnr.CloseAccountRequest;
 import com.vendertool.sharedtypes.rnr.CloseAccountResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
@@ -122,4 +124,12 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @return
 	 */
 	public GetAccountSecurityQuestionsResponse getSecurityQuestions(String email);
+	
+	/**
+	 * HTTP POST to confirm the email.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request);
 }

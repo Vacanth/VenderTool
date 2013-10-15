@@ -8,6 +8,7 @@ public class ChangePasswordRequest extends BaseRequest {
 	private String oldPassword;
 	private String newPassword;
 	private String confirmPassword;
+	private boolean forgotPasswordUsecase;
 	
 	
 	public String getEmail() {
@@ -40,5 +41,13 @@ public class ChangePasswordRequest extends BaseRequest {
 
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
+	}
+
+	public boolean isForgotPasswordUsecase() {
+		return forgotPasswordUsecase;
+	}
+
+	public void setForgotPasswordUsecase(boolean forgotPasswordUsecase) {
+		this.forgotPasswordUsecase = forgotPasswordUsecase;
 	}
 }

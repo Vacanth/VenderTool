@@ -51,11 +51,38 @@ public class UpdateAccountProfileValidator implements Validator {
 		
 		Account account = request.getAccount();
 		
+		validateEmail(account, response);
+		if(response.hasErrors()) {
+			return;
+		}
+		
+		validatePassword(request.getPassword(), response);
+		if(response.hasErrors()) {
+			return;
+		}
+		
 		validateAlternateEmail(account, response);
 		validateContactDetails(account, response);
 		validateBillingAddress(account, response);
 		validateCurrency(account, response);
 		validateLanguage(account, response);
+	}
+
+	private void validatePassword(String password,
+			UpdateAccountResponse response) {
+		if (VUTIL.isEmpty(password)) {
+			response.addFieldBindingError(Errors.REGISTRATION.MISSING_PASSWORD,
+					null, (String[])null);
+			return;
+		}		
+	}
+
+	private void validateEmail(Account account, UpdateAccountResponse response) {
+		if (VUTIL.isEmpty(account.getEmail())) {
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING,
+					account.getClass().getName(), "email");
+			return;
+		}
 	}
 
 	private void validateLanguage(Account account,
@@ -189,13 +216,12 @@ public class UpdateAccountProfileValidator implements Validator {
 	private void validateAlternateEmail(Account account,
 			UpdateAccountResponse response) {
 		
-		if(VUTIL.isNullOrEmpty(account.getEmail())) {
-			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, account.getClass().getName(), "email");
+		if(VUTIL.isEmpty(account.getAlternateEmailId())) {
 			return;
 		}
 		
-		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getEmail())) {
-			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "email");
+		if(!VUTIL.matchesPattern(EmailRegexValidator.SIMPLE_EMAIL_PATTERN, account.getAlternateEmailId())) {
+			response.addFieldBindingError(Errors.REGISTRATION.INVALID_EMAIL_ID, account.getClass().getName(), "alternateEmailId");
 		}
 	}
 

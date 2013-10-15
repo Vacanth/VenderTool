@@ -45,33 +45,49 @@ public class RegistrationEmailSender {
 			return;
 		}
 		
+    	ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
+				account, baseurl, locale, URLConstants.CONFIRM_ACCOUNT_PATH, false);
+    	
+    	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
+    	EmailService emailService = (EmailService) ctx.getBean("confirmRegistrationEmailService");
+    	emailService.sendEmail(emailModel, locale);
+	}
+
+	private ConfirmRegistrationEmailDataModel getConfirmEmailDataModel(
+			Account account, String baseurl, Locale locale, String commandName, boolean changeEmailUsecase) {
+		
 		MsgSource msgSource = new MsgSource();
 		
-    	ConfirmRegistrationEmailDataModel emailModel = new ConfirmRegistrationEmailDataModel();
-    	emailModel.setToEmail(account.getEmail());
-		if (validationUtil.isNotNull(account.getContactDetails())
-				&& (validationUtil.isNotNull(account.getContactDetails().getFirstName()))) {
-			emailModel.setToName(account.getContactDetails().getFirstName());
-		} else {
-			emailModel.setToName(account.getEmail());
-		}
+		ConfirmRegistrationEmailDataModel emailModel = new ConfirmRegistrationEmailDataModel();
+		String email = (changeEmailUsecase) ? 
+				account.getContactDetails().getEmail() : account.getEmail();
+		
+    	emailModel.setToEmail(email);
+		emailModel.setToName(account.getContactDetails().getFirstName());
 		emailModel.setFromName(msgSource.getMessage(PROPERTY_COMPANY_NAME, null,
 				locale));
 		emailModel.setSubject(msgSource.getMessage(PROPERTY_CONFIRM_REG_SUBJECT, null,
 				locale));
     	
-    	String email = account.getEmail();
     	String sessiontoken = account.getAccountConf().getConfirmSessionId();
     	Integer confCode = account.getAccountConf().getConfirmCode();
     	
-		String confirmRegUrl = baseurl + URLConstants.WEB_APP_PATH
-				+ URLConstants.CONFIRM_ACCOUNT_PATH
-				+ URLConstants.QUERY_PARAM_SEPARATOR + "email"
-				+ URLConstants.VALUE_SEPARATOR + email
-				+ URLConstants.FIELD_SEPARATOR + "sessiontoken"
-				+ URLConstants.VALUE_SEPARATOR + sessiontoken
-				+ URLConstants.FIELD_SEPARATOR + "confirmationcode"
-				+ URLConstants.VALUE_SEPARATOR + confCode;
+    	StringBuffer confirmRegUrl = new StringBuffer();
+			confirmRegUrl
+				.append(baseurl).append(URLConstants.WEB_APP_PATH)
+				.append(commandName)
+				.append(URLConstants.QUERY_PARAM_SEPARATOR).append("email")
+				.append(URLConstants.VALUE_SEPARATOR).append(email)
+				.append(URLConstants.FIELD_SEPARATOR).append("sessiontoken")
+				.append(URLConstants.VALUE_SEPARATOR).append(sessiontoken)
+				.append(URLConstants.FIELD_SEPARATOR).append("confirmationcode")
+				.append(URLConstants.VALUE_SEPARATOR).append(confCode);
+			
+		if(changeEmailUsecase) {
+			confirmRegUrl
+				.append(URLConstants.FIELD_SEPARATOR).append("oldemail")
+				.append(URLConstants.VALUE_SEPARATOR).append(account.getEmail());
+		}
 		
 //		String encodedConfirmRegUrl = null;
 //		
@@ -82,11 +98,8 @@ public class RegistrationEmailSender {
 //			return;
 //		}
     	
-    	emailModel.setConfirmationUrl(confirmRegUrl);
-    	
-    	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
-    	EmailService emailService = (EmailService) ctx.getBean("confirmRegistrationEmailService");
-    	emailService.sendEmail(emailModel, locale);
+    	emailModel.setConfirmationUrl(confirmRegUrl.toString());
+		return emailModel;
 	}
 
 	
@@ -164,9 +177,10 @@ public class RegistrationEmailSender {
     	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
     	
     	//send to new email
-    	sendConfirmRegistrationEmail(account, baseurl, locale);
-//    	EmailService emailService = (EmailService) ctx.getBean("changeEmailService");
-//    	emailService.sendEmail(emailModel, locale);
+    	ConfirmRegistrationEmailDataModel confirmEmailModel = getConfirmEmailDataModel(
+				account, baseurl, locale, URLConstants.CONFIRM_EMAIL_PATH, true);
+    	EmailService confirmEmailService = (EmailService) ctx.getBean("confirmEmailService");
+    	confirmEmailService.sendEmail(confirmEmailModel, locale);
     	
     	
     	//Now send to the old email

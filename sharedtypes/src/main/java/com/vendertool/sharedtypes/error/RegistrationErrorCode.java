@@ -77,6 +77,8 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"PWD_CHANGE_MISSING_OLD_PWD");
 	public static VTErrorCode UNABLE_TO_CHANGE_PASSWORD = new RegistrationErrorCode(
 			"UNABLE_TO_CHANGE_PASSWORD");
+	public static VTErrorCode UNABLE_TO_VERIFY_PASSWORD = new RegistrationErrorCode(
+			"UNABLE_TO_VERIFY_PASSWORD");
 	public static VTErrorCode UNABLE_TO_CHANGE_EMAIL = new RegistrationErrorCode(
 			"UNABLE_TO_CHANGE_EMAIL");
 	public static VTErrorCode INVALID_OLD_PASSWORD = new RegistrationErrorCode(
@@ -95,4 +97,8 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"UNABLE_TO_UPDATE_SEC_QUESTIONS");
 	public static VTErrorCode UNABLE_TO_GET_SEC_QUESTIONS = new RegistrationErrorCode(
 			"UNABLE_TO_GET_SEC_QUESTIONS");
+	public static VTErrorCode UNABLE_TO_UPDATE_ACCOUNT = new RegistrationErrorCode(
+			"UNABLE_TO_UPDATE_ACCOUNT");
+	public static VTErrorCode UNABLE_TO_CONFIRM_EMAIL = new RegistrationErrorCode(
+			"UNABLE_TO_CONFIRM_EMAIL");
 }

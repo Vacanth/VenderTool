@@ -19,11 +19,13 @@ import com.vendertool.registration.dal.dao.AccountConfirmationDao;
 import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
 import com.vendertool.registration.dal.dao.codegen.QAccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 
 public class AccountConfirmationDaoTest extends BaseDaoTest{
 
 	private static final int ACCOUNT_COUNT = 2;
 	private static final long ACCOUNT_ID = 600;
+	private static final String DEFAULT_EMAIL = "testemail@test.com";
 	
 	AccountConfirmation[] accConfs;
 	AccountConfirmationDao dao;
@@ -46,11 +48,6 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		accConfs = new AccountConfirmation[ACCOUNT_COUNT];
 		for(int idx = 0; idx < ACCOUNT_COUNT; idx++) {
 			accConfs[idx] = createAccountConf(idx);
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				log(e);
-			}
 		}
 	}
 
@@ -66,7 +63,10 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		accConf.setExpiryDate(cal.getTime());
 		
 		accConf.setConfirmCode(SessionIdGenerator.getInstance().getRandomNumber(5));
-		accConf.setConfirmSessionId(idx+"2347234jlswnwei879807sd832nk9wfw");
+		accConf.setConfirmSessionId(idx+"0002347234jlswnwei879807sd832nk9wfw");
+		
+		accConf.setEmail(DEFAULT_EMAIL);
+		accConf.setStatus(AccountConfirmationStatusEnum.NOT_VERIFIED);
 		
 		return accConf;
 	}
@@ -80,14 +80,14 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		
 		log("======== DAL find latest account confirmation =======");
 		AccountConfirmation dbaccConf = 
-				dao.findLatestActive(ACCOUNT_ID);
+				dao.findLatestActive(ACCOUNT_ID, DEFAULT_EMAIL);
 		Assert.assertNotNull(dbaccConf);
 		log(dbaccConf.toString());
 		Long id1 = dbaccConf.getId();
 		
 		log("======== DAL update attempts for one account =======");
-		dao.updateConfirmationAttempts(ACCOUNT_ID, id1, 1);
-		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		dao.updateConfirmationAttempts(ACCOUNT_ID, id1, 2);
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID, DEFAULT_EMAIL);
 		Assert.assertNotNull(dbaccConf);
 		Long id2 = dbaccConf.getId();
 		Assert.assertEquals(id1, id2);
@@ -104,7 +104,7 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		dao.insert(ACCOUNT_ID, accConfs[0]);
 		
 		log("======== DAL find latest account confirmation after new insert =======");
-		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID, DEFAULT_EMAIL);
 		Assert.assertNotNull(dbaccConf);
 		Long id3 = dbaccConf.getId();
 		Assert.assertNotSame(id1, id3);
@@ -117,7 +117,7 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		for(int i=0; i<count; i++) {
 			dao.delete(accNo++);
 		}
-		dbaccConf = dao.findLatestActive(ACCOUNT_ID);
+		dbaccConf = dao.findLatestActive(ACCOUNT_ID, DEFAULT_EMAIL);
 		Assert.assertNull(dbaccConf);
 		
 		log("******   TEST COMPLETE   ******");
@@ -129,6 +129,12 @@ public class AccountConfirmationDaoTest extends BaseDaoTest{
 		long aid = ACCOUNT_ID;
 		for (AccountConfirmation aconf : accConfs) {
 			dao.insert(aid, aconf);
+			//So that the creation dates are different
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				log(e);
+			}
 		}
 	}
 	

@@ -170,6 +170,12 @@ public class RegistrationErrors {
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
+	public VTError UNABLE_TO_VERIFY_PASSWORD = new VTError(
+			RegistrationErrorCode.UNABLE_TO_VERIFY_PASSWORD, 
+			"Unable to verify password", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
 	public VTError UNABLE_TO_CHANGE_EMAIL = new VTError(
 			RegistrationErrorCode.UNABLE_TO_CHANGE_EMAIL, 
 			"Unable to change email", 
@@ -223,4 +229,17 @@ public class RegistrationErrors {
 			"Unable to get security questions", 
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
+	
+	public VTError UNABLE_TO_UPDATE_ACCOUNT = new VTError(
+			RegistrationErrorCode.UNABLE_TO_UPDATE_ACCOUNT, 
+			"Unable to update account", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError UNABLE_TO_CONFIRM_EMAIL = new VTError(
+			RegistrationErrorCode.UNABLE_TO_CONFIRM_EMAIL, 
+			"Unable to confirm email", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
 }

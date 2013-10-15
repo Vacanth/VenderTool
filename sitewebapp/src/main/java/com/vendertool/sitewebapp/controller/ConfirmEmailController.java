@@ -12,73 +12,76 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
-import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
-import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
-public class ConfirmAccountController {
-	private static final Logger logger = Logger.getLogger(ConfirmAccountController.class);
+public class ConfirmEmailController {
+	private static final Logger logger = Logger.getLogger(ConfirmEmailController.class);
 	
-	@RequestMapping(value="confirmaccount", method=RequestMethod.GET)
-	public String confirmRegistration(HttpServletRequest httprequest) {
+	@RequestMapping(value="confirmemail", method=RequestMethod.GET)
+	public String confirmEmail(HttpServletRequest httprequest) {
 		Map<String, String[]> reqMap = httprequest.getParameterMap();
 		
-		ConfirmRegistrationRequest confirmRegRequest = new ConfirmRegistrationRequest();
-		AccountConfirmation acctConf = new AccountConfirmation();
-		confirmRegRequest.setAccountConf(acctConf);
+		ConfirmEmailRequest request = new ConfirmEmailRequest();
 		
 		boolean emptyRequest = true;
 		String[] emails = reqMap.get("email");
 		if(emails != null) {
-			confirmRegRequest.setEmail(emails[0]);
+			request.setEmail(emails[0]);
+			emptyRequest = false;
+		}
+		
+		String[] oldemails = reqMap.get("oldemail");
+		if(oldemails != null) {
+			request.setOldEmail(oldemails[0]);
 			emptyRequest = false;
 		}
 		
 		String[] sessiontokens = reqMap.get("sessiontoken");
 		if(sessiontokens != null) {
-			acctConf.setConfirmSessionId(sessiontokens[0]);
+			request.setConfirmSessionId(sessiontokens[0]);
 			emptyRequest = false;
 		}
 		
 		String[] codes = reqMap.get("confirmationcode");
 		if((codes != null) && (codes[0] != null)) {
-			acctConf.setConfirmCode(Integer.parseInt(codes[0]));
+			request.setConfirmCode(Integer.getInteger(codes[0]));
 			emptyRequest = false;
 		}
 		
 		if(emptyRequest) {
-			return "home";
+			return "redirect:home";
 		}
 		
 		String hostName = RestServiceClientHelper.getServerURL(httprequest);
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_CONFIRM_PATH;
+				URLConstants.WS_CONFIRM_EMAIL_PATH;
 		
 		Response response = RestServiceClientHelper
-				.invokeRestService(url, confirmRegRequest, null, MediaType.APPLICATION_JSON_TYPE,
+				.invokeRestService(url, request, null, MediaType.APPLICATION_JSON_TYPE,
 						HttpMethodEnum.POST);
 		
 		int responseCode = response.getStatus();
 		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
 				+ url + "' from '" + getClass().getName()
-				+ ".confirmRegistration' is '" + responseCode + "'.");
+				+ ".confirmEmail' is '" + responseCode + "'.");
 		
 		//HTTP error code 201
 		if(response.getStatus() != Response.Status.OK.getStatusCode()) {
-			throw new VTRuntimeException("Unable to confirm registration");
+			throw new VTRuntimeException("Unable to confirm email");
 		}
 		
 		
-		ConfirmRegistrationResponse confirmAccountresponse = response.readEntity(ConfirmRegistrationResponse.class);
-		if(confirmAccountresponse.hasErrors()) {
-			return "confirmaccountfailed";
+		ConfirmEmailResponse confirmEmailresponse = response.readEntity(ConfirmEmailResponse.class);
+		if(confirmEmailresponse.hasErrors()) {
+			return "confirmemailfailed";
 		}
 		
-		return "redirect:signIn?justConfAccount=true";
+		return "redirect:signIn";
 	}
 }

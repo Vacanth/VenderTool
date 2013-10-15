@@ -12,11 +12,13 @@ public class QBeanAccountConfirmation {
 
     private Long accountId;
 
-    private Short confirmationCode;
+    private Integer confirmationCode;
 
     private java.sql.Timestamp confirmationDate;
 
     private java.sql.Timestamp createdDate;
+
+    private String emailAddr;
 
     private java.sql.Timestamp expiryDate;
 
@@ -27,6 +29,8 @@ public class QBeanAccountConfirmation {
     private Byte numberOfAttempts;
 
     private String sessionId;
+
+    private Byte status;
 
     public Long getAccountConfirmationId() {
         return accountConfirmationId;
@@ -44,11 +48,11 @@ public class QBeanAccountConfirmation {
         this.accountId = accountId;
     }
 
-    public Short getConfirmationCode() {
+    public Integer getConfirmationCode() {
         return confirmationCode;
     }
 
-    public void setConfirmationCode(Short confirmationCode) {
+    public void setConfirmationCode(Integer confirmationCode) {
         this.confirmationCode = confirmationCode;
     }
 
@@ -66,6 +70,14 @@ public class QBeanAccountConfirmation {
 
     public void setCreatedDate(java.sql.Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getEmailAddr() {
+        return emailAddr;
+    }
+
+    public void setEmailAddr(String emailAddr) {
+        this.emailAddr = emailAddr;
     }
 
     public java.sql.Timestamp getExpiryDate() {
@@ -106,6 +118,14 @@ public class QBeanAccountConfirmation {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
 }

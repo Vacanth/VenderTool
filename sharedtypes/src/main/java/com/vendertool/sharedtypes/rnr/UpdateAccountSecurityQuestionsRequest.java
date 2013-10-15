@@ -10,6 +10,7 @@ import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 public class UpdateAccountSecurityQuestionsRequest extends BaseRequest {
 	private String email;
 	List<AccountSecurityQuestion> questions;
+	private String password;
 	
 	public String getEmail() {
 		return email;
@@ -25,5 +26,13 @@ public class UpdateAccountSecurityQuestionsRequest extends BaseRequest {
 	
 	public void setQuestions(List<AccountSecurityQuestion> questions) {
 		this.questions = questions;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

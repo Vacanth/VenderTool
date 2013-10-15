@@ -16,6 +16,7 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QAccountConfirmation;
 import com.vendertool.registration.dal.dao.codegen.QBeanAccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 
 public class AccountConfirmationMapper implements DALMapper<AccountConfirmation> {
 
@@ -46,6 +47,16 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		for(Path<?> rpath : paths) {
 			if(ac.accountId.equals(rpath)) {
 				map.put(ac.accountId, accConf.getId());
+			}
+			
+			if(ac.emailAddr.equals(rpath)) {
+				map.put(ac.accountId, accConf.getEmail());
+			}
+			
+			if(ac.status.equals(rpath)) {
+				if(VUTIL.isNotNull(accConf.getStatus())) {
+					map.put(ac.status, new Byte(accConf.getStatus().getId()+""));
+				}
 			}
 			
 			if(ac.confirmationCode.equals(rpath)) {
@@ -106,7 +117,7 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		accbean.setAccountConfirmationId(accConf.getId());
 		
 		if(VUTIL.isNotNull(accConf.getConfirmCode())) {
-			accbean.setConfirmationCode(accConf.getConfirmCode().shortValue());
+			accbean.setConfirmationCode(accConf.getConfirmCode());
 		}
 		
 		if(VUTIL.isNotNull(accConf.getConfirmationDate())) {
@@ -114,6 +125,12 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		}
 		
 		accbean.setSessionId(accConf.getConfirmSessionId());
+		
+		if(VUTIL.isNotNull(accConf.getStatus())) {
+			accbean.setStatus(new Byte(accConf.getStatus().getId()+""));
+		}
+		
+		accbean.setEmailAddr(accConf.getEmail());
 		
 		Date cdate = accConf.getCreateDate();
 		if(cdate == null) {
@@ -155,10 +172,24 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 				accConf.setId(row.get(ac.accountId));
 			}
 			
+			if(ac.status.equals(rpath)) {
+				if(VUTIL.isNotNull(row.get(ac.status))) {
+					int sid = row.get(ac.status).intValue();
+					AccountConfirmationStatusEnum statusEnum = AccountConfirmationStatusEnum.get(sid);
+					if(statusEnum != null) {
+						accConf.setStatus(statusEnum);
+					}
+				}
+			}
+			
+			if(ac.emailAddr.equals(rpath)) {
+				accConf.setEmail(row.get(ac.emailAddr));
+			}
+			
 			if(ac.confirmationCode.equals(rpath)) {
-				Short code = row.get(ac.confirmationCode);
+				Integer code = row.get(ac.confirmationCode);
 				if(VUTIL.isNotNull(code)){
-					accConf.setConfirmCode(new Integer(code.intValue()));
+					accConf.setConfirmCode(code);
 				}
 			}
 			
@@ -220,6 +251,15 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		if(ts != null) {
 			ac.setExpiryDate(new Date(ts.getTime()));
 		}
+		
+		int statusId = rs.getInt("status");
+		AccountConfirmationStatusEnum status = 
+				AccountConfirmationStatusEnum.get(statusId);
+		if(status != null) {
+			ac.setStatus(status);
+		}
+		
+		ac.setEmail(rs.getString("email_addr"));
 		
 		return ac;
 	}

@@ -10,13 +10,40 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AccountConfirmation {
 	private Long id;
+	private String email;
 	private String confirmSessionId;
 	private Integer confirmCode;
 	private int confirmationAttempts;
 	private Date expiryDate;
 	private Date confirmationDate;
 	private Date createDate;
+	private AccountConfirmationStatusEnum status;
 	
+	
+	public enum AccountConfirmationStatusEnum {
+		NOT_VERIFIED(1),
+		VERIFIED(2);
+		
+		private int id;
+		
+		private AccountConfirmationStatusEnum(int id) {
+			this.id = id;
+		}
+
+		public int getId() {
+			return id;
+		}
+		
+		public static AccountConfirmationStatusEnum get(int id) {
+			AccountConfirmationStatusEnum[] enums = AccountConfirmationStatusEnum.values();
+			for(AccountConfirmationStatusEnum e : enums) {
+				if(e.getId() == id) {
+					return e;
+				}
+			}
+			return null;
+		}
+	}
 	
 	public Long getId() {
 		return id;
@@ -78,17 +105,35 @@ public class AccountConfirmation {
 		this.expiryDate = expiryDate;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public AccountConfirmationStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(AccountConfirmationStatusEnum status) {
+		this.status = status;
+	}
+
 	@JsonIgnore
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nAccountConfirmation=[[")
 			.append("\n\tID=").append(getId())
+			.append("\n\tEMAIL=").append(getEmail())
 			.append("\n\tCONFIRM SESSION ID=").append(getConfirmSessionId())
 			.append("\n\tCONFIRM CODE=").append(getConfirmCode())
 			.append("\n\tCONFIRMATION ATTEMPTS=").append(getConfirmationAttempts())
 			.append("\n\tCONFIRMATION DATE=").append(getConfirmationDate())
 			.append("\n\tCREATION DATE=").append(getCreateDate())
 			.append("\n\tEXPIRY DATE=").append(getExpiryDate())
+			.append("\n\tStatus=").append(getStatus())
 		.append("]]");
 		return sb.toString();
 	}

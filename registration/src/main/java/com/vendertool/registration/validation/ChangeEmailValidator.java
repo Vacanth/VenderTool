@@ -48,6 +48,11 @@ public class ChangeEmailValidator implements Validator {
 			return;
 		}
 		
+		if (VUTIL.isEmpty(request.getPassword())) {
+			response.addFieldBindingError(Errors.REGISTRATION.MISSING_PASSWORD,
+					null, (String[])null);
+		}
+		
 		String newemail = request.getNewEmail();
 		if(VUTIL.isEmpty(newemail)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
