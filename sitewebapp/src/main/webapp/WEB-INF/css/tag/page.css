@@ -134,6 +134,8 @@ Page Header
 /*********** Language menu ***********/
 .hdr .lang  {
 	float:right;
+	position:relative;
+	top:1px;
 }
 .hdr .lang .dropdown {
 	margin:0 15px 0 0;
@@ -145,9 +147,10 @@ Page Header
 }
 .hdr .lang .dropdown .dropdown-menu {
 	max-height:400px;
-	width:200px;
+	width:250px;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	right:-5px;
 }
 
 /*********** Sign-in link ***********/
@@ -176,6 +179,14 @@ Page Header
 	position:relative;
 	top:1px;
 }
+/*********** Header dropdown menus ***********/
+
+.hdr .dropdown-menu {
+	top:31px;
+	border-top-left-radius:0;
+	border-top-right-radius:0;
+	border-top:0;
+}
 
 /*********** Search box ***********/
 .hdr .ctls .srch {
@@ -199,7 +210,7 @@ Page Header
 .hdr .ctls .srch button {
 	width:23px;
 	height:20px;
-	background:url('img/icons.png') no-repeat -19px 0;
+	background:url('../../img/icons.png') no-repeat -19px 0;
 	border:0;
 	cursor:pointer;
 	position:absolute;
