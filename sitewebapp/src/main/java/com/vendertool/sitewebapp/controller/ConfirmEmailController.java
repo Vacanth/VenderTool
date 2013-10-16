@@ -50,7 +50,7 @@ public class ConfirmEmailController {
 		
 		String[] codes = reqMap.get("confirmationcode");
 		if((codes != null) && (codes[0] != null)) {
-			request.setConfirmCode(Integer.getInteger(codes[0]));
+			request.setConfirmCode(Integer.parseInt(codes[0]));
 			emptyRequest = false;
 		}
 		
@@ -82,6 +82,6 @@ public class ConfirmEmailController {
 			return "confirmemailfailed";
 		}
 		
-		return "redirect:signIn";
+		return "redirect:j_spring_security_logout";
 	}
 }

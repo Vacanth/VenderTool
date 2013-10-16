@@ -239,6 +239,7 @@ public class ProfileController {
 		
 		ChangeEmailResponse changeEmailResponse = response.readEntity(ChangeEmailResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
+		changeEmailResponse.setEmail(email);
 		
 		if(changeEmailResponse.hasErrors()) {
 			logger.error("Change email failed with errors: " + changeEmailResponse.getFieldBindingErrors());

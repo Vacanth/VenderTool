@@ -388,7 +388,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		UpdateAccountProfileValidator validator = new UpdateAccountProfileValidator();
 		validator.validate(request, response);
 		if(! VUTIL.isEmpty(request.getPassword())) {
-			verifyPassword(response, account.getEmail(), request.getPassword());
+			verifyPassword(response, account.getEmail(), account.getPassword());
 		}
 		
 		if(response.hasErrors()){
@@ -565,21 +565,19 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		account.setEmail(request.getNewEmail());
 		AccountConfirmation ac = prepareAccountConfirmation(request.getNewEmail());
 		account.setAccountConf(ac);
 		account.setAccountStatus(AccountStatusEnum.EMAIL_CHANGE_NOT_VERIFIED);
 		
-		boolean updated = false;
+		boolean inserted = false;
 		try {
-			updated = dalservice.updateEmail(oldInputEmail, account);
-			response.setEmail(request.getNewEmail());
-		} catch (DBConnectionException | UpdateException | DatabaseException e) {
+			inserted = dalservice.insertAccountConfirmation(account.getId(), ac);
+		} catch (DBConnectionException | DatabaseException e) {
 			logger.debug(e.getMessage(), e);
-			updated = false;
+			inserted = false;
 		}
 		
-		if(! updated) {
+		if(! inserted) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CHANGE_EMAIL, null, (String[])null);
 			response.setEmail(request.getOldEmail());
@@ -801,6 +799,17 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
+		account.setEmail(email);
+		try {
+			dalservice.updateEmail(oldemail, account);
+		} catch (DBConnectionException | UpdateException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CONFIRM_EMAIL, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 		return response;
 	}
 	
@@ -831,7 +840,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			response.addFieldBindingError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			try {
-				dalservice.updateAccountStatus(email, AccountStatusEnum.SUSPENDED);
+				dalservice.updateAccountStatus(account.getEmail(), AccountStatusEnum.SUSPENDED);
 				dalservice.updateConfirmationAttempts(accountId,
 						accountConf.getId(), accountConf.getConfirmationAttempts());
 			} catch (Exception e) {

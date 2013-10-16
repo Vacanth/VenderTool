@@ -60,7 +60,7 @@ public class RegistrationEmailSender {
 		
 		ConfirmRegistrationEmailDataModel emailModel = new ConfirmRegistrationEmailDataModel();
 		String email = (changeEmailUsecase) ? 
-				account.getContactDetails().getEmail() : account.getEmail();
+				account.getAccountConf().getEmail() : account.getEmail();
 		
     	emailModel.setToEmail(email);
 		emailModel.setToName(account.getContactDetails().getFirstName());
@@ -150,7 +150,18 @@ public class RegistrationEmailSender {
 			return;
 		}
 		
-		//sendToNewEmail
+    	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
+    	
+    	
+    	//send to new email
+    	ConfirmRegistrationEmailDataModel confirmEmailModel = getConfirmEmailDataModel(
+				account, baseurl, locale, URLConstants.CONFIRM_EMAIL_PATH, true);
+    	EmailService confirmEmailService = (EmailService) ctx.getBean("confirmEmailService");
+    	confirmEmailService.sendEmail(confirmEmailModel, locale);
+    	
+    	
+    	
+    	//Now send to the old email
 		ChangeEmailDataModel emailModel = new ChangeEmailDataModel();
     	emailModel.setToEmail(account.getEmail());
     	boolean fnExists = validationUtil.isNotNull(account.getContactDetails())
@@ -162,7 +173,7 @@ public class RegistrationEmailSender {
 			emailModel.setToName(account.getEmail());
 		}
 		
-		Object[] params = new Object[]{account.getEmail(), CONTACT_EMAIL};
+		Object[] params = new Object[]{account.getAccountConf().getEmail(), CONTACT_EMAIL};
 		emailModel.setMsgParams(params);
 		
 		MsgSource msgSource = new MsgSource();
@@ -171,25 +182,13 @@ public class RegistrationEmailSender {
 				locale));
 		emailModel.setSubject(msgSource.getMessage(PROPERTY_CHANGE_EMAIL_SUBJECT, null,
 				locale));
-		emailModel.setContactusEmail(CONTACT_EMAIL);
-		emailModel.setPreviousEmail(account.getEmail());
-		
-    	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
-    	
-    	//send to new email
-    	ConfirmRegistrationEmailDataModel confirmEmailModel = getConfirmEmailDataModel(
-				account, baseurl, locale, URLConstants.CONFIRM_EMAIL_PATH, true);
-    	EmailService confirmEmailService = (EmailService) ctx.getBean("confirmEmailService");
-    	confirmEmailService.sendEmail(confirmEmailModel, locale);
-    	
-    	
-    	//Now send to the old email
+
     	EmailService oldEmailService = (EmailService) ctx.getBean("changeEmailService");
     	emailModel.setToEmail(oldemail);
     	if(!fnExists) {
     		emailModel.setToName(oldemail);
     	}
-    	emailModel.setPreviousEmail(account.getEmail());
+
     	oldEmailService.sendEmail(emailModel, locale);
 	}
 	

@@ -120,7 +120,7 @@
 		<tr>
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountOrig.password" class="form-control" type="password"/>
+				<input ng-model="accountEdit.password" class="form-control" type="password"/>
 				<div field-error field="password" type="com.vendertool.sharedtypes.core.Account"></div>
 			</td>
 		</tr>

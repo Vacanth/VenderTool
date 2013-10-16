@@ -253,6 +253,8 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 		$scope.question1 = angular.copy($scope.questionList1[0].questionId);
 		$scope.question2 = angular.copy($scope.questionList1[1].questionId);
 		
+		$scope.password;
+		
 		//$scope.answer1 = angular.copy(r.questionAnswers[0].answer);
 		//$scope.answer2 = angular.copy(r.questionAnswers[1].answer);
 	});
@@ -300,7 +302,8 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 		PageUtil.showSpinner();
 		
 		var questionsReq = {};
-		questionsReq.questions = [{"questionCode":$scope.question1, "answer":$scope.answer1}, {"questionCode":$scope.question2, "answer":$scope.answer2}];
+		questionsReq.questions = [{"question":{"questionCode":$scope.question1}, "answer":$scope.answer1}, {"question":{"questionCode":$scope.question2}, "answer":$scope.answer2}];
+		questionsReq.password = $scope.password;
 		
 		//console.log($scope.question1 + ":" + $scope.question2);
 		

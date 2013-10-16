@@ -56,7 +56,7 @@ public class UpdateAccountProfileValidator implements Validator {
 			return;
 		}
 		
-		validatePassword(request.getPassword(), response);
+		validatePassword(account.getPassword(), response);
 		if(response.hasErrors()) {
 			return;
 		}

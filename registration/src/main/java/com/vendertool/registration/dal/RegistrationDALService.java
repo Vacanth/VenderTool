@@ -198,26 +198,30 @@ public class RegistrationDALService {
 		return true;
 	}
 	
-	
 	public boolean updateEmail(String oldEmail, Account account)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
-		if(VUTIL.isNull(oldEmail) || VUTIL.isNull(account) || 
-				(account.getId() <= 0) || VUTIL.isNull(account.getAccountConf())) {
-			return false;
-		}
-		
-		try {
-			accountConfDao.insert(account.getId(), account.getAccountConf());
-		} catch (InsertException e) {
-			logger.debug(e.getMessage(), e);
-			return false;
-		}
 		accountDao.updateEmail(oldEmail, account.getEmail(), account.getAccountStatus());
 		
 		return true;
 	}
 	
+	public boolean insertAccountConfirmation(Long accountId,
+			AccountConfirmation ac) throws DBConnectionException,
+			DatabaseException {
+		if(VUTIL.isNull(accountId) || VUTIL.isNull(ac)) {
+			return false;
+		}
+		
+		try {
+			accountConfDao.insert(accountId, ac);
+		} catch (InsertException e) {
+			logger.debug(e.getMessage(), e);
+			return false;
+		}
+		
+		return true;
+	}
 	
 	public Long getAccountId(String email) throws DBConnectionException,
 			FinderException, DatabaseException {
