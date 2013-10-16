@@ -227,4 +227,24 @@ public class RegistrationEmailSender {
     	EmailService emailService = (EmailService) ctx.getBean("passwordChangeEmailService");
     	emailService.sendEmail(emailModel, locale);
 	}
+
+	public void sendForgotPasswordEmail(Account account, String baseurl,
+			Locale locale) {
+		if (!isValid(account, baseurl)) {
+			logger.debug("Invalid input passed while attempting to send " +
+					"email for the the change password case");
+			return;
+		}
+		
+    	ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
+				account, baseurl, locale, URLConstants.CONFIRM_FORGOT_PASSWORD_PATH, false);
+		
+		Object[] params = new Object[]{CONTACT_EMAIL};
+		emailModel.setMsgParams(params);
+		
+    	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
+    	
+    	EmailService emailService = (EmailService) ctx.getBean("confirmForgotPasswordEmailService");
+    	emailService.sendEmail(emailModel, locale);
+	}
 }

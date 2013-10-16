@@ -171,7 +171,6 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 				logger.debug(e.getMessage(), e);
 			}
 		}
-		
 	}
 
 	@Override

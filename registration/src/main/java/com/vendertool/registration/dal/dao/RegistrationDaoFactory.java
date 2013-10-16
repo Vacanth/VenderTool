@@ -32,6 +32,10 @@ public class RegistrationDaoFactory extends BaseDaoFactory {
 	public AccountSecurityQuestionDao getAccountSecurityQuestionDao() {
 		return (AccountSecurityQuestionDao) getDao(AccountSecurityQuestionDao.class);
 	}
+	
+	public ForgotPasswordDao getForgotPasswordDao() {
+		return (ForgotPasswordDao) getDao(ForgotPasswordDao.class);
+	}
 
 	@Override
 	protected void register() throws DatabaseException {
@@ -39,5 +43,6 @@ public class RegistrationDaoFactory extends BaseDaoFactory {
 		add(AccountConfirmationDao.class, getBean("accountConfirmationDAO"));
 		add(PasswordHistoryDao.class, getBean("passwordHistoryDAO"));
 		add(AccountSecurityQuestionDao.class, getBean("accountSecurityQuestionDAO"));
+		add(ForgotPasswordDao.class, getBean("forgotPasswordDAO"));
 	}
 }
