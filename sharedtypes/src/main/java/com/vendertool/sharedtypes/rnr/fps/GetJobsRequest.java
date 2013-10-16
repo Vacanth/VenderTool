@@ -8,21 +8,39 @@ import com.vendertool.sharedtypes.rnr.BaseRequest;
 public class GetJobsRequest extends BaseRequest {
 
 	private long[] jobIds;
-	private String email;
+	private long accountId;
+	private int pageSize = 25;
+	private int pageNum = 1;
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public long[] getFiles() {
+	public long[] getJobIds() {
 		return jobIds;
 	}
 
 	public void setJobIds(long[] jobIds) {
 		this.jobIds = jobIds;
+	}
+	
+	public long getAccountId() {
+		return accountId;
+	}
+	
+	public void setAccountId(long accountId) {
+		this.accountId = accountId;
+	}
+	
+	public int getPageSize() {
+		return pageSize;
+	}
+	
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPageNum() {
+		return pageNum;
+	}
+
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
 	}
 }

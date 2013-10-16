@@ -9,7 +9,7 @@ public class ProductBean {
 	private String productCode;
 	private String productCodeType;
 	private String categoryId;
-	private String sku;
+	private String SKU;
 	private String description;
 	private String title;
 	private String price;
@@ -18,7 +18,10 @@ public class ProductBean {
 	private String itemCondition;
 	private String weight;
 	private String dimension;
-	private String imageURL;
+	private String imagesUrl;
+	
+	private String variationColor;
+	private String variationSize;
 	private String listingTypeId;
 	private Map<String,String> variations;
 	private Map<String,String> specifications;
@@ -108,11 +111,11 @@ public class ProductBean {
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
 	}
-	public String getImageURL() {
-		return imageURL;
+	public String getImagesUrl() {
+		return imagesUrl;
 	}
-	public void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
+	public void setImagesUrl(String imagesUrl) {
+		this.imagesUrl = imagesUrl;
 	}
 	public Map<String, String> getVariations() {
 		return variations;
@@ -126,11 +129,36 @@ public class ProductBean {
 	public void setSpecifications(Map<String, String> specifications) {
 		this.specifications = specifications;
 	}
-	public String getSku() {
-		return sku;
+	public String getSKU() {
+		return SKU;
 	}
-	public void setSku(String sku) {
-		this.sku = sku;
+	public void setSKU(String sku) {
+		this.SKU = sku;
 	}
+	public String getVariationColor() {
+		return variationColor;
+	}
+	public void setVariationColor(String variationColor) {
+		this.variationColor = variationColor;
+	}
+	public String getVariationSize() {
+		return variationSize;
+	}
+	public void setVariationSize(String variationSize) {
+		this.variationSize = variationSize;
+	}
+	
+	public String toString() {
+        return "ProdBean [refId=" + refId + ", userAccountId=" + userAccountId + ", productCode=" + productCode
+                + ", productCodeType=" + productCodeType + ", categoryId=" + categoryId
+                + ", SKU=" + SKU + ", description=" + description
+                + ", title=" + title + ", price=" + price 
+                + ", currencyCode=" + currencyCode + ", quantity=" + quantity  
+                + ", itemCondition=" + itemCondition +  ", weight=" + weight 
+                + ", dimension=" + dimension +  ", imagesUrl=" + imagesUrl 
+                + ", variationColor=" + variationColor + ", variationSize=" + variationSize
+                + "]";
+    }
+
 }
 

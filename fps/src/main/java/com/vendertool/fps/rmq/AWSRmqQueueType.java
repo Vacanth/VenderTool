@@ -1,7 +1,7 @@
 package com.vendertool.fps.rmq;
 
 public enum AWSRmqQueueType {
-	PRODUCT("productRmqData"), LISTING("listingRmqData"), JOB("jobRmqData");
+	PRODUCT("productRmqData"), LISTING("listingRmqData"), JOB("jobRmqData"), TASK("taskRmqData");
 
 	private String beanName;
 

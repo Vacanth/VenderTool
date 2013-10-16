@@ -37,4 +37,7 @@ public interface TaskDao extends BaseDao {
 	public List<Task> findByAccountId(long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
+	public void insertTasksWithEvents(List<Task> lTask) throws DBConnectionException,
+					InsertException, DatabaseException;
+	
 }

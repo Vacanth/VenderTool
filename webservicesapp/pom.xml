@@ -117,6 +117,8 @@
 											file="${project.build.outputDirectory}/environment.properties" /> -->
 										<copy file="../fps/src/main/resources/config/qa/aws-credentials/AwsCredentials.properties"
 											tofile="${project.build.outputDirectory}/AwsCredentials.properties" />
+										<copy file="../fps/src/main/resources/config/qa/aws-credentials/AWSRmqConfig.xml"
+											tofile="${project.build.outputDirectory}" />
 										<copy file="src/main/resources/security/qa/security-credentials.xml"
 											tofile="${project.build.outputDirectory}/security/security-credentials.xml" />
 										<copy file="../common/src/main/resources/config/qa/dal/Datasource.xml"
@@ -130,6 +132,8 @@
 										<copy file="../listing/src/main/resources/ListingDAL.xml"
 											todir="${project.build.outputDirectory}/dal" />											
 										<copy file="../common/src/main/resources/common-application-context.xml"
+											todir="${project.build.outputDirectory}" />
+										<copy file="../fps/src/main/resources/fps-application-context.xml"
 											todir="${project.build.outputDirectory}" />
 										<copy file="../registration/src/main/resources/registration-application-context.xml"
 											todir="${project.build.outputDirectory}" />

@@ -9,24 +9,34 @@ import com.rabbitmq.client.ConnectionFactory;
 public class FPSBaseEvent {
 	private String queueName;
 	private String hostName;
-	private static ConnectionFactory factory = null;
+	private String exchange;
+	private String routingKey;
+	private String qType;
 	
-	public FPSBaseEvent(String qName, String hName) {
+	public FPSBaseEvent(String qName, String hName, String xchange, String rKey, String type) {
 		queueName = qName;
 		hostName = hName;
-		factory = new ConnectionFactory();
-		factory.setHost(hostName);
+		exchange = xchange;
+		routingKey = rKey;
+		qType = type;
 	}
 	
 	public void sendEvent(String payload) {
 		try {
-		Connection connection = factory.newConnection();
-		Channel channel = connection.createChannel();
-
-		channel.queueDeclare(queueName, false, false, false, null);
-		channel.basicPublish("", queueName, null, payload.getBytes());
-		channel.close();
-		connection.close();
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost(hostName);
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+			channel.exchangeDeclare(exchange, qType);
+			channel.queueDeclare(queueName, true, false, false, null);
+			channel.queueBind(queueName, exchange, routingKey);
+			
+			//channel.queueBind(queueName, "uploadfileX", "uploadfiles");
+			//channel.exchangeDeclare("uploadfileX", "direct");
+			
+			channel.basicPublish("", queueName, null, payload.getBytes());
+			channel.close();
+			connection.close();
 		} catch (IOException io) {
 			System.out.println("Error Message: not able to publish the event " + io.getMessage());
 		}
