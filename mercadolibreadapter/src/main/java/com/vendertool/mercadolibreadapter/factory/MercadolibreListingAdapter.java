@@ -1,7 +1,9 @@
 package com.vendertool.mercadolibreadapter.factory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -10,8 +12,12 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vendertool.common.utils.AdapterUtils;
 import com.vendertool.mercadolibreadapter.MLConstants;
+import com.vendertool.mercadolibreadapter.add.ErrorResponse;
 import com.vendertool.mercadolibreadapter.add.Item;
+import com.vendertool.mercadolibreadapter.utils.ErrorMapperHelper;
+import com.vendertool.sharedtypes.core.Amount;
 import com.vendertool.sharedtypes.core.Classification;
 import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
@@ -28,7 +34,7 @@ import com.vendertool.sharedtypes.rnr.BaseResponse;
 public class MercadolibreListingAdapter implements
 		IBaseMercadolibreOperationAdapter {
 
-	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-100922-284582fa55b9dc63c1f4a9ff69c8b8d4__F_I__-141983227";
+	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-101521-470e85844534bc48f17f71fefa860756__G_J__-141983227";
 
 	private MercadolibreListingAdapter() {
 	}
@@ -56,26 +62,38 @@ public class MercadolibreListingAdapter implements
 		Response resp = s_communicator.call(communicatorVO);
 
 		// Handle the error codes
-		if (resp.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatus());
+		String output = resp.readEntity(String.class);
+
+		if (resp.getStatus() != Response.Status.CREATED.getStatusCode()) {
+			try {
+				processErrorResponse(output, (AddListingResponse) response);
+			} catch (IOException e) {
+				//Set System Error!
+			}
+			return;
 		}
 
-		String output = resp.readEntity(String.class);
 		Item responseItem = readItem(output);
 
 		// Call Add listing
 		adaptTOResponse(responseItem, (AddListingResponse) response);
 	}
 
+	private void processErrorResponse(String output, AddListingResponse response) throws JsonParseException, JsonMappingException, IOException {
+		ErrorResponse error = 	new ObjectMapper().readValue(output, ErrorResponse.class);
+		if(error != null){
+			ErrorMapperHelper.getInstance().populateErrors(response, error);
+		}
+	}
+
 	private void adaptTOResponse(Item responseItem, AddListingResponse response) {
 		response.setListingId(responseItem.getId());
 	}
-
+	
 	private Item readItem(String output) {
 		Item response = null;
 		try {
-			response = new ObjectMapper().readValue(output, Item.class);
+			response = AdapterUtils.getInstance().getObjectMapper(false).readValue(output, Item.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -114,7 +132,6 @@ public class MercadolibreListingAdapter implements
 		if (product == null) {
 			return null;
 		}
-		// TODO validate the request?
 		Item item = new Item();
 		item.setTitle(product.getTitle());
 		List<Classification> classifications = listing.getClassifications();
@@ -189,7 +206,7 @@ public class MercadolibreListingAdapter implements
 		listing.setWarranty("Yes");
 		
 		Product product = new Product();
-		product.setTitle("Anteojos Ray Ban Wayfare");
+		product.setTitle("Test Test Test!");
 
 		List<Classification> classList = new ArrayList<Classification>();
 		Classification clasif = new Classification();
@@ -197,21 +214,16 @@ public class MercadolibreListingAdapter implements
 		clasif.setClassificationType(ClassificationTypeEnum.CATEGORY);
 		classList.add(clasif);
 		listing.setClassifications(classList);
+		listing.setListingCurrency(Currency.getInstance("ARS"));
+		Amount amount = new Amount();
+		amount.setValue(new BigDecimal(3.3));
+		amount.setCurrency(Currency.getInstance("ARS"));
+		listing.setFixedPrice(amount);
+		listing.setPrice(amount);
 		listing.setProduct(product);
+		listing.setQuantity(1);
+		listing.setCondition("used");
 		input.setListing(listing);
-
-		/*
-		 * Response r = m.post("/items", params,
-		 * "{\"title\":\"Anteojos Ray Ban Wayfare\",\"subtitle\":\"Some subtitle here\",\"category_id\":\"MLA5529\",
-		 * \"price\":10,\"currency_id\":\"ARS\",\"available_quantity\":1,\"buying_mode\":\"buy_it_now\",\"listing_type_id\":\"bronze\",
-		 * \"condition\":\"new\",\"description\": 
-		 * \"Item:, <strong> Ray-Ban WAYFARER Gloss Black RB2140 901 </strong> Model: RB2140. 
-		 * Size: 50mm. Name: WAYFARER. Color: Gloss Black. Includes Ray-Ban Carrying Case and Cleaning Cloth. New in Box\",
-		 * \"video_id\":\"YOUTUBE_ID_HERE\",\"warranty\":\"12 month by Ray Ban\",
-		 * \"pictures\":[{\"source\":\"http://upload.wikimedia.org/wikipedia/commons/f/fd/Ray_Ban_Original_Wayfarer.jpg\"},
-		 * {\"source\":\"http://en.wikipedia.org/wiki/File:Teashades.gif\"}]}"
-		 * );
-		 */
 		MercadolibreListingAdapterHolder.INSTANCE.execute(input,
 				new AddListingResponse());
 	}

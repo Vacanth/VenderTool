@@ -32,4 +32,43 @@ public class ListingErrorCode extends VTErrorCode implements Serializable{
 			"LISTING_CONTAINER_IS_EMPTY");
 	public static VTErrorCode PRODUCT_CONTAINER_IS_EMPTY = new ListingErrorCode(
 			"PRODUCT_CONTAINER_IS_EMPTY");
+	
+	public static VTErrorCode START_TIME_INVALID = new ListingErrorCode(
+			"START_TIME_INVALID");
+	
+	public static VTErrorCode CATEGORY_ID_INVALID = new ListingErrorCode(
+			"CATEGORY_ID_INVALID");
+	
+	public static VTErrorCode BUYING_MODE_INVALID = new ListingErrorCode(
+			"BUYING_MODE_INVALID");
+	
+	public static VTErrorCode AVAILABLE_QUANTITY_INVALID = new ListingErrorCode(
+			"AVAILABLE_QUANTITY_INVALID");
+	
+	public static VTErrorCode ATTRIBUTES_INVALID = new ListingErrorCode(
+			"ATTRIBUTES_INVALID");
+	
+	public static VTErrorCode VARIATION_ATTRIBUTE_COMBINATION_INVALID = new ListingErrorCode(
+			"VARIATION_ATTRIBUTE_COMBINATION_INVALID");
+	
+	public static VTErrorCode REQUIRED_ATTIBUTES_MISSING_INVALID = new ListingErrorCode(
+			"REQUIRED_ATTIBUTES_MISSING_INVALID");
+	
+	public static VTErrorCode LISTING_TYPE_ID_INVALID = new ListingErrorCode(
+			"LISTING_TYPE_ID_INVALID");
+	
+	public static VTErrorCode LISTING_TYPE_ID_REQUIRES_PICTURES_INVALID = new ListingErrorCode(
+			"LISTING_TYPE_ID_REQUIRES_PICTURES_INVALID");
+	
+	public static VTErrorCode SITE_ID_INVALID = new ListingErrorCode(
+			"SITE_ID_INVALID");
+	
+	public static VTErrorCode SHOPPING_MODE_INVALID = new ListingErrorCode(
+			"SHOPPING_MODE_INVALID");
+	
+	public static VTErrorCode ITEM_DESCRIPTION_MAX_EXCEEDED = new ListingErrorCode(
+			"ITEM_DESCRIPTION_MAX_EXCEEDED");
+	
+	public static VTErrorCode MAX_PICTURE_COUNT_EXCEEDED = new ListingErrorCode(
+			"MAX_PICTURE_COUNT_EXCEEDED");
 }

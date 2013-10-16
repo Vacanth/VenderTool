@@ -23,5 +23,6 @@ public class CommonErrorCode extends VTErrorCode {
 	//add error codes here
 	public static VTErrorCode NULL_ARGUMENT_PASSED = new CommonErrorCode(
 			"NULL_ARGUMENT_PASSED");
-	
+	public static VTErrorCode UNMAPPED_ERROR = new CommonErrorCode(
+			"UNMAPPED_ERROR");
 }
