@@ -25,7 +25,8 @@ CREATE  TABLE IF NOT EXISTS `jobdb`.`job` (
   `created_date` DATETIME NOT NULL ,
   `last_modified_date` DATETIME NOT NULL ,
   PRIMARY KEY (`job_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -47,8 +48,11 @@ CREATE  TABLE IF NOT EXISTS `jobdb`.`task` (
   `created_date` DATETIME NOT NULL ,
   `last_modified_date` DATETIME NOT NULL ,
   PRIMARY KEY (`task_id`) ,
-  INDEX `jobindex` (`job_id` ASC) )
-ENGINE = InnoDB;
+  INDEX `jobindex` (`job_id` ASC) ,
+  CONSTRAINT `fk_batch_work_log_batch_job1`
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -58,6 +62,7 @@ DROP TABLE IF EXISTS `jobdb`.`file` ;
 
 CREATE  TABLE IF NOT EXISTS `jobdb`.`file` (
   `file_id` BIGINT NOT NULL ,
+  `file_name` VARCHAR(128) NOT NULL ,
   `file_group_id` VARCHAR(64) NOT NULL COMMENT 'time stamp ' ,
   `files_count_in_group` TINYINT NULL ,
   `account_id` BIGINT NOT NULL ,
@@ -68,9 +73,11 @@ CREATE  TABLE IF NOT EXISTS `jobdb`.`file` (
   `use_case` TINYINT NULL ,
   `status` TINYINT NULL ,
   PRIMARY KEY (`file_id`) ,
-  INDEX `filegroupindex` (`file_group_id` ASC) ,
-  INDEX `accountIndex` (`account_id` ASC) )
-ENGINE = InnoDB;
+  INDEX `filegroupindex` (`file_group_id` ASC, `account_id` ASC) ,
+  INDEX `accountIndex` (`account_id` ASC) ,
+  UNIQUE INDEX `file_unique` (`file_name` ASC, `file_group_id` ASC, `account_id` ASC) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 USE `jobdb` ;
 

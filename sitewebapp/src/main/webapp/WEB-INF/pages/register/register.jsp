@@ -3,7 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
-<%@ taglib prefix="t2" tagdir="/WEB-INF/tags/errorResponse" %>
+<%@ taglib prefix="pg" tagdir="/WEB-INF/tags/pageError" %>
+<%@ taglib prefix="fld" tagdir="/WEB-INF/tags/fieldError" %>
 
 <spring:message code='form.registration.firstname' var="c_fname"/>
 <spring:message code='form.registration.lastname' var="c_lname"/>
@@ -18,11 +19,11 @@
 <t1:page title="Registration" currentPage="register" email="${account.email}">
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/register.js' />"></script>
+		<script src="<c:url value='/js/lib/jquery.placeholder.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">
@@ -30,7 +31,7 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<div id="pgBg"><img src="resources/img/cafe.jpg" alt=""></div>
+		<div id="pgBg"><img src="<c:url value='/img/cafe.jpg'/>" alt=""></div>
 	
 		<spring:message code="form.registration.title" var="title"/>
 		<c:set var="email" value="${account.email}"/>
@@ -38,35 +39,28 @@
 			<h3 class="ttl"><spring:message code="form.registration.signup"/></h3>
 
 			<form:form method="post" commandName="account">
-				<c:if test="${errorResponse.hasErrors()}">
-					<div class="pg-msg">
-						<div class="alert alert-danger">
-							<c:forEach items="${errorResponse.getVTErrors()}" var="vterror">
-								${vterror.message}<br />
-							</c:forEach>
-						</div>
-					</div>
-				</c:if>
+			
+				<pg:pageError model="${errorResponse}"/>
 				
 				<div class="fldWrp">
 					<form:input class="form-control" placeholder="${c_fname}"  path="contactDetails.firstName"/>
-					<t2:errorResponse model="${errorResponse}" field="firstName" clss="com.vendertool.sharedtypes.core.ContactDetails"/>
+					<fld:fieldError model="${errorResponse}" field="firstName" type="com.vendertool.sharedtypes.core.ContactDetails"/>
 				</div>
 				<div class="fldWrp">
 					<form:input class="form-control" placeholder="${c_lname}"  path="contactDetails.lastName"/>
-					<t2:errorResponse model="${errorResponse}" field="lastName" clss="com.vendertool.sharedtypes.core.ContactDetails"/>
+					<fld:fieldError model="${errorResponse}" field="lastName" type="com.vendertool.sharedtypes.core.ContactDetails"/>
 				</div>
 				<div class="fldWrp">
 					<form:input id="email" class="form-control info-msg-available" placeholder="${c_email}" path="email" data-content="${c_emailTip}"/>
-					<t2:errorResponse model="${errorResponse}" field="email" clss="com.vendertool.sharedtypes.core.Account"/>
+					<fld:fieldError model="${errorResponse}" field="email" type="com.vendertool.sharedtypes.core.Account"/>
 				</div>
 				<div class="fldWrp">
 					<form:password id="password" class="form-control info-msg-available" placeholder="${c_password}" path="password" data-content="${c_pwdTip}"/>
-					<t2:errorResponse model="${errorResponse}" field="password" clss="com.vendertool.sharedtypes.core.Account"/>
+					<fld:fieldError model="${errorResponse}" field="password" type="com.vendertool.sharedtypes.core.Account"/>
 				</div>
 				<div class="fldWrp">
 					<form:password id="confirmpassword" class="form-control info-msg-available" placeholder="${c_confirmpassword}" path="confirmPassword"  data-content="${c_confPwdTip}"/>
-					<t2:errorResponse model="${errorResponse}" field="confirmPassword" clss="com.vendertool.sharedtypes.core.Account"/>
+					<fld:fieldError model="${errorResponse}" field="confirmPassword" type="com.vendertool.sharedtypes.core.Account"/>
 				</div>
 
 				<div class="submit">

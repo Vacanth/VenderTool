@@ -1,0 +1,34 @@
+/*************************************
+Section nav bar
+**************************************/
+.navbarSec {
+	margin:8px 0 25px 0;
+	width:650px;
+}
+.navbarSec ul {
+	margin:0;
+	padding:0;
+}
+.navbarSec li  {
+	float:left;
+	list-style:none;
+}
+.navbarSec li.active a {
+	background-color:#ddd;
+	color:#000;
+}
+.navbarSec li > a {
+	padding:8px 15px;
+	border-right:1px solid #ccc;
+	text-decoration:none;
+}
+.navbarSec li a:hover {
+	background-color:#ddd;
+}
+.navbarSec li:last-child > a {
+	border-right:0;
+}
+
+
+
+

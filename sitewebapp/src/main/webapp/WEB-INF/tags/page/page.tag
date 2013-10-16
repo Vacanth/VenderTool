@@ -1,7 +1,7 @@
 <%@ tag pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="t" tagdir="/WEB-INF/tags/page" %>
+<%@ taglib prefix="page" tagdir="/WEB-INF/tags/page" %>
 
 <%--============
 Page fragments
@@ -37,8 +37,10 @@ Variables
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>${title}</title>
-
-		<link href='<c:url value="/wro/pageTag.css" />' rel="stylesheet" type="text/css"/>
+		
+		<link href="<c:url value='/css/lib/bootstrap.css' />" rel="stylesheet" type="text/css"/>
+		<link href="<c:url value='/css/tag/page.css' />" rel="stylesheet" type="text/css"/>
+		<link href="<c:url value='/css/tag/fieldError.css' />" rel="stylesheet" type="text/css"/>
 		
 		<%-- Page specific CSS tags --%>
 		<jsp:invoke fragment="css"/>
@@ -47,10 +49,11 @@ Variables
 	<body>
 		<div id="wrap">
 			<div id="content">
-				<t:header email="${email}" currentPage="${currentPage}"/>
+				<page:header email="${email}" currentPage="${currentPage}"/>
 				
 				<%-- Main contents --%>
 				<jsp:doBody/>
+				
 			</div>
 		</div>
 		<div id="footer">
@@ -61,13 +64,24 @@ Variables
 				<a href="#"><spring:message code="form.header.privacy"/></a>
 			</div>
 		</div>
-
+		
+		<div id="pageSpinner">
+			<div class="mask"></div>
+			<div class="spinnerWrp">
+				<div class="spinnerBg"></div>
+				<div class="spinner"><img src="<c:url value='/img/spnnr38w.gif' />"/><b>Loading...</b></div>
+			</div>
+		</div>
+		
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<c:if test="${!empty angularAppName}">
 			<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 		</c:if>
-
-		<script src='<c:url value="/wro/pageTag.js" />'></script>
+		
+		<script src="<c:url value='/js/lib/bootstrap.js' />" ></script>
+		<script src="<c:url value='/js/tag/page.js' />" ></script>
+		<script src="<c:url value='/js/tag/header.js' />" ></script>
+		<script src="<c:url value='/js/tag/fieldError.js' />" ></script>
 		
 		<%-- Page specific javascript tags --%>
 		<jsp:invoke fragment="scripts"/>
@@ -76,15 +90,6 @@ Variables
 		<script type="text/javascript">
 			<jsp:invoke fragment="inlineJs"/>
 		</script>
-		
-		<div id="pageSpinner">
-			<div class="mask"></div>
-			<div class="spinnerWrp">
-				<div class="spinnerBg"></div>
-				<div class="spinner"><img src="resources/img/spnnr38w.gif"/><b>Loading...</b></div>
-			</div>
-		</div>
-		
 	</body>
 </html>
 

@@ -242,6 +242,7 @@
 				<artifactId>commons-fileupload</artifactId>
 			</dependency>
 			
+			<!-- 
 			<dependency>
 				<groupId>ro.isdc.wro4j</groupId>
 				<artifactId>wro4j-core</artifactId>
@@ -251,7 +252,8 @@
 				<groupId>ro.isdc.wro4j</groupId>
 				<artifactId>wro4j-extensions</artifactId>
 			</dependency>
-			
+			 -->
+			 
 		</dependencies>
 		
 		<modules>
@@ -270,6 +272,10 @@
 			            <target>1.7</target>
 			        </configuration>
 			 	</plugin>
+			 	
+
+
+
 			</plugins>
 		</build>		 	
 </project>

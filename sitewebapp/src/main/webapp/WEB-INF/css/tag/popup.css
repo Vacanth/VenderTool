@@ -1,0 +1,55 @@
+/**************************************
+Layout
+***************************************/
+html, body, #wrap {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body > #wrap {
+	height: auto;
+	min-height: 100%;
+}
+body {
+	font-family: helvetica, arial, san-serif;
+   	background-color: #eee !important;
+}
+#content {
+	padding-bottom: 0;
+}
+.clr {
+	clear:both;
+}
+
+
+/**************************************
+Button with icon 
+***************************************/
+.iconBtn {
+	position:relative;
+	overflow:hidden;
+	height:32px;
+	color:#000;
+}
+.iconBtn .bg {
+	display:inline-block;
+	height:50px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.iconBtn .icon {
+	position:relative;
+	display:inline-block;
+	left:-7px;
+	height:26px;
+	margin:0;
+	top:-1px;
+}
+.iconBtn b {
+	display:inline;
+	position:relative;
+	font-weight:normal;
+	top:-11px;
+}
+

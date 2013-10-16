@@ -67,8 +67,8 @@ public class AccountSecurityQuestionMapper implements
 			
 			if(q.securityQuestionCode.equals(rpath)) {
 				map.put(q.securityQuestionCode,
-						(question.getQuestionCode() != null) ? 
-								question.getQuestionCode().getCode() : null);
+						(question.getQuestion() != null && question.getQuestion().getQuestionCode() != null) ? 
+								question.getQuestion().getQuestionCode().getCode() : null);
 			}
 		}
 		
@@ -87,8 +87,8 @@ public class AccountSecurityQuestionMapper implements
 		
 		QBeanAccountSecurityQuestion bean = new QBeanAccountSecurityQuestion();
 		
-		if(question.getQuestionCode() != null) {
-			bean.setSecurityQuestionCode(question.getQuestionCode().getCode());
+		if(question.getQuestion() != null && question.getQuestion().getQuestionCode() != null) {
+			bean.setSecurityQuestionCode(question.getQuestion().getQuestionCode().getCode());
 		}
 		bean.setAccountSecurityQuestionId(question.getId());
 		if(question.getCreatedDate() != null) {
@@ -142,7 +142,7 @@ public class AccountSecurityQuestionMapper implements
 				if(code != null) {
 					SecurityQuestionCodeEnum ce = SecurityQuestionCodeEnum.get(code);
 					if(ce != null) {
-						question.setQuestionCode(ce);
+						question.getQuestion().setQuestionCode(ce);
 					}
 				}
 			}

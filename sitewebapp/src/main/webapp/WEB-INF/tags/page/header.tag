@@ -87,7 +87,7 @@ Attributes
 							<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
 								<li role="presentation"><a role="menuitem" tabindex="-1" href="${profileUrl}">Profile</a></li>
 								<li role="presentation" class="divider"></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="j_spring_security_logout" />">Sign-out</a></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="<c:url value="/j_spring_security_logout" />">Sign-out</a></li>
 							</ul>
 						</div>
 					

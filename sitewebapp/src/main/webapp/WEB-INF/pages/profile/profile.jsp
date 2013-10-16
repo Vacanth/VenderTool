@@ -11,11 +11,15 @@
 <t1:page title="VendorTool" angularAppName="profileApp" currentPage="profile" email="${account.email}" >
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/profile.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/tag/layoutTable.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/profile.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/profile.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/ErrorResponseUtil.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/sharedNgModules/pageErrorModule.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/sharedNgModules/fieldErrorModule.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/page/profileApp.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">

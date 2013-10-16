@@ -348,6 +348,7 @@
 				<version>7.0.42</version>
 			</dependency>
 			
+			<!-- 
 			<dependency>
 				<groupId>ro.isdc.wro4j</groupId>
 				<artifactId>wro4j-core</artifactId>
@@ -359,7 +360,8 @@
 				<artifactId>wro4j-extensions</artifactId>
 				<version>${wro4j-version}</version>
 			</dependency>
-			
+			 -->
+			 
 			<dependency>
 				<groupId>com.rabbitmq</groupId>
 				<artifactId>amqp-client</artifactId>
@@ -475,6 +477,26 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+			
+						 	<plugin>
+<groupId>org.mortbay.jetty</groupId>
+<artifactId>maven-jetty-plugin</artifactId>
+<version>6.1.24</version>
+<configuration>
+<scanIntervalSeconds>1</scanIntervalSeconds>
+<systemProperties>
+<systemProperty>
+<name>org.mortbay.util.URI.charset</name>
+<value>UTF-8</value>
+</systemProperty>
+<systemProperty>
+<name>org.mortbay.jetty.Request.queryEncoding</name>
+<value>UTF-8</value>
+</systemProperty>
+</systemProperties>
+<contextPath></contextPath>
+</configuration>
+</plugin>
 
 		</plugins>
 	</build>
