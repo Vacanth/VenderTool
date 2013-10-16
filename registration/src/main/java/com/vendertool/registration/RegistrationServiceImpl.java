@@ -1017,6 +1017,16 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
+		try {
+			List<AccountSecurityQuestion> questions = dalservice.getAccountSecurityQuestions(email);
+			response.setQuestions(questions);
+			
+		} catch (FinderException | DBConnectionException | DatabaseException e) {
+			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
 		return response;
 		
 	}
