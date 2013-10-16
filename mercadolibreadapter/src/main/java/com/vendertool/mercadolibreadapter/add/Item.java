@@ -41,6 +41,7 @@ public class Item{
    	private String site_id;
    	private Number sold_quantity;
    	private String start_time;
+   	private String end_time;
    	private String status;
    	private String stop_time;
    	private List sub_status;
@@ -309,5 +310,11 @@ public class Item{
 	}
 	public void setWarranty(String warranty){
 		this.warranty = warranty;
+	}
+	public String getEnd_time() {
+		return end_time;
+	}
+	public void setEnd_time(String end_time) {
+		this.end_time = end_time;
 	}
 }
