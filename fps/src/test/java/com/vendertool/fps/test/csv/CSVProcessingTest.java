@@ -10,8 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.vendertool.common.SpringApplicationContextUtils;
-import com.vendertool.fps.fileupload.mappers.CSVProductMapper;
+import com.vendertool.fps.fileupload.mappers.CSVProductReader;
 import com.vendertool.fps.rmq.AWSRmqMetadataFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,10 +27,13 @@ public class CSVProcessingTest implements ApplicationContextAware {
 		try {
 			//setApplicationContext(SpringApplicationContextUtils.getApplicationContext());
 			AWSRmqMetadataFactory.getInstance().init();
-			CSVProductMapper.getInstance().getProductBeans("Testing");
+			
+			CSVProductReader csvReader = new CSVProductReader("C:\\Users\\Gnanasekar\\Downloads\\testfile_dynamic_variations.csv");
+			csvReader.processData(100,"testing", 100,100);
+			//CSVProductMapper.getInstance().getProductBeans("Testing");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception ex){
+			
 		}
 	}
 	

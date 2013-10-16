@@ -15,6 +15,7 @@ public class AWSRmqMetadataFactory {
 	private AWSRmqMetadataFactory() {
 		queueDataMap = new HashMap<AWSRmqQueueType, AWSRmqMetadata>();
 		ctx = SpringApplicationContextUtils.getApplicationContext();
+		init();
 	}
 
 	private static class AWSRmqMetadataFactorySingletonHelper {
@@ -30,6 +31,7 @@ public class AWSRmqMetadataFactory {
 		register(AWSRmqQueueType.PRODUCT);
 		register(AWSRmqQueueType.LISTING);
 		register(AWSRmqQueueType.JOB);
+		register(AWSRmqQueueType.TASK);
 	}
 
 	public AWSRmqMetadata getQueueMetaData(AWSRmqQueueType queueType) {

@@ -103,8 +103,7 @@ public class AWSHelper {
         for (FileInformation file : files) {
             Long contentLength = Long.valueOf(file.getFileSize());
 
-    		//String key = "userName/"+ new Date().getTime()+ "_"+ file.getFileName()+"/";
-            String key = "username_"+file.getFileName();
+    		String key = "userName_"+ new Date().getTime()+ "_"+ file.getFileName();
             fileRefMap.put(file.getFileName(), key);
             
             ObjectMetadata metadata = new ObjectMetadata();
@@ -115,6 +114,10 @@ public class AWSHelper {
         }
         
         return fileRefMap;
+	}
+	
+	public File downloadFileFromAWS(String filename, String localFilename) {
+		return downloadFileFromAWS(UPLOAD_REQ_BUCKET, filename, localFilename);
 	}
 	
 	public File downloadFileFromAWS(String bucketName, String fileName, String localFilename) {

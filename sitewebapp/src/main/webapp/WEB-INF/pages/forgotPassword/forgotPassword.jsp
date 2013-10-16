@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
-<%@ taglib prefix="error" tagdir="/WEB-INF/tags/errorResponse" %>
+<%@ taglib prefix="pg" tagdir="/WEB-INF/tags/pageError" %>
 
 <t1:page title="Forgot password" currentPage="forgotPassword" email="">
 
@@ -34,15 +34,9 @@
 	    		</c:when>
 	    		<c:otherwise>
 	    			<h3 class="ttl">Please submit your email</h3>
-					<c:if test="${errorResponse.hasErrors()}">
-						<div class="pg-msg">
-							<div class="alert alert-danger">
-								<c:forEach items="${errorResponse.getVTErrors()}" var="vterror">
-									${vterror.message}<br />
-								</c:forEach>
-							</div>
-						</div>
-					</c:if>
+					
+					<pg:pageError model="${errorResponse}"/>
+
 					<form:form method="post" commandName="forgotPasswordReq">
 			            <div class="fldWrp">
 			            	<form:input class="form-control" placeholder="Email"  path="email"/>

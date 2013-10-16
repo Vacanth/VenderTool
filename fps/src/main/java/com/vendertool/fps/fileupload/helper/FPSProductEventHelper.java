@@ -7,16 +7,17 @@ import com.vendertool.fps.rmq.AWSRmqQueueType;
 public class FPSProductEventHelper extends FPSBaseEvent {
 	private static FPSProductEventHelper s_self = null;
 	
-	private FPSProductEventHelper(String hostName,String queueName) {
-		super(queueName, hostName);
+	private FPSProductEventHelper(String hostName,String queueName, String xChange, String rKey, String qType) {
+		super(queueName, hostName, xChange, rKey, qType);
 	}
 
 	public synchronized static FPSProductEventHelper getInstance() {
 		if (s_self == null) {
 			AWSRmqMetadata rmqMetaData = AWSRmqMetadataFactory.getInstance().
 					getQueueMetaData(AWSRmqQueueType.LISTING);
-			s_self = new FPSProductEventHelper(rmqMetaData.getQueueName(),
-											rmqMetaData.getQueueHost());
+			s_self = new FPSProductEventHelper(rmqMetaData.getQueueName(),rmqMetaData.getQueueHost(),
+					rmqMetaData.getExchange(), rmqMetaData.getRoutingKey(),
+					rmqMetaData.getQueueType());
 		}
 		return s_self;
 	}

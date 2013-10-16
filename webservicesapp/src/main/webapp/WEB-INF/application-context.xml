@@ -6,6 +6,7 @@
  
  	<import resource="classpath:common-application-context.xml" />
  	<import resource="classpath:registration-application-context.xml" />
+ 	<import resource="classpath:fps-application-context.xml" />
  	
   <bean id="applicationContextUtils" class="com.vendertool.common.SpringApplicationContextUtils"></bean>
 

@@ -131,7 +131,7 @@ public class CSVProductMapper {
 					if (bean == null) {
 						continue;
 					}
-					String sku = bean.getSku();
+					String sku = bean.getSKU();
 					bean.setVariations(vsMap.get(sku));
 					bean.setSpecifications(psMap.get(sku));
 				}

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
 import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
@@ -43,7 +44,8 @@ public class UploaderController {
 		throws IOException {
 		
 		Response serviceRes = null;
-         
+
+		
 		if (ServletFileUpload.isMultipartContent(request)) {
 	        FileItemFactory factory = new DiskFileItemFactory();
 	        ServletFileUpload upload = new ServletFileUpload(factory);
@@ -116,7 +118,7 @@ public class UploaderController {
      
         UploadFileRequest fileUploadReq = new UploadFileRequest();
         fileUploadReq.setGroupId(groupId);
-        fileUploadReq.setUploadTitle("uploadTitle");
+        fileUploadReq.setUploadTitle(uploadTitle);
         
         String hostName = RestServiceClientHelper.getServerURL(req);
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_CREATE_PATH;
@@ -137,6 +139,16 @@ public class UploaderController {
 		else {
 			msg.put("statusMessage", "success");
 		}
+		
+		url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
+		ProcessJobRequest jobRequest = new ProcessJobRequest();
+		jobRequest.setJobId(341);
+		serviceRes = RestServiceClientHelper.invokeRestService(
+				url,
+				jobRequest,
+				null,
+				MediaType.APPLICATION_JSON_TYPE,
+				HttpMethodEnum.POST);
 
 		return msg;
 	}

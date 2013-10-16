@@ -23,6 +23,7 @@ import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.fps.dal.dao.codegen.QTask;
+import com.vendertool.fps.fileupload.helper.FPSTaskEvent;
 import com.vendertool.sharedtypes.core.fps.Task;
 
 public class TaskDaoImpl extends BaseDaoImpl implements TaskDao {
@@ -282,6 +283,20 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao {
 			}
 		} catch (SQLException e){
 			logger.debug(e.getMessage(), e);
+		}
+	}
+	
+	//Need to optimize with batch insert, single connection
+	public void insertTasksWithEvents(List<Task> lTask) throws DBConnectionException,
+		InsertException, DatabaseException{
+		
+		for (Task task : lTask) {
+			long taskId = insert(task);
+			if (taskId > 0) {
+	        	FPSTaskEvent tEvent = new FPSTaskEvent();
+	        	tEvent.setTaskId(taskId);
+	        	tEvent.sendEvent();
+			}
 		}
 	}
 }

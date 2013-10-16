@@ -46,12 +46,23 @@
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
+		</dependency>	
+				
+		<dependency>
+    		<groupId>net.sf.supercsv</groupId>
+    		<artifactId>super-csv</artifactId>
 		</dependency>
 		
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-			</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.json</groupId>
+   			<artifactId>json</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
@@ -84,6 +95,10 @@
 									todir="${project.build.outputDirectory}/dal" />
 								<copy file="src/main/resources/dal-module.xml"
 									todir="${project.build.outputDirectory}/dal" />
+								<copy file="../common/src/main/resources/common-application-context.xml"
+									todir="${project.build.outputDirectory}" />
+								<copy file="src/main/resources/config/qa/aws-credentials/AWSRmqConfig.xml"
+									todir="${project.build.outputDirectory}" />
 							</tasks>
 						</configuration>
 					</execution>

@@ -1,8 +1,12 @@
 package com.vendertool.sitewebapp.controller;
 
 import java.security.Principal;
+import java.util.List;
 
-import org.apache.log4j.Level;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vendertool.sharedtypes.exception.VTRuntimeException;
+import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.core.fps.File;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.UploadsResponse;
+import com.vendertool.sharedtypes.rnr.fps.GetJobsRequest;
+import com.vendertool.sharedtypes.rnr.fps.GetJobsResponse;
+import com.vendertool.sharedtypes.rnr.fps.JobDetails;
+import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
+import com.vendertool.sitewebapp.common.RestServiceClientHelper;
 import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.util.MockDataUtil;
 
@@ -23,7 +32,33 @@ public class UploadsController {
 	private static final Logger logger = Logger.getLogger(UploadsController.class);
 	
 	@RequestMapping(value=URLConstants.UPLOADS, method=RequestMethod.GET)
-	public String getUploadsView(ModelMap modelMap, Principal principal) {
+	public String getUploadsView(ModelMap modelMap, HttpServletRequest req) {
+	//public String getUploadsView(ModelMap modelMap, Principal principal) {
+		logger.info("getUploadsView controller invoked");
+
+		String email = ContainerBootstrapContext.getSignedInEmail();
+        String hostName = RestServiceClientHelper.getServerURL(req);
+		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
+				URLConstants.JOB_DETAILS_PATH + URLConstants.QUERY_START + 
+				URLConstants.USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
+		
+		Response serviceRes = RestServiceClientHelper
+				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
+						HttpMethodEnum.GET);
+		
+		GetJobsResponse getJobsResponse = serviceRes.readEntity(GetJobsResponse.class);
+		List<JobDetails> ljDetails = getJobsResponse.getJobs();
+		
+		for (JobDetails jobDetails : ljDetails) {
+			System.out.println("JobDetails :" + jobDetails.getJob().getTitle());
+			System.out.println("JobDetails :" + jobDetails.getJob().getReqFileGroupId());
+			System.out.println("JobDetails :" + jobDetails.getJob().getJobId());
+			System.out.println("JobDetails :" + jobDetails.getJob().getStatus());
+			for (File file : jobDetails.getFiles()) {
+				System.out.println("File :"+ file.getFileName());
+			}
+		}
+		
 		logger.info("getUploadsView controller invoked");
 
 		// TODO: principal is throwing error

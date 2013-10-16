@@ -40,6 +40,7 @@ Variables
 		
 		<link href="<c:url value='/css/lib/bootstrap.css' />" rel="stylesheet" type="text/css"/>
 		<link href="<c:url value='/css/tag/page.css' />" rel="stylesheet" type="text/css"/>
+		<link href="<c:url value='/css/tag/fieldError.css' />" rel="stylesheet" type="text/css"/>
 		
 		<%-- Page specific CSS tags --%>
 		<jsp:invoke fragment="css"/>
@@ -80,6 +81,7 @@ Variables
 		<script src="<c:url value='/js/lib/bootstrap.js' />" ></script>
 		<script src="<c:url value='/js/tag/page.js' />" ></script>
 		<script src="<c:url value='/js/tag/header.js' />" ></script>
+		<script src="<c:url value='/js/tag/fieldError.js' />" ></script>
 		
 		<%-- Page specific javascript tags --%>
 		<jsp:invoke fragment="scripts"/>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
-<%@ taglib prefix="error" tagdir="/WEB-INF/tags/errorResponse" %>
+<%@ taglib prefix="pg" tagdir="/WEB-INF/tags/pageError" %>
 
 <t1:page title="Security Questions" currentPage="askSecurityQuestions" email="">
 
@@ -27,16 +27,8 @@
 	    	<spring:message code='form.submit' var="submit"/>
 	    	
 	        <h3 class="ttl">Please submit your answers</h3>
-
-			<c:if test="${errorResponse.hasErrors()}">
-				<div class="pg-msg">
-					<div class="alert alert-danger">
-						<c:forEach items="${errorResponse.getVTErrors()}" var="vterror">
-							${vterror.message}<br />
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
+			
+			<pg:pageError model="${errorResponse}"/>
 			
 			<form:form method="post" action="answerSecurityQuestions" commandName="forgotPasswordReq">
 				<form:hidden path="emailToken"/>
