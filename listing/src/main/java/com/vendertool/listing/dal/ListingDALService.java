@@ -50,7 +50,7 @@ public class ListingDALService {
 //		Product
 		Long listingID = listingDAO.generateNextSequence();
 		listing.setListingId(listingID);
-		listingDAO.insertAccount(listing);//TODO if there are any failures, delete the previous product entry.
+		listingDAO.insertListing(listing);//TODO if there are any failures, delete the previous product entry.
 		return listingID;
 	}
 

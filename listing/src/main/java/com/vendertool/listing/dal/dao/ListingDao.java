@@ -12,7 +12,7 @@ import com.vendertool.sharedtypes.core.Listing;
 
 public interface ListingDao extends BaseDao {
 
-	public void insertAccount(Listing listing) throws DBConnectionException,
+	public void insertListing(Listing listing) throws DBConnectionException,
 	InsertException, DatabaseException;
 	
 	public void updateListing(Listing listing, Path<?>[] updateSet)

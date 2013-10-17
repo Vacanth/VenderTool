@@ -38,7 +38,7 @@ public class ListingDaoImpl extends BaseDaoImpl implements ListingDao {
 	}
 
 	@Override
-	public void insertAccount(Listing listing) throws DBConnectionException,
+	public void insertListing(Listing listing) throws DBConnectionException,
 			InsertException, DatabaseException {
 		if (VUTIL.isNull(listing)) {
 			InsertException ie = new InsertException(
