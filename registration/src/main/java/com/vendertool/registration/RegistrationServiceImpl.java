@@ -38,6 +38,7 @@ import com.vendertool.registration.validation.ChangeEmailValidator;
 import com.vendertool.registration.validation.ChangePasswordValidator;
 import com.vendertool.registration.validation.ConfirmEmailValidator;
 import com.vendertool.registration.validation.ConfirmForgotPasswordEmailValidator;
+import com.vendertool.registration.validation.ForgotPasswordSecurityQuestionValidator;
 import com.vendertool.registration.validation.ForgotPasswordValidator;
 import com.vendertool.registration.validation.RegistrationValidator;
 import com.vendertool.registration.validation.SecurityQuestionsValidator;
@@ -45,6 +46,7 @@ import com.vendertool.registration.validation.UpdateAccountProfileValidator;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
+import com.vendertool.sharedtypes.core.ForgotPassword.ForgotPasswordStatusEnum;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
@@ -848,6 +850,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 				dalservice.updateAccountStatus(account.getEmail(), AccountStatusEnum.SUSPENDED);
 				dalservice.updateConfirmationAttempts(accountId,
 						accountConf.getId(), accountConf.getConfirmationAttempts());
+				account.setAccountStatus(AccountStatusEnum.SUSPENDED);
 			} catch (Exception e) {
 				logger.debug(e.getMessage(), e);
 			}
@@ -927,14 +930,9 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		fp.setEmail(request.getEmail());
 		fp.setAccountId(account.getId());
 		fp.setIpAddress(request.getIpAddress());
+		fp.setStatus(ForgotPasswordStatusEnum.ATTEMPTED);
 		
-		try {
-			dalservice.insertForgotPassword(fp);
-		} catch (DBConnectionException | DatabaseException | InsertException e) {
-			//do block for this here, just log id
-			logger.info(fp.toString());
-			logger.debug(e.getMessage(), e);
-		}
+		insertForgotPassword(fp);
 		
 		AccountConfirmation ac = prepareAccountConfirmation(email);
 		account.setAccountConf(ac);
@@ -1020,7 +1018,6 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		try {
 			List<AccountSecurityQuestion> questions = dalservice.getAccountSecurityQuestions(email);
 			response.setQuestions(questions);
-			
 		} catch (FinderException | DBConnectionException | DatabaseException e) {
 			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
@@ -1039,15 +1036,140 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	@Override
 	public ForgotPasswordResponse validateForgotPasswordSecurityQuestions(
 			ForgotPasswordRequest request) {
-		// XXX Auto-generated method stub
-		return null;
+		
+		ForgotPasswordResponse response = new ForgotPasswordResponse();
+				
+		ForgotPasswordSecurityQuestionValidator validator = 
+				new ForgotPasswordSecurityQuestionValidator();
+		
+		String email = request.getEmail();
+		response.setEmail(email);
+		
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		String inputSessionId = request.getConfirmSessionId();
+		Integer inputCode = request.getConfirmCode();
+		
+		Account account;
+		try {
+			account = dalservice.getAccountProfile(email);
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			account = null;
+		}
+		
+		if(VUTIL.isNull(account)) {
+			logger.debug("Forgot Password Security Question Answer Attempt by email='"
+					+ email + "'");
+			logger.debug("Forgot Password Security Question Answer Attempt by IP ADDRESS='"
+					+ request.getIpAddress() + "'");
+			
+			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode);
+		
+		ForgotPassword fp = new ForgotPassword();
+		fp.setAccountId(account.getId());
+		fp.setEmail(email);
+		fp.setIpAddress(request.getIpAddress());
+		fp.setStatus(ForgotPasswordStatusEnum.SEC_QUES_FAILED);
+		
+		if(response.hasError(
+				Errors.REGISTRATION.UNAUTHORIZED_ACCOUNT_CONFIRMATION.getErrorCode())) {
+			insertForgotPassword(fp);
+		}
+		
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		List<AccountSecurityQuestion> dbquestions = null;
+		try {
+			dbquestions = dalservice.getAccountSecurityQuestions(email);
+		} catch (FinderException | DBConnectionException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			dbquestions = null;
+		}
+		
+		if(VUTIL.isNull(dbquestions) || dbquestions.isEmpty()) {
+			response.addFieldBindingError(
+					Errors.REGISTRATION.UNABLE_TO_VERIFY_SECURITY_ANSWERS,
+					null, (String[]) null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		insertForgotPassword(fp);
+		
+		validator.validateSecurityAnswers(response, account, dbquestions,
+				request.getQuestions());
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		response.setStatus(ResponseAckStatusEnum.SUCCESS);
+		return response;
 	}
 
 
+	private void insertForgotPassword(ForgotPassword fp) {
+		try {
+			dalservice.insertForgotPassword(fp);
+		} catch (DBConnectionException | DatabaseException | InsertException e) {
+			//do block for this here, just log id
+			logger.info(fp.toString());
+			logger.debug(e.getMessage(), e);
+		}
+	}
+
+	
+	@POST
+	@Path("/changeForgotPassword")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
 	public ForgotPasswordResponse changeForgotPassword(
 			ForgotPasswordRequest request) {
-		// XXX Auto-generated method stub
-		return null;
+		
+		ForgotPasswordResponse response = new ForgotPasswordResponse();
+		
+		if (VUTIL.isNull(request)) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.COMMON.NULL_ARGUMENT_PASSED, null, (String[])null);
+			return response;
+		}
+		
+		response.setEmail(request.getEmail());
+		
+		if (VUTIL.isEmpty(request.getEmail())) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, null, (String[])null);
+			return response;
+		}
+		
+		ChangePasswordRequest chpwdRequest = new ChangePasswordRequest();
+		chpwdRequest.setEmail(request.getEmail());
+		chpwdRequest.setNewPassword(request.getNewPassword());
+		chpwdRequest.setConfirmPassword(request.getConfirmPassword());
+		chpwdRequest.setForgotPasswordUsecase(true);
+		
+		ChangePasswordResponse chpwdresponse = changePassword(chpwdRequest);
+		response.addFieldBindingErrors(chpwdresponse.getFieldBindingErrors());
+		
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		response.setStatus(ResponseAckStatusEnum.SUCCESS);
+		return response;
 	}
 }

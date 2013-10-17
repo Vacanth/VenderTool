@@ -101,4 +101,14 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"UNABLE_TO_UPDATE_ACCOUNT");
 	public static VTErrorCode UNABLE_TO_CONFIRM_EMAIL = new RegistrationErrorCode(
 			"UNABLE_TO_CONFIRM_EMAIL");
+	public static VTErrorCode UNABLE_TO_VERIFY_SECURITY_ANSWERS = new RegistrationErrorCode(
+			"UNABLE_TO_VERIFY_SECURITY_ANSWERS");
+	public static VTErrorCode INVALID_SECURITY_QUESTIONS_ANSWERS = new RegistrationErrorCode(
+			"INVALID_SECURITY_QUESTIONS_ANSWERS");
+	public static VTErrorCode TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR = new RegistrationErrorCode(
+			"TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR");
+	public static VTErrorCode TOO_MANY_ACCOUNT_PWD_ATTEMPTS = new RegistrationErrorCode(
+			"TOO_MANY_ACCOUNT_PWD_ATTEMPTS");
+	public static VTErrorCode SUSPENDED = new RegistrationErrorCode(
+			"SUSPENDED");
 }

@@ -12,12 +12,14 @@ import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
 import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
+import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.vendertool.common.dal.dao.BaseDaoImpl;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
+import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QBeanForgotPassword;
 import com.vendertool.registration.dal.dao.codegen.QForgotPassword;
@@ -251,5 +253,48 @@ public class ForgotPasswordDaoImpl extends BaseDaoImpl implements
 				logger.debug(e.getMessage(), e);
 			}
 		}	
+	}
+
+	@Override
+	public void updateStatusByEmail(String email,
+			ForgotPasswordStatusEnum status) throws DBConnectionException,
+			UpdateException, DatabaseException {
+		
+		if(VUTIL.isNull(email) || VUTIL.isNull(status)) {
+			UpdateException ue = new UpdateException("Cannot update null account");
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
+		
+		Connection con = null;
+		
+		try {
+			con = getConnection();
+			
+			QForgotPassword f = QForgotPassword.forgotPassword;
+			
+			SQLUpdateClause s = update(con, f)
+					.set(f.status, new Byte(status.getId()+""))
+					.where(f.emailAddr.eq(email));
+			
+	    	//Always log the query before executing it
+	    	logger.info("DAL QUERY: " + s.toString());
+	    	
+	    	try {
+	    		s.execute();
+	    	} catch (Exception e) {
+	    		UpdateException ue = new UpdateException(e);
+				logger.debug(ue.getMessage(), ue);
+				throw ue;
+	    	}
+		} finally {
+			try {
+				if(con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
 	}
 }

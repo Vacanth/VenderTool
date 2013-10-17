@@ -429,4 +429,15 @@ public class RegistrationDALService {
 		
 		fpDao.deleteByAccountId(accountId);
 	}
+	
+	public void updateForgotPasswordByStatus(String email,
+			ForgotPasswordStatusEnum status) throws DeleteException,
+			DBConnectionException, UpdateException, DatabaseException {
+		
+		if (VUTIL.isEmpty(email) || VUTIL.isNull(status)) {
+			throw new DeleteException("Cannot delete forgot password for null account id");
+		}
+		
+		fpDao.updateStatusByEmail(email, status);
+	}
 }

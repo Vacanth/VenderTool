@@ -12,7 +12,8 @@ public class ForgotPassword {
 	
 	public enum ForgotPasswordStatusEnum {
 		ATTEMPTED(1),
-		SEC_QUES_FAILED(2);
+		SEC_QUES_FAILED(2),
+		INVALIDATE(3);
 		
 		private int id;
 		

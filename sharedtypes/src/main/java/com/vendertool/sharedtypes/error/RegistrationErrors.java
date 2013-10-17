@@ -242,4 +242,33 @@ public class RegistrationErrors {
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
+	public VTError UNABLE_TO_VERIFY_SECURITY_ANSWERS = new VTError(
+			RegistrationErrorCode.UNABLE_TO_VERIFY_SECURITY_ANSWERS, 
+			"Unable to confirm email", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError INVALID_SECURITY_QUESTIONS_ANSWERS = new VTError(
+			RegistrationErrorCode.INVALID_SECURITY_QUESTIONS_ANSWERS, 
+			"Invalid security questions and answers", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR = new VTError(
+			RegistrationErrorCode.TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR, 
+			"Too many security question answer failure attempts in one hour", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError TOO_MANY_ACCOUNT_PWD_ATTEMPTS = new VTError(
+			RegistrationErrorCode.TOO_MANY_ACCOUNT_PWD_ATTEMPTS, 
+			"Too many security question answer failure attempts to your account", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError SUSPENDED = new VTError(
+			RegistrationErrorCode.SUSPENDED, 
+			"Your account is suspended", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
 }
