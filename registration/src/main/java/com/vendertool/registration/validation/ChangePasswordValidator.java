@@ -9,7 +9,6 @@ import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
-import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 
 public class ChangePasswordValidator implements Validator {
 
@@ -17,10 +16,9 @@ public class ChangePasswordValidator implements Validator {
 	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
 	
 	@Override
-	public void validate(BaseRequest _request, BaseResponse _response) {
+	public void validate(BaseRequest _request, BaseResponse response) {
 		logger.info(ChangePasswordValidator.class.getName() + ".validate()");
 		
-		ChangePasswordResponse response = (ChangePasswordResponse) _response;
 		ChangePasswordRequest request = (ChangePasswordRequest) _request;
 		
 		if (VUTIL.isNull(request) || VUTIL.isNull(response)) {

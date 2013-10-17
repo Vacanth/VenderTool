@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,7 +40,6 @@ public class ForgotPasswordController {
 	public String validateEmail(
 			Model model, 
 			HttpServletRequest req,
-			HttpServletResponse res,
 			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
 		
 		logger.info("validateEmail POST controller invoked");
@@ -80,7 +78,7 @@ public class ForgotPasswordController {
 		
 		// All good
 		ForgotPasswordRequest forgotPasswordReq = new ForgotPasswordRequest();
-		forgotPasswordReq.setEmailToken(emailToken);
+		forgotPasswordReq.setConfirmSessionId(emailToken);
 		List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
 		forgotPasswordReq.setQuestions(questions);
 
@@ -96,7 +94,8 @@ public class ForgotPasswordController {
 			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 		
-		String emailToken = forgotPasswordReq.getEmailToken();
+		String emailToken = forgotPasswordReq.getConfirmSessionId();
+		Integer code = forgotPasswordReq.getConfirmCode();
 		
 		// Not good
 		if (!isEmailTokenValid(emailToken)) {
@@ -139,7 +138,7 @@ public class ForgotPasswordController {
 			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 		
-		String emailToken = forgotPasswordReq.getEmailToken();
+		String emailToken = forgotPasswordReq.getConfirmSessionId();
 		
 		// Not good
 		if (!isEmailTokenValid(emailToken)) {

@@ -11,6 +11,8 @@ public class ForgotPasswordResponse extends BaseResponse {
 
 	private String email;
 	private List<AccountSecurityQuestion> questions;
+	private String confirmSessionId;
+	private Integer confirmCode;
 	
 	public String getEmail() {
 		return email;
@@ -24,6 +26,16 @@ public class ForgotPasswordResponse extends BaseResponse {
 	public void setQuestions(List<AccountSecurityQuestion> questions) {
 		this.questions = questions;
 	}
-	
-	
+	public String getConfirmSessionId() {
+		return confirmSessionId;
+	}
+	public void setConfirmSessionId(String confirmSessionId) {
+		this.confirmSessionId = confirmSessionId;
+	}
+	public Integer getConfirmCode() {
+		return confirmCode;
+	}
+	public void setConfirmCode(Integer confirmCode) {
+		this.confirmCode = confirmCode;
+	}
 }

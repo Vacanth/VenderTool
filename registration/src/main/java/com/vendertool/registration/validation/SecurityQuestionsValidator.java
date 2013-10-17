@@ -10,9 +10,8 @@ import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
-import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
-import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
+import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 
 public class SecurityQuestionsValidator implements Validator {
 
@@ -20,10 +19,9 @@ public class SecurityQuestionsValidator implements Validator {
 	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
 	
 	@Override
-	public void validate(BaseRequest _request, BaseResponse _response) {
+	public void validate(BaseRequest _request, BaseResponse response) {
 		logger.info(SecurityQuestionsValidator.class.getName() + ".validate()");
 		
-		UpdateAccountSecurityQuestionsResponse response = (UpdateAccountSecurityQuestionsResponse) _response;
 		UpdateAccountSecurityQuestionsRequest request = (UpdateAccountSecurityQuestionsRequest) _request;
 		
 		if(VUTIL.isNull(request)) {

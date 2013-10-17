@@ -13,6 +13,8 @@ import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
+import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
+import com.vendertool.sharedtypes.rnr.ForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountSecurityQuestionsResponse;
@@ -132,4 +134,38 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @return
 	 */
 	public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request);
+	
+	/**
+	 * HTTP POST to process the email for forgot password.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public ForgotPasswordResponse processForgotPasswordEmail(ForgotPasswordRequest request);
+	
+	
+	/**
+	 * HTTP POST to confirm the email for forgot password.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public ForgotPasswordResponse confirmForgotPasswordEmail(ForgotPasswordRequest request);
+	
+	
+	/**
+	 * Validate forgot password security questions
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public ForgotPasswordResponse validateForgotPasswordSecurityQuestions(ForgotPasswordRequest request);
+	
+	/**
+	 * Handle change password for forgot password case
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public ForgotPasswordResponse changeForgotPassword(ForgotPasswordRequest request);
 }

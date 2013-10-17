@@ -35,4 +35,11 @@
 		<property name="velocityEngine" ref="velocityEngine" />
 		<property name="templateLocation" value="emailtemplates/PasswordChange.vm" />
 	</bean>
+	
+	<bean id="confirmForgotPasswordEmailService" class="com.vendertool.common.email.EmailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="templateLocation" value="emailtemplates/ConfirmForgotPasswordEmail.vm" />
+	</bean>
+	
 </beans>	   					 

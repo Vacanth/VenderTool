@@ -1,5 +1,6 @@
 package com.vendertool.registration.dal;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -16,17 +17,20 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.AccountConfirmationDao;
 import com.vendertool.registration.dal.dao.AccountDao;
 import com.vendertool.registration.dal.dao.AccountSecurityQuestionDao;
+import com.vendertool.registration.dal.dao.ForgotPasswordDao;
 import com.vendertool.registration.dal.dao.PasswordHistoryDao;
 import com.vendertool.registration.dal.dao.RegistrationDaoFactory;
 import com.vendertool.registration.dal.fieldset.FieldSets;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
+import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.Address;
-import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
 import com.vendertool.sharedtypes.core.Address.AddressUsecaseEnum;
 import com.vendertool.sharedtypes.core.ContactDetails;
+import com.vendertool.sharedtypes.core.ForgotPassword;
+import com.vendertool.sharedtypes.core.ForgotPassword.ForgotPasswordStatusEnum;
 
 public class RegistrationDALService {
 	private static final Logger logger = Logger.getLogger(RegistrationDALService.class);
@@ -36,6 +40,7 @@ public class RegistrationDALService {
 	PasswordHistoryDao pwdHistoryDao;
 	AddressDao addrDao;
 	AccountSecurityQuestionDao secQuestionDao;
+	ForgotPasswordDao fpDao;
 	
 	private RegistrationDALService() {
 		accountDao = RegistrationDaoFactory.getInstance().getAccountDao();
@@ -390,5 +395,49 @@ public class RegistrationDALService {
 		}
 		
 		return secQuestionDao.findAllByAccountId(accountId);
+	}
+	
+	public void insertForgotPassword(ForgotPassword fp) 
+			throws DBConnectionException, DatabaseException, InsertException {
+		
+		if(VUTIL.isNull(fp)) {
+			throw new InsertException("Cannot insert null forgot password entity");
+		}
+		
+		fpDao.insert(fp);
+	}
+	
+	public long getForgotPasswordCount(String email, Date startDate,
+			Date endDate, ForgotPasswordStatusEnum status)
+			throws FinderException, DBConnectionException, DatabaseException {
+		
+		if (VUTIL.isEmpty(email) || VUTIL.isNull(startDate)
+				|| VUTIL.isNull(endDate) || VUTIL.isNull(status)) {
+			FinderException fe = new FinderException("Null data passed to get forgot password");
+			logger.debug(fe.getMessage(), fe);
+			throw fe;
+		}
+		
+		return fpDao.findTotalByDateRange(email, startDate, endDate, status);
+	}
+	
+	public void removeForgotPassword(Long accountId) 
+			throws DBConnectionException, DatabaseException, DeleteException {
+		if (VUTIL.isNull(accountId)) {
+			throw new DeleteException("Cannot delete forgot password for null account id");
+		}
+		
+		fpDao.deleteByAccountId(accountId);
+	}
+	
+	public void updateForgotPasswordByStatus(String email,
+			ForgotPasswordStatusEnum status) throws DeleteException,
+			DBConnectionException, UpdateException, DatabaseException {
+		
+		if (VUTIL.isEmpty(email) || VUTIL.isNull(status)) {
+			throw new DeleteException("Cannot delete forgot password for null account id");
+		}
+		
+		fpDao.updateStatusByEmail(email, status);
 	}
 }

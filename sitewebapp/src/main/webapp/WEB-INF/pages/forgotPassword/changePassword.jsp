@@ -31,7 +31,9 @@
 			<pg:pageError model="${errorResponse}"/>
 			
 			<form:form method="post" action="processChangePassword" commandName="forgotPasswordReq">
-				<form:hidden path="emailToken"/>
+				<form:hidden path="email"/>
+				<form:hidden path="confirmCode"/>
+				<form:hidden path="confirmSessionId"/>
 	            <div class="fldWrp">
 	            	<form:input path="newPassword" class="form-control" placeholder="Password" />
 	            </div>

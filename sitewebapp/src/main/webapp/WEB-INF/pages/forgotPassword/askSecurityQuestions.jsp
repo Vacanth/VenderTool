@@ -31,7 +31,9 @@
 			<pg:pageError model="${errorResponse}"/>
 			
 			<form:form method="post" action="answerSecurityQuestions" commandName="forgotPasswordReq">
-				<form:hidden path="emailToken"/>
+				<form:hidden path="email"/>
+				<form:hidden path="confirmCode"/>
+				<form:hidden path="confirmSessionId"/>
 				<div>
 	            	${forgotPasswordReq.questions[0].question.questionDisplayName}
 	            </div>
