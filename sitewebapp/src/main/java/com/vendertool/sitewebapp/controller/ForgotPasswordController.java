@@ -31,7 +31,7 @@ public class ForgotPasswordController {
 	public String getForgotPasswordView(Model model){
 		logger.info("getForgotPasswordView GET controller invoked");
 
-//		model.addAttribute("forgotPasswordReq", new ForgotPasswordRequest());
+		model.addAttribute("forgotPasswordReq", new ForgotPasswordRequest());
 		
 		return "forgotPassword/forgotPassword";
 	}
