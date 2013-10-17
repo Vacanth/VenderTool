@@ -10,8 +10,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vendertool.common.utils.AdapterUtils;
 import com.vendertool.mercadolibreadapter.MLConstants;
 import com.vendertool.mercadolibreadapter.add.ErrorResponse;
@@ -19,10 +21,12 @@ import com.vendertool.mercadolibreadapter.add.Item;
 import com.vendertool.mercadolibreadapter.utils.ErrorMapperHelper;
 import com.vendertool.sharedtypes.core.Amount;
 import com.vendertool.sharedtypes.core.Classification;
+import com.vendertool.sharedtypes.core.CountryEnum;
 import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Listing.ListingFormatEnum;
+import com.vendertool.sharedtypes.core.MarketEnum;
 import com.vendertool.sharedtypes.core.PaymentMethod;
 import com.vendertool.sharedtypes.core.PaymentMethod.PaymentTypeEnum;
 import com.vendertool.sharedtypes.core.Product;
@@ -34,7 +38,7 @@ import com.vendertool.sharedtypes.rnr.BaseResponse;
 public class MercadolibreListingAdapter implements
 		IBaseMercadolibreOperationAdapter {
 
-	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-101521-470e85844534bc48f17f71fefa860756__G_J__-141983227";
+	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-101621-65f1d728e89f9240031927bbbe14b529__C_G__-141983227";
 
 	private MercadolibreListingAdapter() {
 	}
@@ -76,7 +80,7 @@ public class MercadolibreListingAdapter implements
 		Item responseItem = readItem(output);
 
 		// Call Add listing
-		adaptTOResponse(responseItem, (AddListingResponse) response);
+		adaptTOResponse(responseItem, (AddListingResponse) response,(AddListingRequest) request);
 	}
 
 	private void processErrorResponse(String output, AddListingResponse response) throws JsonParseException, JsonMappingException, IOException {
@@ -86,8 +90,10 @@ public class MercadolibreListingAdapter implements
 		}
 	}
 
-	private void adaptTOResponse(Item responseItem, AddListingResponse response) {
-		response.setListingId(responseItem.getId());
+	private void adaptTOResponse(Item responseItem, AddListingResponse response, AddListingRequest request) {
+		Listing listing = request.getListing();
+		listing.setMarketPlaceListingId(responseItem.getId());
+		response.setListing(listing);
 	}
 	
 	private Item readItem(String output) {
@@ -223,7 +229,18 @@ public class MercadolibreListingAdapter implements
 		listing.setProduct(product);
 		listing.setQuantity(1);
 		listing.setCondition("used");
+		listing.setMarket(MarketEnum.MERCADO_LIBRE);
+		listing.setCountry(CountryEnum.ALL);
 		input.setListing(listing);
+		
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		try {
+			String json = ow.writeValueAsString(input);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		MercadolibreListingAdapterHolder.INSTANCE.execute(input,
 				new AddListingResponse());
 	}
