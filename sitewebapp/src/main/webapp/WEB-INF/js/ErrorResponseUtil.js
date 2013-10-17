@@ -110,7 +110,17 @@ ErrorResponseUtil.getAllFieldErrorMsgs = function(errorResponse) {
 	var messages = [];
 	
 	for (var i=0, n=fldErrors.length; i<n; i++) {
-		messages.push(fldErrors[i].message);
+		
+		var err = fldErrors[i];
+		
+		// Try to get message first.
+		if (err.message && err.message !== '') {
+			messages.push(err.message);
+		}
+		else { // If no message, use the errorCode props.
+			var msg = err.errorCode.type + ': ' + err.errorCode.errorCode;
+			messages.push(msg);
+		}
 	}
 	
 	return messages;
@@ -141,7 +151,17 @@ ErrorResponseUtil.getPageErrorMsgs = function(errorResponse) {
 	
 	pageErrors = ErrorResponseUtil.getPageErrors(errorResponse);
 	for (i=0, j=pageErrors.length; i<j; i++) {
-		errorMsgs.push(pageErrors[i].message);
+		
+		var err = pageErrors[i];
+		
+		// Try to get message first.
+		if (err.message && err.message !== '') {
+			errorMsgs.push(err.message);
+		}
+		else { // If no message, use the errorCode props.
+			var msg = err.errorCode.type + ': ' + err.errorCode.errorCode;
+			errorMsgs.push(msg);
+		}
 	}
 	
 	return errorMsgs;
