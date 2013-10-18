@@ -56,7 +56,7 @@ The second error is a field level error since its 'bindingFieldMap' is not null.
 						${vterror.message}
 					</c:when>
 					<c:otherwise>
-						${vterror.errorCode.type ": " + vterror.errorCode.errorCode}
+						${vterror.errorCode.type + ": " + vterror.errorCode.errorCode}
 					</c:otherwise>
 				</c:choose>
 				<br />
