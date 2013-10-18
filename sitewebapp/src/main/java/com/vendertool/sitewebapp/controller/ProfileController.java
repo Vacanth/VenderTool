@@ -20,6 +20,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendertool.sharedtypes.core.Account;
+import com.vendertool.sharedtypes.core.ChangeEmail;
+import com.vendertool.sharedtypes.core.ChangePassword;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
@@ -181,16 +183,16 @@ public class ProfileController {
 	public @ResponseBody Map<String, Object> getEmailView() {
 		logger.info("getEmailView controller invoked");
 
-		String email = ContainerBootstrapContext.getSignedInEmail();
-		if((email == null) || (email.trim().isEmpty())) {
+		String currEmail = ContainerBootstrapContext.getSignedInEmail();
+		if((currEmail == null) || (currEmail.trim().isEmpty())) {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
-		ChangeEmailResponse response = new ChangeEmailResponse();
-		response.setEmail(email);
+		ChangeEmail changeEmail = new ChangeEmail();
+		changeEmail.setCurrentEmail(currEmail);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("changeEmailResponse", response);
+		map.put("changeEmail", changeEmail);
 		return map;
 	}
 	
@@ -198,12 +200,12 @@ public class ProfileController {
 	@RequestMapping(value=URLConstants.PROFILE_EMAIL_SAVE, method=RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> saveEmailChange(
-			@RequestBody ChangeEmailRequest changeEmailRequest,
+			@RequestBody ChangeEmail changeEmail,
 			HttpServletRequest request) {
 		logger.info("saveEmailChange controller invoked");
 		
-		if (changeEmailRequest == null) {
-			throw new VTRuntimeException("Cannot update email. changeEmailRequest is null.");
+		if (changeEmail == null) {
+			throw new VTRuntimeException("Cannot update email. changeEmail is null.");
 		}
 		
 		String email = ContainerBootstrapContext.getSignedInEmail();
@@ -211,7 +213,12 @@ public class ProfileController {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
 		
-		changeEmailRequest.setOldEmail(email);
+		changeEmail.setCurrentEmail(email);
+		ChangeEmailRequest changeEmailReq = new ChangeEmailRequest();
+		changeEmailReq.setOldEmail(changeEmail.getCurrentEmail());
+		changeEmailReq.setNewEmail(changeEmail.getNewEmail());
+		changeEmailReq.setConfirmEmail(changeEmail.getConfirmEmail());
+		changeEmailReq.setPassword(changeEmail.getPassword());
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
@@ -219,13 +226,13 @@ public class ProfileController {
 				URLConstants.WS_REGISTRATION_CHANGE_EMAIL_PATH;
 		
 		Response response = RestServiceClientHelper
-				.invokeRestService(url, changeEmailRequest, null, MediaType.APPLICATION_JSON_TYPE,
+				.invokeRestService(url, changeEmailReq, null, MediaType.APPLICATION_JSON_TYPE,
 						HttpMethodEnum.POST);
 		
 		int responseCode = response.getStatus();
 		logger.log(Level.INFO, "Vendertool Web service status code for URL '"
 				+ url + "' from '" + getClass().getName()
-				+ ".saveEmailChange(" + changeEmailRequest + ")' is '" + responseCode
+				+ ".saveEmailChange(" + changeEmailReq + ")' is '" + responseCode
 				+ "'.");
 		
 		//HTTP error code 200
@@ -239,7 +246,6 @@ public class ProfileController {
 		
 		ChangeEmailResponse changeEmailResponse = response.readEntity(ChangeEmailResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
-		changeEmailResponse.setEmail(email);
 
 		if(changeEmailResponse.hasErrors()) {
 			logger.error("Change email failed with errors: " + changeEmailResponse.getFieldBindingErrors());
@@ -249,14 +255,21 @@ public class ProfileController {
 			Locale locale = RequestContextUtils.getLocale(request);
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
 			
-			map.put("errorResponse", errorResponse);
-			map.put("updated", false);
+			// Clear email
+			changeEmail.setPassword(null);
 			
+			map.put("errorResponse", errorResponse);
+			map.put("changeEmail", changeEmail);
+
 			return map;
 		}
 		
-		map.put("updated", true);
-		map.put("changeEmailResponse", changeEmailResponse);
+		// Clear form
+		changeEmail.setNewEmail(null);
+		changeEmail.setConfirmEmail(null);
+		changeEmail.setPassword(null);
+		
+		map.put("changeEmail", changeEmail);
 		return map;
 	}
 
@@ -274,22 +287,25 @@ public class ProfileController {
 	@RequestMapping(value=URLConstants.PROFILE_PASSWORD_SAVE, method=RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> savePasswordChange(
-			@RequestBody ChangePasswordRequest changePasswordRequest,
+			@RequestBody ChangePassword changePassword,
 			HttpServletRequest request) {
 		logger.info("savePasswordChange controller invoked");
 		
-		if (changePasswordRequest == null) {
-			throw new VTRuntimeException("Cannot update password. changePasswordRequest is null.");
+		if (changePassword == null) {
+			throw new VTRuntimeException("Cannot update password. changePassword is null.");
 		}
 		
 		String email = ContainerBootstrapContext.getSignedInEmail();
 		if((email == null) || (email.trim().isEmpty())) {
 			throw new VTRuntimeException("Unable to get signed in user name");
 		}
-		
-		//always set this & don't accept from the UI input
-		changePasswordRequest.setEmail(email);
+
+		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
+		changePasswordRequest.setEmail(email); //always set this & don't accept from the UI input
 		changePasswordRequest.setForgotPasswordUsecase(false);
+		changePasswordRequest.setOldPassword(changePassword.getCurrentPassword());
+		changePasswordRequest.setNewPassword(changePassword.getNewPassword());
+		changePasswordRequest.setConfirmPassword(changePassword.getConfirmPassword());
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
@@ -317,7 +333,7 @@ public class ProfileController {
 		
 		ChangePasswordResponse changePasswordResponse = response.readEntity(ChangePasswordResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		if(changePasswordResponse.hasErrors()) {
 			logger.error("Change email failed with errors: " + changePasswordResponse.getFieldBindingErrors());
 
@@ -327,12 +343,11 @@ public class ProfileController {
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
 			
 			map.put("errorResponse", errorResponse);
-			map.put("updated", false);
+			map.put("changePassword", null); // Clear input fields
 			
 			return map;
 		}
-		
-		map.put("updated", true);
+
 		return map;
 	}
 	

@@ -100,7 +100,7 @@ profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParam
 				PageUtil.scrollTop();
 			});
 	};
-
+	
 	$scope.resetAccount = function() {
     	$scope.accountEdit = angular.copy($scope.accountOrig);
     	$scope.errorResponse = undefined;
@@ -115,25 +115,25 @@ profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParam
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
-	
+profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($scope, $http, $routeParams, $location, Data, Content) {
+
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();
 	
-	$scope.changeEmailRequest = {};
-	$scope.changeEmailResponse = {};
+	$scope.changeEmail = {};
 
 	$http.get('profile/email').success(function(data) {
-		$scope.changeEmailResponse = data.changeEmailResponse;
+		$scope.changeEmail = data.changeEmail;
 	});
 
 	$scope.saveEmail = function() {
 		
 		PageUtil.showSpinner();
 		
-		$http.post('profile/email/save', $scope.changeEmailRequest).
+		$http.post('profile/email/save', $scope.changeEmail).
 			success(function (data, status, headers, config) {
-
+				
+				$scope.changeEmail = data.changeEmail;
 				$scope.errorResponse = data.errorResponse;
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
@@ -141,11 +141,7 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 					handlePageErrorMsg();
 				}
 				else {
-					// Only update this if no errors
-					$scope.changeEmailResponse = data.changeEmailResponse;
-					
-					$scope.changeEmailRequest.newEmail = '';
-					$scope.changeEmailRequest.confirmEmail = '';
+					// Clear errorResponse
 					$scope.errorResponse = undefined;
 					
 					showPageSuccessMsg('email');
@@ -161,8 +157,8 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 	};
 	
 	$scope.resetEmail = function() { 
-    	$scope.changeEmailRequest.newEmail = '';
-    	$scope.changeEmailRequest.confirmEmail = '';
+    	$scope.changeEmail.newEmail = '';
+    	$scope.changeEmail.confirmEmail = '';
     	$scope.errorResponse = undefined;
     	$('.alert-danger').hide();
   	};
@@ -172,20 +168,21 @@ profileApp.controller('EmailCtrl', ['$scope', '$http', '$routeParams', '$locatio
 Using the array notation requires the listing of
 all the function params as strings in same order.
 ********************/
-profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', function($scope, $http, $routeParams, $location, Data) {
+profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'Data', 'Content', function($scope, $http, $routeParams, $location, Data, Content) {
 	
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();
 	
-	$scope.changePasswordRequest = {};
+	$scope.changePassword = {};
 
   	$scope.savePassword = function() {
 		
   		PageUtil.showSpinner();
   		
-		$http.post('profile/password/save', $scope.changePasswordRequest).
+		$http.post('profile/password/save', $scope.changePassword).
 			success(function (data, status, headers, config) {
 				
+				$scope.changePassword = data.changePassword;
 				$scope.errorResponse = data.errorResponse;
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
@@ -193,9 +190,6 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 					handlePageErrorMsg();
 				}
 				else {
-					// Only update this if no errors
-					$scope.changePasswordRequest.newPassword = '';
-					$scope.changePasswordRequest.confirmPassword = '';
 					$scope.errorResponse = undefined;
 
 					showPageSuccessMsg('password');
@@ -211,8 +205,8 @@ profileApp.controller('PasswordCtrl', ['$scope', '$http', '$routeParams', '$loca
 	};
 	
 	$scope.resetPassword = function() { 
-    	$scope.changePasswordRequest.newPassword = '';
-    	$scope.changePasswordRequest.confirmPassword = '';
+    	$scope.changePassword.newPassword = '';
+    	$scope.changePassword.confirmPassword = '';
     	$scope.errorResponse = undefined;
     	$('.alert-danger').hide();
   	};
@@ -311,16 +305,15 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 			success(function (data, status, headers, config) {
 				
 				$scope.errorResponse = data.errorResponse;
-				
-				// data.updated will be true or false. Not sure if we need this.
-				//alert(data.updated);
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					handlePageErrorMsg();
+					$scope.password = '';
 				}
 				else {
 					// Only update this if no errors
 					$scope.errorResponse = undefined;
+					$scope.resetQuestionAnswers();
 
 					// Show success message
 					showPageSuccessMsg('questions');
@@ -342,6 +335,8 @@ profileApp.controller('QuestionsCtrl', ['$scope', '$http', '$routeParams', '$loc
 		
 		$scope.answer1 = '';
 		$scope.answer2 = '';
+		
+		$scope.password = '';
 		
 		// Clear errors
 		$scope.errorResponse = undefined;
@@ -369,16 +364,16 @@ function showPageSuccessMsg(type) {
 	$('.alert-danger').hide();
 	
 	if (type === 'profile') {
-		$('.alert-success.profile').show().delay(10000).fadeOut(300);
+		$('.alert-success.profile').show();
 	}
 	else if (type === 'email') {
-		$('.alert-success.email').show().delay(10000).fadeOut(300);
+		$('.alert-success.email').show();
 	}
 	else if (type === 'password') {
-		$('.alert-success.password').show().delay(10000).fadeOut(300);
+		$('.alert-success.password').show();
 	}
 	else if (type === 'questions') {
-		$('.alert-success.questions').show().delay(10000).fadeOut(300);
+		$('.alert-success.questions').show();
 	}
 };
 
