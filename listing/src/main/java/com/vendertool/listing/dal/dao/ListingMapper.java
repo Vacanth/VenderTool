@@ -107,7 +107,7 @@ public class ListingMapper implements DALMapper<Listing> {
 			if (a.currencyCodeIso3.equals(rpath)) {
 				Currency currency = listing.getListingCurrency();
 				if (currency != null) {
-					// map.put(a.currencyId, currency.get);
+					map.put(a.currencyCodeIso3, currency.getCurrencyCode());
 				}
 			}
 
@@ -133,15 +133,19 @@ public class ListingMapper implements DALMapper<Listing> {
 			}
 
 			if (a.lastModifiedApp.equals(rpath)) {
-				map.put(a.lastModifiedApp, listing.getLastModifiedApp());
+				map.put(a.lastModifiedApp, new Byte(listing.getLastModifiedApp()+""));
 			}
+			
 			if (a.lastModifiedDate.equals(rpath)) {
-				map.put(a.lastModifiedDate, listing.getListingId());
+				Date date = listing.getLastModifiedDate();
+				if (date != null) {
+					map.put(a.lastModifiedDate, new Timestamp(date.getTime()));
+				}
 			}
 			if (a.marketplaceId.equals(rpath)) {
 				MarketEnum market = listing.getMarket();
 				if (market != null) {
-					map.put(a.marketplaceId, market.getId());
+					map.put(a.marketplaceId, new Byte(market.getId()+""));
 				}
 			}
 
@@ -295,70 +299,104 @@ public class ListingMapper implements DALMapper<Listing> {
 			}
 
 			if (l.currencyCodeIso3.equals(rpath)) {
-				// listing.setListingId(row.get(l.currencyId));
+				String code = row.get(l.currencyCodeIso3);
+				if(code != null) {
+					Currency currency = Currency.getInstance(code);
+					if(currency != null) {
+						listing.setListingCurrency(currency);
+					}
+				}
 			}
 
 			if (l.auctionCurrentPrice.equals(rpath)) {
-				Amount auctionCurrentPrice = new Amount();
-				auctionCurrentPrice.setValue(row.get(l.auctionCurrentPrice));
-				listing.setAuctionCurrrentPrice(auctionCurrentPrice);
+				if(row.get(l.auctionCurrentPrice) != null) {
+					Amount auctionCurrentPrice = new Amount();
+					auctionCurrentPrice.setValue(row.get(l.auctionCurrentPrice));
+					listing.setAuctionCurrrentPrice(auctionCurrentPrice);
+				}
 			}
 
 			if (l.fixedPrice.equals(rpath)) {
-				Amount fixedPrice = new Amount();
-				fixedPrice.setValue(row.get(l.fixedPrice));
-				// TODO set currency.
-				listing.setFixedPrice(fixedPrice);
+				if(row.get(l.fixedPrice) != null) {
+					Amount fixedPrice = new Amount();
+					fixedPrice.setValue(row.get(l.fixedPrice));
+					listing.setFixedPrice(fixedPrice);
+				}
 			}
 
 			if (l.auctionReservedPrice.equals(rpath)) {
-				Amount auctionReservedPrice = new Amount();
-				auctionReservedPrice.setValue(row.get(l.auctionCurrentPrice));
-				listing.setAuctionReservedPrice(auctionReservedPrice);
+				if(row.get(l.auctionCurrentPrice) != null) {
+					Amount auctionReservedPrice = new Amount();
+					auctionReservedPrice.setValue(row.get(l.auctionCurrentPrice));
+					listing.setAuctionReservedPrice(auctionReservedPrice);
+				}
 			}
 
 			if (l.auctionStartPrice.equals(rpath)) {
-				Amount auctionStartPrice = new Amount();
-				auctionStartPrice.setValue(row.get(l.auctionStartPrice));
-				listing.setAuctionStartPrice(auctionStartPrice);
+				if(row.get(l.auctionStartPrice) != null) {
+					Amount auctionStartPrice = new Amount();
+					auctionStartPrice.setValue(row.get(l.auctionStartPrice));
+					listing.setAuctionStartPrice(auctionStartPrice);
+				}
 			}
 
 			if (l.categoryId.equals(rpath)) {
-				List<Classification> classifications = new ArrayList<Classification>();
-				Classification classification = new Classification();
-				classification
-						.setClassificationType(ClassificationTypeEnum.CATEGORY);
-				classification.setClassifierId(row.get(l.categoryId));
-				listing.setClassifications(classifications);
+				if(row.get(l.categoryId) != null) {
+					List<Classification> classifications = new ArrayList<Classification>();
+					Classification classification = new Classification();
+					classification
+							.setClassificationType(ClassificationTypeEnum.CATEGORY);
+					classification.setClassifierId(row.get(l.categoryId));
+					listing.setClassifications(classifications);
+				}
 			}
 
 			if (l.condition.equals(rpath)) {
-				listing.setListingId(row.get(l.listingId));
+				listing.setCondition(row.get(l.condition));
 			}
 
 			if (l.createdDate.equals(rpath)) {
-				listing.setListingId(row.get(l.listingId));
+				Timestamp ts = row.get(l.createdDate);
+				if(ts != null) {
+					listing.setCreateDate(new Date(ts.getTime()));
+				}
 			}
 
 			if (l.itemEndTime.equals(rpath)) {
-				listing.setListingEndTime(row.get(l.itemEndTime));
+				Timestamp ts = row.get(l.itemEndTime);
+				if(ts != null) {
+					listing.setListingEndTime(new Date(ts.getTime()));
+				}
 			}
 
 			if (l.itemStartTime.equals(rpath)) {
-				listing.setListingStartTime(row.get(l.itemStartTime));
+				Timestamp ts = row.get(l.itemStartTime);
+				if(ts != null) {
+					listing.setListingStartTime(new Date(ts.getTime()));
+				}
 			}
 
 			if (l.lastModifiedApp.equals(rpath)) {
-				listing.setLastModifiedApp(row.get(l.lastModifiedApp));
+				if(row.get(l.lastModifiedApp) != null) {
+					listing.setLastModifiedApp(row.get(l.lastModifiedApp).intValue());
+				}
 			}
 
 			if (l.lastModifiedDate.equals(rpath)) {
-				listing.setLastModifiedDate(row.get(l.lastModifiedDate));
+				Timestamp ts = row.get(l.lastModifiedDate);
+				if(ts != null) {
+					listing.setLastModifiedDate(new Date(ts.getTime()));
+				}
 			}
 
 			if (l.marketplaceId.equals(rpath)) {
-				MarketEnum market = MarketEnum.get(row.get(l.marketplaceId));
-				listing.setMarket(market);
+				if(row.get(l.marketplaceId) != null) {
+					int id = row.get(l.marketplaceId).intValue();
+					MarketEnum market = MarketEnum.get(id);
+					if(market != null) {
+						listing.setMarket(market);
+					}
+				}
 			}
 
 			if (l.marketplaceItemId.equals(rpath)) {
@@ -374,9 +412,11 @@ public class ListingMapper implements DALMapper<Listing> {
 			}
 
 			if (l.productId.equals(rpath)) {
-				Product product = new Product();
-				product.setProductId(row.get(l.productId));
-				listing.setProduct(product);
+				if(row.get(l.productId) != null) {
+					Product product = new Product();
+					product.setProductId(row.get(l.productId));
+					listing.setProduct(product);
+				}
 			}
 
 			if (l.quantity.equals(rpath)) {
