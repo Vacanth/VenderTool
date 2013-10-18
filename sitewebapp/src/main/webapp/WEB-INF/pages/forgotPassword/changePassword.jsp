@@ -30,15 +30,15 @@
 			
 			<pg:pageError model="${errorResponse}"/>
 			
-			<form:form method="post" action="processChangePassword" commandName="forgotPasswordReq">
-				<form:hidden path="email"/>
-				<form:hidden path="confirmCode"/>
-				<form:hidden path="confirmSessionId"/>
+			<form:form method="post" action="processChangePassword" commandName="validateNewPassword">
+				<form:hidden path="emailConfirmation.email"/>
+				<form:hidden path="emailConfirmation.confirmCode"/>
+				<form:hidden path="emailConfirmation.confirmSessionId"/>
 	            <div class="fldWrp">
-	            	<form:input path="newPassword" class="form-control" placeholder="Password" />
+	            	<form:input path="newPassword" type="password" class="form-control" placeholder="Password" />
 	            </div>
 	             <div class="fldWrp">
-	            	<form:input path="confirmPassword" class="form-control" placeholder="Confirm password" />
+	            	<form:input path="confirmPassword" type="password"  class="form-control" placeholder="Confirm password" />
 	            </div>
 	            <div class="submit">
 	            	<input type="submit" class="btn btn-primary grn" value="${submit}" />

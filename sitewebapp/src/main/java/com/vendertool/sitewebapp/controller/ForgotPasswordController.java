@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
+import com.vendertool.sharedtypes.core.EmailConfirmation;
+import com.vendertool.sharedtypes.core.ValidateEmail;
+import com.vendertool.sharedtypes.core.ValidateNewPassword;
+import com.vendertool.sharedtypes.core.ValidateSecurityQuestions;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
 import com.vendertool.sitewebapp.util.MockDataUtil;
 
 @Controller
@@ -31,7 +34,7 @@ public class ForgotPasswordController {
 	public String getForgotPasswordView(Model model){
 		logger.info("getForgotPasswordView GET controller invoked");
 
-		model.addAttribute("forgotPasswordReq", new ForgotPasswordRequest());
+		model.addAttribute("validateEmail", new ValidateEmail());
 		
 		return "forgotPassword/forgotPassword";
 	}
@@ -40,18 +43,18 @@ public class ForgotPasswordController {
 	public String validateEmail(
 			Model model, 
 			HttpServletRequest req,
-			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
+			@ModelAttribute("validateEmail") ValidateEmail validateEmail) {
 		
 		logger.info("validateEmail POST controller invoked");
 		
-		ErrorResponse errorResponse = validateEmail(forgotPasswordReq.getEmail());
+		ErrorResponse errorResponse = validateEmail(validateEmail.getEmail());
 		if (errorResponse != null) { // Error
 			model.addAttribute("errorResponse", errorResponse);
 		}
 		
 		else { // All good
-			forgotPasswordReq.setEmailValid(true);
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			validateEmail.setEmailValid(true);
+			model.addAttribute("validateEmail", validateEmail);
 		}
 
 		return "forgotPassword/forgotPassword";
@@ -65,24 +68,31 @@ public class ForgotPasswordController {
 	@RequestMapping(value="askSecurityQuestions", method=RequestMethod.GET)
 	public String getAskQuestionsView(Model model, HttpServletRequest request){
 		logger.info("getAskQuestionsView POST controller invoked");
-
-		String emailToken = request.getParameter("t");
+		
+		String email = request.getParameter("email");
+		String confirmCode = request.getParameter("cc");
+		String confirmSessionId = request.getParameter("csi");
+		
+		EmailConfirmation emailConfirmation = new EmailConfirmation();
+		emailConfirmation.setEmail(email);
+		emailConfirmation.setConfirmCode(confirmCode);
+		emailConfirmation.setConfirmSessionId(confirmSessionId);
 		
 		// Not good
-		if (!isEmailTokenValid(emailToken)) {
+		if (!isEmailConfirmationValid(emailConfirmation)) {
 			return "unauthorized/unauthorized";
 		}
-		else if (isTooManyAttempts(emailToken)) {
+		else if (isTooManyAttempts(emailConfirmation)) {
 			return "accountLocked/accountLocked";
 		}
 		
 		// All good
-		ForgotPasswordRequest forgotPasswordReq = new ForgotPasswordRequest();
-		forgotPasswordReq.setConfirmSessionId(emailToken);
+		ValidateSecurityQuestions validateSecurityQuestions = new ValidateSecurityQuestions();
+		validateSecurityQuestions.setEmailConfirmation(emailConfirmation);
 		List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-		forgotPasswordReq.setQuestions(questions);
+		validateSecurityQuestions.setQuestions(questions);
 
-		model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+		model.addAttribute("validateSecurityQuestions", validateSecurityQuestions);
 		return "forgotPassword/askSecurityQuestions";
 	}
 	
@@ -91,35 +101,35 @@ public class ForgotPasswordController {
 			Model model,
 			HttpServletRequest req,
 			HttpServletResponse res,
-			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
+			@ModelAttribute("validateSecurityQuestions") ValidateSecurityQuestions validateSecurityQuestions) {
 		logger.info("answerSecurityQuestions POST controller invoked");
-		
-		String emailToken = forgotPasswordReq.getConfirmSessionId();
-		Integer code = forgotPasswordReq.getConfirmCode();
-		
+
 		// Not good
-		if (!isEmailTokenValid(emailToken)) {
+		if (!isEmailConfirmationValid(validateSecurityQuestions.getEmailConfirmation())) {
 			return "unauthorized/unauthorized";
 		}
-		else if (isTooManyAttempts(emailToken)) {
+		else if (isTooManyAttempts(validateSecurityQuestions.getEmailConfirmation())) {
 			return "accountLocked/accountLocked";
 		}
 
 		// Validate answers
-		ErrorResponse errorResponse = validateAnswers(forgotPasswordReq.getQuestions());
+		ErrorResponse errorResponse = validateAnswers(validateSecurityQuestions.getQuestions());
 		if (errorResponse != null) {
 			model.addAttribute("errorResponse", errorResponse);
 			
 			 // Echo back the questions
 			List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-			forgotPasswordReq.setQuestions(questions);
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			validateSecurityQuestions.setQuestions(questions);
+			model.addAttribute("validateSecurityQuestions", validateSecurityQuestions);
 
 			return "forgotPassword/askSecurityQuestions";
 		}
 		else {
 			// Answers are good
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			ValidateNewPassword validateNewPassword = new ValidateNewPassword();
+			validateNewPassword.setEmailConfirmation(validateSecurityQuestions.getEmailConfirmation());
+			
+			model.addAttribute("validateNewPassword", validateNewPassword);
 			
 			return "forgotPassword/changePassword";
 		}
@@ -135,30 +145,28 @@ public class ForgotPasswordController {
 			Model model,
 			HttpServletRequest req,
 			HttpServletResponse res,
-			@ModelAttribute("forgotPasswordReq") ForgotPasswordRequest forgotPasswordReq) {
+			@ModelAttribute("validateNewPassword") ValidateNewPassword validateNewPassword) {
 		logger.info("answerSecurityQuestions POST controller invoked");
-		
-		String emailToken = forgotPasswordReq.getConfirmSessionId();
-		
+
 		// Not good
-		if (!isEmailTokenValid(emailToken)) {
+		if (!isEmailConfirmationValid(validateNewPassword.getEmailConfirmation())) {
 			return "unauthorized/unauthorized";
 		}
-		else if (isTooManyAttempts(emailToken)) {
+		else if (isTooManyAttempts(validateNewPassword.getEmailConfirmation())) {
 			return "accountLocked/accountLocked";
 		}
 		
 		// Validate password
-		ErrorResponse errorResponse = validatePassword(forgotPasswordReq);
+		ErrorResponse errorResponse = validatePassword(validateNewPassword.getNewPassword(), validateNewPassword.getConfirmPassword());
 		if (errorResponse != null) {
 			model.addAttribute("errorResponse", errorResponse);
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			model.addAttribute("forgotPasswordFlow", null);
 
 			return "forgotPassword/changePassword";
 		}
 		else {
 			// Passwords are good
-			model.addAttribute("forgotPasswordReq", forgotPasswordReq);
+			model.addAttribute("forgotPasswordFlow", null);
 			
 			return "forgotPassword/success";
 		}
@@ -169,26 +177,26 @@ public class ForgotPasswordController {
 	//
 	// Replace with real validation
 	//
-	private boolean isEmailTokenValid(String emailToken) {
-		return emailToken != null && !emailToken.trim().isEmpty();
+	private boolean isEmailConfirmationValid(EmailConfirmation emailConfirmation) {
+		return emailConfirmation.getEmail() != null && !emailConfirmation.getEmail().trim().isEmpty();
 	}
 	
 	//
 	// Replace with real validation
 	//
-	private boolean isTooManyAttempts(String emailToken) {
+	private boolean isTooManyAttempts(EmailConfirmation emailConfirmation) {
 		return false;
 	}
 	
 	//
 	// Replace with real errorResponses
 	//
-	private ErrorResponse validatePassword(ForgotPasswordRequest forgotPasswordReq) {
+	private ErrorResponse validatePassword(String newPassword, String confirmPassword) {
 		
-		if (forgotPasswordReq.getNewPassword() == null || 
-			forgotPasswordReq.getNewPassword().trim().isEmpty()|| 
-			forgotPasswordReq.getConfirmPassword() == null || 
-			forgotPasswordReq.getConfirmPassword().trim().isEmpty()) {
+		if (newPassword == null || 
+				newPassword.trim().isEmpty()|| 
+				confirmPassword == null || 
+				confirmPassword.trim().isEmpty()) {
 			
 			ErrorResponse resp = new ErrorResponse();
 			resp.addFieldBindingError(

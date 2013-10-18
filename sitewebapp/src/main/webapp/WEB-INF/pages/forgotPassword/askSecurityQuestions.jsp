@@ -30,10 +30,10 @@
 			
 			<pg:pageError model="${errorResponse}"/>
 			
-			<form:form method="post" action="answerSecurityQuestions" commandName="forgotPasswordReq">
-				<form:hidden path="email"/>
-				<form:hidden path="confirmCode"/>
-				<form:hidden path="confirmSessionId"/>
+			<form:form method="post" action="answerSecurityQuestions" commandName="validateSecurityQuestions">
+				<form:hidden path="emailConfirmation.email"/>
+				<form:hidden path="emailConfirmation.confirmCode"/>
+				<form:hidden path="emailConfirmation.confirmSessionId"/>
 				<div>
 	            	${forgotPasswordReq.questions[0].question.questionDisplayName}
 	            </div>
