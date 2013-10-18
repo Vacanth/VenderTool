@@ -239,9 +239,7 @@ public class ListingMapper implements DALMapper<Listing> {
 			bean.setItemStartTime(new Timestamp(startTime.getTime()));
 		}
 
-//		if(listing.getLastModifiedApp() != null) {
-//			bean.setLastModifiedApp((byte) listing.getLastModifiedApp());
-//		}
+		bean.setLastModifiedApp(new Byte(listing.getLastModifiedApp()+""));
 		
 		Date lastModifiedDate = listing.getLastModifiedDate();
 		if (lastModifiedDate != null) {

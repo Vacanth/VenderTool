@@ -153,6 +153,8 @@ public class ProfileController {
 		
 		UpdateAccountResponse accountresponse = response.readEntity(UpdateAccountResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
+		Account acct = accountresponse.getAccount();
+		acct.setPassword(null); // Clear password so it doesn't show up in form
 		
 		if(accountresponse.hasErrors()) {
 			logger.error("Update account profile failed with errors: " + accountresponse.getFieldBindingErrors());
@@ -161,17 +163,15 @@ public class ProfileController {
 			
 			Locale locale = RequestContextUtils.getLocale(request);
 			VTErrorUtil.updateErrorsWithLocalizedMessages(errorResponse.getVTErrors(), locale);
-			
-			Account responseAccount = accountresponse.getAccount();
-			
-			map.put("account", responseAccount);
+
+			map.put("account", acct);
 			map.put("errorResponse", errorResponse);
 			map.put("updated", false);
 			
 			return map;
 		}
 		
-		map.put("account", accountresponse.getAccount());
+		map.put("account", acct);
 		map.put("updated", true);
 		return map;
 	}
@@ -240,7 +240,7 @@ public class ProfileController {
 		ChangeEmailResponse changeEmailResponse = response.readEntity(ChangeEmailResponse.class);
 		Map<String, Object> map = new HashMap<String, Object>();
 		changeEmailResponse.setEmail(email);
-		
+
 		if(changeEmailResponse.hasErrors()) {
 			logger.error("Change email failed with errors: " + changeEmailResponse.getFieldBindingErrors());
 

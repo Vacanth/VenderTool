@@ -59,9 +59,14 @@ public class ListingDAOTest implements ApplicationContextAware {
 			
 			listing.setMasterTemplateId(234l);
 			
+			System.err.println("inserting listing");
 			Long listingId = listingDalService.createListing(listing);
+			System.err.println("inserted listing id:" + listingId);
 			
+			System.err.println("deleting listing");
 			listingDalService.removeListing(listingId);
+			
+			System.err.println("Test Complete");
 		} catch (DBConnectionException e) {
 			e.printStackTrace();
 		} catch (InsertException e) {

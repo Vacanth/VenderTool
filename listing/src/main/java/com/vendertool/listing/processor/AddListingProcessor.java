@@ -1,14 +1,22 @@
 package com.vendertool.listing.processor;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.vendertool.common.MarketCountryKey;
+import com.vendertool.common.dal.exception.DBConnectionException;
+import com.vendertool.common.dal.exception.DatabaseException;
+import com.vendertool.common.dal.exception.FinderException;
+import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.marketplace.IMarketListingAdapter;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.listing.ListingMarketAdapterRegistry;
+import com.vendertool.listing.dal.ListingDALService;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.error.Errors;
+import com.vendertool.sharedtypes.error.VTErrorFieldBindingMap;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
 import com.vendertool.sharedtypes.rnr.AddListingResponse;
@@ -45,8 +53,8 @@ public class AddListingProcessor extends BaseListingProcessor {
 				|| s_validationUtil.isNull(response)) {
 			VTRuntimeException ex = new VTRuntimeException(
 					"NULL value passed to validate in AddListingProcessor");
-			logger.debug("NULL value passed to validate in AddListingProcessor",
-					ex);
+			logger.debug(
+					"NULL value passed to validate in AddListingProcessor", ex);
 			throw ex;
 		}
 		AddListingRequest addListingRequest = (AddListingRequest) request;
@@ -56,7 +64,7 @@ public class AddListingProcessor extends BaseListingProcessor {
 			addListingResponse.addFieldBindingError(
 					Errors.LISTING.LISTING_CONTAINER_IS_EMPTY,
 					addListingRequest.getClass().getName(), "listing");
-			//If am here, I don't have anything to process. So am going back.
+			// If am here, I don't have anything to process. So am going back.
 			return;
 		}
 		Product product = listing.getProduct();
@@ -64,11 +72,11 @@ public class AddListingProcessor extends BaseListingProcessor {
 			addListingResponse.addFieldBindingError(
 					Errors.LISTING.LISTING_CONTAINER_IS_EMPTY,
 					addListingRequest.getClass().getName(), "product");
-			//If am here, I don't have anything to process. So am going back.
+			// If am here, I don't have anything to process. So am going back.
 			return;
 		}
 		// TODO start basic validation
-		//We can skip this since we are gona relay on MarketPlace validations.
+		// We can skip this since we are gona relay on MarketPlace validations.
 	}
 
 	@Override
@@ -92,6 +100,23 @@ public class AddListingProcessor extends BaseListingProcessor {
 						new MarketCountryKey(listing.getCountry(), listing
 								.getMarket()));
 		adapter.addListing(addListingRequest, addListingResponse);
+		if (hasErrors(addListingResponse)) {
+			return;
+		}
+
 		// TODO update DB
+		try {
+			ListingDALService.getInstance().createListing(
+					addListingResponse.getListing());
+		} catch (DBConnectionException e) {
+			
+		} catch (FinderException e) {
+			
+		} catch (InsertException e) {
+			
+		} catch (DatabaseException e) {
+			
+		}
+
 	}
 }

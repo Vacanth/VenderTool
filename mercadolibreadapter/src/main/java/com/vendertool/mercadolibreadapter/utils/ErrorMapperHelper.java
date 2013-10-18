@@ -19,6 +19,7 @@ public class ErrorMapperHelper {
 	public static ErrorMapperHelper getInstance() {
 		return ErrorMapperHelperHolder.INSTANCE;
 	}
+	private static ErrorMapper mapper = ErrorMapper.getInstance();
 
 	public void populateErrors(BaseResponse response, ErrorResponse vtErrorResp) {
 		if (response == null || vtErrorResp == null) {
@@ -28,11 +29,11 @@ public class ErrorMapperHelper {
 
 		if (errorDetails == null
 				|| (errorDetails != null && errorDetails.size() == 0)) {
-			// Populate generic error and return;
+			response.addFieldBindingError(mapper.getVTError(vtErrorResp.getError()),
+					"", "");
 			return;
 		}
 
-		ErrorMapper mapper = ErrorMapper.getInstance();
 
 		for (ErrorDetail error : errorDetails) {
 			//TODO set field class names?

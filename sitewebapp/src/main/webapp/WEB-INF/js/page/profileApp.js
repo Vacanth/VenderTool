@@ -78,18 +78,18 @@ profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParam
 				
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
 					handlePageErrorMsg();
+					$scope.accountEdit = angular.copy(data.account);
 				}
 				else {
-					// Only update this if no errors
+					// Only update original account this if no errors
 					$scope.accountOrig = data.account;
 					$scope.accountEdit = angular.copy(data.account);
 					$scope.errorResponse = undefined;
 					
 					$rootScope.accountUpdated = angular.copy(data.account);
-					
 					showPageSuccessMsg('profile');
 				}
-				
+
 				PageUtil.hideSpinner();
 				PageUtil.scrollTop();
 			}).
