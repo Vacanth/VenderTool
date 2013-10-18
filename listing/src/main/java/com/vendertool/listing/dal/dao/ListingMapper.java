@@ -223,7 +223,7 @@ public class ListingMapper implements DALMapper<Listing> {
 
 		Currency currency = listing.getListingCurrency();
 		if (currency != null) {
-			// bean.setCurrencyId(currencyId);
+			bean.setCurrencyCodeIso3(currency.getCurrencyCode());
 		}
 		Amount fixedPrice = listing.getFixedPrice();
 		if (fixedPrice != null) {
@@ -239,7 +239,10 @@ public class ListingMapper implements DALMapper<Listing> {
 			bean.setItemStartTime(new Timestamp(startTime.getTime()));
 		}
 
-		bean.setLastModifiedApp((byte) listing.getLastModifiedApp());
+//		if(listing.getLastModifiedApp() != null) {
+//			bean.setLastModifiedApp((byte) listing.getLastModifiedApp());
+//		}
+		
 		Date lastModifiedDate = listing.getLastModifiedDate();
 		if (lastModifiedDate != null) {
 			bean.setLastModifiedDate(new Timestamp(lastModifiedDate.getTime()));
@@ -248,17 +251,21 @@ public class ListingMapper implements DALMapper<Listing> {
 		bean.setListingId(listing.getListingId());
 		MarketEnum market = listing.getMarket();
 		if (market != null) {
-			bean.setMarketplaceId((byte) market.getId());
+			bean.setMarketplaceId(new Byte(market.getId()+""));
 		}
+		
 		bean.setMarketplaceItemId(listing.getMarketPlaceListingId());
 		bean.setMasterTemplateId(listing.getMasterTemplateId());
 		bean.setParentItemId(listing.getParentListingId());
+		
 		Product product = listing.getProduct();
 		if (product != null) {
 			bean.setProductId(product.getProductId());
 		}
+		
 		bean.setQuantity(listing.getQuantity());
 		bean.setWarranty(listing.getWarranty());
+		
 		return bean;
 	}
 

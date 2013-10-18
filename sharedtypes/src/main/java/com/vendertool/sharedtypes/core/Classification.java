@@ -9,7 +9,7 @@ public class Classification {
 	
 	@XmlEnum
 	public enum ClassificationTypeEnum {
-		UNKNOWN(-1), CATEGORY(1),PRODUCT(2),KEYWORD(3),TITLE(4);
+		CATEGORY(1),PRODUCT(2),KEYWORD(3),TITLE(4);
 		
 		private int id;
 
@@ -28,7 +28,7 @@ public class Classification {
 					return typeEnum;
 				}
 			}
-			return UNKNOWN;
+			return null;
 		}
 	}
 	

@@ -103,9 +103,9 @@ public class RegistrationDALService {
 			return;
 		}
 		
-		accountDao.update(account, FieldSets.ACCOUNT_UPDATESET.PROFILE);
-		
 		updateAddress(account);
+		
+		accountDao.update(account, FieldSets.ACCOUNT_UPDATESET.PROFILE);
 	}
 
 

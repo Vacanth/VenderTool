@@ -13,7 +13,7 @@ public class Listing {
 	
 	@XmlEnum
 	public enum ListingFormatEnum{
-		UNKNOWN(-1), FIXED_PRICE(1), AUCTION(2), AD(3);
+		FIXED_PRICE(1), AUCTION(2), AD(3);
 		private int id;
 
 		private ListingFormatEnum(int id) {
@@ -31,7 +31,7 @@ public class Listing {
 					return typeEnum;
 				}
 			}
-			return UNKNOWN;
+			return null;
 		}
 	}
 	
