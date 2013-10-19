@@ -23,7 +23,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				clearFileInput,
 				findDupes,
 				makeId,
-				getMapSize
+				getMapSize,
+				_maxSize = 15360 /** 15 megs in kb **/
 			;
 
 			//
@@ -36,6 +37,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				scope.percentDone = 0;
 				scope.fileWrappers = [];
 				scope.dupeNames = [];
+				scope.excludedFileTypes = [];
+				scope.exceedsMaxSize = [];
 				scope.errors = undefined; // map of fileId to fileName
 				scope.allUploadsSuccessful = false;
 				scope.retrySendUploadsDoneMessage = false;
@@ -71,7 +74,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				}
 			});
 
-			initialAdd = function() {
+			addFromFileInput = function() {
 
 				initScopeVars();
 				addFiles(this.files);
@@ -97,11 +100,43 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				}
 				
 				for (var i=0, n=filesToAdd.length; i<n; i++) {
+					var file = filesToAdd[i];
+					
 					fileWrap = {};
 					fileWrap.id = makeId();
-					fileWrap.file = filesToAdd[i];
-					fileWrap.kbSize = parseInt(filesToAdd[i].size/1024);
+					fileWrap.file = file;
+					fileWrap.kbSize = Math.ceil(file.size/1024);
 					scope.fileWrappers.push(fileWrap);
+					
+					//
+					// Handle exclusions
+					//
+					handleExcludedFileTypes(file);
+					handleExceedsMaxSize(file, fileWrap.kbSize);
+				}
+			};
+			
+			handleExcludedFileTypes = function(file) {
+				
+				var name = file.name;
+				var type = file.type; // could be empty
+				var ext = name.substring(name.indexOf('.') + 1);
+				
+				if (type) {
+					if (type.indexOf('text') === -1) {
+						scope.excludedFileTypes.push(name);
+					}
+				}
+				else { // see about the ext since cannot get the type
+					if (ext !== 'txt' && ext !== 'csv' && ext !== 'text') {
+						scope.excludedFileTypes.push(name);
+					}
+				}
+			};
+			
+			handleExceedsMaxSize = function(file, kbSize) {
+				if (kbSize > _maxSize) {
+					scope.exceedsMaxSize.push(file.name);
 				}
 			};
 			
@@ -110,6 +145,8 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				var dupeNames;
 				scope.dupeNames = [];
 				
+				// In the html, there's a watch on dupeNames.length (ng-show="dupeNames.length").
+				// If more than zero, the error message shows.
 				dupeNames = findDupes(scope.fileWrappers, this.files);
 				
 				if (dupeNames && dupeNames.length > 0) {
@@ -384,7 +421,9 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 					scope.allUploadsSuccessful = true;
 				}
 				
-				scope.$apply();
+				/** $apply() was throwing error, so replacing with safeApply() for now
+				scope.$apply();**/
+				scope.safeApply();
 			};
 
 			getMapSize = function(map) {
@@ -419,7 +458,21 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 								scope.dupeNames.splice(j, 1);
 							}
 						}
-
+						
+						// Update the scope.excludedFileTypes since an excludedFileTypes file might have been removed.
+						for (var j=0, m=scope.excludedFileTypes.length; j<m; j++) {
+							if (scope.excludedFileTypes[j] === fileWrap.file.name) {
+								scope.excludedFileTypes.splice(j, 1);
+							}
+						}
+						
+						// Update the scope.exceedsMaxSize since an exceedsMaxSize file might have been removed.
+						for (var j=0, m=scope.exceedsMaxSize.length; j<m; j++) {
+							if (scope.exceedsMaxSize[j] === fileWrap.file.name) {
+								scope.exceedsMaxSize.splice(j, 1);
+							}
+						}
+						
 						break;
 					}
 				}
@@ -427,6 +480,18 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				updateUploadStatus();
 			};
 			
+			scope.safeApply = function(fn) {
+				var phase = this.$root.$$phase;
+				if(phase == '$apply' || phase == '$digest') {
+					if(fn && (typeof(fn) === 'function')) {
+						fn();
+					}
+				}
+				else {
+					this.$apply(fn);
+				}
+			};
+				
 			scope.closePopup = function() {
 				window.close();
 			};
@@ -434,7 +499,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 			//
 			// Bind the elements
 			//
-			fileInput.bind('change', initialAdd);
+			fileInput.bind('change', addFromFileInput);
 			uploadBtn.bind('click', uploadFiles);
 		
 		},

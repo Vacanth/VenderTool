@@ -8,21 +8,33 @@ import com.vendertool.sharedtypes.core.fps.Job;
 
 public class JobDetails {
 	private Job job;
-	private List<File> files;
+	private List<File> uploadedFiles;
+	private List<File> processedFiles;
 	
 	public Job getJob() {
 		return job;
 	}
+	
 	public void setJob(Job job) {
 		this.job = job;
 	}
-	public List<File> getFiles() {
-		return files;
-	}
-	public void setFiles(List<File> iFiles) {
-		this.files = new ArrayList<File>(iFiles.size());
-		this.files.addAll(iFiles);
+	
+	public List<File> getUploadedFiles() {
+		return uploadedFiles;
 	}
 	
+	public List<File> getProcessedFiles() {
+		return processedFiles;
+	}
+	
+	public void setUploadedFiles(List<File> iFiles) {
+		this.uploadedFiles = new ArrayList<File>(iFiles.size());
+		this.uploadedFiles.addAll(iFiles);
+	}
+	
+	public void setProcessedFiles(List<File> iFiles) {
+		this.processedFiles = new ArrayList<File>(iFiles.size());
+		this.processedFiles.addAll(iFiles);
+	}	
 }
 

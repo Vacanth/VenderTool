@@ -23,6 +23,7 @@ import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.fps.dal.dao.codegen.QFile;
+import com.vendertool.fps.dal.fieldset.FileUpdateSet;
 import com.vendertool.sharedtypes.core.fps.File;
 
 public class FileDaoImpl extends BaseDaoImpl implements FileDao {
@@ -110,6 +111,14 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao {
 		
 		for (File file : files) {
 			insert(file);
+		}
+	}
+	
+	public void updateFileStatus(List<File> files) throws DBConnectionException,
+		UpdateException, DatabaseException{
+	
+		for (File file : files) {
+			update(file,FileUpdateSet.getInstance().STATUS);
 		}
 	}
 	

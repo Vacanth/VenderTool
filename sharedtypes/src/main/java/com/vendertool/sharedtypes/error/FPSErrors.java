@@ -49,4 +49,41 @@ public class FPSErrors {
 			"File you are trying to access is not authrorized", 
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
+	
+	public VTError DB_UPDATE_ERROR = new VTError(
+			FPSErrorCode.DB_UPDATE_ERROR, 
+			"Unable to update the DB", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError DB_FIND_ERROR = new VTError(
+			FPSErrorCode.DB_FIND_ERROR, 
+			"Unable to find from the DB", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError ACCOUNT_NOT_FOUND = new VTError(
+			FPSErrorCode.ACCOUNT_NOT_FOUND, 
+			"Unable to find account from DB", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError EMPTY_GROUPID_JOB = new VTError(
+			FPSErrorCode.EMPTY_GROUPID_JOB, 
+			"Empty groupId is passed for create Job", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError EMPTY_JOBID = new VTError(
+			FPSErrorCode.EMPTY_JOBID, 
+			"Empty jobId is passed for process Job", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	
+	public VTError EMPTY_TASKID = new VTError(
+			FPSErrorCode.EMPTY_TASKID, 
+			"Empty taskId is passed for process Task", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
 }
