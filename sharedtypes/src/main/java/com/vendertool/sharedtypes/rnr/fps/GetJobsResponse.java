@@ -5,19 +5,20 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 
 @XmlRootElement
 public class GetJobsResponse extends BaseResponse {
-	private List<JobDetails> jobs;
+	private List<Job> jobs;
 
-	public List<JobDetails> getJobs() {
+	public List<Job> getJobs() {
 		return jobs;
 	}
 
-	public void setJobs(List<JobDetails> lJobs) {
+	public void setJobs(List<Job> lJobs) {
 		if (lJobs != null) {
-			this.jobs = new ArrayList<JobDetails>(lJobs.size());
+			this.jobs = new ArrayList<Job>(lJobs.size());
 			this.jobs.addAll(lJobs);
 		}
 	}
