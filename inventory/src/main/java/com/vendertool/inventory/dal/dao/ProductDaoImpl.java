@@ -190,8 +190,7 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			SQLQuery query = from(con, a).where(
-					a.accountId.eq(accountId),
+			SQLQuery query = from(con, a).where(a.accountId.eq(accountId),
 					a.productId.eq(productId));
 
 			logger.info("DAL QUERY: " + query.toString());
@@ -230,14 +229,15 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Product findBySKU(String sku, Path<?>[] readSet)
+	public Product findBySKU(Long accountId, String sku, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
 		Connection con = null;
 
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			SQLQuery query = from(con, a).where(a.sku.eq(sku));
+			SQLQuery query = from(con, a).where(a.accountId.eq(accountId),
+					a.sku.eq(sku));
 
 			logger.info("DAL QUERY: " + query.toString());
 
@@ -247,8 +247,8 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 				return null;
 			}
 
-			Product product = (Product) new ProductMapper(readSet)
-					.convert(rows.get(0), readSet);
+			Product product = (Product) new ProductMapper(readSet).convert(
+					rows.get(0), readSet);
 			if (product == null) {
 				FinderException fe = new FinderException(
 						"Cannot find product for given sku : " + sku);

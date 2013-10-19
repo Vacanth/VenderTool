@@ -67,17 +67,32 @@ public class InventoryDALService {
 		productDao.delete(productId);
 	}
 
-	public Product findBySKU(String sku) {
+	public Product findBySKU(Long accountId, String sku) {
 		Product product = null;
 		try {
-			product = productDao.findBySKU(sku,
+			product = productDao.findBySKU(accountId, sku,
 					ProductReadSet.getInstance().ALL);
 		} catch (DBConnectionException e) {
-			
+
 		} catch (FinderException e) {
-			
+
 		} catch (DatabaseException e) {
-			
+
+		}
+		return product;
+	}
+
+	public Product findByProductId(Long accountId, Long productId) {
+		Product product = null;
+		try {
+			product = productDao.findByAccountIdAndProductId(accountId,
+					productId, ProductReadSet.getInstance().ALL);
+		} catch (DBConnectionException e) {
+
+		} catch (FinderException e) {
+
+		} catch (DatabaseException e) {
+
 		}
 		return product;
 	}

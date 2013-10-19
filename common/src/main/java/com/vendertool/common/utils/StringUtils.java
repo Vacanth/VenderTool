@@ -103,4 +103,8 @@ public class StringUtils {
 		}
 		return new String(byteArrayOS.toByteArray());
 	}
+	
+	public boolean isEmpty(String value) {
+		return (value != null && value.trim().length() > 0);
+	}
 }
