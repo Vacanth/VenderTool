@@ -30,7 +30,7 @@
 			
 			<pg:pageError model="${errorResponse}"/>
 			
-			<form:form method="post" action="processChangePassword" commandName="validateNewPassword">
+			<form:form method="post" action="processChangePassword" commandName="forgotPassword">
 				<form:hidden path="emailConfirmation.email"/>
 				<form:hidden path="emailConfirmation.confirmCode"/>
 				<form:hidden path="emailConfirmation.confirmSessionId"/>

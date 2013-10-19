@@ -1,4 +1,4 @@
-package com.vendertool.sharedtypes.core;
+package com.vendertool.sitewebapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
