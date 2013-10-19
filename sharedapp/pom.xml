@@ -1,0 +1,251 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.vendertool.parent</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../parent/pom.xml</relativePath>
+    </parent>
+  
+  <groupId>com.vendertool.sharedapp</groupId>
+  <artifactId>sharedapp</artifactId>
+  <packaging>jar</packaging>
+
+  <name>sharedapp</name>
+  <url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<vendertool-version>1.0</vendertool-version>
+	</properties>
+
+  <dependencies>
+	    <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+    
+    	<dependency>
+	      <groupId>com.vendertool.sharedtypes</groupId>
+	      <artifactId>sharedtypes</artifactId>
+	      <version>${vendertool-version}</version>
+	    </dependency>
+    
+    
+    
+   		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		
+		<!-- ************ SPRING START ************ -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<!-- ************ SPRING END ************ -->
+		
+		
+		<!-- ************ SPRING-SECURITY START ************ -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<exclusions>
+					<exclusion>
+						<artifactId>spring-beans</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-aop</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-context</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-expression</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-web</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-core</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+	 
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<exclusions>
+					<exclusion>
+						<artifactId>spring-beans</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-aop</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-context</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-expression</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-web</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-core</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+	 
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<exclusions>
+					<exclusion>
+						<artifactId>spring-beans</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-aop</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-context</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-expression</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-web</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>spring-core</artifactId>
+						<groupId>org.springframework</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- ************ SPRING-SECURITY END ************ -->
+			
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-json-provider</artifactId>
+			</dependency>
+			
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+			</dependency>
+  </dependencies>
+  
+  		<build>
+			<plugins>			
+				<plugin>
+			        <groupId>org.apache.maven.plugins</groupId>
+			        <artifactId>maven-compiler-plugin</artifactId>
+			        <version>3.1</version>
+			        <configuration>
+			            <source>1.7</source>
+			            <target>1.7</target>
+			        </configuration>
+			 	</plugin>
+			 	
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.7</version>
+					<executions>
+						<execution>
+							<phase>test</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<tasks>
+									<copy file="src/main/resources/security/qa/client-credentials.xml"
+										tofile="${project.build.outputDirectory}/security/client-credentials.xml" />
+								</tasks>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</build>
+		
+</project>

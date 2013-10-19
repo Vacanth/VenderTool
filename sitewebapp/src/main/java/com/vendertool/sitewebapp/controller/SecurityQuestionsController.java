@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
@@ -28,8 +30,6 @@ import com.vendertool.sharedtypes.rnr.GetSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.common.VTErrorUtil;
 
 @Controller

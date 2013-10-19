@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
+import com.vendertool.sitewebapp.common.WebURLConstants;
 
 @Controller
 public class UploaderController {
@@ -83,7 +83,7 @@ public class UploaderController {
 		        }
 		        
 		        String hostName = RestServiceClientHelper.getServerURL(request);
-    			String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.FILE_UPLOAD_PATH;
+    			String url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.FILE_UPLOAD_PATH;
     			serviceRes = RestServiceClientHelper.invokeRestService(
 								url,
 								fileUploadReq,
@@ -121,7 +121,7 @@ public class UploaderController {
         fileUploadReq.setUploadTitle(uploadTitle);
         
         String hostName = RestServiceClientHelper.getServerURL(req);
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_CREATE_PATH;
+		String url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_CREATE_PATH;
 		Response serviceRes = RestServiceClientHelper.invokeRestService(
 						url,
 						fileUploadReq,
@@ -140,7 +140,7 @@ public class UploaderController {
 			msg.put("statusMessage", "success");
 		}
 		
-		url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
+		url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_PROCESS_PATH;
 		ProcessJobRequest jobRequest = new ProcessJobRequest();
 		jobRequest.setJobId(341);
 		serviceRes = RestServiceClientHelper.invokeRestService(
@@ -153,7 +153,7 @@ public class UploaderController {
 		return msg;
 	}
 	
-	@RequestMapping(value=URLConstants.UPLOADER, method=RequestMethod.GET)
+	@RequestMapping(value=WebURLConstants.UPLOADER, method=RequestMethod.GET)
 	public String getUploaderPopup(ModelMap modelMap, Principal principal) {
 		logger.info("getUploaderPopup controller invoked");
 		

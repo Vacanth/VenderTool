@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.ChangeEmail;
 import com.vendertool.sharedtypes.core.ChangePassword;
@@ -35,9 +36,8 @@ import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.common.VTErrorUtil;
+import com.vendertool.sitewebapp.common.WebURLConstants;
 import com.vendertool.sitewebapp.util.MenuBuilder;
 
 @Controller
@@ -45,7 +45,7 @@ public class ProfileController {
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
 
 	
-	@RequestMapping(value=URLConstants.PROFILE, method=RequestMethod.GET)
+	@RequestMapping(value=WebURLConstants.PROFILE, method=RequestMethod.GET)
 	public String getProfileView(ModelMap modelMap, HttpServletRequest request) {
 		logger.info("getProfileView controller invoked");
 		
@@ -56,9 +56,9 @@ public class ProfileController {
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_GET_ACCOUNT_PATH + URLConstants.QUERY_START + 
-				URLConstants.USERNAME_KEY + URLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
+		String url = hostName + WebURLConstants.WEB_SERVICE_PATH + 
+				WebURLConstants.WS_REGISTRATION_GET_ACCOUNT_PATH + WebURLConstants.QUERY_START + 
+				WebURLConstants.USERNAME_KEY + WebURLConstants.PARAM_KEY_VALUE_SEPARATOR + email;
 		
 		Response response = RestServiceClientHelper
 				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
@@ -109,7 +109,7 @@ public class ProfileController {
 	}
 
 	
-	@RequestMapping(value=URLConstants.PROFILE_SAVE, method=RequestMethod.POST)
+	@RequestMapping(value=WebURLConstants.PROFILE_SAVE, method=RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> saveProfile(@RequestBody Account account,
 			HttpServletRequest request) {
@@ -131,8 +131,8 @@ public class ProfileController {
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_UPDATE_PROFILE_PATH;
+		String url = hostName + WebURLConstants.WEB_SERVICE_PATH + 
+				WebURLConstants.WS_REGISTRATION_UPDATE_PROFILE_PATH;
 		
 		Response response = RestServiceClientHelper
 				.invokeRestService(url, updateAccountReq, null, MediaType.APPLICATION_JSON_TYPE,
@@ -179,7 +179,7 @@ public class ProfileController {
 	}
 	
 	
-	@RequestMapping(value=URLConstants.PROFILE_EMAIL, method=RequestMethod.GET)
+	@RequestMapping(value=WebURLConstants.PROFILE_EMAIL, method=RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getEmailView() {
 		logger.info("getEmailView controller invoked");
 
@@ -197,7 +197,7 @@ public class ProfileController {
 	}
 	
 	
-	@RequestMapping(value=URLConstants.PROFILE_EMAIL_SAVE, method=RequestMethod.POST)
+	@RequestMapping(value=WebURLConstants.PROFILE_EMAIL_SAVE, method=RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> saveEmailChange(
 			@RequestBody ChangeEmail changeEmail,
@@ -222,8 +222,8 @@ public class ProfileController {
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_CHANGE_EMAIL_PATH;
+		String url = hostName + WebURLConstants.WEB_SERVICE_PATH + 
+				WebURLConstants.WS_REGISTRATION_CHANGE_EMAIL_PATH;
 		
 		Response response = RestServiceClientHelper
 				.invokeRestService(url, changeEmailReq, null, MediaType.APPLICATION_JSON_TYPE,
@@ -274,7 +274,7 @@ public class ProfileController {
 	}
 
 	
-	@RequestMapping(value=URLConstants.PROFILE_PASSWORD, method=RequestMethod.GET)
+	@RequestMapping(value=WebURLConstants.PROFILE_PASSWORD, method=RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getPasswordView() {
 		logger.info("getPasswordView controller invoked");
 		
@@ -284,7 +284,7 @@ public class ProfileController {
 	}
 	
 	
-	@RequestMapping(value=URLConstants.PROFILE_PASSWORD_SAVE, method=RequestMethod.POST)
+	@RequestMapping(value=WebURLConstants.PROFILE_PASSWORD_SAVE, method=RequestMethod.POST)
 	public @ResponseBody
 	Map<String, Object> savePasswordChange(
 			@RequestBody ChangePassword changePassword,
@@ -309,8 +309,8 @@ public class ProfileController {
 		
 		String hostName = RestServiceClientHelper.getServerURL(request);
 		
-		String url = hostName + URLConstants.WEB_SERVICE_PATH + 
-				URLConstants.WS_REGISTRATION_CHANGE_PASSWORD_PATH;
+		String url = hostName + WebURLConstants.WEB_SERVICE_PATH + 
+				WebURLConstants.WS_REGISTRATION_CHANGE_PASSWORD_PATH;
 		
 		Response response = RestServiceClientHelper
 				.invokeRestService(url, changePasswordRequest, null, MediaType.APPLICATION_JSON_TYPE,

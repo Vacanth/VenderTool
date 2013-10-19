@@ -408,6 +408,7 @@
 			<module>../webservicesapp</module>
 			<module>../sitewebapp</module>
 			<module>../consumer</module>
+			<module>../sharedapp</module>
 			<module>../tools</module>
 		</modules>
 
