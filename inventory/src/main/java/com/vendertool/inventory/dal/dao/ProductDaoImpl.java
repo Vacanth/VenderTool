@@ -43,15 +43,15 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			Long seq = generateNextSequence(con);
-			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-				
-				if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
+			Long productId = product.getProductId();
+			if(VUTIL.isNull(productId) || (productId.longValue() <= 0)) {
+				productId = generateNextSequence(con);
+				if(VUTIL.isNull(productId) || (productId.longValue() <= 0)) {
 		    		InsertException ie = new InsertException("Unable to generate valid sequence");
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-				product.setProductId(seq);
+				product.setProductId(productId);
 			}
 	
 	    	SQLInsertClause s = insert(con, a)
@@ -65,7 +65,7 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
     	}
-    	return seq;
+    	return productId;
 	} finally {
 		closeConnection(con);
 	}

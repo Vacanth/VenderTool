@@ -16,37 +16,38 @@ import com.vendertool.inventory.dal.dao.ProductVariationDaoFactory;
 import com.vendertool.sharedtypes.core.Product;
 
 public class InventoryDALService {
-	private static final Logger logger = Logger.getLogger(InventoryDALService.class);
+	private static final Logger logger = Logger
+			.getLogger(InventoryDALService.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 	ProductDao productDao;
 	ProductVariationDao productVariationDao;
-	
-	
+
 	private InventoryDALService() {
 		productDao = ProductDaoFactory.getInstance().getProductDao();
-		productVariationDao = ProductVariationDaoFactory.getInstance().getProductVariationDao();
+		productVariationDao = ProductVariationDaoFactory.getInstance()
+				.getProductVariationDao();
 
 	}
-	
+
 	private static class InventoryDALServiceHolder {
 		private static final InventoryDALService INSTANCE = new InventoryDALService();
 	}
-	
+
 	public static InventoryDALService getInstance() {
 		return InventoryDALServiceHolder.INSTANCE;
 	}
-	
-	
+
 	public Long createProduct(Product product) throws DBConnectionException,
-			FinderException, InsertException, DatabaseException, UpdateException {
-		
-		if(VUTIL.isNull(product)) {
+			FinderException, InsertException, DatabaseException,
+			UpdateException {
+
+		if (VUTIL.isNull(product)) {
 			return null;
 		}
-		
+
 		Long productId = productDao.generateNextSequence();
 		product.setProductId(productId);
-				
+
 		try {
 			productDao.insert(product);
 		} catch (InsertException e) {
@@ -56,13 +57,13 @@ public class InventoryDALService {
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		
+
 		return productId;
 	}
-	
+
 	public void removeListing(Long productId) throws DeleteException,
-	DBConnectionException, DatabaseException, FinderException {
+			DBConnectionException, DatabaseException, FinderException {
 		productDao.delete(productId);
-}
-	
+	}
+
 }
