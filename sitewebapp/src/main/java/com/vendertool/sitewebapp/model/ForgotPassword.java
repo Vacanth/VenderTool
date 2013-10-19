@@ -1,10 +1,10 @@
-package com.vendertool.sharedtypes.core;
+package com.vendertool.sitewebapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ValidateNewPassword {
+public class ForgotPassword {
 
 	private String newPassword;
 	private String confirmPassword;

@@ -27,7 +27,7 @@
 
 	    <div class="reg main input-group" style="padding-bottom:15px;">
 	    	<c:choose>
-	    		<c:when test="${validateEmail.emailValid}">
+	    		<c:when test="${isEmailValid}">
 	    			<h3 class="ttl">Confirmation email sent</h3>
 	    			<p>Please check your email for our message.
 	    			Click the link in the message to continue the password recovery process.</p>
@@ -37,7 +37,7 @@
 					
 					<pg:pageError model="${errorResponse}"/>
 
-					<form:form method="post" commandName="validateEmail">
+					<form:form method="post" commandName="emailModel">
 			            <div class="fldWrp">
 			            	<form:input path="email" placeholder="Email" class="form-control"/>
 			            </div>

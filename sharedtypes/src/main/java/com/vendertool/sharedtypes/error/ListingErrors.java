@@ -25,6 +25,36 @@ public class ListingErrors {
 			"Provided Listing Container is Empty", VTErrorSeverityEnum.ERROR,
 			DOMAIN);
 
+	public VTError ACCOUNT_ID_REQUIRED = new VTError(
+			ListingErrorCode.ACCOUNT_ID_REQUIRED,
+			"Account Id Required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
+	public VTError TITLE_REQUIRED = new VTError(
+			ListingErrorCode.TITLE_REQUIRED,
+			"Title Required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
+	public VTError SKU_REQUIRED = new VTError(
+			ListingErrorCode.TITLE_REQUIRED,
+			"Title Required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
+	public VTError PRODUCT_PRICE_REQUIRED = new VTError(
+			ListingErrorCode.PRODUCT_PRICE_REQUIRED,
+			"Product Price Required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+
+	public VTError PRODUCT_CODE_REQUIRED = new VTError(
+			ListingErrorCode.PRODUCT_CODE_REQUIRED,
+			"Product code is required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
+	public VTError PRODUCT_SKU_REQUIRED = new VTError(
+			ListingErrorCode.PRODUCT_SKU_REQUIRED,
+			"Product SKU Required", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
 	public VTError PRODUCT_CONTAINER_IS_EMPTY = new VTError(
 			ListingErrorCode.PRODUCT_CONTAINER_IS_EMPTY,
 			"Provided Product Container is Empty", VTErrorSeverityEnum.ERROR,

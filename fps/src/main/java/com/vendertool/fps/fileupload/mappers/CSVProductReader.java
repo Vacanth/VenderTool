@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.supercsv.exception.SuperCsvException;
 
 import com.vendertool.fps.dal.FpsDALService;
+import com.vendertool.sharedtypes.core.fps.FPSTaskStatusEnum;
 import com.vendertool.sharedtypes.core.fps.Task;
 
 public class CSVProductReader extends CSVBaseReader{
@@ -71,9 +72,10 @@ public class CSVProductReader extends CSVBaseReader{
 				task.setRequestFileId(iTask.getRequestFileId());
 				task.setRecordId(recordCount++);
 				task.setRequest(new JSONObject(pBean).toString().getBytes());
+				task.setStatus(FPSTaskStatusEnum.CREATED);
+				task.setIsoCountryCode(pBean.getCurrencyCode());
 				
-				System.out.println("Testing product bean"+ pBean.getCategoryId());
-				System.out.println("JSON String :"+ new JSONObject(pBean).toString());
+				lTask.add(task);
 			}
 			FpsDALService.getInstance().insertTaskWithEvents(lTask);
 		}

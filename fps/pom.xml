@@ -32,6 +32,12 @@
 			<artifactId>common</artifactId>
 			<version>${vendertool-version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.vendertool.registration</groupId>
+			<artifactId>registration</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.vendertool.common</groupId>
 			<artifactId>common</artifactId>

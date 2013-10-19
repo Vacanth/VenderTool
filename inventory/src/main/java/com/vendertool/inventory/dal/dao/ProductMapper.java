@@ -163,24 +163,29 @@ public class ProductMapper implements DALMapper<Product> {
 		if(product.getProductCodeType() != null) {
 			bean.setProductCodeType((byte) product.getProductCodeType().getId());
 		}
-
-		if(product.getDimension().getDimensionUnit() != null) {
-			bean.setDimensionUnit((byte) product.getDimension().getDimensionUnit().getId());
+		Dimension dimension = product.getDimension();
+		if(dimension != null){
+			if(dimension.getDimensionUnit() != null) {
+				bean.setDimensionUnit((byte) dimension.getDimensionUnit().getId());
+			}
+			if(dimension.getHeight() != null) {
+				bean.setHeight( dimension.getHeight());
+			}
+			if(dimension.getLength() != null) {
+				bean.setHeight( dimension.getLength());
+			}
+			if(dimension.getWidth() != null) {
+				bean.setHeight( dimension.getWidth());
+			}
 		}
-		if(product.getDimension().getHeight() != null) {
-			bean.setHeight( product.getDimension().getHeight());
-		}
-		if(product.getDimension().getLength() != null) {
-			bean.setHeight( product.getDimension().getLength());
-		}
-		if(product.getDimension().getWidth() != null) {
-			bean.setHeight( product.getDimension().getWidth());
-		}
-		if(product.getWeight().getWeightUnit() != null) {
-			bean.setWeightUnit((byte) product.getWeight().getWeightUnit().getId());
-		}
-		if(product.getWeight().getValue() != null) {
-			bean.setWeightUnit((byte) product.getWeight().getWeightUnit().getId());
+		Weight weight = product.getWeight();
+		if(weight != null){
+			if(weight.getWeightUnit() != null) {
+				bean.setWeightUnit((byte) weight.getWeightUnit().getId());
+			}
+			if(weight.getValue() != null) {
+				bean.setWeightUnit((byte) weight.getWeightUnit().getId());
+			}
 		}
 		if(product.getProductUrl() != null) {
 			bean.setProductUrl(product.getProductUrl());
@@ -240,12 +245,16 @@ public class ProductMapper implements DALMapper<Product> {
 				product.setProductCode(row.get(a.productCode));
 			}
 			if(a.productCodeType.equals(rpath)) {
-				product.setProductCodeType(ProductCodeTypeEnum.valueOf(row.get(a.productCodeType).toString()));
+				if(row.get(a.productCodeType) != null){
+					product.setProductCodeType(ProductCodeTypeEnum.valueOf(row.get(a.productCodeType).toString()));
+				}
 			}
 			Weight weight = new Weight();
 			if(a.weightUnit.equals(rpath)) {
-				weight.setWeightUnit(WeightUnitEnum.valueOf(row.get(a.weightUnit).toString()));
-				product.setWeight(weight);
+				if(row.get(a.weightUnit) != null){
+					weight.setWeightUnit(WeightUnitEnum.valueOf(row.get(a.weightUnit).toString()));
+					product.setWeight(weight);
+				}
 			}
 			if(a.weight.equals(rpath)) {
 				weight.setValue(row.get(a.weight));
@@ -253,8 +262,10 @@ public class ProductMapper implements DALMapper<Product> {
 			}
 			Dimension dimension = new Dimension();
 			if(a.dimensionUnit.equals(rpath)) {
-				dimension.setDimensionUnit(Dimension.DimensionUnitEnum.valueOf(row.get(a.dimensionUnit).toString()));
-				product.setDimension(dimension);
+				if(row.get(a.dimensionUnit) != null){
+					dimension.setDimensionUnit(Dimension.DimensionUnitEnum.valueOf(row.get(a.dimensionUnit).toString()));
+					product.setDimension(dimension);
+				}
 			}
 			if(a.height.equals(rpath)) {
 				dimension.setHeight(row.get(a.height));

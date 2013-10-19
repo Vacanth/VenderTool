@@ -3,6 +3,7 @@ package com.vendertool.common.validation;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -55,6 +56,15 @@ public class ValidationUtil {
 	 */
 	public boolean isEmpty(String value) {
 		return (isNull(value) || (value.trim().length() <= 0));
+	}
+	
+	/**
+	 * Checks if the list is Empty or not
+	 * @param list
+	 * @return
+	 */
+	public boolean isEmptyList(List<?> list) {
+		return (isNull(list) || list.isEmpty());
 	}
 	
 	/**
@@ -204,6 +214,16 @@ public class ValidationUtil {
 	 * @return
 	 */
 	public boolean isPositiveInteger(int value){
+		return value > 0;
+	}
+	
+	/**
+	 * This method determines if the given number is positive integer.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public boolean isPositiveLong(long value){
 		return value > 0;
 	}
 }

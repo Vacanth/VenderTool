@@ -1,6 +1,5 @@
 package com.vendertool.inventory.dal.dao;
 
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -27,49 +26,51 @@ import com.vendertool.sharedtypes.core.Product;
 public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 	private static final Logger logger = Logger.getLogger(ProductDaoImpl.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
-			
+
 	@Override
 	public long insert(Product product) throws DBConnectionException,
 			InsertException, DatabaseException {
-		
-		if(VUTIL.isNull(product)) {
-			InsertException ie = new InsertException("Cannot insert null product");
+
+		if (VUTIL.isNull(product)) {
+			InsertException ie = new InsertException(
+					"Cannot insert null product");
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
 		}
-		
+
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			Long seq = generateNextSequence(con);
-			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-				
-				if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-		    		InsertException ie = new InsertException("Unable to generate valid sequence");
+			Long productId = product.getProductId();
+			if (VUTIL.isNull(productId) || (productId.longValue() <= 0)) {
+				productId = generateNextSequence(con);
+				if (VUTIL.isNull(productId) || (productId.longValue() <= 0)) {
+					InsertException ie = new InsertException(
+							"Unable to generate valid sequence");
 					logger.debug(ie.getMessage(), ie);
 					throw ie;
 				}
-				product.setProductId(seq);
+				product.setProductId(productId);
 			}
-	
-	    	SQLInsertClause s = insert(con, a)
-    				.populate(new ProductMapper(a.all()).populateBean(product));
-    	logger.info("DAL QUERY: " + s.toString());
-    	
-    	try {
-    		s.execute();
-    	} catch (Exception e) {
-    		InsertException ie = new InsertException(e);
-			logger.debug(ie.getMessage(), ie);
-			throw ie;
-    	}
-    	return seq;
-	} finally {
-		closeConnection(con);
+
+			SQLInsertClause s = insert(con, a).populate(
+					new ProductMapper(a.all()).populateBean(product));
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				InsertException ie = new InsertException(e);
+				logger.debug(ie.getMessage(), ie);
+				throw ie;
+			}
+			return productId;
+		} finally {
+			closeConnection(con);
+		}
 	}
-}
 
 	@Override
 	public boolean hasSequenceGenerator() {
@@ -87,27 +88,27 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 	public void delete(Product product) throws DBConnectionException,
 			DeleteException, DatabaseException {
 		delete(product.getProductId());
-		
+
 	}
+
 	@Override
 	public void delete(long productId) throws DBConnectionException,
 			DeleteException {
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			SQLDeleteClause s = delete(con, a)
-				.where(a.productId.eq(productId));
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		DeleteException ie = new DeleteException(e);
+			SQLDeleteClause s = delete(con, a).where(a.productId.eq(productId));
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				DeleteException ie = new DeleteException(e);
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
-	    	}
+			}
 		} finally {
 			closeConnection(con);
 		}
@@ -116,63 +117,64 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 	@Override
 	public void update(Product product, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException {
-		if(VUTIL.isNull(product) || VUTIL.isNull(updateSet)){
-			UpdateException ue = new UpdateException("Cannot update null product");
+		if (VUTIL.isNull(product) || VUTIL.isNull(updateSet)) {
+			UpdateException ue = new UpdateException(
+					"Cannot update null product");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		
+
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-	    	SQLUpdateClause s = update(con, a)
-					.populate(product, new ProductMapper(updateSet));
+			SQLUpdateClause s = update(con, a).populate(product,
+					new ProductMapper(updateSet));
 
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		UpdateException ue = new UpdateException(e);
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				UpdateException ue = new UpdateException(e);
 				logger.debug(ue.getMessage(), ue);
 				throw ue;
-	    	}
+			}
 		} finally {
 			closeConnection(con);
 		}
 	}
 
-	
-
 	@Override
 	public List<Product> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
-	Connection con = null;
-		
-		try { 
+		Connection con = null;
+
+		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			SQLQuery query = from(con, a)
-					.where(a.accountId.eq(accountId.longValue()));
+			SQLQuery query = from(con, a).where(
+					a.accountId.eq(accountId.longValue()));
 
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
-			List<Product> product = (List<Product>) new ProductMapper(readSet).convert(rows.get(0), readSet);
-			if(product == null) {
-				FinderException fe = new FinderException("Cannot find product for given account : "+accountId.longValue());
+			logger.info("DAL QUERY: " + query.toString());
+
+			List<Tuple> rows = query.list(readSet);
+
+			if ((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
+			List<Product> product = (List<Product>) new ProductMapper(readSet)
+					.convert(rows.get(0), readSet);
+			if (product == null) {
+				FinderException fe = new FinderException(
+						"Cannot find product for given account : "
+								+ accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
-			
+
 			return product;
 		} finally {
 			closeConnection(con);
@@ -183,43 +185,80 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 	public Product findByAccountIdAndProductId(Long accountId, Long productId,
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException {
-	Connection con = null;
-		
-		try { 
+		Connection con = null;
+
+		try {
 			con = getConnection();
 			QProduct a = QProduct.product;
-			SQLQuery query = from(con, a)
-					.where(a.accountId.eq(accountId.longValue()) , a.productId.eq(productId.longValue()));
+			SQLQuery query = from(con, a).where(
+					a.accountId.eq(accountId),
+					a.productId.eq(productId));
 
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
-			Product product =  new ProductMapper(readSet).convert(rows.get(0), readSet);
-			if(product == null) {
-				FinderException fe = new FinderException("Cannot find product for given account : "+accountId.longValue());
+			logger.info("DAL QUERY: " + query.toString());
+
+			List<Tuple> rows = query.list(readSet);
+
+			if ((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
+			Product product = new ProductMapper(readSet).convert(rows.get(0),
+					readSet);
+			if (product == null) {
+				FinderException fe = new FinderException(
+						"Cannot find product for given account : "
+								+ accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
-			
+
 			return product;
 		} finally {
 			closeConnection(con);
 		}
 	}
-	
+
 	private void closeConnection(Connection con) {
 		try {
 			if (con != null) {
 				con.close();
 			}
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			logger.debug(e.getMessage(), e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Product findBySKU(String sku, Path<?>[] readSet)
+			throws DBConnectionException, FinderException, DatabaseException {
+		Connection con = null;
+
+		try {
+			con = getConnection();
+			QProduct a = QProduct.product;
+			SQLQuery query = from(con, a).where(a.sku.eq(sku));
+
+			logger.info("DAL QUERY: " + query.toString());
+
+			List<Tuple> rows = query.list(readSet);
+
+			if ((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
+			Product product = (Product) new ProductMapper(readSet)
+					.convert(rows.get(0), readSet);
+			if (product == null) {
+				FinderException fe = new FinderException(
+						"Cannot find product for given sku : " + sku);
+				logger.debug(fe.getMessage(), fe);
+				throw fe;
+			}
+
+			return product;
+		} finally {
+			closeConnection(con);
 		}
 	}
 }

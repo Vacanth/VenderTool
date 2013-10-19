@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.fps.File;
+import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.UploadsResponse;
 import com.vendertool.sharedtypes.rnr.fps.GetJobsResponse;
-import com.vendertool.sharedtypes.rnr.fps.JobDetails;
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
 import com.vendertool.sitewebapp.common.WebURLConstants;
 import com.vendertool.sitewebapp.util.MockDataUtil;
@@ -46,14 +46,14 @@ public class UploadsController {
 						HttpMethodEnum.GET);
 		
 		GetJobsResponse getJobsResponse = serviceRes.readEntity(GetJobsResponse.class);
-		List<JobDetails> ljDetails = getJobsResponse.getJobs();
+		List<Job> ljDetails = getJobsResponse.getJobs();
 		
-		for (JobDetails jobDetails : ljDetails) {
-			System.out.println("JobDetails :" + jobDetails.getJob().getTitle());
-			System.out.println("JobDetails :" + jobDetails.getJob().getReqFileGroupId());
-			System.out.println("JobDetails :" + jobDetails.getJob().getJobId());
-			System.out.println("JobDetails :" + jobDetails.getJob().getStatus());
-			for (File file : jobDetails.getFiles()) {
+		for (Job job : ljDetails) {
+			System.out.println("JobDetails :" + job.getTitle());
+			System.out.println("JobDetails :" + job.getReqFileGroupId());
+			System.out.println("JobDetails :" + job.getJobId());
+			System.out.println("JobDetails :" + job.getStatus());
+			for (File file : job.getUploadedFiles()) {
 				System.out.println("File :"+ file.getFileName());
 			}
 		}

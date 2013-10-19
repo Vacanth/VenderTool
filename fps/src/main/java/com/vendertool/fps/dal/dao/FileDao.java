@@ -22,6 +22,9 @@ public interface FileDao extends BaseDao {
 	public void update(File file, Path<?>[] updateSet)
 			throws DBConnectionException, UpdateException, DatabaseException;
 	
+	public void	updateFileStatus(List<File> list) 
+		throws DBConnectionException,UpdateException, DatabaseException;
+	
 	public void delete(File file) 
 		throws DBConnectionException, DeleteException, DatabaseException;
 	

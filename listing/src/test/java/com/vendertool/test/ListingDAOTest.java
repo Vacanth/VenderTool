@@ -36,7 +36,7 @@ public class ListingDAOTest implements ApplicationContextAware {
 	}
 
 	@Test
-	public void testContext() {
+	public void testInsert() {
 		listingDalService  = ListingDALService.getInstance();
 //		Assert.notNull(context.getBean("test"));
 		Listing listing = new Listing();
