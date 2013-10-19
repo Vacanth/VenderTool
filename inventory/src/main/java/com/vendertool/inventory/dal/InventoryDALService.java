@@ -11,6 +11,8 @@ import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.inventory.dal.dao.ProductDao;
 import com.vendertool.inventory.dal.dao.ProductDaoFactory;
+import com.vendertool.inventory.dal.dao.ProductDescriptionDao;
+import com.vendertool.inventory.dal.dao.ProductDescriptionDaoFactory;
 import com.vendertool.inventory.dal.dao.ProductVariationDao;
 import com.vendertool.inventory.dal.dao.ProductVariationDaoFactory;
 import com.vendertool.inventory.dal.fieldset.ProductReadSet;
@@ -21,10 +23,12 @@ public class InventoryDALService {
 			.getLogger(InventoryDALService.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 	ProductDao productDao;
+	ProductDescriptionDao productDescriptionDao;
 	ProductVariationDao productVariationDao;
 
 	private InventoryDALService() {
 		productDao = ProductDaoFactory.getInstance().getProductDao();
+		productDescriptionDao = ProductDescriptionDaoFactory.getInstance().getProductDescriptionDao();
 		productVariationDao = ProductVariationDaoFactory.getInstance()
 				.getProductVariationDao();
 
@@ -51,9 +55,19 @@ public class InventoryDALService {
 
 		try {
 			productDao.insert(product);
+			} catch (InsertException e) {
+			UpdateException ue = new UpdateException(
+					"Unable to add new productId : "
+							+ product.getProductId(), e);
+			logger.debug(ue.getMessage(), ue);
+			throw ue;
+		}
+		//set description 
+		try {
+			productDescriptionDao.insert(product,productId);
 		} catch (InsertException e) {
 			UpdateException ue = new UpdateException(
-					"Unable to update account profile for "
+					"Unable to add new description for productId : "
 							+ product.getProductId(), e);
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
@@ -65,6 +79,7 @@ public class InventoryDALService {
 	public void removeListing(Long productId) throws DeleteException,
 			DBConnectionException, DatabaseException, FinderException {
 		productDao.delete(productId);
+		productDescriptionDao.delete(productId);
 	}
 
 	public Product findBySKU(Long accountId, String sku) {

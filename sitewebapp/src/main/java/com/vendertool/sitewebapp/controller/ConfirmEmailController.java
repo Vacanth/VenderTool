@@ -9,22 +9,23 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
 public class ConfirmEmailController {
 	private static final Logger logger = Logger.getLogger(ConfirmEmailController.class);
 	
 	@RequestMapping(value="confirmemail", method=RequestMethod.GET)
-	public String confirmEmail(HttpServletRequest httprequest) {
+	public String confirmEmail(Model model, HttpServletRequest httprequest) {
 		Map<String, String[]> reqMap = httprequest.getParameterMap();
 		
 		ConfirmEmailRequest request = new ConfirmEmailRequest();
@@ -79,7 +80,8 @@ public class ConfirmEmailController {
 		
 		ConfirmEmailResponse confirmEmailresponse = response.readEntity(ConfirmEmailResponse.class);
 		if(confirmEmailresponse.hasErrors()) {
-			return "confirmemailfailed";
+			model.addAttribute("type", "email");
+			return "errors/confirmationFailed";
 		}
 		
 		return "redirect:j_spring_security_logout";

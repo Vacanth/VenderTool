@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.vendertool.sitewebapp.common.ContainerBootstrapContext;
-import com.vendertool.sitewebapp.common.URLConstants;
+import com.vendertool.sitewebapp.common.WebURLConstants;
 
 @Controller
 public class AccountHubController {
-	@RequestMapping(value=URLConstants.ACCOUNT_HUB, method=RequestMethod.GET)
+	@RequestMapping(value=WebURLConstants.ACCOUNT_HUB, method=RequestMethod.GET)
 	public String getAccountHub(ModelMap modelMap, Principal principal) {
 		
 		String email = ContainerBootstrapContext.getSignedInEmail();

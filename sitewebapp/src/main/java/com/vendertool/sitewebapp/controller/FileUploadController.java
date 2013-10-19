@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.FileUploadDataModel;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.FileUploadRequest;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
 public class FileUploadController {

@@ -1,4 +1,4 @@
-package com.vendertool.sitewebapp.security;
+package com.vendertool.sharedapp.security;
 
 
 public class CleintCredentials {

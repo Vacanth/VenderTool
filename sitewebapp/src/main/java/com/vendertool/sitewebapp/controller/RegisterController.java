@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Language;
@@ -22,8 +24,6 @@ import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 import com.vendertool.sitewebapp.common.VTErrorUtil;
 import com.vendertool.sitewebapp.util.MenuBuilder;
 

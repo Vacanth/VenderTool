@@ -4,8 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
  
-	<bean id="webserviceClientCredentials" class="com.vendertool.sitewebapp.security.CleintCredentials">
-		<property name="username" value="7jgkcg5tts5fjp11j4e0vi2u1u" />
-		<property name="password" value="vubunbrgubb95f844qmmutqogr9b3bl426ove5rjvk45aq57d5q" />
-	</bean>
-</beans>
+ 	<import resource="classpath:security/client-credentials.xml" />
+ 	
+	<bean id="applicationContextUtils" class="com.vendertool.sharedapp.SpringApplicationContextUtils"></bean>
+ </beans>

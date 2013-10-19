@@ -30,19 +30,19 @@
 			
 			<pg:pageError model="${errorResponse}"/>
 			
-			<form:form method="post" action="answerSecurityQuestions" commandName="validateSecurityQuestions">
+			<form:form method="post" action="answerSecurityQuestions" commandName="securityQuestions">
 				<form:hidden path="emailConfirmation.email"/>
 				<form:hidden path="emailConfirmation.confirmCode"/>
 				<form:hidden path="emailConfirmation.confirmSessionId"/>
 				<div>
-	            	${forgotPasswordReq.questions[0].question.questionDisplayName}
+	            	${securityQuestions.questions[0].question.questionDisplayName}
 	            </div>
 	            <div>
 			       <form:input path="questions[0].answer" class="form-control" placeholder="Answer to question 1"  />
 	            </div>
 	            <br/>
 	            <div>
-	            	${forgotPasswordReq.questions[1].question.questionDisplayName}
+	            	${securityQuestions.questions[1].question.questionDisplayName}
 	            </div>
 	             <div>
 			       <form:input path="questions[1].answer" class="form-control" placeholder="Answer to question 2"  />

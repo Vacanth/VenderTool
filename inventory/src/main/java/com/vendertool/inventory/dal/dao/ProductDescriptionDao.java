@@ -15,13 +15,10 @@ import com.vendertool.sharedtypes.core.Product;
 
 public interface ProductDescriptionDao extends BaseDao {
 	
-	public long insert(Product productDescription,Long productId) throws DBConnectionException,
+	public void insert(Product productDescription,Long productId) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
-	public void delete(Product productDescription)
-			throws DBConnectionException, DeleteException, DatabaseException;
-	
-	public void delete(long productDescriptionId)
+	public void delete(long productId)
 			throws DBConnectionException, DeleteException, DatabaseException;
 	
 	public void update(Product productDescription, Path<?>[] updateSet)

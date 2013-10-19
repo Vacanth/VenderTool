@@ -5,7 +5,7 @@
 <t1:page title="Unexpected error" currentPage="unexpectedError" email="${email}" >
 	
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:body>
