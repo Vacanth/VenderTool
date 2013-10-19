@@ -21,6 +21,8 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.validation.ValidationUtil;
+import com.vendertool.inventory.dal.dao.codegen.QBeanProductDescription;
+import com.vendertool.inventory.dal.dao.codegen.QBeanProductVariation;
 import com.vendertool.inventory.dal.dao.codegen.QProductDescription;
 import com.vendertool.sharedtypes.core.Product;
 
@@ -29,7 +31,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 			
 	@Override
-	public long insert(Product productDescription,Long productId) throws DBConnectionException,
+	public void insert(Product productDescription,Long productId) throws DBConnectionException,
 			InsertException, DatabaseException {
 		
 		if(VUTIL.isNull(productDescription)) {
@@ -43,20 +45,11 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 		try {
 			con = getConnection();
 			QProductDescription a = QProductDescription.productDescription;
-			Long seq = generateNextSequence(con);
-			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-				
-				if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-		    		InsertException ie = new InsertException("Unable to generate valid sequence");
-					logger.debug(ie.getMessage(), ie);
-					throw ie;
-				}
-				//Auto increment
-		//	productDescription.setProductDescriptionId(seq);
-			}
-			
-	    	SQLInsertClause s = insert(con, a)
-    				.populate(new ProductDescriptionMapper(a.all()).populateBean(productDescription));
+			ProductDescriptionMapper productDescriptionMapper = new ProductDescriptionMapper(a.all());
+			QBeanProductDescription qBeanProductDescription = productDescriptionMapper.populateBean(productDescription);
+			qBeanProductDescription.setProductId(productId);
+			SQLInsertClause s = insert(con, a).populate(qBeanProductDescription);
+	    	
     	logger.info("DAL QUERY: " + s.toString());
     	
     	try {
@@ -66,7 +59,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
     	}
-    	return seq;
+    	
 	} finally {
 		closeConnection(con);
 	}

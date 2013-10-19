@@ -15,7 +15,7 @@ import com.vendertool.sharedtypes.core.Product;
 
 public interface ProductDescriptionDao extends BaseDao {
 	
-	public long insert(Product productDescription,Long productId) throws DBConnectionException,
+	public void insert(Product productDescription,Long productId) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void delete(Product productDescription)
