@@ -38,6 +38,18 @@
 							<br/><br/>
 							Please try clicking the "Upload Files" button again.
 						</div>
+						<div ng-show="excludedFileTypes.length" class="alert alert-danger">
+							Sorry, we can only accept text files.
+							<br/><br/>
+							Please remove the files:
+							<b ng-repeat="fileName in excludedFileTypes">{{fileName}}{{{true: '', false: ', '}[$last]}}</b>
+						</div>
+						<div ng-show="exceedsMaxSize.length" class="alert alert-danger">
+							Sorry, maximum file size is 15,360 KB.
+							<br/><br/>
+							Please remove the files:
+							<b ng-repeat="fileName in exceedsMaxSize">{{fileName}}{{{true: '', false: ', '}[$last]}}</b>
+						</div>
 						
 						<div class="upldr-inp-wrp">
 							<div ng-class="{disabledAddBtn: uploadInProgress || allUploadsSuccessful}"></div>
