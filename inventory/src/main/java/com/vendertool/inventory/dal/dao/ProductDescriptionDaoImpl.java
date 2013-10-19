@@ -77,12 +77,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 		return "nextvalForProductDescription()";
 	}
 
-	@Override
-	public void delete(Product productDescription) throws DBConnectionException,
-			DeleteException, DatabaseException {
-		delete(productDescription.getProductId());
-		
-	}
+	
 	@Override
 	public void delete(long productId) throws DBConnectionException,
 			DeleteException {
