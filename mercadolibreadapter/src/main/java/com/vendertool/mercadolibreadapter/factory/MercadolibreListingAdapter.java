@@ -18,11 +18,12 @@ import com.vendertool.common.utils.AdapterUtils;
 import com.vendertool.mercadolibreadapter.MLConstants;
 import com.vendertool.mercadolibreadapter.add.ErrorResponse;
 import com.vendertool.mercadolibreadapter.add.Item;
+import com.vendertool.mercadolibreadapter.client.MLAPIEnum;
 import com.vendertool.mercadolibreadapter.utils.ErrorMapperHelper;
 import com.vendertool.sharedtypes.core.Amount;
 import com.vendertool.sharedtypes.core.Classification;
-import com.vendertool.sharedtypes.core.CountryEnum;
 import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
+import com.vendertool.sharedtypes.core.CountryEnum;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Listing.ListingFormatEnum;
@@ -35,12 +36,11 @@ import com.vendertool.sharedtypes.rnr.AddListingResponse;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 
-public class MercadolibreListingAdapter implements
-		IBaseMercadolibreOperationAdapter {
-
-	private static String LISTING_URL = "https://api.mercadolibre.com/items?access_token=APP_USR-6965385537109061-101621-65f1d728e89f9240031927bbbe14b529__C_G__-141983227";
+public class MercadolibreListingAdapter extends
+		BaseMercadolibreOperationAdapter {
 
 	private MercadolibreListingAdapter() {
+		super(MLAPIEnum.ADD_LISTING);
 	}
 
 	private static class MercadolibreListingAdapterHolder {
@@ -61,7 +61,8 @@ public class MercadolibreListingAdapter implements
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
-		communicatorVO.setTargetURL(LISTING_URL);
+		communicatorVO
+				.setTargetURL(getEndPointURL("APP_USR-6965385537109061-101621-65f1d728e89f9240031927bbbe14b529__C_G__-141983227"));
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		Response resp = s_communicator.call(communicatorVO);
 
@@ -72,7 +73,7 @@ public class MercadolibreListingAdapter implements
 			try {
 				processErrorResponse(output, (AddListingResponse) response);
 			} catch (IOException e) {
-				//Set System Error!
+				// Set System Error!
 			}
 			return;
 		}
@@ -80,26 +81,31 @@ public class MercadolibreListingAdapter implements
 		Item responseItem = readItem(output);
 
 		// Call Add listing
-		adaptTOResponse(responseItem, (AddListingResponse) response,(AddListingRequest) request);
+		adaptTOResponse(responseItem, (AddListingResponse) response,
+				(AddListingRequest) request);
 	}
 
-	private void processErrorResponse(String output, AddListingResponse response) throws JsonParseException, JsonMappingException, IOException {
-		ErrorResponse error = 	new ObjectMapper().readValue(output, ErrorResponse.class);
-		if(error != null){
+	private void processErrorResponse(String output, AddListingResponse response)
+			throws JsonParseException, JsonMappingException, IOException {
+		ErrorResponse error = new ObjectMapper().readValue(output,
+				ErrorResponse.class);
+		if (error != null) {
 			ErrorMapperHelper.getInstance().populateErrors(response, error);
 		}
 	}
 
-	private void adaptTOResponse(Item responseItem, AddListingResponse response, AddListingRequest request) {
+	private void adaptTOResponse(Item responseItem,
+			AddListingResponse response, AddListingRequest request) {
 		Listing listing = request.getListing();
 		listing.setMarketPlaceListingId(responseItem.getId());
 		response.setListing(listing);
 	}
-	
+
 	private Item readItem(String output) {
 		Item response = null;
 		try {
-			response = AdapterUtils.getInstance().getObjectMapper(false).readValue(output, Item.class);
+			response = AdapterUtils.getInstance().getObjectMapper(false)
+					.readValue(output, Item.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -202,7 +208,8 @@ public class MercadolibreListingAdapter implements
 	}
 
 	private boolean isProductIDAvailalbe(Product product) {
-		return product != null && product.getProductId() != null && product.getProductId() > 0;
+		return product != null && product.getProductId() != null
+				&& product.getProductId() > 0;
 	}
 
 	// ********** Dev Testing *******
@@ -210,7 +217,7 @@ public class MercadolibreListingAdapter implements
 		AddListingRequest input = new AddListingRequest();
 		Listing listing = new Listing();
 		listing.setWarranty("Yes");
-		
+
 		Product product = new Product();
 		product.setTitle("Test Test Test!");
 
@@ -232,15 +239,16 @@ public class MercadolibreListingAdapter implements
 		listing.setMarket(MarketEnum.MERCADO_LIBRE);
 		listing.setCountry(CountryEnum.ALL);
 		input.setListing(listing);
-		
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+		ObjectWriter ow = new ObjectMapper().writer()
+				.withDefaultPrettyPrinter();
 		try {
 			String json = ow.writeValueAsString(input);
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		MercadolibreListingAdapterHolder.INSTANCE.execute(input,
 				new AddListingResponse());
 	}

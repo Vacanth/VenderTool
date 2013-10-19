@@ -44,6 +44,7 @@
 			/WEB-INF/spring-security.xml
 			/WEB-INF/dal-module.xml
 			classpath:security\security-credentials.xml
+			classpath:client\ml\consumer.xml
 		</param-value>
 	</context-param>
 

@@ -143,6 +143,9 @@
 										<copy todir="${project.build.outputDirectory}/emailtemplates">
 											<fileset dir="../registration/src/main/resources/emailtemplates" includes="**/*" />
 										</copy>
+										
+										<copy file="../mercadolibreadapter/src/main/resources/client/qa/consumer.xml"
+											tofile="${project.build.outputDirectory}/client/ml/consumer.xml" />
 									</tasks>
 								</configuration>
 							</execution>

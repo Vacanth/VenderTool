@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- Listing End Point URL Configuration -->
+	<bean id="ml-addListing" class="com.vendertool.common.client.ClientConfig">
+		<property name="endPointURL" value="https://api.mercadolibre.com/items?access_token=#ACCESS_TOKEN#" />
+		<property name="timeOutInMilliSeconds" value="5000" />
+	</bean>
+</beans>

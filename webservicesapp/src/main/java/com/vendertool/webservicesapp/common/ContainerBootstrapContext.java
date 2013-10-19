@@ -45,6 +45,7 @@ public class ContainerBootstrapContext {
 		    	//Do processor Init
 		    	Module.getInstance().init();
 		    	com.vendertool.inventory.processor.Module.getInstance().init();
+		    	com.vendertool.mercadolibreadapter.Module.getInstance().init();
 	    	} finally {
 	    		CTX.set(this);
 	    	}
