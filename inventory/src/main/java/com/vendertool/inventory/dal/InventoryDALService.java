@@ -13,6 +13,7 @@ import com.vendertool.inventory.dal.dao.ProductDao;
 import com.vendertool.inventory.dal.dao.ProductDaoFactory;
 import com.vendertool.inventory.dal.dao.ProductVariationDao;
 import com.vendertool.inventory.dal.dao.ProductVariationDaoFactory;
+import com.vendertool.inventory.dal.fieldset.ProductReadSet;
 import com.vendertool.sharedtypes.core.Product;
 
 public class InventoryDALService {
@@ -66,4 +67,18 @@ public class InventoryDALService {
 		productDao.delete(productId);
 	}
 
+	public Product findBySKU(String sku) {
+		Product product = null;
+		try {
+			product = productDao.findBySKU(sku,
+					ProductReadSet.getInstance().ALL);
+		} catch (DBConnectionException e) {
+			
+		} catch (FinderException e) {
+			
+		} catch (DatabaseException e) {
+			
+		}
+		return product;
+	}
 }

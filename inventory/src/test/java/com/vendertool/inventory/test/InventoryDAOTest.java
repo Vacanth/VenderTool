@@ -15,9 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.DeleteException;
+import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.inventory.dal.dao.ProductDao;
 import com.vendertool.inventory.dal.dao.ProductDaoFactory;
+import com.vendertool.inventory.dal.fieldset.ProductReadSet;
 import com.vendertool.sharedtypes.core.Amount;
 import com.vendertool.sharedtypes.core.Product;
 
@@ -29,35 +31,43 @@ public class InventoryDAOTest implements ApplicationContextAware {
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException { 
+			throws BeansException {
 		context = applicationContext;
 	}
+
 	@Test
 	public void testInsert() {
 		ProductDao productDao = ProductDaoFactory.getInstance().getProductDao();
 		Product product = new Product();
-		product.setAccountId(1234l);
+		product.setAccountId(123534l);
 		product.setTitle("This product is by GK");
 		Date now = new Date();
 		product.setCreateDate(now);
 		product.setLastModifiedDate(now);
-		product.setSku("R21344");
+		product.setSku("R213445");
 		Amount amount = new Amount();
 		amount.setCurrency(Currency.getInstance("ARS"));
 		amount.setValue(new BigDecimal("123.56"));
 		product.setPrice(amount);
 		product.setProductCode("code123");
 		product.setQuantity(1);
-		Long productId = 0l;
+		Long productId = 14l;
 		try {
-			productId = productDao.insert(product);
+//			productId = productDao.insert(product);
+//			Product product3 =productDao.findByAccountIdAndProductId(1234l, productId, ProductReadSet.getInstance().ALL);
+			Product product2 = productDao.findBySKU("R21344",
+					ProductReadSet.getInstance().ALL);
+			System.out.println("");
 		} catch (DBConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InsertException e) {
+		} /*catch (InsertException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (DatabaseException e) {
+		}*/ catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FinderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

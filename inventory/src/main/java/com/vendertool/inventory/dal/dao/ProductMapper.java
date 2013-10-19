@@ -245,12 +245,16 @@ public class ProductMapper implements DALMapper<Product> {
 				product.setProductCode(row.get(a.productCode));
 			}
 			if(a.productCodeType.equals(rpath)) {
-				product.setProductCodeType(ProductCodeTypeEnum.valueOf(row.get(a.productCodeType).toString()));
+				if(row.get(a.productCodeType) != null){
+					product.setProductCodeType(ProductCodeTypeEnum.valueOf(row.get(a.productCodeType).toString()));
+				}
 			}
 			Weight weight = new Weight();
 			if(a.weightUnit.equals(rpath)) {
-				weight.setWeightUnit(WeightUnitEnum.valueOf(row.get(a.weightUnit).toString()));
-				product.setWeight(weight);
+				if(row.get(a.weightUnit) != null){
+					weight.setWeightUnit(WeightUnitEnum.valueOf(row.get(a.weightUnit).toString()));
+					product.setWeight(weight);
+				}
 			}
 			if(a.weight.equals(rpath)) {
 				weight.setValue(row.get(a.weight));
@@ -258,8 +262,10 @@ public class ProductMapper implements DALMapper<Product> {
 			}
 			Dimension dimension = new Dimension();
 			if(a.dimensionUnit.equals(rpath)) {
-				dimension.setDimensionUnit(Dimension.DimensionUnitEnum.valueOf(row.get(a.dimensionUnit).toString()));
-				product.setDimension(dimension);
+				if(row.get(a.dimensionUnit) != null){
+					dimension.setDimensionUnit(Dimension.DimensionUnitEnum.valueOf(row.get(a.dimensionUnit).toString()));
+					product.setDimension(dimension);
+				}
 			}
 			if(a.height.equals(rpath)) {
 				dimension.setHeight(row.get(a.height));
