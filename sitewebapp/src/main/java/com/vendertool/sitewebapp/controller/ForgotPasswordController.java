@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
-import com.vendertool.sharedtypes.core.EmailConfirmation;
-import com.vendertool.sharedtypes.core.ValidateEmail;
-import com.vendertool.sharedtypes.core.ValidateNewPassword;
-import com.vendertool.sharedtypes.core.ValidateSecurityQuestions;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.ErrorResponse;
+import com.vendertool.sitewebapp.model.EmailConfirmation;
+import com.vendertool.sitewebapp.model.EmailModel;
+import com.vendertool.sitewebapp.model.ForgotPassword;
+import com.vendertool.sitewebapp.model.SecurityQuestions;
 import com.vendertool.sitewebapp.util.MockDataUtil;
 
 @Controller
@@ -33,8 +33,8 @@ public class ForgotPasswordController {
 	@RequestMapping(value="forgotPassword", method=RequestMethod.GET)
 	public String getForgotPasswordView(Model model){
 		logger.info("getForgotPasswordView GET controller invoked");
-
-		model.addAttribute("validateEmail", new ValidateEmail());
+		
+		model.addAttribute("emailModel", new EmailModel());
 		
 		return "forgotPassword/forgotPassword";
 	}
@@ -43,18 +43,18 @@ public class ForgotPasswordController {
 	public String validateEmail(
 			Model model, 
 			HttpServletRequest req,
-			@ModelAttribute("validateEmail") ValidateEmail validateEmail) {
+			@ModelAttribute("emailModel") EmailModel emailModel) {
 		
 		logger.info("validateEmail POST controller invoked");
 		
-		ErrorResponse errorResponse = validateEmail(validateEmail.getEmail());
+		ErrorResponse errorResponse = validateEmail(emailModel.getEmail());
 		if (errorResponse != null) { // Error
 			model.addAttribute("errorResponse", errorResponse);
 		}
 		
 		else { // All good
-			validateEmail.setEmailValid(true);
-			model.addAttribute("validateEmail", validateEmail);
+			model.addAttribute("emailModel", emailModel);
+			model.addAttribute("isEmailValid", true);
 		}
 
 		return "forgotPassword/forgotPassword";
@@ -87,12 +87,12 @@ public class ForgotPasswordController {
 		}
 		
 		// All good
-		ValidateSecurityQuestions validateSecurityQuestions = new ValidateSecurityQuestions();
-		validateSecurityQuestions.setEmailConfirmation(emailConfirmation);
+		SecurityQuestions securityQuestions = new SecurityQuestions();
+		securityQuestions.setEmailConfirmation(emailConfirmation);
 		List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-		validateSecurityQuestions.setQuestions(questions);
-
-		model.addAttribute("validateSecurityQuestions", validateSecurityQuestions);
+		securityQuestions.setQuestions(questions);
+		
+		model.addAttribute("securityQuestions", securityQuestions);
 		return "forgotPassword/askSecurityQuestions";
 	}
 	
@@ -101,35 +101,35 @@ public class ForgotPasswordController {
 			Model model,
 			HttpServletRequest req,
 			HttpServletResponse res,
-			@ModelAttribute("validateSecurityQuestions") ValidateSecurityQuestions validateSecurityQuestions) {
+			@ModelAttribute("securityQuestions") SecurityQuestions securityQuestions) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 
 		// Not good
-		if (!isEmailConfirmationValid(validateSecurityQuestions.getEmailConfirmation())) {
+		if (!isEmailConfirmationValid(securityQuestions.getEmailConfirmation())) {
 			return "unauthorized/unauthorized";
 		}
-		else if (isTooManyAttempts(validateSecurityQuestions.getEmailConfirmation())) {
+		else if (isTooManyAttempts(securityQuestions.getEmailConfirmation())) {
 			return "accountLocked/accountLocked";
 		}
 
 		// Validate answers
-		ErrorResponse errorResponse = validateAnswers(validateSecurityQuestions.getQuestions());
+		ErrorResponse errorResponse = validateAnswers(securityQuestions.getQuestions());
 		if (errorResponse != null) {
 			model.addAttribute("errorResponse", errorResponse);
 			
 			 // Echo back the questions
 			List<AccountSecurityQuestion> questions = MockDataUtil.getUsersAccountSecurityQuestions();
-			validateSecurityQuestions.setQuestions(questions);
-			model.addAttribute("validateSecurityQuestions", validateSecurityQuestions);
+			securityQuestions.setQuestions(questions);
+			model.addAttribute("securityQuestions", securityQuestions);
 
 			return "forgotPassword/askSecurityQuestions";
 		}
 		else {
 			// Answers are good
-			ValidateNewPassword validateNewPassword = new ValidateNewPassword();
-			validateNewPassword.setEmailConfirmation(validateSecurityQuestions.getEmailConfirmation());
+			ForgotPassword forgotPassword = new ForgotPassword();
+			forgotPassword.setEmailConfirmation(securityQuestions.getEmailConfirmation());
 			
-			model.addAttribute("validateNewPassword", validateNewPassword);
+			model.addAttribute("forgotPassword", forgotPassword);
 			
 			return "forgotPassword/changePassword";
 		}
@@ -145,19 +145,19 @@ public class ForgotPasswordController {
 			Model model,
 			HttpServletRequest req,
 			HttpServletResponse res,
-			@ModelAttribute("validateNewPassword") ValidateNewPassword validateNewPassword) {
+			@ModelAttribute("forgotPassword") ForgotPassword forgotPassword) {
 		logger.info("answerSecurityQuestions POST controller invoked");
 
 		// Not good
-		if (!isEmailConfirmationValid(validateNewPassword.getEmailConfirmation())) {
+		if (!isEmailConfirmationValid(forgotPassword.getEmailConfirmation())) {
 			return "unauthorized/unauthorized";
 		}
-		else if (isTooManyAttempts(validateNewPassword.getEmailConfirmation())) {
+		else if (isTooManyAttempts(forgotPassword.getEmailConfirmation())) {
 			return "accountLocked/accountLocked";
 		}
 		
 		// Validate password
-		ErrorResponse errorResponse = validatePassword(validateNewPassword.getNewPassword(), validateNewPassword.getConfirmPassword());
+		ErrorResponse errorResponse = validatePassword(forgotPassword.getNewPassword(), forgotPassword.getConfirmPassword());
 		if (errorResponse != null) {
 			model.addAttribute("errorResponse", errorResponse);
 			model.addAttribute("forgotPasswordFlow", null);
@@ -171,7 +171,7 @@ public class ForgotPasswordController {
 			return "forgotPassword/success";
 		}
 	}
-	
+
 	
 	
 	//
