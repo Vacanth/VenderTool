@@ -7,6 +7,9 @@ import java.util.List;
 import org.json.JSONObject;
 import org.supercsv.exception.SuperCsvException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vendertool.fps.dal.FpsDALService;
 import com.vendertool.sharedtypes.core.fps.FPSTaskStatusEnum;
 import com.vendertool.sharedtypes.core.fps.Task;
@@ -24,29 +27,8 @@ public class CSVProductReader extends CSVBaseReader{
 		return prodBean;
 	}
 	
-	/*public List<ProductBean> readNDataFromFile(int num) throws SuperCsvException,IOException { 
-		int i=0;
-		List<ProductBean> pBeanList = new ArrayList<ProductBean>();
-		ProductBean prodBean;
-
-		try {
-			while (i<num) {
-				prodBean = getBeanReader().read(ProductBean.class, getDynamicHeader(), getProcessors());
-				if (prodBean == null) {
-					break;
-				}
-				pBeanList.add(prodBean);
-				i++;
-			}
-		}catch (SuperCsvException e) {                                  
-		}catch (Exception e) {       
-			System.out.println("Message "+e.getMessage());
-		} 
-		return pBeanList;
-	}
-	*/
 	public void processData(long jobId, String fileGrpId, long accountId, long fileId) throws Exception {                            
-		List<ProductBean> prodList = readNDataFromFile(CHUNK_SIZE);
+		List<ProductBean> prodList = readNProductDataFromFile(CHUNK_SIZE);
 		
 		Task task = new Task();
 		task.setJobId(jobId);;
@@ -56,7 +38,7 @@ public class CSVProductReader extends CSVBaseReader{
 		
 		while (prodList != null && !prodList.isEmpty()) {
 			processTask(prodList, task);
-			prodList = readNDataFromFile(CHUNK_SIZE);
+			prodList = readNProductDataFromFile(CHUNK_SIZE);
 		}
 	}
 	
@@ -71,7 +53,16 @@ public class CSVProductReader extends CSVBaseReader{
 				task.setRequestGroupId(iTask.getRequestGroupId());
 				task.setRequestFileId(iTask.getRequestFileId());
 				task.setRecordId(recordCount++);
-				task.setRequest(new JSONObject(pBean).toString().getBytes());
+				//task.setRequest(new JSONObject(pBean).toString().getBytes());
+				
+				ObjectWriter ow = new ObjectMapper().writer()
+						.withDefaultPrettyPrinter();
+				try {
+					String json = ow.writeValueAsString(pBean);
+					task.setRequest(json.getBytes());
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+				}
 				task.setStatus(FPSTaskStatusEnum.CREATED);
 				task.setIsoCountryCode(pBean.getCurrencyCode());
 				

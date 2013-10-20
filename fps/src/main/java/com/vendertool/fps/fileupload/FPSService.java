@@ -23,7 +23,7 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.fps.dal.FpsDALService;
 import com.vendertool.fps.fileupload.helper.AWSHelper;
 import com.vendertool.fps.fileupload.helper.FPSJobEvent;
-import com.vendertool.fps.fileupload.mappers.CSVProductReader;
+import com.vendertool.fps.fileupload.mappers.CSVListingReader;
 import com.vendertool.fps.fileupload.validator.ProcessJobValidator;
 import com.vendertool.fps.fileupload.validator.ProcessTaskValidator;
 import com.vendertool.fps.fileupload.validator.UploadFileValidator;
@@ -291,7 +291,8 @@ public class FPSService extends BaseVenderToolServiceImpl {
 									AWSHelper.getInstance().downloadFileFromAWS(fileUrl, filePath);
 																
 									try {	
-										CSVProductReader csvReader = new CSVProductReader(filePath);
+										//CSVProductReader csvReader = new CSVProductReader(filePath);
+										CSVListingReader csvReader = new CSVListingReader(filePath);
 										csvReader.processData(job.getJobId(), job.getReqFileGroupId(),
 												job.getAccountId(), file.getFileId());	
 										file.setStatus(FPSFileStatusEnum.IN_PROGRESS);
