@@ -48,6 +48,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 			ProductDescriptionMapper productDescriptionMapper = new ProductDescriptionMapper(a.all());
 			QBeanProductDescription qBeanProductDescription = productDescriptionMapper.populateBean(productDescription);
 			qBeanProductDescription.setProductId(productId);
+			qBeanProductDescription.setProductDescriptionId(generateNextSequence(con));
 			SQLInsertClause s = insert(con, a).populate(qBeanProductDescription);
 	    	
     	logger.info("DAL QUERY: " + s.toString());

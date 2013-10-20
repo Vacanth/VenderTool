@@ -84,6 +84,8 @@
 									todir="${project.build.outputDirectory}/dal" />
 								<copy file="src/main/resources/dal-module.xml"
 									todir="${project.build.outputDirectory}/dal" />
+								<copy file="../inventory/src/main/resources/InventoryDAL.xml"
+									todir="${project.build.outputDirectory}/dal" />
 							</tasks>
 						</configuration>
 					</execution>

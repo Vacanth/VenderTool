@@ -5,15 +5,8 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -22,7 +15,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.vendertool.listing.ListingServiceimpl;
 import com.vendertool.listing.dal.ListingDALService;
 import com.vendertool.listing.processor.Module;
@@ -38,10 +30,13 @@ import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:dal/dal-module.xml","classpath:dal/ListingDAL.xml","classpath:client/ml/consumer.xml" })
+@ContextConfiguration(locations = { "classpath:dal/dal-module.xml",
+		"classpath:dal/InventoryDAL.xml", "classpath:dal/ListingDAL.xml",
+		"classpath:client/ml/consumer.xml" })
 public class ListingServiceTest implements ApplicationContextAware {
 	private ApplicationContext context;
 	private ListingDALService listingDalService;
+
 	/**
 	 * @param args
 	 */
@@ -80,21 +75,26 @@ public class ListingServiceTest implements ApplicationContextAware {
 		vo.setTargetURL("http://localhost:8080/services/listing/addListing");
 		vo.setRequestObject(input);
 		vo.setMethodEnum(HttpMethodEnum.POST);
-/*//		Response resp = MercadolibreCommunicator.getInstance().call(vo);
-		ClientConfig clientConfig = new ClientConfig(JacksonJsonProvider.class);
-		Client client = ClientBuilder.newClient(clientConfig);
-		client.register(new HttpBasicAuthFilter("7jgkcg5tts5fjp11j4e0vi2u1u", "vubunbrgubb95f844qmmutqogr9b3bl426ove5rjvk45aq57d5q"));
-		WebTarget webtarget = client.target("http://localhost:8080/services/listing/addListing");
-		Entity entity = Entity.entity(input, MediaType.APPLICATION_JSON);
-		Response resp = webtarget.request(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.post(entity, Response.class);*/
+		/*
+		 * // Response resp = MercadolibreCommunicator.getInstance().call(vo);
+		 * ClientConfig clientConfig = new
+		 * ClientConfig(JacksonJsonProvider.class); Client client =
+		 * ClientBuilder.newClient(clientConfig); client.register(new
+		 * HttpBasicAuthFilter("7jgkcg5tts5fjp11j4e0vi2u1u",
+		 * "vubunbrgubb95f844qmmutqogr9b3bl426ove5rjvk45aq57d5q")); WebTarget
+		 * webtarget =
+		 * client.target("http://localhost:8080/services/listing/addListing");
+		 * Entity entity = Entity.entity(input, MediaType.APPLICATION_JSON);
+		 * Response resp = webtarget.request(MediaType.APPLICATION_JSON)
+		 * .accept(MediaType.APPLICATION_JSON) .post(entity, Response.class);
+		 */
 		Module.getInstance().init();
 		com.vendertool.mercadolibreadapter.Module.getInstance().init();
 		ListingServiceimpl impl = new ListingServiceimpl();
 		impl.addListing(input);
 		System.out.println("");
 	}
+
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
