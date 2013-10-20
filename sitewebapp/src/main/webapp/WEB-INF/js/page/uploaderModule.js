@@ -122,17 +122,17 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 				var name = file.name;
 				var type = file.type; // could be empty
 				var ext = name.substring(name.indexOf('.') + 1);
-
+				
 				//
 				// If type can be detected, accept text and spreadsheets only.
 				// If type cannot be detected, then accept it.
 				//
 				if (type) {
-					if (type.indexOf('text') === -1 && type.indexOf('xls') === -1 && type.indexOf('xlsx') === -1) {
+					if (type.indexOf('text/plain') === -1 && type.indexOf('xls') === -1 && type.indexOf('xlsx') === -1) {
 						scope.excludedFileTypes.push(name);
 					}
 				}
-				/**
+				/*** Don't rely on file extension
 				else { // see about the ext since cannot get the type
 					if (_acceptedFileTypes.indexOf(ext) === -1) {
 						scope.excludedFileTypes.push(name);
