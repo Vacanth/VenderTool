@@ -13,12 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
-import com.vendertool.sitewebapp.common.RestServiceClientHelper;
-import com.vendertool.sitewebapp.common.URLConstants;
 
 @Controller
 public class ConfirmEmailController {

@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
+import com.vendertool.sharedapp.SpringApplicationContextUtils;
+
 /**
  * This is how you get access to resource like messages.properties 
  * from Java

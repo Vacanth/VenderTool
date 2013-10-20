@@ -2,6 +2,7 @@ package com.vendertool.common.test;
 
 import java.net.URL;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
@@ -14,18 +15,24 @@ import com.vendertool.common.SessionIdGenerator;
 public class DigestHashUtil {
 
 	public static void main(String[] args) {
-        URL location = DigestHashUtil.class.getProtectionDomain().getCodeSource().getLocation();
-        String beanFilePath = location.getFile();
-        log("Current class file execution location: " + beanFilePath);
-        
-		String salt = SessionIdGenerator.getInstance().generateSessionId(false);
-		log("Salt (secure random id): '" + salt + "'.");
+//        URL location = DigestHashUtil.class.getProtectionDomain().getCodeSource().getLocation();
+//        String beanFilePath = location.getFile();
+//        log("Current class file execution location: " + beanFilePath);
+//        
+//		String salt = SessionIdGenerator.getInstance().generateSessionId(false);
+//		log("Salt (secure random id): '" + salt + "'.");
+//		
+//		String password = SessionIdGenerator.getInstance().generateSecureRandomId(256, 32);
+//		log("Password (secure random id): '" + password + "'.");
+//		
+//		String hashedPassword = saltHashPassword(salt, password, beanFilePath);
+//		log("Hashed password (secure random id): '" + hashedPassword + "'.");
 		
-		String password = SessionIdGenerator.getInstance().generateSecureRandomId(256, 32);
-		log("Password (secure random id): '" + password + "'.");
+		byte[] bytes = Base64.encodeBase64("7jgkcg5tts5fjp11j4e0vi2u1u:vubunbrgubb95f844qmmutqogr9b3bl426ove5rjvk45aq57d5q"
+				.getBytes());
 		
-		String hashedPassword = saltHashPassword(salt, password, beanFilePath);
-		log("Hashed password (secure random id): '" + hashedPassword + "'.");
+		log("base64 encoded: ");
+		log(new String(bytes));
 		
 	}
 	

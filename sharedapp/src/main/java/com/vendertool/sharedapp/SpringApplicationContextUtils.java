@@ -1,4 +1,4 @@
-package com.vendertool.sitewebapp.common;
+package com.vendertool.sharedapp;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

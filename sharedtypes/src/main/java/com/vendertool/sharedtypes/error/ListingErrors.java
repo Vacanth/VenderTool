@@ -35,6 +35,11 @@ public class ListingErrors {
 			"Title Required", VTErrorSeverityEnum.ERROR,
 			DOMAIN);
 	
+	public VTError NO_MATCHING_PRODUCT_FOUND = new VTError(
+			ListingErrorCode.NO_MATCHING_PRODUCT_FOUND,
+			"No Matching Product Found", VTErrorSeverityEnum.ERROR,
+			DOMAIN);
+	
 	public VTError SKU_REQUIRED = new VTError(
 			ListingErrorCode.TITLE_REQUIRED,
 			"Title Required", VTErrorSeverityEnum.ERROR,

@@ -33,6 +33,6 @@ public interface ProductDao extends BaseDao {
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException;
 
-	public Product findBySKU(String sku, Path<?>[] readSet) throws DBConnectionException,
+	public Product findBySKU(Long accountId, String sku, Path<?>[] readSet) throws DBConnectionException,
 			FinderException, DatabaseException;
 }
