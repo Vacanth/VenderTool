@@ -68,7 +68,6 @@ public class MercadolibreListingAdapter extends
 
 		// Handle the error codes
 		String output = resp.readEntity(String.class);
-
 		if (resp.getStatus() != Response.Status.CREATED.getStatusCode()) {
 			try {
 				processErrorResponse(output, (AddListingResponse) response);
