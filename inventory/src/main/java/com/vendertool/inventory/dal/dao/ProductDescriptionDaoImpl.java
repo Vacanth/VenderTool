@@ -68,7 +68,7 @@ public class ProductDescriptionDaoImpl extends BaseDaoImpl implements ProductDes
 	@Override
 	public boolean hasSequenceGenerator() {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override

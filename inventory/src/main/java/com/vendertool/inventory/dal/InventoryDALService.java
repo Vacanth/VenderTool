@@ -17,6 +17,7 @@ import com.vendertool.inventory.dal.dao.ProductVariationDao;
 import com.vendertool.inventory.dal.dao.ProductVariationDaoFactory;
 import com.vendertool.inventory.dal.fieldset.ProductReadSet;
 import com.vendertool.sharedtypes.core.Product;
+import com.vendertool.sharedtypes.core.ProductVariation;
 
 public class InventoryDALService {
 	private static final Logger logger = Logger
@@ -43,8 +44,8 @@ public class InventoryDALService {
 	}
 
 	public Long createProduct(Product product) throws DBConnectionException,
-			FinderException, InsertException, DatabaseException,
-			UpdateException {
+	FinderException, InsertException, DatabaseException,
+	UpdateException {
 
 		if (VUTIL.isNull(product)) {
 			return null;
@@ -55,7 +56,7 @@ public class InventoryDALService {
 
 		try {
 			productDao.insert(product);
-			} catch (InsertException e) {
+		} catch (InsertException e) {
 			UpdateException ue = new UpdateException(
 					"Unable to add new productId : "
 							+ product.getProductId(), e);
@@ -73,11 +74,25 @@ public class InventoryDALService {
 			throw ue;
 		}
 
+		//set variations
+		if ( product.getVariations() != null ) {
+			for (ProductVariation pv : product.getVariations()) {
+				try {
+					productVariationDao.insert(pv, productId);
+				} catch (InsertException e) {
+					UpdateException ue = new UpdateException(
+							"Unable to add new variations for productId : "
+									+ product.getProductId(), e);
+					logger.debug(ue.getMessage(), ue);
+					throw ue;	
+				}
+			}
+		}
 		return productId;
 	}
 
 	public void removeListing(Long productId) throws DeleteException,
-			DBConnectionException, DatabaseException, FinderException {
+	DBConnectionException, DatabaseException, FinderException {
 		productDao.delete(productId);
 		productDescriptionDao.delete(productId);
 	}
@@ -88,11 +103,11 @@ public class InventoryDALService {
 			product = productDao.findBySKU(sku,
 					ProductReadSet.getInstance().ALL);
 		} catch (DBConnectionException e) {
-			
+
 		} catch (FinderException e) {
-			
+
 		} catch (DatabaseException e) {
-			
+
 		}
 		return product;
 	}

@@ -101,11 +101,16 @@ public class ImageMapper implements DALMapper<Image> {
 		if(image.getSize() != null) {
 			bean.setSize(image.getSize());
 		}
-			bean.setSortOrderId(image.getSortOrderId());
-
-		
-		
-		
+		if(image.getSortOrderId()>0) {
+		bean.setSortOrderId(image.getSortOrderId());
+		}
+		if(image.getHash() != null) {
+			bean.setHash(image.getHash());
+		}
+		if(image.getImgurl() != null) {
+			bean.setHostedUrl(image.getImgurl());
+		}
+				
 		return bean;
 		
 	}
@@ -147,6 +152,9 @@ public class ImageMapper implements DALMapper<Image> {
 			}
 			if(a.sortOrderId.equals(rpath)) {
 				image.setSortOrderId(row.get(a.sortOrderId));
+			}
+			if(a.size.equals(rpath)) {
+				image.setSize(row.get(a.size));
 			}
 
 		}

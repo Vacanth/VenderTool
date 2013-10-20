@@ -1,4 +1,4 @@
-package com.vendertool.inventory.test.dal;
+package com.vendertool.common.test.dal;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,18 +8,18 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.vendertool.common.dal.dao.ImageDao;
+import com.vendertool.common.dal.dao.ImageDaoFactory;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
-import com.vendertool.common.dal.exception.DeleteException;
 import com.vendertool.common.dal.exception.InsertException;
-import com.vendertool.inventory.dal.dao.ProductDescriptionDao;
-import com.vendertool.inventory.dal.dao.ProductDescriptionDaoFactory;
-import com.vendertool.sharedtypes.core.Product;
+import com.vendertool.sharedtypes.core.Image;
+import com.vendertool.sharedtypes.core.Image.ImageFormatEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:dal/dal-module.xml",
-		"classpath:dal/InventoryDAL.xml" })
-public class ProductDescriptionDAOTest implements ApplicationContextAware {
+		"classpath:dal/CommonDAL.xml" })
+public class ImageDAOTest implements ApplicationContextAware {
 	private ApplicationContext context;
 
 	@Override
@@ -29,13 +29,17 @@ public class ProductDescriptionDAOTest implements ApplicationContextAware {
 	}
 	@Test
 	public void testInsert() {
-		ProductDescriptionDao productDescriptionDao = ProductDescriptionDaoFactory.getInstance().getProductDescriptionDao();
-		Product productDescription = new Product();
-		productDescription.setAccountId(1234l);
-		productDescription.setTitle("This productDescription is by MB");
-		productDescription.setDescription("Well-designed appearance and structure There is a 0.3-megapixel front camera sitting in the middle of the top bezel,useful for video chat. On the top right isthe power/lock button, closely followed bya DC jack, a Mini-USB port and the MICinterface. On the right edge toward the top is a headphone jack, following down with the volume rocker, and a TF Card  slot");
-			try {
-			  productDescriptionDao.insert(productDescription,12342L);
+		ImageDao imageDao = ImageDaoFactory.getInstance().getImageDao();
+		Image image = new Image();
+		image.setAccountId(1234l);
+		image.setImageId(123L);
+		image.setImgurl("test url ");
+		image.setName("first image");
+		image.setSize("1024");
+		image.setFormat(ImageFormatEnum.JPEG);
+		image.setSortOrderId((byte) 1);
+		try {
+			  imageDao.insert(image,123L,(byte) 123);
 		} catch (DBConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,7 +52,7 @@ public class ProductDescriptionDAOTest implements ApplicationContextAware {
 		}
 
 		/*try {
-			productDescriptionDao.delete(productDescriptionId);
+			imageDao.delete(imageId);
 		} catch (DBConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
