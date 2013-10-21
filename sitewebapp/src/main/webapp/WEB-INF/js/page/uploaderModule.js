@@ -112,7 +112,7 @@ angular.module('uploaderModule', []).directive("uploader", function() {
 					//
 					// Handle exclusions
 					//
-					handleExcludedFileTypes(file);
+					//handleExcludedFileTypes(file);
 					handleExceedsMaxSize(file, fileWrap.kbSize);
 				}
 			};

@@ -5,27 +5,33 @@ import com.vendertool.sharedtypes.rnr.AuthorizeMarketRequest;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketResponse;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangeEmailResponse;
+import com.vendertool.sharedtypes.rnr.ChangeForgotPasswordRequest;
+import com.vendertool.sharedtypes.rnr.ChangeForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 import com.vendertool.sharedtypes.rnr.CloseAccountRequest;
 import com.vendertool.sharedtypes.rnr.CloseAccountResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteRequest;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteResponse;
+import com.vendertool.sharedtypes.rnr.ProcessForgotPasswordEmailRequest;
+import com.vendertool.sharedtypes.rnr.ProcessForgotPasswordEmailResponse;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
+import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsRequest;
+import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsResponse;
 
 
 public interface IRegistrationService extends IVenderToolService {
@@ -141,7 +147,7 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @param request
 	 * @return
 	 */
-	public ForgotPasswordResponse processForgotPasswordEmail(ForgotPasswordRequest request);
+	public ProcessForgotPasswordEmailResponse processForgotPasswordEmail(ProcessForgotPasswordEmailRequest request);
 	
 	
 	/**
@@ -150,7 +156,7 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @param request
 	 * @return
 	 */
-	public ForgotPasswordResponse confirmForgotPasswordEmail(ForgotPasswordRequest request);
+	public ConfirmForgotPasswordEmailResponse confirmForgotPasswordEmail(ConfirmForgotPasswordEmailRequest request);
 	
 	
 	/**
@@ -159,7 +165,8 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @param request
 	 * @return
 	 */
-	public ForgotPasswordResponse validateForgotPasswordSecurityQuestions(ForgotPasswordRequest request);
+	public ValidateSecurityQuestionsResponse validateSecurityQuestions(
+			ValidateSecurityQuestionsRequest request);
 	
 	/**
 	 * Handle change password for forgot password case
@@ -167,5 +174,5 @@ public interface IRegistrationService extends IVenderToolService {
 	 * @param request
 	 * @return
 	 */
-	public ForgotPasswordResponse changeForgotPassword(ForgotPasswordRequest request);
+	public ChangeForgotPasswordResponse changeForgotPassword(ChangeForgotPasswordRequest request);
 }

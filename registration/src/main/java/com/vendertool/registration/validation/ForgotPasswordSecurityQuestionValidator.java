@@ -22,9 +22,8 @@ import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
+import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsRequest;
 
 public class ForgotPasswordSecurityQuestionValidator implements Validator {
 
@@ -38,7 +37,8 @@ public class ForgotPasswordSecurityQuestionValidator implements Validator {
 	public void validate(BaseRequest _request, BaseResponse response) {
 		logger.info(ForgotPasswordSecurityQuestionValidator.class.getName() + ".validate()");
 		
-		ForgotPasswordRequest request = (ForgotPasswordRequest) _request;
+		ValidateSecurityQuestionsRequest request = 
+				(ValidateSecurityQuestionsRequest) _request;
 		
 		ConfirmForgotPasswordEmailValidator validator = 
 				new ConfirmForgotPasswordEmailValidator();
@@ -48,13 +48,13 @@ public class ForgotPasswordSecurityQuestionValidator implements Validator {
 		sqrequest.setEmail(request.getEmail());
 		sqrequest.setQuestions(request.getQuestions());
 		//this is to bypass for now
-		sqrequest.setPassword("empty");
+		sqrequest.setPassword("Oneempty1");
 		
 		SecurityQuestionsValidator sqvalidator = new SecurityQuestionsValidator();
 		sqvalidator.validate(sqrequest, response);
 	}
 
-	public void validateSecurityAnswers(ForgotPasswordResponse response,
+	public void validateSecurityAnswers(BaseResponse response,
 			Account account, 
 			List<AccountSecurityQuestion> dbquestions,
 			List<AccountSecurityQuestion> inputQuestions) {

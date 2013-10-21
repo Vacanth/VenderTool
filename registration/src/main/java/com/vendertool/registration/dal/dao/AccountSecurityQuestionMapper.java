@@ -14,6 +14,7 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.registration.dal.dao.codegen.QAccountSecurityQuestion;
 import com.vendertool.registration.dal.dao.codegen.QBeanAccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
+import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 
 public class AccountSecurityQuestionMapper implements
@@ -142,7 +143,11 @@ public class AccountSecurityQuestionMapper implements
 				if(code != null) {
 					SecurityQuestionCodeEnum ce = SecurityQuestionCodeEnum.get(code);
 					if(ce != null) {
-						question.getQuestion().setQuestionCode(ce);
+						SecurityQuestion sq = question.getQuestion();
+						if(sq == null) {
+							sq = new SecurityQuestion();
+						}
+						sq.setQuestionCode(ce);
 					}
 				}
 			}

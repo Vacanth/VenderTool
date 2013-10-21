@@ -1,7 +1,5 @@
 package com.vendertool.sitewebapp.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,38 +24,24 @@ public class ConfirmEmailController {
 	
 	@RequestMapping(value="confirmemail", method=RequestMethod.GET)
 	public String confirmEmail(Model model, HttpServletRequest httprequest) {
-		Map<String, String[]> reqMap = httprequest.getParameterMap();
 		
 		ConfirmEmailRequest request = new ConfirmEmailRequest();
 		
-		boolean emptyRequest = true;
-		String[] emails = reqMap.get("email");
-		if(emails != null) {
-			request.setEmail(emails[0]);
-			emptyRequest = false;
+		String email = httprequest.getParameter("email");
+		String sessiontoken = httprequest.getParameter("sessiontoken");
+		String _code = httprequest.getParameter("confirmationcode");
+		Integer code = null;
+		if((_code != null) && (!_code.trim().isEmpty())) {
+			code = Integer.parseInt(_code);
 		}
 		
-		String[] oldemails = reqMap.get("oldemail");
-		if(oldemails != null) {
-			request.setOldEmail(oldemails[0]);
-			emptyRequest = false;
-		}
-		
-		String[] sessiontokens = reqMap.get("sessiontoken");
-		if(sessiontokens != null) {
-			request.setConfirmSessionId(sessiontokens[0]);
-			emptyRequest = false;
-		}
-		
-		String[] codes = reqMap.get("confirmationcode");
-		if((codes != null) && (codes[0] != null)) {
-			request.setConfirmCode(Integer.parseInt(codes[0]));
-			emptyRequest = false;
-		}
-		
-		if(emptyRequest) {
+		if((email == null) && (sessiontoken == null) && (code == null)) {
 			return "redirect:home";
 		}
+		
+		request.setEmail(email);
+		request.setConfirmCode(code);
+		request.setConfirmSessionId(sessiontoken);
 		
 		String hostName = RestServiceClientHelper.getServerURL(httprequest);
 		String url = hostName + URLConstants.WEB_SERVICE_PATH + 

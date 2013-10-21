@@ -74,7 +74,7 @@ public class CSVBaseReader {
 		}                              
 	}     
 	
-	public List<ProductBean> readNDataFromFile(int num) throws SuperCsvException,IOException { 
+	public List<ProductBean> readNProductDataFromFile(int num) throws SuperCsvException,IOException { 
 		int i=0;
 		List<ProductBean> pBeanList = new ArrayList<ProductBean>();
 		ProductBean prodBean;
@@ -93,5 +93,26 @@ public class CSVBaseReader {
 			System.out.println("Message "+e.getMessage());
 		} 
 		return pBeanList;
+	}
+	
+	public List<ListingBean> readNListingDataFromFile(int num) throws SuperCsvException,IOException { 
+		int i=0;
+		List<ListingBean> lBeanList = new ArrayList<ListingBean>();
+		ListingBean lstBean;
+
+		try {
+			while (i<num) {
+				lstBean = getBeanReader().read(ListingBean.class, getDynamicHeader(), getProcessors());
+				if (lstBean == null) {
+					break;
+				}
+				lBeanList.add(lstBean);
+				i++;
+			}
+		}catch (SuperCsvException e) {                                  
+		}catch (Exception e) {       
+			System.out.println("Message "+e.getMessage());
+		} 
+		return lBeanList;
 	}
 }

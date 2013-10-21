@@ -8,3 +8,10 @@
 .sec-ques .fldWrp {
 	margin-top:10px;
 }
+
+.pg-msg.sec-ques {
+	min-height:0;
+}
+.pg-msg .alert {
+	display: none;
+}

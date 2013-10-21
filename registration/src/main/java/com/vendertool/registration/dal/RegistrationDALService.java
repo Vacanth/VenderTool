@@ -48,6 +48,7 @@ public class RegistrationDALService {
 		pwdHistoryDao = RegistrationDaoFactory.getInstance().getPasswordHistoryDao();
 		addrDao = AddressDaoFactory.getInstance().getAddressDao();
 		secQuestionDao = RegistrationDaoFactory.getInstance().getAccountSecurityQuestionDao();
+		fpDao = RegistrationDaoFactory.getInstance().getForgotPasswordDao();
 	}
 	
 	private static class RegistrationDALServiceHolder {
@@ -248,6 +249,7 @@ public class RegistrationDALService {
 		
 		Account a = accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PROFILE);
 		if((a != null) && (a.getContactDetails().getAddress() != null)) {
+			Long accountId = a.getId();
 			Long id = a.getContactDetails().getAddress().getId();
 			if(id != null) {
 				Address addr = addrDao.findById(id);
@@ -256,6 +258,9 @@ public class RegistrationDALService {
 					a.getContactDetails().setAddress(addr);
 				}
 			}
+			
+			List<AccountSecurityQuestion> questions = secQuestionDao.findAllByAccountId(accountId);
+			a.setSecurityQuestionsSetup((questions != null) && (!questions.isEmpty()));
 		}
 		
 		return a;
@@ -268,7 +273,16 @@ public class RegistrationDALService {
 			return null;
 		}
 		
-		return accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
+		Account a = accountDao.findByEmail(email, FieldSets.ACCOUNT_READSET.PASSWORD);
+		
+		if(a != null) {
+			Long accountId = a.getId();
+			
+			List<AccountSecurityQuestion> questions = secQuestionDao.findAllByAccountId(accountId);
+			a.setSecurityQuestionsSetup((questions != null) && (!questions.isEmpty()));
+		}
+		
+		return a;
 	}
 	
 	public AccountConfirmation getAccountConfirmation(Long accountId, String email)

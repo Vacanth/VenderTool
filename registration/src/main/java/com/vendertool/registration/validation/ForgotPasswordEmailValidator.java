@@ -9,16 +9,16 @@ import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
+import com.vendertool.sharedtypes.rnr.ProcessForgotPasswordEmailRequest;
 
-public class ForgotPasswordValidator implements Validator {
+public class ForgotPasswordEmailValidator implements Validator {
 
-	private static final Logger logger = Logger.getLogger(ForgotPasswordValidator.class);
+	private static final Logger logger = Logger.getLogger(ForgotPasswordEmailValidator.class);
 	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
 	
 	@Override
 	public void validate(BaseRequest _request, BaseResponse response) {
-		ForgotPasswordRequest request = (ForgotPasswordRequest) _request;
+		ProcessForgotPasswordEmailRequest request = (ProcessForgotPasswordEmailRequest) _request;
 		
 		if (VUTIL.isNull(request)) {
 			logger.debug("NULL value passed to processForgotPasswordEmail");

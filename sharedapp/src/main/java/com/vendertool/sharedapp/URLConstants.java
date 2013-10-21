@@ -25,4 +25,8 @@ public interface URLConstants {
 	public static final String WS_REGISTRATION_CHANGE_PASSWORD_PATH = "/registration/changePassword";
 	public static final String WS_METADATA_GET_SEC_QUESTIONS_PATH = "/metadata/getSecurityQuestions";
 	public static final String WS_REGISTRATION_UPDATE_SEC_QUESTIONS_PATH = "/registration/updateSecurityQuestions";
+	public static final String WS_REGISTRATION_PROCESS_FORGOT_PWD_EMAIL = "/registration/processForgotPasswordEmail";
+	public static final String WS_REGISTRATION_CONFIRM_FORGOT_PWD_EMAIL = "/registration/confirmForgotPasswordEmail";
+	public static final String WS_REGISTRATION_VALIDATE_SEC_QUES = "/registration/validateSecurityQuestions";
+	public static final String WS_REGISTRATION_CHANGE_FORGOT_PASSWORD = "/registration/changeForgotPassword";
 }
