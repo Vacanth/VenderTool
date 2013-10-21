@@ -1,5 +1,6 @@
 package com.vendertool.sharedtypes.core;
 
+import java.io.Serializable;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,7 +14,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Account {
+public class Account implements Serializable{
+	private static final long serialVersionUID = 1842222348894989744L;
+
 	@JsonIgnore
 	private static final String VALUE_DELIMITER = ",";
 	
@@ -35,6 +38,7 @@ public class Account {
 	private AccountStatusEnum accountStatus;
 	private AccountConfirmation accountConf;
 	private List<AccountSecurityQuestion> securityQuestions;
+	private boolean securityQuestionsSetup;
 	
 	public Account(){}
 	
@@ -270,5 +274,13 @@ public class Account {
 		.append("]]");
 		
 		return sb.toString();
+	}
+
+	public boolean isSecurityQuestionsSetup() {
+		return securityQuestionsSetup;
+	}
+
+	public void setSecurityQuestionsSetup(boolean securityQuestionsSetup) {
+		this.securityQuestionsSetup = securityQuestionsSetup;
 	}
 }

@@ -20,6 +20,7 @@ public class RegistrationEmailSender {
 	private static final String PROPERTY_REG_COMPLETE_SUBJECT = "email.registration.regcomplete.subject";
 	private static final String PROPERTY_CHANGE_EMAIL_SUBJECT = "email.registration.changeemail.subject";
 	private static final String PROPERTY_CHANGE_PASSWORD_SUBJECT = "email.registration.changepassword.subject";
+	private static final String PROPERTY_FORGOT_PWD_EMAIL_SUBJECT = "email.registration.confirmforgotpwdemail.subject";
 	
 	private static ValidationUtil validationUtil = ValidationUtil.getInstance();
 	private static final Logger logger = Logger.getLogger(RegistrationEmailSender.class);
@@ -45,8 +46,9 @@ public class RegistrationEmailSender {
 			return;
 		}
 		
-    	ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
-				account, baseurl, locale, URLConstants.CONFIRM_ACCOUNT_PATH, false);
+		ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
+				account, baseurl, locale, URLConstants.CONFIRM_ACCOUNT_PATH,
+				false, PROPERTY_CONFIRM_REG_SUBJECT);
     	
     	ApplicationContext ctx = SpringApplicationContextUtils.getApplicationContext();
     	EmailService emailService = (EmailService) ctx.getBean("confirmRegistrationEmailService");
@@ -54,7 +56,8 @@ public class RegistrationEmailSender {
 	}
 
 	private ConfirmRegistrationEmailDataModel getConfirmEmailDataModel(
-			Account account, String baseurl, Locale locale, String commandName, boolean changeEmailUsecase) {
+			Account account, String baseurl, Locale locale, String commandName,
+			boolean changeEmailUsecase, String subject) {
 		
 		MsgSource msgSource = new MsgSource();
 		
@@ -66,7 +69,7 @@ public class RegistrationEmailSender {
 		emailModel.setToName(account.getContactDetails().getFirstName());
 		emailModel.setFromName(msgSource.getMessage(PROPERTY_COMPANY_NAME, null,
 				locale));
-		emailModel.setSubject(msgSource.getMessage(PROPERTY_CONFIRM_REG_SUBJECT, null,
+		emailModel.setSubject(msgSource.getMessage(subject, null,
 				locale));
     	
     	String sessiontoken = account.getAccountConf().getConfirmSessionId();
@@ -155,7 +158,7 @@ public class RegistrationEmailSender {
     	
     	//send to new email
     	ConfirmRegistrationEmailDataModel confirmEmailModel = getConfirmEmailDataModel(
-				account, baseurl, locale, URLConstants.CONFIRM_EMAIL_PATH, true);
+				account, baseurl, locale, URLConstants.CONFIRM_EMAIL_PATH, true, PROPERTY_CHANGE_EMAIL_SUBJECT);
     	EmailService confirmEmailService = (EmailService) ctx.getBean("confirmEmailService");
     	confirmEmailService.sendEmail(confirmEmailModel, locale);
     	
@@ -236,8 +239,10 @@ public class RegistrationEmailSender {
 			return;
 		}
 		
-    	ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
-				account, baseurl, locale, URLConstants.CONFIRM_FORGOT_PASSWORD_PATH, false);
+		ConfirmRegistrationEmailDataModel emailModel = getConfirmEmailDataModel(
+				account, baseurl, locale,
+				URLConstants.CONFIRM_FORGOT_PASSWORD_EMAIL_PATH, false,
+				PROPERTY_FORGOT_PWD_EMAIL_SUBJECT);
 		
 		Object[] params = new Object[]{CONTACT_EMAIL};
 		emailModel.setMsgParams(params);

@@ -8,7 +8,7 @@ import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailRequest;
 
 public class ConfirmForgotPasswordEmailValidator implements Validator {
 
@@ -19,7 +19,7 @@ public class ConfirmForgotPasswordEmailValidator implements Validator {
 	public void validate(BaseRequest _request, BaseResponse response) {
 		logger.info(ConfirmForgotPasswordEmailValidator.class.getName() + ".validate()");
 		
-		ForgotPasswordRequest request = (ForgotPasswordRequest) _request;
+		ConfirmForgotPasswordEmailRequest request = (ConfirmForgotPasswordEmailRequest) _request;
 		
 		if (VUTIL.isNull(request) || VUTIL.isNull(response)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);

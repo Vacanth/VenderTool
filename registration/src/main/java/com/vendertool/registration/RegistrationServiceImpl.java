@@ -38,19 +38,19 @@ import com.vendertool.registration.validation.ChangeEmailValidator;
 import com.vendertool.registration.validation.ChangePasswordValidator;
 import com.vendertool.registration.validation.ConfirmEmailValidator;
 import com.vendertool.registration.validation.ConfirmForgotPasswordEmailValidator;
+import com.vendertool.registration.validation.ForgotPasswordEmailValidator;
 import com.vendertool.registration.validation.ForgotPasswordSecurityQuestionValidator;
-import com.vendertool.registration.validation.ForgotPasswordValidator;
 import com.vendertool.registration.validation.RegistrationValidator;
 import com.vendertool.registration.validation.SecurityQuestionsValidator;
 import com.vendertool.registration.validation.UpdateAccountProfileValidator;
 import com.vendertool.sharedtypes.core.Account;
 import com.vendertool.sharedtypes.core.AccountConfirmation;
 import com.vendertool.sharedtypes.core.AccountConfirmation.AccountConfirmationStatusEnum;
-import com.vendertool.sharedtypes.core.ForgotPassword.ForgotPasswordStatusEnum;
 import com.vendertool.sharedtypes.core.AccountRoleEnum;
 import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.ForgotPassword;
+import com.vendertool.sharedtypes.core.ForgotPassword.ForgotPasswordStatusEnum;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketRequest;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketResponse;
@@ -58,27 +58,33 @@ import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.ChangeEmailRequest;
 import com.vendertool.sharedtypes.rnr.ChangeEmailResponse;
+import com.vendertool.sharedtypes.rnr.ChangeForgotPasswordRequest;
+import com.vendertool.sharedtypes.rnr.ChangeForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.ChangePasswordRequest;
 import com.vendertool.sharedtypes.rnr.ChangePasswordResponse;
 import com.vendertool.sharedtypes.rnr.CloseAccountRequest;
 import com.vendertool.sharedtypes.rnr.CloseAccountResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmEmailResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailRequest;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailResponse;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationRequest;
 import com.vendertool.sharedtypes.rnr.ConfirmRegistrationResponse;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordRequest;
-import com.vendertool.sharedtypes.rnr.ForgotPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountPasswordResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountResponse;
 import com.vendertool.sharedtypes.rnr.GetAccountSecurityQuestionsResponse;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteRequest;
 import com.vendertool.sharedtypes.rnr.LinkOtherSiteResponse;
+import com.vendertool.sharedtypes.rnr.ProcessForgotPasswordEmailRequest;
+import com.vendertool.sharedtypes.rnr.ProcessForgotPasswordEmailResponse;
 import com.vendertool.sharedtypes.rnr.RegisterAccountRequest;
 import com.vendertool.sharedtypes.rnr.RegisterAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountResponse;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsResponse;
+import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsRequest;
+import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsResponse;
 
 @Path("/registration")
 public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
@@ -93,7 +99,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	
 	private static final Logger logger = Logger.getLogger(RegistrationServiceImpl.class);
 	private static int RANDOM_CODE_DIGIT_COUNT = 5;
-	private static int MAX_ACCOUNT_RETRY_ATTEMPTS = 3;
+	private static int MAX_EMAIL_CONFIRM_RETRY_ATTEMPTS = 5;
 	private static int ACCOUNT_CONFIRMATION_EXPIRY_DAYS = 14;
 	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
 	
@@ -272,7 +278,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		_confirmEmail(response, account, email, email, inputSessionId, inputCode);
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode, true);
 		
 		if(response.hasErrors()) {
 			return response;
@@ -800,7 +806,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		_confirmEmail(response, account, oldemail, email, inputSessionId, inputCode);
+		_confirmEmail(response, account, oldemail, email, inputSessionId, inputCode, true);
 		
 		if(response.hasErrors()) {
 			return response;
@@ -822,7 +828,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	
 	private void _confirmEmail(BaseResponse response, Account account,
 			String oldemail, String email, String inputSessionId,
-			Integer inputCode) {
+			Integer inputCode, boolean updateACStatus) {
 		
 		Long accountId = account.getId();
 		
@@ -843,7 +849,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		//Now increment the attempt count.
 		accountConf.incrementAttempts();
 		
-		if(accountConf.getConfirmationAttempts() > MAX_ACCOUNT_RETRY_ATTEMPTS) {
+		if(accountConf.getConfirmationAttempts() > MAX_EMAIL_CONFIRM_RETRY_ATTEMPTS) {
 			response.addFieldBindingError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			try {
@@ -877,6 +883,10 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return;
 		}
 		
+		if(! updateACStatus) {
+			return;
+		}
+		
 		try {
 			dalservice.updateAccountConfirmationStatus(accountConf.getId(), AccountConfirmationStatusEnum.VERIFIED);
 		} catch (DBConnectionException | UpdateException | DatabaseException e) {
@@ -885,8 +895,6 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return;
 		}
-		
-		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 	}
 
 
@@ -895,13 +903,13 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public ForgotPasswordResponse processForgotPasswordEmail(
-			ForgotPasswordRequest request) {
+	public ProcessForgotPasswordEmailResponse processForgotPasswordEmail(
+			ProcessForgotPasswordEmailRequest request) {
 		
-		ForgotPasswordResponse response = new ForgotPasswordResponse();
+		ProcessForgotPasswordEmailResponse response = new ProcessForgotPasswordEmailResponse();
 		String email = request.getEmail();
 		
-		ForgotPasswordValidator validator = new ForgotPasswordValidator();
+		ForgotPasswordEmailValidator validator = new ForgotPasswordEmailValidator();
 		validator.validate(request, response);
 		
 		if(response.hasErrors()) {
@@ -975,10 +983,10 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public ForgotPasswordResponse confirmForgotPasswordEmail(
-			ForgotPasswordRequest request) {
+	public ConfirmForgotPasswordEmailResponse confirmForgotPasswordEmail(
+			ConfirmForgotPasswordEmailRequest request) {
 		
-		ForgotPasswordResponse response = new ForgotPasswordResponse();
+		ConfirmForgotPasswordEmailResponse response = new ConfirmForgotPasswordEmailResponse();
 		
 		ConfirmForgotPasswordEmailValidator validator = 
 				new ConfirmForgotPasswordEmailValidator();
@@ -1009,7 +1017,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		_confirmEmail(response, account, email, email, inputSessionId, inputCode);
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode, false);
 		
 		if(response.hasErrors()) {
 			return response;
@@ -1017,6 +1025,13 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		try {
 			List<AccountSecurityQuestion> questions = dalservice.getAccountSecurityQuestions(email);
+			if(!VUTIL.isEmptyList(questions)) {
+				for(AccountSecurityQuestion question : questions) {
+					if(VUTIL.isNotNull(question)) {
+						question.setAnswer(null);
+					}
+				}
+			}
 			response.setQuestions(questions);
 		} catch (FinderException | DBConnectionException | DatabaseException e) {
 			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
@@ -1030,20 +1045,24 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 
 
 	@POST
-	@Path("/validateForgotPasswordSecurityQuestions")
+	@Path("/validateSecurityQuestions")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public ForgotPasswordResponse validateForgotPasswordSecurityQuestions(
-			ForgotPasswordRequest request) {
+	public ValidateSecurityQuestionsResponse validateSecurityQuestions(
+			ValidateSecurityQuestionsRequest request) {
 		
-		ForgotPasswordResponse response = new ForgotPasswordResponse();
+		ValidateSecurityQuestionsResponse response = 
+				new ValidateSecurityQuestionsResponse();
+		response.setEmail(request.getEmail());
+		response.setConfirmCode(request.getConfirmCode());
+		response.setConfirmSessionId(request.getConfirmSessionId());
 				
 		ForgotPasswordSecurityQuestionValidator validator = 
 				new ForgotPasswordSecurityQuestionValidator();
+		validator.validate(request, response);
 		
 		String email = request.getEmail();
-		response.setEmail(email);
 		
 		if(response.hasErrors()) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
@@ -1072,7 +1091,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		_confirmEmail(response, account, email, email, inputSessionId, inputCode);
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode, false);
 		
 		ForgotPassword fp = new ForgotPassword();
 		fp.setAccountId(account.getId());
@@ -1136,10 +1155,13 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Override
-	public ForgotPasswordResponse changeForgotPassword(
-			ForgotPasswordRequest request) {
+	public ChangeForgotPasswordResponse changeForgotPassword(
+			ChangeForgotPasswordRequest request) {
 		
-		ForgotPasswordResponse response = new ForgotPasswordResponse();
+		ChangeForgotPasswordResponse response = new ChangeForgotPasswordResponse();
+		response.setEmail(request.getEmail());
+		response.setConfirmCode(request.getConfirmCode());
+		response.setConfirmSessionId(request.getConfirmSessionId());
 		
 		if (VUTIL.isNull(request)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
@@ -1147,11 +1169,36 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
-		response.setEmail(request.getEmail());
-		
 		if (VUTIL.isEmpty(request.getEmail())) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			response.addFieldBindingError(Errors.REGISTRATION.EMAIL_MISSING, null, (String[])null);
+			return response;
+		}
+		
+		String inputSessionId = request.getConfirmSessionId();
+		Integer inputCode = request.getConfirmCode();
+		String email = request.getEmail();
+		
+		Account account;
+		try {
+			account = dalservice.getAccountProfile(email);
+		} catch (DBConnectionException | FinderException | DatabaseException e) {
+			logger.debug(e.getMessage(), e);
+			account = null;
+		}
+		
+		if(VUTIL.isNull(account)) {
+			response.addFieldBindingError(
+					Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null,
+					(String[]) null);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			return response;
+		}
+		
+		_confirmEmail(response, account, email, email, inputSessionId, inputCode, true);
+		
+		if(response.hasErrors()) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return response;
 		}
 		

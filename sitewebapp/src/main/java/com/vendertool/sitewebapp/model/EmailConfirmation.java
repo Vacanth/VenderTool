@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class EmailConfirmation {
 
 	private String email;
-	private String confirmCode;
+	private Integer confirmCode;
 	private String confirmSessionId;
 	
 	public String getEmail() {
@@ -16,10 +16,10 @@ public class EmailConfirmation {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getConfirmCode() {
+	public Integer getConfirmCode() {
 		return confirmCode;
 	}
-	public void setConfirmCode(String confirmCode) {
+	public void setConfirmCode(Integer confirmCode) {
 		this.confirmCode = confirmCode;
 	}
 	public String getConfirmSessionId() {

@@ -37,7 +37,7 @@
   	<sec:http pattern="/askSecurityQuestions/**" security="none"/>
   	<sec:http pattern="/answerSecurityQuestions/**" security="none"/>
   	<sec:http pattern="/processChangePassword/**" security="none"/>
-
+	<sec:http pattern="/confirmForgotPasswordEmail" security="none"/>
   	<sec:http pattern="/unexpectedException/**" security="none"/>
   	
   	<!--
@@ -79,7 +79,8 @@
 		<sec:form-login login-page="/signIn" 
 			authentication-failure-url="/signIn?error=true" 
 			always-use-default-target='true'
-			default-target-url="/accounthub" />
+			default-target-url="/accounthub" 
+			authentication-success-handler-ref="authSuccessHandler" />
 		
 		<!-- logout-url="/signout" -->
 		<sec:logout logout-success-url="/signIn" 
@@ -158,5 +159,7 @@
     </bean>
     
     <bean id="userDetailsService" class="com.vendertool.sitewebapp.security.CustomUserDetailsService"/>
+    
+    <bean id="authSuccessHandler" class="com.vendertool.sitewebapp.security.CustomAuthenticationSuccessHandler"/>
 	
 </beans>
