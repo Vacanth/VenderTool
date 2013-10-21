@@ -1,9 +1,5 @@
 package com.vendertool.listing.processor;
 
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 
 import com.vendertool.common.MarketCountryKey;
@@ -13,8 +9,10 @@ import com.vendertool.common.dal.exception.FinderException;
 import com.vendertool.common.dal.exception.InsertException;
 import com.vendertool.common.dal.exception.UpdateException;
 import com.vendertool.common.marketplace.IMarketListingAdapter;
+import com.vendertool.common.utils.StringUtils;
 import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.inventory.dal.InventoryDALService;
+import com.vendertool.inventory.processor.helper.InventoryHelper;
 import com.vendertool.listing.ListingMarketAdapterRegistry;
 import com.vendertool.listing.dal.ListingDALService;
 import com.vendertool.sharedtypes.core.Amount;
@@ -26,6 +24,7 @@ import com.vendertool.sharedtypes.rnr.AddListingRequest;
 import com.vendertool.sharedtypes.rnr.AddListingResponse;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
+import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 
 public class AddListingProcessor extends BaseListingProcessor {
 
@@ -81,41 +80,46 @@ public class AddListingProcessor extends BaseListingProcessor {
 		}
 		// TODO start basic validation
 		// We can skip this since we are gona relay on MarketPlace validations.
-		if(product.getAccountId() == null || product.getAccountId() <= 0){
-			//Add AccountID required
+		if (product.getAccountId() == null || product.getAccountId() <= 0) {
+			// Add AccountID required
 			addListingResponse.addFieldBindingError(
-					Errors.LISTING.ACCOUNT_ID_REQUIRED,
-					product.getClass().getName(), "product");
+					Errors.LISTING.ACCOUNT_ID_REQUIRED, product.getClass()
+							.getName(), "product");
 		}
-		
-		if(product.getTitle() == null || product.getTitle().length() == 0){
-			//Add Title required error
+
+		if (product.getSku() == null || product.getSku().length() == 0) {
+			// Add Sku required error
+			addListingResponse.addFieldBindingError(
+					Errors.LISTING.SKU_REQUIRED, product.getClass().getName(),
+					"product");
+		}
+
+		if (InventoryHelper.getInstance().copyFromProductRequest(product)) {
+			// Below validations are not required, since product contains only
+			// SKU.
+			return;
+		}
+
+		if (product.getTitle() == null || product.getTitle().length() == 0) {
 			addListingResponse.addFieldBindingError(
 					Errors.LISTING.TITLE_REQUIRED,
 					product.getClass().getName(), "product");
 		}
-		
-		if(product.getSku() == null || product.getSku().length() == 0){
-			//Add Sku required error
+
+		if (!(s_validationUtil.isValidAmount(product.getPrice())
+				|| s_validationUtil.isValidAmount(listing.getPrice()))) {
 			addListingResponse.addFieldBindingError(
-					Errors.LISTING.SKU_REQUIRED,
-					product.getClass().getName(), "product");
+					Errors.LISTING.PRODUCT_PRICE_REQUIRED, product.getClass()
+							.getName(), "product");
 		}
-		
-		if(product.getPrice() == null){
-			//Add price required error
+
+		if (product.getProductCode() == null
+				|| product.getProductCode().length() == 0) {
 			addListingResponse.addFieldBindingError(
-					Errors.LISTING.PRODUCT_PRICE_REQUIRED,
-					product.getClass().getName(), "product");
+					Errors.LISTING.PRODUCT_CODE_REQUIRED, product.getClass()
+							.getName(), "product");
 		}
-		
-		if(product.getProductCode() == null || product.getProductCode().length() == 0){
-			//Add Product code required error
-			addListingResponse.addFieldBindingError(
-					Errors.LISTING.PRODUCT_CODE_REQUIRED,
-					product.getClass().getName(), "product");
-		}
-		
+
 	}
 
 	@Override
@@ -131,23 +135,43 @@ public class AddListingProcessor extends BaseListingProcessor {
 		AddListingRequest addListingRequest = (AddListingRequest) request;
 		AddListingResponse addListingResponse = (AddListingResponse) response;
 		// TODO Do operation
-		normalizeProduct(addListingRequest);
-		// Make call to Mer
 		Listing listing = addListingRequest.getListing();
+		Product product = listing.getProduct();
+		boolean productExist = false;
+		if (InventoryHelper.getInstance().copyFromProductRequest(product)) {
+			normalizeProduct(addListingRequest, addListingResponse);
+			if (addListingResponse.hasErrors()) {
+				response.setStatus(ResponseAckStatusEnum.FAILURE);
+				return;
+			}
+			productExist = true;
+		} else {
+			preProcessProduct(listing);
+		}
+		// Make call to Mer
+		listing.setListingId(0L);// Always setListingId to 0.
 		IMarketListingAdapter adapter = ListingMarketAdapterRegistry
 				.getInstance().getMarketListingAdapter(
 						new MarketCountryKey(listing.getCountry(), listing
 								.getMarket()));
 		adapter.addListing(addListingRequest, addListingResponse);
 		if (hasErrors(addListingResponse)) {
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return;
 		}
 
 		// TODO update DB
 		try {
-			Long productId = InventoryDALService.getInstance().createProduct(
-					addListingResponse.getListing().getProduct());
-			addListingResponse.getListing().getProduct().setProductId(productId);
+			Long productId = null;
+			if (productExist) {
+				productId = product.getProductId();
+			} else {
+				productId = InventoryDALService.getInstance().createProduct(
+						addListingResponse.getListing().getProduct());
+			}
+
+			listing.getProduct().setProductId(productId);
+
 			ListingDALService.getInstance().createListing(
 					addListingResponse.getListing());
 		} catch (DBConnectionException e) {
@@ -161,19 +185,42 @@ public class AddListingProcessor extends BaseListingProcessor {
 		} catch (UpdateException e) {
 
 		}
-
 	}
 
-	private void normalizeProduct(AddListingRequest addListingRequest) {
+	/**
+	 * 
+	 * @param listing
+	 */
+	private void preProcessProduct(Listing listing) {
+		Amount price = listing.getPrice();
+		Product product = listing.getProduct();
+		Amount productPrice = product.getPrice();
+		if (!s_validationUtil.isValidAmount(productPrice)) {
+			product.setPrice(price);
+		}
+	}
+
+	private void normalizeProduct(AddListingRequest addListingRequest,
+			AddListingResponse addListingResponse) {
 		Listing listing = addListingRequest.getListing();
 		Product product = listing.getProduct();
-		if(product != null){
-			//Request already has product details so return as is.
-			return;
+		Product productFromDB = null;
+		if (StringUtils.getInstance().isEmpty(product.getSku())) {
+			productFromDB = InventoryDALService.getInstance().findBySKU(
+					listing.getCreateOwnerId(), product.getSku());
+			if (productFromDB == null) {
+				addListingResponse.addFieldBindingError(
+						Errors.LISTING.NO_MATCHING_PRODUCT_FOUND, product
+								.getClass().getName(), "product");
+				return;
+			}
+		} else if (product.getProductId() != null) {
+			productFromDB = InventoryDALService.getInstance().findByProductId(
+					listing.getCreateOwnerId(), product.getProductId());
 		}
-		/*product = new Product();
-		listing.setProduct(product);
-		product.setTitle();
-		product.s*/
+
+		// Now set the product which we find from the DB.
+		listing.setProduct(productFromDB);
+		listing.setListingId(0L);
 	}
 }

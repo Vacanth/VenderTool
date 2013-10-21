@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vendertool.mercadolibreadapter.add.ErrorDetail;
 import com.vendertool.mercadolibreadapter.add.ErrorResponse;
+import com.vendertool.sharedtypes.error.VTError;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 
 public class ErrorMapperHelper {
@@ -29,7 +30,9 @@ public class ErrorMapperHelper {
 
 		if (errorDetails == null
 				|| (errorDetails != null && errorDetails.size() == 0)) {
-			response.addFieldBindingError(mapper.getVTError(vtErrorResp.getError()),
+			VTError error = mapper.getVTError(vtErrorResp.getError());
+			error.setMessage(vtErrorResp.getMessage());
+			response.addFieldBindingError(error,
 					"", "");
 			return;
 		}

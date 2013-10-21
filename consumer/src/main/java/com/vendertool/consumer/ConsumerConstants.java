@@ -13,5 +13,9 @@ public class ConsumerConstants {
 		public static final int    RABBIT_AMQP_CHANNEL_NUMBER = 5000;
 		public static final String RABBIT_AMQP_CONSUMER_TAG = "fpConsumer";
 		public static final int    RABBIT_AMQP_EVENT_PREFETCH_COUNT = 1;
+		public static final String MSG_JOB = "jobId";
+		public static final String MSG_TASK = "taskId";
+		public static final String MSG_TOKEN_SEPARATOR = "=";
+		public static final int MSG_TOTAL_TOKEN = 2;
 	}
 }

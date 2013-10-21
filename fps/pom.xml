@@ -28,6 +28,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.vendertool.listing</groupId>
+			<artifactId>listing</artifactId>
+			<version>${vendertool-version}</version>
+		</dependency>
+	
+		<dependency>
 			<groupId>com.vendertool.common</groupId>
 			<artifactId>common</artifactId>
 			<version>${vendertool-version}</version>

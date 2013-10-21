@@ -62,8 +62,9 @@ public class InventoryDALService {
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		//set description 
-		try {
+		//set description
+		//Description ID is not being set so it is failing.
+		/*try {
 			productDescriptionDao.insert(product,productId);
 		} catch (InsertException e) {
 			UpdateException ue = new UpdateException(
@@ -71,7 +72,7 @@ public class InventoryDALService {
 							+ product.getProductId(), e);
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
-		}
+		}*/
 
 		return productId;
 	}
@@ -82,17 +83,32 @@ public class InventoryDALService {
 		productDescriptionDao.delete(productId);
 	}
 
-	public Product findBySKU(String sku) {
+	public Product findBySKU(Long accountId, String sku) {
 		Product product = null;
 		try {
-			product = productDao.findBySKU(sku,
+			product = productDao.findBySKU(accountId, sku,
 					ProductReadSet.getInstance().ALL);
 		} catch (DBConnectionException e) {
-			
+
 		} catch (FinderException e) {
-			
+
 		} catch (DatabaseException e) {
-			
+
+		}
+		return product;
+	}
+
+	public Product findByProductId(Long accountId, Long productId) {
+		Product product = null;
+		try {
+			product = productDao.findByAccountIdAndProductId(accountId,
+					productId, ProductReadSet.getInstance().ALL);
+		} catch (DBConnectionException e) {
+
+		} catch (FinderException e) {
+
+		} catch (DatabaseException e) {
+
 		}
 		return product;
 	}

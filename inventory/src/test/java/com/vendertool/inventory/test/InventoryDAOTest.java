@@ -55,7 +55,7 @@ public class InventoryDAOTest implements ApplicationContextAware {
 		try {
 //			productId = productDao.insert(product);
 //			Product product3 =productDao.findByAccountIdAndProductId(1234l, productId, ProductReadSet.getInstance().ALL);
-			Product product2 = productDao.findBySKU("R21344",
+			Product product2 = productDao.findBySKU(123534l,"R21344",
 					ProductReadSet.getInstance().ALL);
 			System.out.println("");
 		} catch (DBConnectionException e) {

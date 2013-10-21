@@ -9,11 +9,16 @@
 <t1:page title="VendorTool" angularAppName="securityQuestionsApp" currentPage="questions" email="${email}" >
 
 	<jsp:attribute name="css">
-		<link href="<c:url value='/wro/securityQuestions.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/register.css' />" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/css/page/securityQuestions.css' />" rel="stylesheet" type="text/css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
-		<script src="<c:url value='/wro/securityQuestions.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/lib/jquery.placeholder.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/ErrorResponseUtil.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/sharedNgModules/pageErrorModule.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/sharedNgModules/fieldErrorModule.js' />" type="text/javascript"></script>
+		<script src="<c:url value='/js/page/securityQuestionsApp.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
 	<jsp:attribute name="inlineJs">
@@ -26,16 +31,9 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<div id="pgBg"><img src="resources/img/cafe2.jpg" alt=""></div>
-		
-	    <div class="reg main input-group" ng-controller="SecurityQuestionsCtrl">
-	    	<spring:message code="form.securityquestions.title" var="title"/>
-				
-			<h3 class="ttl">${title}</h3>
-			
-			<div class="alert alert-danger" style="display:none">Please correct errors below.</div>
-			<div class="alert alert-success" style="display:none">Your security questions have been saved.</div>
+		<div id="pgBg"><img src="<c:url value='/img/cafe2.jpg'/>" alt=""></div>
 
+	    <div class="reg main input-group" ng-controller="SecurityQuestionsCtrl">
 	    	<div ng-view></div>
 	    </div>
 	</jsp:body>

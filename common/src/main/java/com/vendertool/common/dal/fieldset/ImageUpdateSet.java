@@ -15,7 +15,18 @@ public class ImageUpdateSet {
 	}
 	
 	public final Path<?>[] ALL = {
-		
+			IMAGE.accountId,
+			IMAGE.createdDate,
+			IMAGE.hostedUrl,
+			IMAGE.hash,
+			IMAGE.imageFormat,
+			IMAGE.imageId,
+			IMAGE.imageName,
+			IMAGE.lastModifiedDate,
+			IMAGE.refId,
+			IMAGE.refType,
+			IMAGE.size,
+			IMAGE.sortOrderId	
 	};
 	
 

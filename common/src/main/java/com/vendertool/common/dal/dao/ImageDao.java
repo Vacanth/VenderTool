@@ -15,7 +15,7 @@ import com.vendertool.sharedtypes.core.Image;
 
 public interface ImageDao extends BaseDao {
 	
-	public long insert(Image image) throws DBConnectionException,
+	public long insert(Image image,Long refId,Byte refType) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void delete(Image image)

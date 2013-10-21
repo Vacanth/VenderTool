@@ -13,6 +13,7 @@ import com.mysema.query.sql.dml.SQLDeleteClause;
 import com.mysema.query.sql.dml.SQLInsertClause;
 import com.mysema.query.sql.dml.SQLUpdateClause;
 import com.mysema.query.types.Path;
+import com.vendertool.common.dal.dao.codegen.QBeanImage;
 import com.vendertool.common.dal.dao.codegen.QImage;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
@@ -26,49 +27,53 @@ import com.vendertool.sharedtypes.core.Image;
 public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	private static final Logger logger = Logger.getLogger(ImageDaoImpl.class);
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
-			
+
 	@Override
-	public long insert(Image image) throws DBConnectionException,
-			InsertException, DatabaseException {
-		
+	public long insert(Image image,Long refId,Byte refType) throws DBConnectionException,
+	InsertException, DatabaseException {
+
 		if(VUTIL.isNull(image)) {
 			InsertException ie = new InsertException("Cannot insert null image");
 			logger.debug(ie.getMessage(), ie);
 			throw ie;
 		}
-		
+
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QImage a = QImage.image;
+			ImageMapper imageMapper = new ImageMapper(a.all());
+			
 			Long seq = generateNextSequence(con);
+			if (hasSequenceGenerator()) {
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-				
-				if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
-		    		InsertException ie = new InsertException("Unable to generate valid sequence");
-					logger.debug(ie.getMessage(), ie);
-					throw ie;
-				}
-				image.setImageId(seq);
+				InsertException ie = new InsertException("Unable to generate valid sequence");
+				logger.debug(ie.getMessage(), ie);
+				throw ie;
 			}
-	
-	    	SQLInsertClause s = insert(con, a)
-    				.populate(new ImageMapper(a.all()).populateBean(image));
-    	logger.info("DAL QUERY: " + s.toString());
-    	
-    	try {
-    		s.execute();
-    	} catch (Exception e) {
-    		InsertException ie = new InsertException(e);
-			logger.debug(ie.getMessage(), ie);
-			throw ie;
-    	}
-    	return seq;
-	} finally {
-		closeConnection(con);
+			image.setImageId(seq);
+			}
+			QBeanImage qBeanImage = imageMapper.populateBean(image);
+			qBeanImage.setRefId(refId);
+			qBeanImage.setRefType(refType);
+			
+			SQLInsertClause s = insert(con, a).populate(qBeanImage);
+			
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				InsertException ie = new InsertException(e);
+				logger.debug(ie.getMessage(), ie);
+				throw ie;
+			}
+			return seq;
+		} finally {
+			closeConnection(con);
+		}
 	}
-}
 
 	@Override
 	public boolean hasSequenceGenerator() {
@@ -84,29 +89,29 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 
 	@Override
 	public void delete(Image image) throws DBConnectionException,
-			DeleteException, DatabaseException {
+	DeleteException, DatabaseException {
 		delete(image.getImageId());
-		
+
 	}
 	@Override
 	public void delete(long imageId) throws DBConnectionException,
-			DeleteException {
+	DeleteException {
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QImage a = QImage.image;
 			SQLDeleteClause s = delete(con, a)
-				.where(a.imageId.eq(imageId));
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		DeleteException ie = new DeleteException(e);
+					.where(a.imageId.eq(imageId));
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				DeleteException ie = new DeleteException(e);
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
-	    	}
+			}
 		} finally {
 			closeConnection(con);
 		}
@@ -120,24 +125,24 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		
+
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QImage a = QImage.image;
-	    	SQLUpdateClause s = update(con, a)
+			SQLUpdateClause s = update(con, a)
 					.populate(image, new ImageMapper(updateSet));
 
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		UpdateException ue = new UpdateException(e);
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				UpdateException ue = new UpdateException(e);
 				logger.debug(ue.getMessage(), ue);
 				throw ue;
-	    	}
+			}
 		} finally {
 			closeConnection(con);
 		}
@@ -151,9 +156,9 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		
+
 		Connection con = null;
-		
+
 		try {
 			con = getConnection();
 			QImage a = QImage.image;
@@ -161,82 +166,82 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 					.set(a.hostedUrl, hostedUrl)
 					.where(a.accountId.eq(accountId),a.imageId.eq(imageId));
 
-	    	logger.info("DAL QUERY: " + s.toString());
-	    	
-	    	try {
-	    		s.execute();
-	    	} catch (Exception e) {
-	    		UpdateException ue = new UpdateException(e);
+			logger.info("DAL QUERY: " + s.toString());
+
+			try {
+				s.execute();
+			} catch (Exception e) {
+				UpdateException ue = new UpdateException(e);
 				logger.debug(ue.getMessage(), ue);
 				throw ue;
-	    	}
+			}
 		} finally {
 			closeConnection(con);
 		}
-		
+
 	}
 
 	@Override
 	public List<Image> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException {
-	Connection con = null;
-		
+		Connection con = null;
+
 		try { 
 			con = getConnection();
 			QImage a = QImage.image;
 			SQLQuery query = from(con, a)
 					.where(a.accountId.eq(accountId.longValue()));
 
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
+			logger.info("DAL QUERY: " + query.toString());
+
+
+			List<Tuple> rows = query.list(readSet);
+
+			if((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
 			List<Image> image = (List<Image>) new ImageMapper(readSet).convert(rows.get(0), readSet);
 			if(image == null) {
 				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
-			
+
 			return image;
 		} finally {
 			closeConnection(con);
 		}
 	}
-	
+
 	@Override
 	public List<Image> findByAccountIdRefIdAndRefType(Long accountId,Long refId, Byte refType,
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException {
-Connection con = null;
-		
+		Connection con = null;
+
 		try { 
 			con = getConnection();
 			QImage a = QImage.image;
 			SQLQuery query = from(con, a)
 					.where(a.accountId.eq(accountId.longValue()) , a.refId.eq(refId.longValue()) , a.refType.eq(refType));
 
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
+			logger.info("DAL QUERY: " + query.toString());
+
+
+			List<Tuple> rows = query.list(readSet);
+
+			if((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
 			List<Image> image = (List<Image>) new ImageMapper(readSet).convert(rows.get(0), readSet);
 			if(image == null) {
 				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
-			
+
 			return image;
 		} finally {
 			closeConnection(con);
@@ -247,36 +252,36 @@ Connection con = null;
 	public Image findByAccountIdAndImageId(Long accountId, Long imageId,
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException {
-	Connection con = null;
-		
+		Connection con = null;
+
 		try { 
 			con = getConnection();
 			QImage a = QImage.image;
 			SQLQuery query = from(con, a)
 					.where(a.accountId.eq(accountId.longValue()) , a.imageId.eq(imageId.longValue()));
 
-	    	logger.info("DAL QUERY: " + query.toString());
-	    	
-	    	
-	    	List<Tuple> rows = query.list(readSet);
-	    	
-	    	if((rows == null) || (rows.isEmpty())) {
-	    		return null;
-	    	}
-	    	
+			logger.info("DAL QUERY: " + query.toString());
+
+
+			List<Tuple> rows = query.list(readSet);
+
+			if((rows == null) || (rows.isEmpty())) {
+				return null;
+			}
+
 			Image image =  new ImageMapper(readSet).convert(rows.get(0), readSet);
 			if(image == null) {
 				FinderException fe = new FinderException("Cannot find image for given account : "+accountId.longValue());
 				logger.debug(fe.getMessage(), fe);
 				throw fe;
 			}
-			
+
 			return image;
 		} finally {
 			closeConnection(con);
 		}
 	}
-	
+
 	private void closeConnection(Connection con) {
 		try {
 			if (con != null) {
@@ -287,5 +292,5 @@ Connection con = null;
 		}
 	}
 
-	
+
 }
