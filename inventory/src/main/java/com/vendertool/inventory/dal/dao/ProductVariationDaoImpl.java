@@ -48,14 +48,14 @@ public class ProductVariationDaoImpl extends BaseDaoImpl implements ProductVaria
 
 
 			Long seq = generateNextSequence(con);
-
+			if (hasSequenceGenerator()) {
 			if(VUTIL.isNull(seq) || (seq.longValue() <= 0)) {
 				InsertException ie = new InsertException("Unable to generate valid sequence");
 				logger.debug(ie.getMessage(), ie);
 				throw ie;
 			}
 			productVariation.setProductVariationId(seq);
-
+			}
 			QBeanProductVariation qBeanProductVariation = productVariationMapper.populateBean(productVariation);
 			qBeanProductVariation.setProductId(productId);
 

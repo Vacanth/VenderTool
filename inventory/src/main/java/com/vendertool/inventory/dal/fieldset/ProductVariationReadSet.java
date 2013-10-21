@@ -17,8 +17,17 @@ public class ProductVariationReadSet {
 	
 	
 	public final Path<?>[] ALL = {
-		
-	};
+			PRODUCTVARIATION.createdDate,
+			PRODUCTVARIATION.currencyCodeIso3,
+			PRODUCTVARIATION.lastModifiedDate,
+			PRODUCTVARIATION.price,
+			PRODUCTVARIATION.productId,
+			PRODUCTVARIATION.productVariationId,
+			PRODUCTVARIATION.quantity,
+			PRODUCTVARIATION.sku,
+			PRODUCTVARIATION.title,
+			PRODUCTVARIATION.url,
+			};
 	
 	
 }

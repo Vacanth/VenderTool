@@ -15,7 +15,25 @@ public class ProductUpdateSet {
 	}
 	
 	public final Path<?>[] ALL = {
-		
+			PRODUCT.accountId,
+			PRODUCT.createdDate,
+			PRODUCT.currencyCodeIso3,
+			PRODUCT.dimensionUnit,
+			PRODUCT.height,
+			PRODUCT.lastModifiedApp,
+			PRODUCT.lastModifiedDate,
+			PRODUCT.length,
+			PRODUCT.price,
+			PRODUCT.productCode,
+			PRODUCT.productCodeType,
+			PRODUCT.productId,
+			PRODUCT.productUrl,
+			PRODUCT.quantity,
+			PRODUCT.sku,
+			PRODUCT.title,
+			PRODUCT.weight,
+			PRODUCT.weightUnit,
+			PRODUCT.width
 	};
 	
 

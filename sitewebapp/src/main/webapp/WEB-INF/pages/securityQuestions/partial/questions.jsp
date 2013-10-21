@@ -4,28 +4,35 @@
 
 
 <spring:message code='form.submit' var="submit"/>
+<spring:message code="form.securityquestions.title" var="title"/>
+				
+<h3 class="ttl">${title}</h3>
 
+<div class="alert alert-danger" style="display:none">Please correct errors below.</div>
+<div class="alert alert-success" style="display:none">Your security questions have been saved.</div>
+	
 <div class="sec-ques">
+
 	<div class="fldWrp">
 		<select ng-model="question1" ng-options="q.id as q.text for q in questionList1">
 			<option value="">- Select a question -</option>
 		</select>
-		<div error-response field="question1" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+		<div field-error field="question1" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 	</div>
 	<div class="fldWrp">
 		<input class="form-control" ng-model="answer1" placeholder="Your answer to question" autocomplete="off"/>
-		<div error-response field="answer1" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+		<div field-error field="answer1" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 		<br/>
 	</div>
 	<div class="fldWrp">
 		<select ng-model="question2" ng-options="q.id as q.text for q in questionList2">
 			<option value="">- Select a second question -</option>
 		</select>
-		<div error-response field="question2" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+		<div field-error field="question2" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 	</div>
 	<div class="fldWrp">
 		<input class="form-control" ng-model="answer2" placeholder="Your answer to second question" autocomplete="off"/>
-		<div error-response field="answer2" clss="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
+		<div field-error field="answer2" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 	</div>
 	
 	<div class="submit">

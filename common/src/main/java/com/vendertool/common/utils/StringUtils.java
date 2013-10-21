@@ -105,6 +105,6 @@ public class StringUtils {
 	}
 	
 	public boolean isEmpty(String value) {
-		return (value != null && value.trim().length() > 0);
+		return !(value != null && value.trim().length() > 0);
 	}
 }

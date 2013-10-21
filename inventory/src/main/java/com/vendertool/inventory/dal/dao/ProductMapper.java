@@ -161,12 +161,12 @@ public class ProductMapper implements DALMapper<Product> {
 			bean.setProductCode(product.getProductCode());
 		}	
 		if(product.getProductCodeType() != null) {
-			bean.setProductCodeType((byte) product.getProductCodeType().getId());
+			bean.setProductCodeType(new Byte(product.getProductCodeType().getId()+""));
 		}
 		Dimension dimension = product.getDimension();
 		if(dimension != null){
 			if(dimension.getDimensionUnit() != null) {
-				bean.setDimensionUnit((byte) dimension.getDimensionUnit().getId());
+				bean.setDimensionUnit(new Byte(dimension.getDimensionUnit().getId()+""));
 			}
 			if(dimension.getHeight() != null) {
 				bean.setHeight( dimension.getHeight());

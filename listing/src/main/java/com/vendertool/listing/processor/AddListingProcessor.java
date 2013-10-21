@@ -15,6 +15,7 @@ import com.vendertool.inventory.dal.InventoryDALService;
 import com.vendertool.inventory.processor.helper.InventoryHelper;
 import com.vendertool.listing.ListingMarketAdapterRegistry;
 import com.vendertool.listing.dal.ListingDALService;
+import com.vendertool.sharedtypes.core.Amount;
 import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.error.Errors;
@@ -105,7 +106,8 @@ public class AddListingProcessor extends BaseListingProcessor {
 					product.getClass().getName(), "product");
 		}
 
-		if (product.getPrice() == null) {
+		if (!(s_validationUtil.isValidAmount(product.getPrice())
+				|| s_validationUtil.isValidAmount(listing.getPrice()))) {
 			addListingResponse.addFieldBindingError(
 					Errors.LISTING.PRODUCT_PRICE_REQUIRED, product.getClass()
 							.getName(), "product");
@@ -133,7 +135,8 @@ public class AddListingProcessor extends BaseListingProcessor {
 		AddListingRequest addListingRequest = (AddListingRequest) request;
 		AddListingResponse addListingResponse = (AddListingResponse) response;
 		// TODO Do operation
-		Product product = addListingRequest.getListing().getProduct();
+		Listing listing = addListingRequest.getListing();
+		Product product = listing.getProduct();
 		boolean productExist = false;
 		if (InventoryHelper.getInstance().copyFromProductRequest(product)) {
 			normalizeProduct(addListingRequest, addListingResponse);
@@ -142,9 +145,10 @@ public class AddListingProcessor extends BaseListingProcessor {
 				return;
 			}
 			productExist = true;
+		} else {
+			preProcessProduct(listing);
 		}
 		// Make call to Mer
-		Listing listing = addListingRequest.getListing();
 		listing.setListingId(0L);// Always setListingId to 0.
 		IMarketListingAdapter adapter = ListingMarketAdapterRegistry
 				.getInstance().getMarketListingAdapter(
@@ -180,6 +184,19 @@ public class AddListingProcessor extends BaseListingProcessor {
 
 		} catch (UpdateException e) {
 
+		}
+	}
+
+	/**
+	 * 
+	 * @param listing
+	 */
+	private void preProcessProduct(Listing listing) {
+		Amount price = listing.getPrice();
+		Product product = listing.getProduct();
+		Amount productPrice = product.getPrice();
+		if (!s_validationUtil.isValidAmount(productPrice)) {
+			product.setPrice(price);
 		}
 	}
 

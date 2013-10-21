@@ -62,8 +62,9 @@ public class InventoryDALService {
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
 		}
-		//set description 
-		try {
+		//set description
+		//Description ID is not being set so it is failing.
+		/*try {
 			productDescriptionDao.insert(product,productId);
 		} catch (InsertException e) {
 			UpdateException ue = new UpdateException(
@@ -71,7 +72,7 @@ public class InventoryDALService {
 							+ product.getProductId(), e);
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
-		}
+		}*/
 
 		return productId;
 	}

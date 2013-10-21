@@ -74,6 +74,9 @@ public class Amount {
 		return value;
 	}
 	public void setValue(BigDecimal value) {
+		if(value != null){
+			value.setScale(2, RoundingMode.CEILING);
+		}
 		this.value = value;
 	}
 	public Currency getCurrency() {
