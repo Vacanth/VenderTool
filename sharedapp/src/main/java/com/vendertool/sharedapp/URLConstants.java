@@ -18,6 +18,7 @@ public interface URLConstants {
 	public static final String FILE_UPLOAD_PATH = "/fps/upload";
 	public static final String JOB_CREATE_PATH = "/fps/uploadDone";
 	public static final String JOB_PROCESS_PATH = "/fps/processJob";
+	public static final String TASK_PROCESS_PATH = "/fps/processTask";
 	public static final String JOB_DETAILS_PATH = "/fps/uploadedJobs";
 	public static final String WS_METADATA_GET_LANGUAGES_PATH = "/metadata/getSupportedLanguages";
 	public static final String WS_REGISTRATION_UPDATE_PROFILE_PATH = "/registration/updateAccount";
@@ -25,4 +26,6 @@ public interface URLConstants {
 	public static final String WS_REGISTRATION_CHANGE_PASSWORD_PATH = "/registration/changePassword";
 	public static final String WS_METADATA_GET_SEC_QUESTIONS_PATH = "/metadata/getSecurityQuestions";
 	public static final String WS_REGISTRATION_UPDATE_SEC_QUESTIONS_PATH = "/registration/updateSecurityQuestions";
+	
+	public static final String WS_URL_ENDPOINT = "http://localhost:8080";	// for debugging only
 }
