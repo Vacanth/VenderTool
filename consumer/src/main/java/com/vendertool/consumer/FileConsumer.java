@@ -9,8 +9,17 @@ import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
 import com.rabbitmq.client.ShutdownSignalException;
+import com.vendertool.sharedapp.RestServiceClientHelper;
+import com.vendertool.sharedapp.URLConstants;
+import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class FileConsumer {
 	private static final Logger logger = Logger.getLogger(FileConsumer.class);
@@ -32,6 +41,8 @@ public class FileConsumer {
 
 	 public FileConsumer init() throws Exception {		 
 		logger.log(Level.INFO, "FileConsumer:: " + FileConsumer.class.getName() + " initstarted.");
+		
+		new ClassPathXmlApplicationContext("consumer-app-context.xml");
 		
 		 /*ConnectionParameters params = new ConnectionParameters();
 		 params.setUsername(ConsumerConstants.Rabbitmq.RABBIT_AMQP_HOST_USERNAME);
@@ -165,13 +176,38 @@ public class FileConsumer {
 				 }
 				 else
 				 {
-
 					 String message = new String(delivery.getBody());  // if message is missign, rollback
+					 message = message.trim();
 					 logger.log(Level.INFO, "FileConsumer:: "  + " message to process..."+message);
-					 // make the fps REST call
-					 // ack the message so that it will not be processed more than once
-					 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-					 //channel.txCommit();	// Commit the transaction
+					 if (message.contains(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR)) {
+						 String[] result = message.split(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR);
+						 if (result.length != ConsumerConstants.Rabbitmq.MSG_TOTAL_TOKEN) {
+						     logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
+						     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+						     // channel.rollback);
+						 }
+						 else if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_JOB)) {
+							 String hostName = "http://localhost:8080";
+							 String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
+								ProcessJobRequest jobRequest = new ProcessJobRequest();
+								jobRequest.setJobId(356);
+								Response serviceRes = RestServiceClientHelper.invokeRestService(
+										url,
+										jobRequest,
+										null,
+										MediaType.APPLICATION_JSON_TYPE,
+										HttpMethodEnum.POST);
+								// if response code = 201, ack
+							 // ack the message so that it will not be processed more than once
+							 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+							 //channel.txCommit();	// Commit the transaction
+						 }
+					 } 
+					 else {
+						    logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
+						    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+						    // channel.rollback(); 
+						}
 				 }	
 			 } 
 			 catch (ShutdownSignalException e) {
