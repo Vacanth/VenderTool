@@ -1,27 +1,21 @@
 package com.vendertool.fps.fileupload.mappers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import org.supercsv.exception.SuperCsvException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vendertool.fps.dal.FpsDALService;
-import com.vendertool.sharedtypes.core.Amount;
-import com.vendertool.sharedtypes.core.Classification;
-import com.vendertool.sharedtypes.core.Classification.ClassificationTypeEnum;
-import com.vendertool.sharedtypes.core.CountryEnum;
+import com.vendertool.listing.ListingServiceimpl;
 import com.vendertool.sharedtypes.core.Listing;
-import com.vendertool.sharedtypes.core.MarketEnum;
-import com.vendertool.sharedtypes.core.Product;
-import com.vendertool.sharedtypes.core.ProductCodeTypeEnum;
 import com.vendertool.sharedtypes.core.fps.FPSTaskStatusEnum;
 import com.vendertool.sharedtypes.core.fps.Task;
+import com.vendertool.sharedtypes.rnr.AddListingRequest;
 
 public class CSVListingReader extends CSVBaseReader{
 	private static int CHUNK_SIZE = 100;
@@ -69,69 +63,33 @@ public class CSVListingReader extends CSVBaseReader{
 				ObjectWriter ow = new ObjectMapper().writer()
 						.withDefaultPrettyPrinter();
 				try {
-					String json = ow.writeValueAsString(lstBean);
+					String json = ow.writeValueAsString(lBean);
 					task.setRequest(json.getBytes());
 					System.out.println("JSON String :"+ json);
 					
 					ListingBean oBean = new ObjectMapper().readValue(json, ListingBean.class);
-					json = ow.writeValueAsString(oBean);
-					System.out.println("JSON String :"+ json);
+					
+					System.out.println("TESTING  :"+ json);
+					String json1 = ow.writeValueAsString(oBean);
+					System.out.println("JSON String :"+ json1);
+					
+					Listing listing = new CSVBeanHelper().beanToListing(oBean);
+					AddListingRequest input = new AddListingRequest();
+					input.setListing(listing);
+					ListingServiceimpl impl = new ListingServiceimpl();
+					impl.addListing(input);
 
 				} catch (JsonProcessingException je) {
-					// TODO Auto-generated catch block
+					System.out.println("Exception occurred");
+					je.printStackTrace();
 				} catch (IOException ie) {
+					System.out.println("Exception occurred");
+					ie.printStackTrace();
 				}
 				lTask.add(task);
 			}
 			FpsDALService.getInstance().insertTaskWithEvents(lTask);
 		}
-	}
-	
-	private Amount getAmount(Currency currency, String value) {
-		if (currency == null || value == null  || value.isEmpty()) {
-			return null;
-		}
-		Amount amount = new Amount();
-		amount.setValue(new BigDecimal(value));
-		amount.setCurrency(currency);		
-		return amount;
-	}
-	
-	
-	private Product beanToProduct(ListingBean lBean) {
-		Product product = new Product();
-		product.setTitle(lBean.getTitle());
-		product.setDescription(lBean.getDescription());
-		//product.setDimension(lBean.getDimension());
-		product.setProductCode(lBean.getProductCode());
-		product.setProductCodeType(ProductCodeTypeEnum.valueOf(lBean.getProductCodeType()));
-		//Continue....
-		
-		return product;
-		
-	}
-	
-	public Listing beanToListing(ListingBean lBean) {
-		Listing listing = new Listing();
-		Currency lCurrency = Currency.getInstance(lBean.getListingCurrency());
-		
-		listing.setListingCurrency(lCurrency);		
-		List<Classification> classList = new ArrayList<Classification>();
-		Classification clasif = new Classification();
-		clasif.setClassifierId(lBean.getCategoryId());
-		clasif.setClassificationType(ClassificationTypeEnum.get(lBean.getClassification()));
-		classList.add(clasif);
-		listing.setClassifications(classList);
-
-		listing.setFixedPrice(getAmount(lCurrency, lBean.getFixedPrice()));
-		listing.setPrice(getAmount(lCurrency, lBean.getPrice()));
-		listing.setProduct(beanToProduct(lBean));
-		listing.setQuantity(lBean.getListingQty());
-		listing.setCondition(lBean.getItemCondition());
-		listing.setMarket(MarketEnum.MERCADO_LIBRE);
-		listing.setCountry(CountryEnum.ALL);
-
-		return listing;
 	}
 }
 

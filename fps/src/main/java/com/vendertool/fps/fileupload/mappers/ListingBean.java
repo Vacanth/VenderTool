@@ -6,11 +6,11 @@ public class ListingBean {
 	private String listingCurrency;
 	private String listingCountry;
 	private String listingPrice;
-	private int  listingQty;
-	private int paymentMethod;
-	private int classification;
-	private int listingFormat;
-	private int duration;
+	private String  listingQty;
+	private String paymentMethod;
+	private String classification;
+	private String listingFormat;
+	private String duration;
 	private String auctionStartPrice;
 	private String acutionReservedPrice;
 	private String fixedPrice;
@@ -177,34 +177,35 @@ public class ListingBean {
 	public void setListingPrice(String listingPrice) {
 		this.listingPrice = listingPrice;
 	}
-	public int getListingQty() {
+
+	public String getListingQty() {
 		return listingQty;
 	}
-	public void setListingQty(int listingQty) {
+	public void setListingQty(String listingQty) {
 		this.listingQty = listingQty;
 	}
-	public int getPaymentMethod() {
+	public String getPaymentMethod() {
 		return paymentMethod;
 	}
-	public void setPaymentMethod(int paymentMethod) {
+	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	public int getClassification() {
+	public String getClassification() {
 		return classification;
 	}
-	public void setClassification(int classification) {
+	public void setClassification(String classification) {
 		this.classification = classification;
 	}
-	public int getListingFormat() {
+	public String getListingFormat() {
 		return listingFormat;
 	}
-	public void setListingFormat(int listingFormat) {
+	public void setListingFormat(String listingFormat) {
 		this.listingFormat = listingFormat;
 	}
-	public int getDuration() {
+	public String getDuration() {
 		return duration;
 	}
-	public void setDuration(int duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 	public String getAuctionStartPrice() {

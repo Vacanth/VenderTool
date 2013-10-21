@@ -1,5 +1,6 @@
 package com.vendertool.fps.fileupload;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendertool.common.dal.exception.DBConnectionException;
 import com.vendertool.common.dal.exception.DatabaseException;
 import com.vendertool.common.dal.exception.FinderException;
@@ -23,12 +26,16 @@ import com.vendertool.common.validation.ValidationUtil;
 import com.vendertool.fps.dal.FpsDALService;
 import com.vendertool.fps.fileupload.helper.AWSHelper;
 import com.vendertool.fps.fileupload.helper.FPSJobEvent;
+import com.vendertool.fps.fileupload.mappers.CSVBeanHelper;
 import com.vendertool.fps.fileupload.mappers.CSVListingReader;
+import com.vendertool.fps.fileupload.mappers.ListingBean;
 import com.vendertool.fps.fileupload.validator.ProcessJobValidator;
 import com.vendertool.fps.fileupload.validator.ProcessTaskValidator;
 import com.vendertool.fps.fileupload.validator.UploadFileValidator;
+import com.vendertool.listing.ListingServiceimpl;
 import com.vendertool.registration.dal.RegistrationDALService;
 import com.vendertool.sharedtypes.core.FileInformation;
+import com.vendertool.sharedtypes.core.Listing;
 import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSStorageSourceEnum;
@@ -38,6 +45,7 @@ import com.vendertool.sharedtypes.core.fps.File;
 import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.core.fps.Task;
 import com.vendertool.sharedtypes.error.Errors;
+import com.vendertool.sharedtypes.rnr.AddListingRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.fps.GetJobsResponse;
@@ -340,7 +348,19 @@ public class FPSService extends BaseVenderToolServiceImpl {
 				try {
 					task = fpsDal.getTask(tRequest.getTaskId());
 					if (task != null && task.getStatus().equals(FPSTaskStatusEnum.CREATED)) {
-						System.out.println("Here need to plugin the adapter code :" + tRequest.getTaskId());
+						try {
+							ListingBean lBean = new ObjectMapper().readValue(task.getRequest(), ListingBean.class);
+							Listing listing = new CSVBeanHelper().beanToListing(lBean);
+							AddListingRequest input = new AddListingRequest();
+							input.setListing(listing);
+							ListingServiceimpl impl = new ListingServiceimpl();
+							impl.addListing(input);
+							
+						} catch (JsonProcessingException je) {
+							// TODO Auto-generated catch block
+						} catch (IOException ie) {
+						}
+
 					}
 					
 				} catch (DBConnectionException | FinderException | DatabaseException e) {
