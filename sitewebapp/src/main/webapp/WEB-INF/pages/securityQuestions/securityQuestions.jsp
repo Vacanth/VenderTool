@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t1" tagdir="/WEB-INF/tags/page" %>
 
-
+<spring:message code='HTTP.ERROR' var="c_httpError"/>
 
 <t1:page title="VendorTool" angularAppName="securityQuestionsApp" currentPage="questions" email="${email}" >
 
@@ -24,6 +24,10 @@
 	<jsp:attribute name="inlineJs">
 		securityQuestionsApp.factory('Data', function() {
 			return ${modelMapJson};
+		});
+		
+		securityQuestionsApp.factory('Content', function() {
+			return {"httpError":"${c_httpError}"};
 		});
 		
 		// IE placeholder text
