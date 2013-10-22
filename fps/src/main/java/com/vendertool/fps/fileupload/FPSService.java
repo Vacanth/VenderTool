@@ -420,11 +420,12 @@ public class FPSService extends BaseVenderToolServiceImpl {
 			
 			if (lJobs != null) {
 				int i =0;
+				List<Job> jobList = new ArrayList<Job>(size);
 				for (Job job:lJobs) {
 					
-					if (i < (pageNum-1)*size) {
+					if (i < (pNum-1)*size) {
 						continue;
-					} else if (i > pageNum*size) {
+					} else if (i > pNum*size) {
 						break;
 					}
 					
@@ -441,9 +442,10 @@ public class FPSService extends BaseVenderToolServiceImpl {
 						job.setUploadedFiles(files);
 						job.setProcessedFiles(files);
 					}
+					jobList.add(job);
 					i++;
 				}
-				response.setJobs(lJobs);
+				response.setJobs(jobList);
 			}
 			response.setPaginationOutput(paginationOutput);
 		}
