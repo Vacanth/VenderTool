@@ -34,6 +34,10 @@
 		<input class="form-control" ng-model="answer2" placeholder="Your answer to second question" autocomplete="off"/>
 		<div field-error field="answer2" type="com.vendertool.sitewebapp.controller.SecurityQuestionAnswer"></div>
 	</div>
+	<hr/>
+	<div class="fldWrp">
+		<input class="form-control" type="password" ng-model="password" placeholder="Password" autocomplete="off"/>
+	</div>
 	
 	<div class="submit">
 		<button ng-click="save()" type="button" class="btn btn-primary grn">Submit</button>

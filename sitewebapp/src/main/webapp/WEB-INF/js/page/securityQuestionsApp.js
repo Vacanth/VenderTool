@@ -94,10 +94,14 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 					$location.path('/success');
 				}
 				
+				$scope.password = ''; // Clear password field;
+				
 				//PageUtil.hideSpinner();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
+				
+				$scope.password = ''; // Clear password field;
 				
 				//PageUtil.hideSpinner();
 			});
