@@ -13,6 +13,7 @@ import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
+import com.vendertool.sharedtypes.rnr.fps.ProcessTaskRequest;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -42,7 +43,7 @@ public class FileConsumer {
 	 public FileConsumer init() throws Exception {		 
 		logger.log(Level.INFO, "FileConsumer:: " + FileConsumer.class.getName() + " initstarted.");
 		
-		new ClassPathXmlApplicationContext("consumer-app-context.xml");
+		new ClassPathXmlApplicationContext("consumer-application-context.xml");
 		
 		 /*ConnectionParameters params = new ConnectionParameters();
 		 params.setUsername(ConsumerConstants.Rabbitmq.RABBIT_AMQP_HOST_USERNAME);
@@ -177,37 +178,73 @@ public class FileConsumer {
 				 else
 				 {
 					 String message = new String(delivery.getBody());  // if message is missign, rollback
-					 message = message.trim();
-					 logger.log(Level.INFO, "FileConsumer:: "  + " message to process..."+message);
-					 if (message.contains(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR)) {
-						 String[] result = message.split(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR);
-						 if (result.length != ConsumerConstants.Rabbitmq.MSG_TOTAL_TOKEN) {
-						     logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
-						     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-						     // channel.rollback);
+					 if(message != null & (((message = message.trim()).length())>0)) {
+						 logger.log(Level.INFO, "FileConsumer:: "  + " message to process..."+message);
+						 if (message.contains(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR)) {
+							 String[] result = message.split(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR);
+							 int eventId=0;
+
+							 if (result.length != ConsumerConstants.Rabbitmq.MSG_TOTAL_TOKEN) {
+								 logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
+								 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+								 // channel.rollback);
+							 }
+							 else { 
+								 try {
+									 eventId = Integer.parseInt(result[1]);
+								 } catch (NumberFormatException e) {
+									 // ignore the event
+									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false); 
+									 continue;
+								 }
+								 if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_JOB)) {
+
+									 String url = URLConstants.WS_URL_ENDPOINT + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
+									 ProcessJobRequest jobRequest = new ProcessJobRequest();
+									 jobRequest.setJobId(eventId);
+									 Response serviceRes = RestServiceClientHelper.invokeRestService(
+											 url,
+											 jobRequest,
+											 null,
+											 MediaType.APPLICATION_JSON_TYPE,
+											 HttpMethodEnum.POST);
+									 // if response code = 201, ack
+									 // ack the message so that it will not be processed more than once
+									 //if(serviceRes.getStatus()==Response.Status.CREATED.getStatusCode())
+									 //	 System.out.println("Need a response code here...");
+									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+									 //channel.txCommit();	// Commit the transaction
+								 }
+								 else if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_TASK)) {
+									 String url = URLConstants.WS_URL_ENDPOINT + URLConstants.WEB_SERVICE_PATH + URLConstants.TASK_PROCESS_PATH;
+									 ProcessTaskRequest taskRequest = new ProcessTaskRequest();
+									 taskRequest.setTaskId(eventId);
+									 Response serviceRes = RestServiceClientHelper.invokeRestService(
+											 url,
+											 taskRequest,
+											 null,
+											 MediaType.APPLICATION_JSON_TYPE,
+											 HttpMethodEnum.POST);
+									 // if response code = 201, ack
+									 // ack the message so that it will not be processed more than once
+									 //if(serviceRes.getStatus()==Response.Status.CREATED.getStatusCode())
+										
+									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+									 //channel.txCommit();	// Commit the transaction
+								 }
+							 } 
 						 }
-						 else if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_JOB)) {
-							 String hostName = "http://localhost:8080";
-							 String url = hostName + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
-								ProcessJobRequest jobRequest = new ProcessJobRequest();
-								jobRequest.setJobId(356);
-								Response serviceRes = RestServiceClientHelper.invokeRestService(
-										url,
-										jobRequest,
-										null,
-										MediaType.APPLICATION_JSON_TYPE,
-										HttpMethodEnum.POST);
-								// if response code = 201, ack
-							 // ack the message so that it will not be processed more than once
-							 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-							 //channel.txCommit();	// Commit the transaction
-						 }
-					 } 
-					 else {
+						 else {
 						    logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
 						    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 						    // channel.rollback(); 
-						}
+						 }
+					 }
+					 else {
+						 // ignore the message
+						 logger.log(Level.INFO, "FileConsumer::Message: Junk message");
+						 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					 }
 				 }	
 			 } 
 			 catch (ShutdownSignalException e) {

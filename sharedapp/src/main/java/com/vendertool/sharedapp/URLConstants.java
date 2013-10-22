@@ -29,4 +29,7 @@ public interface URLConstants {
 	public static final String WS_REGISTRATION_CONFIRM_FORGOT_PWD_EMAIL = "/registration/confirmForgotPasswordEmail";
 	public static final String WS_REGISTRATION_VALIDATE_SEC_QUES = "/registration/validateSecurityQuestions";
 	public static final String WS_REGISTRATION_CHANGE_FORGOT_PASSWORD = "/registration/changeForgotPassword";
+	public static final String TASK_PROCESS_PATH = "/fps/processTask";
+	public static final String WS_URL_ENDPOINT = "http://localhost:8080";	// for debugging only
+
 }
