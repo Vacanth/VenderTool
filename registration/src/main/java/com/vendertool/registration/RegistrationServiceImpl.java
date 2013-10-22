@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 
+import com.vendertool.common.MsgSource;
 import com.vendertool.common.SessionIdGenerator;
 import com.vendertool.common.SpringApplicationContextUtils;
 import com.vendertool.common.URLConstants;
@@ -51,6 +52,7 @@ import com.vendertool.sharedtypes.core.AccountSecurityQuestion;
 import com.vendertool.sharedtypes.core.AccountStatusEnum;
 import com.vendertool.sharedtypes.core.ForgotPassword;
 import com.vendertool.sharedtypes.core.ForgotPassword.ForgotPasswordStatusEnum;
+import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketRequest;
 import com.vendertool.sharedtypes.rnr.AuthorizeMarketResponse;
@@ -1023,16 +1025,18 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			return response;
 		}
 		
+		MsgSource msgsrc = new MsgSource();
 		try {
 			List<AccountSecurityQuestion> questions = dalservice.getAccountSecurityQuestions(email);
 			if(!VUTIL.isEmptyList(questions)) {
 				for(AccountSecurityQuestion question : questions) {
 					if(VUTIL.isNotNull(question)) {
 						question.setAnswer(null);
+						populateSecQuestionDisplayName(msgsrc, question);
 					}
 				}
+				response.setQuestions(questions);
 			}
-			response.setQuestions(questions);
 		} catch (FinderException | DBConnectionException | DatabaseException e) {
 			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
@@ -1041,6 +1045,19 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		return response;
 		
+	}
+
+
+	private void populateSecQuestionDisplayName(MsgSource msgsrc,
+			AccountSecurityQuestion question) {
+		if (VUTIL.isNull(question.getQuestion())
+				|| VUTIL.isNull(question.getQuestion().getQuestionCode())) {
+			return;
+		}
+		
+		SecurityQuestionCodeEnum scode = question.getQuestion().getQuestionCode();
+		String localizedDisplayName = msgsrc.getMessage(scode.getCode(), null, getLocale());
+		question.getQuestion().setQuestionDisplayName(localizedDisplayName);
 	}
 
 
@@ -1057,7 +1074,19 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		response.setEmail(request.getEmail());
 		response.setConfirmCode(request.getConfirmCode());
 		response.setConfirmSessionId(request.getConfirmSessionId());
-				
+		
+		MsgSource msgsrc = new MsgSource();
+		List<AccountSecurityQuestion> questions = request.getQuestions();
+		if(!VUTIL.isEmptyList(questions)) {
+			for(AccountSecurityQuestion question : questions) {
+				if(VUTIL.isNotNull(question)) {
+					question.setAnswer(null);
+					populateSecQuestionDisplayName(msgsrc, question);
+				}
+			}
+			response.setQuestions(questions);
+		}
+		
 		ForgotPasswordSecurityQuestionValidator validator = 
 				new ForgotPasswordSecurityQuestionValidator();
 		validator.validate(request, response);

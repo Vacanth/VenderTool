@@ -146,6 +146,7 @@ public class AccountSecurityQuestionMapper implements
 						SecurityQuestion sq = question.getQuestion();
 						if(sq == null) {
 							sq = new SecurityQuestion();
+							question.setQuestion(sq);
 						}
 						sq.setQuestionCode(ce);
 					}
