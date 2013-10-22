@@ -36,6 +36,8 @@ import com.vendertool.listing.ListingServiceimpl;
 import com.vendertool.registration.dal.RegistrationDALService;
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.Listing;
+import com.vendertool.sharedtypes.core.PaginationOutput;
+import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.core.fps.FPSFileStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSJobStatusEnum;
 import com.vendertool.sharedtypes.core.fps.FPSStorageSourceEnum;
@@ -48,7 +50,7 @@ import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
-import com.vendertool.sharedtypes.rnr.fps.GetJobsResponse;
+import com.vendertool.sharedtypes.rnr.UploadsResponse;
 import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 import com.vendertool.sharedtypes.rnr.fps.ProcessJobResponse;
 import com.vendertool.sharedtypes.rnr.fps.ProcessTaskRequest;
@@ -351,6 +353,10 @@ public class FPSService extends BaseVenderToolServiceImpl {
 						try {
 							ListingBean lBean = new ObjectMapper().readValue(task.getRequest(), ListingBean.class);
 							Listing listing = new CSVBeanHelper().beanToListing(lBean);
+							
+							Product product = listing.getProduct();
+							product.setAccountId(accountId);
+							listing.setProduct(product);
 							AddListingRequest input = new AddListingRequest();
 							input.setListing(listing);
 							ListingServiceimpl impl = new ListingServiceimpl();
@@ -381,8 +387,9 @@ public class FPSService extends BaseVenderToolServiceImpl {
 	@Path("/uploadedJobs")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public GetJobsResponse getUploadedJobs(@QueryParam(value="email") String email) {
-		GetJobsResponse response = new GetJobsResponse();	
+	public UploadsResponse getUploadedJobs(@QueryParam(value="email") String email,
+			@QueryParam(value="pageNum") int pageNum, @QueryParam(value="pageSize") int pageSize) {
+		UploadsResponse response = new UploadsResponse();	
 		
 		if(VUTIL.isEmpty(email)) {
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
@@ -390,6 +397,13 @@ public class FPSService extends BaseVenderToolServiceImpl {
 			return response;
 		}
 
+		int size = pageSize != 0 ? pageSize : 10;
+		int pNum = pageNum  != 0 ? pageNum  : 1;
+		
+		PaginationOutput paginationOutput = new PaginationOutput();
+		paginationOutput.setEntriesPerPage(size);
+		paginationOutput.setCurrentPage(pageNum);
+		
 		Long accountId  = getAccount(email,response);
 		if (!response.hasErrors()) {
 			List<Job> lJobs = null;
@@ -399,11 +413,21 @@ public class FPSService extends BaseVenderToolServiceImpl {
 				if (lJobs == null) {
 					lJobs = new ArrayList<Job>();
 				}
+				paginationOutput.setTotalResults(lJobs.size());
 			} catch (DBConnectionException | FinderException | DatabaseException e) {
 				lJobs = new ArrayList<Job>();
 			}
+			
 			if (lJobs != null) {
+				int i =0;
 				for (Job job:lJobs) {
+					
+					if (i < (pageNum-1)*size) {
+						continue;
+					} else if (i > pageNum*size) {
+						break;
+					}
+					
 					List<File> files = null;
 					
 					try {
@@ -417,9 +441,11 @@ public class FPSService extends BaseVenderToolServiceImpl {
 						job.setUploadedFiles(files);
 						job.setProcessedFiles(files);
 					}
+					i++;
 				}
 				response.setJobs(lJobs);
 			}
+			response.setPaginationOutput(paginationOutput);
 		}
 		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 		return response;

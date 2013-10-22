@@ -34,6 +34,7 @@ public class CSVBeanHelper {
 		//product.setDimension(lBean.getDimension());
 		product.setProductCode(lBean.getProductCode());
 		product.setProductCodeType(ProductCodeTypeEnum.valueOf(lBean.getProductCodeType()));
+		product.setSku(lBean.getSKU());
 		//Continue....
 		
 		return product;

@@ -8,7 +8,7 @@ import com.vendertool.sharedtypes.core.PaginationOutput;
 import com.vendertool.sharedtypes.core.fps.File;
 import com.vendertool.sharedtypes.core.fps.Job;
 
-public class UploadsResponse {
+public class UploadsResponse extends BaseResponse{
 
 	private List<Job> jobs;
 	private PaginationOutput paginationOutput;
@@ -25,7 +25,4 @@ public class UploadsResponse {
 	public void setPaginationOutput(PaginationOutput paginationOutput) {
 		this.paginationOutput = paginationOutput;
 	}
-
-	
-	
 }

@@ -7,12 +7,12 @@ import java.util.List;
 import org.supercsv.exception.SuperCsvException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vendertool.fps.dal.FpsDALService;
 import com.vendertool.listing.ListingServiceimpl;
 import com.vendertool.sharedtypes.core.Listing;
+import com.vendertool.sharedtypes.core.Product;
 import com.vendertool.sharedtypes.core.fps.FPSTaskStatusEnum;
 import com.vendertool.sharedtypes.core.fps.Task;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
@@ -74,6 +74,10 @@ public class CSVListingReader extends CSVBaseReader{
 					System.out.println("JSON String :"+ json1);
 					
 					Listing listing = new CSVBeanHelper().beanToListing(oBean);
+					Product product = listing.getProduct();
+					product.setAccountId(iTask.getAccountId());
+					listing.setProduct(product);
+					
 					AddListingRequest input = new AddListingRequest();
 					input.setListing(listing);
 					ListingServiceimpl impl = new ListingServiceimpl();

@@ -45,9 +45,9 @@ public class UploadsController {
 				.invokeRestService(url, null, null, MediaType.APPLICATION_JSON_TYPE,
 						HttpMethodEnum.GET);
 		
-		GetJobsResponse getJobsResponse = serviceRes.readEntity(GetJobsResponse.class);
-		List<Job> ljDetails = getJobsResponse.getJobs();
+		UploadsResponse uResponse = serviceRes.readEntity(UploadsResponse.class);
 		
+		/*List<Job> ljDetails = uResponse.getJobs();
 		for (Job job : ljDetails) {
 			System.out.println("JobDetails :" + job.getTitle());
 			System.out.println("JobDetails :" + job.getReqFileGroupId());
@@ -56,14 +56,14 @@ public class UploadsController {
 			for (File file : job.getUploadedFiles()) {
 				System.out.println("File :"+ file.getFileName());
 			}
-		}
-		
+		}*/
 		logger.info("getUploadsView controller invoked");
 
 		// TODO: principal is throwing error
 		//modelMap.addAttribute("email", principal.getName());
 		modelMap.addAttribute("email", "ted@gmail.com");
-		modelMap.addAttribute("uploadsResponse", MockDataUtil.getUploadsResponse());
+		//modelMap.addAttribute("uploadsResponse", MockDataUtil.getUploadsResponse());
+		modelMap.addAttribute("uploadsResponse", uResponse);
 		modelMap.addAttribute("errorResponse", new ErrorResponse());
 		
 		// Add JSON for Angular
