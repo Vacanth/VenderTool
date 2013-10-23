@@ -22,6 +22,7 @@ import com.vendertool.sharedtypes.core.SecurityQuestionCodeEnum;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
+import com.vendertool.sharedtypes.rnr.ConfirmForgotPasswordEmailRequest;
 import com.vendertool.sharedtypes.rnr.UpdateAccountSecurityQuestionsRequest;
 import com.vendertool.sharedtypes.rnr.ValidateSecurityQuestionsRequest;
 
@@ -40,9 +41,15 @@ public class ForgotPasswordSecurityQuestionValidator implements Validator {
 		ValidateSecurityQuestionsRequest request = 
 				(ValidateSecurityQuestionsRequest) _request;
 		
+		ConfirmForgotPasswordEmailRequest cfprequest = new ConfirmForgotPasswordEmailRequest();
+		cfprequest.setEmail(request.getEmail());
+		cfprequest.setConfirmCode(request.getConfirmCode());
+		cfprequest.setConfirmSessionId(request.getConfirmSessionId());
+		cfprequest.setIpAddress(request.getIpAddress());
+		
 		ConfirmForgotPasswordEmailValidator validator = 
 				new ConfirmForgotPasswordEmailValidator();
-		validator.validate(request, response);
+		validator.validate(cfprequest, response);
 		
 		UpdateAccountSecurityQuestionsRequest sqrequest = new UpdateAccountSecurityQuestionsRequest();
 		sqrequest.setEmail(request.getEmail());

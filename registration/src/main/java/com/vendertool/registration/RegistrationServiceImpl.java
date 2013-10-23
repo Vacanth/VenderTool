@@ -1075,25 +1075,16 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		response.setConfirmCode(request.getConfirmCode());
 		response.setConfirmSessionId(request.getConfirmSessionId());
 		
-		MsgSource msgsrc = new MsgSource();
-		List<AccountSecurityQuestion> questions = request.getQuestions();
-		if(!VUTIL.isEmptyList(questions)) {
-			for(AccountSecurityQuestion question : questions) {
-				if(VUTIL.isNotNull(question)) {
-					question.setAnswer(null);
-					populateSecQuestionDisplayName(msgsrc, question);
-				}
-			}
-			response.setQuestions(questions);
-		}
-		
 		ForgotPasswordSecurityQuestionValidator validator = 
 				new ForgotPasswordSecurityQuestionValidator();
 		validator.validate(request, response);
 		
 		String email = request.getEmail();
 		
+		List<AccountSecurityQuestion> questions = request.getQuestions();
+		
 		if(response.hasErrors()) {
+			prepareSecurityQuestionResponse(response, questions);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return response;
 		}
@@ -1115,6 +1106,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 			logger.debug("Forgot Password Security Question Answer Attempt by IP ADDRESS='"
 					+ request.getIpAddress() + "'");
 			
+			prepareSecurityQuestionResponse(response, questions);
 			response.addFieldBindingError(Errors.REGISTRATION.ACCOUNT_NOT_FOUND, null, (String[])null);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return response;
@@ -1134,6 +1126,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		}
 		
 		if(response.hasErrors()) {
+			prepareSecurityQuestionResponse(response, questions);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return response;
 		}
@@ -1147,6 +1140,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		}
 		
 		if(VUTIL.isNull(dbquestions) || dbquestions.isEmpty()) {
+			prepareSecurityQuestionResponse(response, questions);
 			response.addFieldBindingError(
 					Errors.REGISTRATION.UNABLE_TO_VERIFY_SECURITY_ANSWERS,
 					null, (String[]) null);
@@ -1159,12 +1153,31 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		validator.validateSecurityAnswers(response, account, dbquestions,
 				request.getQuestions());
 		if(response.hasErrors()) {
+			prepareSecurityQuestionResponse(response, questions);
 			response.setStatus(ResponseAckStatusEnum.FAILURE);
 			return response;
 		}
 		
+		prepareSecurityQuestionResponse(response, questions);
 		response.setStatus(ResponseAckStatusEnum.SUCCESS);
 		return response;
+	}
+
+
+	private void prepareSecurityQuestionResponse(
+			ValidateSecurityQuestionsResponse response, 
+			List<AccountSecurityQuestion> questions) {
+		
+		MsgSource msgsrc = new MsgSource();
+		if(!VUTIL.isEmptyList(questions)) {
+			for(AccountSecurityQuestion question : questions) {
+				if(VUTIL.isNotNull(question)) {
+					question.setAnswer(null);
+					populateSecQuestionDisplayName(msgsrc, question);
+				}
+			}
+			response.setQuestions(questions);
+		}
 	}
 
 

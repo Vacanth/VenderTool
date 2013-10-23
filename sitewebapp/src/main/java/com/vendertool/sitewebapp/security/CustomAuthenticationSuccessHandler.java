@@ -22,7 +22,7 @@ public class CustomAuthenticationSuccessHandler extends
 			CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 			Account a = user.getAccount();
 			if(! a.isSecurityQuestionsSetup()) {
-				setDefaultTargetUrl("/profile#/questions");
+				setDefaultTargetUrl("/questions");
 			} else {
 				setDefaultTargetUrl("/accounthub");
 			}

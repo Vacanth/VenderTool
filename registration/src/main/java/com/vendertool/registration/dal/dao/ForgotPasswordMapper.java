@@ -93,9 +93,10 @@ public class ForgotPasswordMapper implements DALMapper<ForgotPassword> {
 		fpbean.setAccountId(fp.getAccountId());
 		
 		Date dt = fp.getCreatedDate();
-		if(dt != null) {
-			fpbean.setCreatedDate(new Timestamp(dt.getTime()));
+		if(dt == null) {
+			dt = new Date();
 		}
+		fpbean.setCreatedDate(new Timestamp(dt.getTime()));
 		
 		fpbean.setEmailAddr(fp.getEmail());
 		fpbean.setIpAddr(fp.getIpAddress());
