@@ -9,5 +9,5 @@
 	<import resource="classpath:dal/RegistrationDAL.xml" />
 	<import resource="classpath:dal/FpsDAL.xml" />
 	<import resource="classpath:dal/ListingDAL.xml" />
-	
+	<import resource="classpath:dal/InventoryDAL.xml" />
 </beans>

@@ -130,7 +130,9 @@
 										<copy file="../fps/src/main/resources/FpsDAL.xml"
 											todir="${project.build.outputDirectory}/dal" />
 										<copy file="../listing/src/main/resources/ListingDAL.xml"
-											todir="${project.build.outputDirectory}/dal" />											
+											todir="${project.build.outputDirectory}/dal" />		
+										<copy file="../inventory/src/main/resources/InventoryDAL.xml"
+											todir="${project.build.outputDirectory}/dal" />							
 										<copy file="../common/src/main/resources/common-application-context.xml"
 											todir="${project.build.outputDirectory}" />
 										<copy file="../fps/src/main/resources/fps-application-context.xml"
