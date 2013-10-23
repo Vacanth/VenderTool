@@ -38,14 +38,16 @@
 	            	${securityQuestions.questions[0].question.questionDisplayName}
 	            </div>
 	            <div>
-			       <form:input path="questions[0].answer" class="form-control" placeholder="Answer to question 1"  />
+	            	<form:input path="questions[0].answer" class="form-control" placeholder="Answer to question 1"  />
+			       	<form:input path="questions[0].question.questionCode" type="hidden" class="form-control"  />
 	            </div>
 	            <br/>
 	            <div>
 	            	${securityQuestions.questions[1].question.questionDisplayName}
 	            </div>
 	             <div>
-			       <form:input path="questions[1].answer" class="form-control" placeholder="Answer to question 2"  />
+	             	<form:input path="questions[1].answer" class="form-control" placeholder="Answer to question 2"  />
+			       	<form:input path="questions[1].question.questionCode" type="hidden" class="form-control"  />
 	            </div>
 
 	            <div class="submit">
