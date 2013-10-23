@@ -79,7 +79,7 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 		
 		$http.post('questions/save', questionsReq).
 			success(function (data, status, headers, config) {
-				
+
 				$scope.errorResponse = data.errorResponse;
 
 				if ($scope.errorResponse && $scope.errorResponse.fieldBindingErrors.length > 0) {
@@ -89,9 +89,9 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 					// Only update this if no errors
 					$scope.errorResponse = undefined;
 					$scope.resetQuestionAnswers();
-
-					// Take user to success page
-					$location.path('/success');
+					
+					// Take user to accounthub
+					document.location.href = "accounthub";
 				}
 				
 				$scope.password = ''; // Clear password field;
