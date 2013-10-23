@@ -58,8 +58,7 @@
   </dependencies>
   
   <build>
-	  <finalName>consumer</finalName>
-	  
+	  <finalName>consumer</finalName>	  
 	  <plugins>
 	    <plugin>
 	       <groupId>org.codehaus.mojo</groupId>

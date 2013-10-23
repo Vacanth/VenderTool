@@ -398,6 +398,7 @@
 			<module>../consumer</module>
 			<module>../sharedapp</module>
 			<module>../tools</module>
+			<module>../batch</module>
 		</modules>
 
 

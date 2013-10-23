@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
+		
+	<!--  	<context:component-scan base-package="com.vendertool.batch" />  -->
+
+	<batch:job-repository id="jobRepository" />
+	
+	<bean id="jobReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sql" value="select job_id,status from job where status=2 and created_date BETWEEN (CURDATE()- INTERVAL 3 DAY) AND (CURDATE() - INTERVAL 1 DAY);
+" />
+		<property name="rowMapper"><bean class="com.vendertool.batch.reader.JobRowMapper" /></property>
+	</bean>
+	
+	<bean id="jobDaoImpl" class="com.vendertool.batch.dao.JobDaoImpl">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="jobProcessor" class="com.vendertool.batch.processor.JobProcessor" >
+	</bean>
+	
+	<bean id="jobWriter" class="com.vendertool.batch.writer.JobWriter" >
+		<property name="jobDao" ref="jobDaoImpl"></property>
+	</bean>
+	
+	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+</beans>

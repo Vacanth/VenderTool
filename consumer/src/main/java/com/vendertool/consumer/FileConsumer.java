@@ -12,6 +12,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedapp.URLConstants;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
+import com.vendertool.sharedtypes.rnr.BaseRequest;
 import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 import com.vendertool.sharedtypes.rnr.fps.ProcessTaskRequest;
 
@@ -85,10 +86,10 @@ public class FileConsumer {
 			 if(channel!=null) {
 				 // unbind the queue, delete exchange and queue
 				 try {
-				 channel.queueUnbind(queueName, exchangeName, routingKey);
-				 channel.queueDelete(queueName);
-				 channel.exchangeDelete(exchangeName);
-				 channel.close();
+					 channel.queueUnbind(queueName, exchangeName, routingKey);
+					 channel.queueDelete(queueName);
+					 channel.exchangeDelete(exchangeName);
+					 channel.close();
 				 }
 				 catch(IOException e){}
 			 }
@@ -166,78 +167,77 @@ public class FileConsumer {
 	 public void processFile()  {
 		 while (true) {
 			 try {
-				 // Create transaction
-				 //channel.txSelect();
+				 // Get the next message in the queue
 				 Delivery delivery = consumer.nextDelivery();
+				 logger.log(Level.DEBUG, "FileConsumer:: New message to process");
 				 if (delivery == null)
 				 {
-					 //channel.txRollback();
 					 if (channel.isOpen() == false) { 
 						 throw new ShutdownSignalException(false, false, delivery, delivery); }
 				 }
 				 else
 				 {
-					 String message = new String(delivery.getBody());  // if message is missign, rollback
+					 logger.log(Level.DEBUG, "FileConsumer:: Message has data");
+					 String message = new String(delivery.getBody());  
 					 if(message != null & (((message = message.trim()).length())>0)) {
-						 logger.log(Level.INFO, "FileConsumer:: "  + " message to process..."+message);
+						 logger.log(Level.INFO, "FileConsumer:: Process message: "+message);
 						 if (message.contains(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR)) {
-							 String[] result = message.split(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR);
+							 String[] tokens = message.split(ConsumerConstants.Rabbitmq.MSG_TOKEN_SEPARATOR);
 							 int eventId=0;
 
-							 if (result.length != ConsumerConstants.Rabbitmq.MSG_TOTAL_TOKEN) {
-								 logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
-								 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-								 // channel.rollback);
+							 if (tokens.length != ConsumerConstants.Rabbitmq.MSG_TOTAL_TOKEN) {
+								 logger.log(Level.INFO, "FileConsumer::Invalid message format: "+ message);
+								 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);  // ignore the message by ACK so that it will not clog in the Q
 							 }
 							 else { 
 								 try {
-									 eventId = Integer.parseInt(result[1]);
+									 eventId = Integer.parseInt(tokens[1]);
 								 } catch (NumberFormatException e) {
-									 // ignore the event
-									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false); 
+									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);  // ignore the message by ACKing so that it will not clog the Q
 									 continue;
 								 }
-								 if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_JOB)) {
+								 if(tokens[0].equals(ConsumerConstants.Rabbitmq.MSG_JOB)) {	// Job message
 
 									 String url = URLConstants.WS_URL_ENDPOINT + URLConstants.WEB_SERVICE_PATH + URLConstants.JOB_PROCESS_PATH;
 									 ProcessJobRequest jobRequest = new ProcessJobRequest();
-									 jobRequest.setJobId(eventId);
-									 Response serviceRes = RestServiceClientHelper.invokeRestService(
+									 jobRequest.setJobId(eventId);				 								 
+									 Response response = RestServiceClientHelper.invokeRestService(
 											 url,
 											 jobRequest,
 											 null,
 											 MediaType.APPLICATION_JSON_TYPE,
 											 HttpMethodEnum.POST);
-									 // if response code = 201, ack
-									 // ack the message so that it will not be processed more than once
-									 //if(serviceRes.getStatus()==Response.Status.CREATED.getStatusCode())
-									 //	 System.out.println("Need a response code here...");
-									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-									 //channel.txCommit();	// Commit the transaction
+									 // if response code = 200, ack the message so that it will not be processed more than once 
+									 if(response.getStatus() == Response.Status.OK.getStatusCode()) 
+										 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);   // ack one message
+									 else
+										 // if response is not 200, re-queue so the message will be reprocessed
+										 channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);  // re-queue single message
 								 }
-								 else if(result[0].equals(ConsumerConstants.Rabbitmq.MSG_TASK)) {
+								 else if(tokens[0].equals(ConsumerConstants.Rabbitmq.MSG_TASK)) {
 									 String url = URLConstants.WS_URL_ENDPOINT + URLConstants.WEB_SERVICE_PATH + URLConstants.TASK_PROCESS_PATH;
 									 ProcessTaskRequest taskRequest = new ProcessTaskRequest();
 									 taskRequest.setTaskId(eventId);
-									 Response serviceRes = RestServiceClientHelper.invokeRestService(
+									 Response response = RestServiceClientHelper.invokeRestService(
 											 url,
 											 taskRequest,
 											 null,
 											 MediaType.APPLICATION_JSON_TYPE,
 											 HttpMethodEnum.POST);
-									 // if response code = 201, ack
 									 // ack the message so that it will not be processed more than once
-									 //if(serviceRes.getStatus()==Response.Status.CREATED.getStatusCode())
-										
-									 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-									 //channel.txCommit();	// Commit the transaction
+									 if(response.getStatus() == Response.Status.OK.getStatusCode()) 
+										 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);   // ack one message
+									 else
+										 // if response is not 200, re-queue so the message will be reprocessed
+										 channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);  // re-queue single message
 								 }
+								 else 
+									 channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);  // re-queue single message
 							 } 
 						 }
 						 else {
-						    logger.log(Level.INFO, "FileConsumer::Message:"  + message + " not in correct format");
+						    logger.log(Level.INFO, "FileConsumer::Message format invalid :"  + message);
 						    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-						    // channel.rollback(); 
 						 }
 					 }
 					 else {
@@ -269,6 +269,21 @@ public class FileConsumer {
 			 }
 		 }
 	  }
+	 
+	 private Response processMessage(String url, String eventType, BaseRequest request)
+	 {
+		 if(eventType.equals(ConsumerConstants.Rabbitmq.MSG_JOB))
+			request = (ProcessJobRequest)request;
+		 else if(eventType.equals(ConsumerConstants.Rabbitmq.MSG_TASK))
+			request = (ProcessTaskRequest)request;
+		 Response response = RestServiceClientHelper.invokeRestService(
+				 url,
+				 request,
+				 null,
+				 MediaType.APPLICATION_JSON_TYPE,
+				 HttpMethodEnum.POST);
+		 return response;
+	 }
 	 
 	 public static void main(String[] args) {
 		 FileConsumer consumer = null;

@@ -11,6 +11,7 @@ import com.vendertool.sharedtypes.core.HttpMethodEnum;
 import com.vendertool.sharedtypes.core.SecurityQuestion;
 import com.vendertool.sharedtypes.exception.VTRuntimeException;
 import com.vendertool.sharedtypes.rnr.GetSecurityQuestionsResponse;
+import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 
 public class WebserviceTest {
 	public static void main(String[] args) {

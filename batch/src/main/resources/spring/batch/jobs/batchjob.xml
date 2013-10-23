@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+    
+
+	<batch:job id="statusCheckJob" >
+		<batch:step id="step">
+			<batch:tasklet>
+				<batch:chunk reader="jobReader" processor="jobProcessor" writer="jobWriter" commit-interval="10"/>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+
+<!-- 
+	<bean id="runScheduler" class="com.vendertool.batch.RunScheduler" />
+-->
+	<!-- Run every 60 seconds -->
+<!--  	<task:scheduled-tasks> -->
+		<!-- <task:scheduled ref="runScheduler" method="run" fixed-delay="5000" 
+			/> -->
+	<!--  	<task:scheduled ref="runScheduler" method="run"
+			cron="*/60 * * * * *" /> -->
+	<!--  </task:scheduled-tasks>  -->
+
+</beans>
