@@ -18,6 +18,7 @@ import com.vendertool.fps.dal.fieldset.FileReadSet;
 import com.vendertool.fps.dal.fieldset.JobReadSet;
 import com.vendertool.fps.dal.fieldset.JobUpdateSet;
 import com.vendertool.fps.dal.fieldset.TaskReadSet;
+import com.vendertool.fps.dal.fieldset.TaskUpdateSet;
 import com.vendertool.sharedtypes.core.fps.File;
 import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.core.fps.Task;
@@ -101,7 +102,24 @@ public class FpsDALService {
 		}
 		
 		jobDao.update(job, JobUpdateSet.getInstance().STATUS);
+	}
+	
+	public void updateTaskStatus (Task task) throws DBConnectionException,
+			UpdateException, DatabaseException{
+
+		if(VUTIL.isNull(task)) {
+			return;
+		}
+		taskDao.update(task, TaskUpdateSet.getInstance().STATUS);
+	}
+	
+	public void updateTaskStatusResponse(Task task) throws DBConnectionException,
+			UpdateException, DatabaseException{
 		
+		if(VUTIL.isNull(task)) {
+			return;
+		}
+		taskDao.update(task, TaskUpdateSet.getInstance().STATUS_RESPONSE);
 	}
 		
 	public Task getTask(Long taskId) throws DBConnectionException,

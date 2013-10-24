@@ -195,12 +195,12 @@ public class ListingMapper implements DALMapper<Listing> {
 		}
 
 		Amount auctionReservedPrice = listing.getAuctionReservedPrice();
-		if (auctionReservedPrice != null) {
+		if (auctionReservedPrice != null && auctionReservedPrice.getValue() != null) {
 			bean.setAuctionReservedPrice(auctionReservedPrice.getValue());
 		}
 
 		Amount auctionStartPrice = listing.getAuctionStartPrice();
-		if (auctionStartPrice != null) {
+		if (auctionStartPrice != null && auctionStartPrice.getValue() != null) {
 			bean.setAuctionStartPrice(auctionStartPrice.getValue());
 		}
 
@@ -230,8 +230,8 @@ public class ListingMapper implements DALMapper<Listing> {
 			bean.setCurrencyCodeIso3(currency.getCurrencyCode());
 		}
 		Amount fixedPrice = listing.getFixedPrice();
-		if (fixedPrice != null) {
-			bean.setFixedPrice(fixedPrice.getValue());
+		if (fixedPrice != null && fixedPrice.getValue()!= null) {
+				bean.setFixedPrice(fixedPrice.getValue());
 		}
 
 		Date endTime = listing.getListingEndTime();

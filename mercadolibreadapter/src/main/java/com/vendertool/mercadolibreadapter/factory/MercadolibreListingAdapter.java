@@ -61,8 +61,8 @@ public class MercadolibreListingAdapter extends
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
-		communicatorVO
-				.setTargetURL(getEndPointURL("APP_USR-6965385537109061-102321-861544ecb19bc31e2a8240634507f3df__H_K__-141983227"));
+		communicatorVO				
+			.setTargetURL(getEndPointURL("APP_USR-6965385537109061-102401-834b56f9c2ff4965168d2feb4067a26e__B_C__-141983227"));
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		Response resp = s_communicator.call(communicatorVO);
 
@@ -167,7 +167,7 @@ public class MercadolibreListingAdapter extends
 			item.setCurrency_id(listing.getPrice().getCurrency()
 					.getCurrencyCode());// TODO remove this hardcoding
 		}
-		item.setListing_type_id("bronze");
+		item.setListing_type_id("free");
 		ListingFormatEnum listingFormate = listing.getListingFormat();
 		if (listingFormate != null) {
 			String buyingMode = MLConstants.ListingConstants.BUY_IT_NOW;

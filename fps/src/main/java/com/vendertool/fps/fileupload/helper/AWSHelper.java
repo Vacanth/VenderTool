@@ -116,6 +116,10 @@ public class AWSHelper {
         return fileRefMap;
 	}
 	
+	public InputStream downloadFileFromwAWS(String fileName) {
+		return s3.getObject(new GetObjectRequest(UPLOAD_REQ_BUCKET, fileName)).getObjectContent();
+	}
+	
 	public File downloadFileFromAWS(String filename, String localFilename) {
 		return downloadFileFromAWS(UPLOAD_REQ_BUCKET, filename, localFilename);
 	}

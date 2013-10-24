@@ -54,6 +54,25 @@ public class CSVBaseReader {
 	public void setDynamicHeader(String[] dynamicHeader) {
 		this.dynamicHeader = dynamicHeader;
 	}
+	
+	public void initHeader(InputStream inputStream) {
+		try {                                        
+			reader = new BufferedInputStream(inputStream);                       
+ 			beanReader = new CsvBeanReader(new InputStreamReader(reader), CsvPreference.STANDARD_PREFERENCE);                                   
+			String[] headerInFile = beanReader.getHeader(true);                                   
+			                                                
+			dynamicHeader = new String[headerInFile.length];                                       
+			processors = new CellProcessor[headerInFile.length];                                  
+                                         
+			int colCnt = 0;                                      
+			for (String header: headerInFile) { 
+ 				dynamicHeader[colCnt] = header;                                                                              
+				processors[colCnt++] = new Optional();                                                         
+			}                                              
+		} catch (Exception e) {                                    
+                         
+		}     
+	}
     
 	public void initHeader(String filePath) {                              
 		try {                                        
