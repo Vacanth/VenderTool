@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 public class BaseDao {
-
+	@SuppressWarnings("deprecation")
 	protected SimpleJdbcTemplate simpleJdbcTemplate;
 
 	@Autowired

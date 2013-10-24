@@ -20,10 +20,10 @@ public class App {
 	public static void main(String[] args) {
 
 		String[] springConfig  = 
-			{	"spring/batch/config/database.xml", 
-				"spring/batch/config/context.xml",
-				"spring/batch/jobs/batchjob.xml",
-				"spring/batch/config/batch-application-context.xml"
+			{	"database.xml", 
+				"context.xml",
+				"batchjob.xml",
+				"batch-application-context.xml"
 			};
 		
 		ApplicationContext context = 

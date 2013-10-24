@@ -28,9 +28,9 @@
 	
 	<bean id="jobProcessor" class="com.vendertool.batch.processor.JobProcessor" >
 	</bean>
-	
+	  
 	<bean id="jobWriter" class="com.vendertool.batch.writer.JobWriter" >
-		<property name="jobDao" ref="jobDaoImpl"></property>
+		  <property name="jobDao" ref="jobDaoImpl"></property>
 	</bean>
 	
 	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">

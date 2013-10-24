@@ -11,22 +11,20 @@ import com.vendertool.batch.model.Job;
 
 
 public class JobWriter implements ItemWriter<Job> {
-
-	StringBuilder sb = new StringBuilder();
 	@Autowired
 	private JobDao jobDao;
 	
 	public void write(List<? extends Job> items) throws Exception {
-		
-		for(Job job: items){
-			jobDao.save(job);
+		if(items!=null)
+		{
+			for(Job job: items){
+				jobDao.save(job);
+			}
 		}
 	}
-	
 	public JobDao getJobDao() {
 		return jobDao;
 	}
-
 	public void setJobDao(JobDao jobDao) {
 		this.jobDao = jobDao;
 	}
