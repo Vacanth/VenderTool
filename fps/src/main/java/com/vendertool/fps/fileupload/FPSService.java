@@ -1,6 +1,7 @@
 package com.vendertool.fps.fileupload;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +49,7 @@ import com.vendertool.sharedtypes.core.fps.Job;
 import com.vendertool.sharedtypes.core.fps.Task;
 import com.vendertool.sharedtypes.error.Errors;
 import com.vendertool.sharedtypes.rnr.AddListingRequest;
+import com.vendertool.sharedtypes.rnr.AddListingResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse;
 import com.vendertool.sharedtypes.rnr.BaseResponse.ResponseAckStatusEnum;
 import com.vendertool.sharedtypes.rnr.UploadsResponse;
@@ -63,76 +65,6 @@ public class FPSService extends BaseVenderToolServiceImpl {
 	private static ValidationUtil VUTIL = ValidationUtil.getInstance();
 	private static FpsDALService fpsDal =FpsDALService.getInstance();
 
-//	@POST
-//	@Path("/upload")
-//	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-//	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-//	public Response uploadFile(FileUploadRequest fileUploadRequest) {
-//		
-//		uploadFile2AWS(fileUploadRequest);
-//
-//		/*// TODO file path.
-//		String uploadedFileLocation = "d://uploaded/"
-//				+ fileDetail.getFileName();// TODO Amazon
-//		// save it
-//		FPSHelper.getInstance().writeToFile(uploadedInputStream,
-//				uploadedFileLocation);
-//		String output = "File uploaded to : " + uploadedFileLocation;*/
-//		return Response.status(200).entity("").build();
-//	}
-//	
-//	private void uploadFile2AWS (FileUploadRequest fileRequest) {
-//        AmazonS3 s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-//		Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-//		s3.setRegion(usWest2);
-//		
-//		String bucketName = "uploadfiles-" + "username";
-//		
-//		try {
-//			//TODO find the bucket already exists then don't create it
-//			//if (s3.listObjects(bucketName) == null) {
-//			if (!isBucketExists(s3.listBuckets(), bucketName)) {
-//	            System.out.println("Creating bucket " + bucketName + "\n");
-//	            s3.createBucket(bucketName);
-//			}
-//
-//            System.out.println("Uploading a new object to S3 from a file\n");
-//            List<FileInformation> files = fileRequest.getFiles();
-//            for (FileInformation file : files) {
-//                Long contentLength = Long.valueOf(file.getFileSize());
-//
-//                ObjectMetadata metadata = new ObjectMetadata();
-//                metadata.setContentLength(contentLength);
-//                InputStream fileIStream = new ByteArrayInputStream(file.getFileData());
-//            	s3.putObject(new PutObjectRequest(bucketName, file.getFileName(), fileIStream, metadata));
-//            }
-//			
-//		} catch (AmazonServiceException ase) {
-//	            System.out.println("Caught an AmazonServiceException, which means your request made it "
-//	                    + "to Amazon S3, but was rejected with an error response for some reason.");
-//	            System.out.println("Error Message:    " + ase.getMessage());
-//	            System.out.println("HTTP Status Code: " + ase.getStatusCode());
-//	            System.out.println("AWS Error Code:   " + ase.getErrorCode());
-//	            System.out.println("Error Type:       " + ase.getErrorType());
-//	            System.out.println("Request ID:       " + ase.getRequestId());
-//	    } catch (AmazonClientException ace) {
-//	            System.out.println("Caught an AmazonClientException, which means the client encountered "
-//	                    + "a serious internal problem while trying to communicate with S3, "
-//	                    + "such as not being able to access the network.");
-//	            System.out.println("Error Message: " + ace.getMessage());
-//	    }
-//
-//	}
-//
-//	private boolean isBucketExists(List<Bucket> buckets, String bucketName) {
-//        for (Bucket bucket : buckets) {
-//            if (bucket != null && bucket.getName().equals(bucketName)) {
-//            	return true;
-//            }
-//        }
-//        return false;
-//	}
-	
 	@POST
 	@Path("/upload")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -294,15 +226,16 @@ public class FPSService extends BaseVenderToolServiceImpl {
 							for (File file : lFiles) {
 								if (file != null && file.getRefUrl() != null) {
 									String fileUrl = file.getRefUrl();
-									String filePath = "C:\\Users\\Gnanasekar\\Downloads\\Process\\"+file.getFileName();
-									System.out.println("FilePath:"+filePath);
-									System.out.println("FileUrl:"+fileUrl);
+									//String filePath = "C:\\Users\\Gnanasekar\\Downloads\\Process\\"+file.getFileName();
 									
-									AWSHelper.getInstance().downloadFileFromAWS(fileUrl, filePath);
-																
+									//AWSHelper.getInstance().downloadFileFromAWS(fileUrl, filePath);
+									
+									InputStream iStream = AWSHelper.getInstance().downloadFileFromwAWS(fileUrl);						
 									try {	
 										//CSVProductReader csvReader = new CSVProductReader(filePath);
-										CSVListingReader csvReader = new CSVListingReader(filePath);
+										//CSVListingReader csvReader = new CSVListingReader(filePath);
+										
+										CSVListingReader csvReader = new CSVListingReader(iStream);
 										csvReader.processData(job.getJobId(), job.getReqFileGroupId(),
 												job.getAccountId(), file.getFileId());	
 										file.setStatus(FPSFileStatusEnum.IN_PROGRESS);
@@ -360,7 +293,28 @@ public class FPSService extends BaseVenderToolServiceImpl {
 							AddListingRequest input = new AddListingRequest();
 							input.setListing(listing);
 							ListingServiceimpl impl = new ListingServiceimpl();
-							impl.addListing(input);
+							AddListingResponse alResponse = impl.addListing(input);
+							if (alResponse.hasErrors()) {
+								task.setResponse(alResponse.getVTErrors().toString().getBytes());
+								task.setStatus(FPSTaskStatusEnum.FAILED);
+								task.setLastModifiedDate(new Date());
+							} else {
+								Listing mItem = alResponse.getListing();
+								if (VUTIL.isNotNull(mItem)) {
+									task.setResponse(mItem.getListingId().toString().getBytes());
+								}
+								task.setStatus(FPSTaskStatusEnum.SUCCESS);
+								task.setLastModifiedDate(new Date());
+							}
+							try {
+								fpsDal.updateTaskStatusResponse(task);
+							} catch (UpdateException ue) {
+								response.setStatus(ResponseAckStatusEnum.FAILURE);
+								response.addFieldBindingError(
+									Errors.FPS.DB_UPDATE_ERROR, null,
+									(String[]) null);		
+					        	response.setStatus(ResponseAckStatusEnum.FAILURE);
+							}
 							
 						} catch (JsonProcessingException je) {
 							// TODO Auto-generated catch block

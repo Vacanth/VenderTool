@@ -20,4 +20,10 @@ public class TaskUpdateSet {
 		TASK.status,
 		TASK.lastModifiedDate
 	};
+	
+	public final Path<?>[] STATUS_RESPONSE = {
+			TASK.response,
+			TASK.status,
+			TASK.lastModifiedDate
+		};
 }
