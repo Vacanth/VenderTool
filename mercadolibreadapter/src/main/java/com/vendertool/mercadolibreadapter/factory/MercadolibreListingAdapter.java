@@ -167,7 +167,7 @@ public class MercadolibreListingAdapter extends
 			item.setCurrency_id(listing.getPrice().getCurrency()
 					.getCurrencyCode());// TODO remove this hardcoding
 		}
-		item.setListing_type_id("bronze");
+		item.setListing_type_id("free");
 		ListingFormatEnum listingFormate = listing.getListingFormat();
 		if (listingFormate != null) {
 			String buyingMode = MLConstants.ListingConstants.BUY_IT_NOW;
