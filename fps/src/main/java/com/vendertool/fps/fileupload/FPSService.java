@@ -294,7 +294,7 @@ public class FPSService extends BaseVenderToolServiceImpl {
 							for (File file : lFiles) {
 								if (file != null && file.getRefUrl() != null) {
 									String fileUrl = file.getRefUrl();
-									String filePath = "C:\\Users\\Gnanasekar\\Downloads\\Process\\"+file.getFileName();
+									String filePath = "C:\\Startup\\tmp\\demo\\"+file.getFileName();
 									System.out.println("FilePath:"+filePath);
 									System.out.println("FileUrl:"+fileUrl);
 									

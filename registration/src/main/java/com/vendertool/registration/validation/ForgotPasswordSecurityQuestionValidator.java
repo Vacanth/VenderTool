@@ -93,7 +93,7 @@ public class ForgotPasswordSecurityQuestionValidator implements Validator {
 		try {
 			hourcount = dalservice.getForgotPasswordCount(email, stdt, eddt,
 					ForgotPasswordStatusEnum.SEC_QUES_FAILED);
-			hourcount = dalservice.getForgotPasswordCount(email, totalstdt, new Date(),
+			totalcount = dalservice.getForgotPasswordCount(email, totalstdt, new Date(),
 					ForgotPasswordStatusEnum.SEC_QUES_FAILED);
 		} catch (FinderException | DBConnectionException | DatabaseException e1) {
 			logger.debug(e1.getMessage(), e1);

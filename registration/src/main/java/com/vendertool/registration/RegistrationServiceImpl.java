@@ -402,9 +402,7 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		
 		UpdateAccountProfileValidator validator = new UpdateAccountProfileValidator();
 		validator.validate(request, response);
-		if(! VUTIL.isEmpty(request.getPassword())) {
-			verifyPassword(response, account.getEmail(), account.getPassword());
-		}
+		verifyPassword(response, account.getEmail(), account.getPassword());
 		
 		if(response.hasErrors()){
 			response.setStatus(ResponseAckStatusEnum.FAILURE);

@@ -30,9 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.vendertool.sharedapp.RestServiceClientHelper;
 import com.vendertool.sharedtypes.core.FileInformation;
 import com.vendertool.sharedtypes.core.HttpMethodEnum;
-import com.vendertool.sharedtypes.rnr.fps.ProcessJobRequest;
 import com.vendertool.sharedtypes.rnr.fps.UploadFileRequest;
-import com.vendertool.sharedtypes.rnr.fps.UploadFileResponse;
 import com.vendertool.sitewebapp.common.WebURLConstants;
 
 @Controller
@@ -140,17 +138,17 @@ public class UploaderController {
 		else {
 			msg.put("statusMessage", "success");
 		}
-		UploadFileResponse uResponse = serviceRes.readEntity(UploadFileResponse.class);
-		
-		url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_PROCESS_PATH;
-		ProcessJobRequest jobRequest = new ProcessJobRequest();
-		jobRequest.setJobId(uResponse.getJobId());
-		serviceRes = RestServiceClientHelper.invokeRestService(
-				url,
-				jobRequest,
-				null,
-				MediaType.APPLICATION_JSON_TYPE,
-				HttpMethodEnum.POST);
+//		UploadFileResponse uResponse = serviceRes.readEntity(UploadFileResponse.class);
+//		
+//		url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_PROCESS_PATH;
+//		ProcessJobRequest jobRequest = new ProcessJobRequest();
+//		jobRequest.setJobId(uResponse.getJobId());
+//		serviceRes = RestServiceClientHelper.invokeRestService(
+//				url,
+//				jobRequest,
+//				null,
+//				MediaType.APPLICATION_JSON_TYPE,
+//				HttpMethodEnum.POST);
 
 		return msg;
 	}
