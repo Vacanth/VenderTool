@@ -127,35 +127,35 @@
 		<tr>
 			<td class="col1"><label>Work phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['WORK'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
+				<input ng-model="accountEdit.contactDetails.phones['WORK'].number" type="tel" placeholder="Numbers only" class="form-control phoneNum" data-content="Please enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="col1"><label>Mobile phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['MOBILE'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
+				<input ng-model="accountEdit.contactDetails.phones['MOBILE'].number" type="tel" placeholder="Numbers only" class="form-control phoneNum" data-content="Please enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="col1"><label>Company phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['PUBLIC'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
+				<input ng-model="accountEdit.contactDetails.phones['PUBLIC'].number" type="tel" placeholder="Numbers only" class="form-control phoneNum" data-content="Please enter only numbers""/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="col1"><label>Fax:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['FAX'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
+				<input ng-model="accountEdit.contactDetails.phones['FAX'].number" type="tel" placeholder="Numbers only" class="form-control phoneNum" data-content="Please enter only numbers""/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="col1"><label>Home phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['HOME'].number" type="tel" class="form-control phoneNum"  data-content="Enter only numbers"/>
+				<input ng-model="accountEdit.contactDetails.phones['HOME'].number" type="tel" placeholder="Numbers only" class="form-control phoneNum"  data-content="Please enter only numbers""/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
