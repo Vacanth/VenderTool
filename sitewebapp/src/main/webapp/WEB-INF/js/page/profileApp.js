@@ -401,11 +401,7 @@ function hidePageMsg() {
 };
 
 
-
-
-
-
-
+$('.phoneNum').popover({trigger:'focus'});
 
 
 

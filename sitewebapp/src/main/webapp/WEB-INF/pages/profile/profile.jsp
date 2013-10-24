@@ -59,14 +59,14 @@
 					
 	<table class="info" cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="col1"><label>First name:</label></td>
+			<td class="col1"><label>First name (required):</label></td>
 			<td class="col2 fldWrp">
 				<input ng-model="accountEdit.contactDetails.firstName" class="form-control"/>
 				<div field-error field="firstName" type="com.vendertool.sharedtypes.core.ContactDetails"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Last name:</label></td>
+			<td class="col1"><label>Last name  (required):</label></td>
 			<td class="col2 fldWrp">
 				<input ng-model="accountEdit.contactDetails.lastName" class="form-control"/>
 				<div field-error field="lastName" type="com.vendertool.sharedtypes.core.ContactDetails"></div>
@@ -125,37 +125,37 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Phone (work):</label></td>
+			<td class="col1"><label>Work phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['WORK'].number" class="form-control" />
+				<input ng-model="accountEdit.contactDetails.phones['WORK'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Phone (mobile):</label></td>
+			<td class="col1"><label>Mobile phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['MOBILE'].number" class="form-control" />
+				<input ng-model="accountEdit.contactDetails.phones['MOBILE'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Phone (company):</label></td>
+			<td class="col1"><label>Company phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['PUBLIC'].number" class="form-control" />
+				<input ng-model="accountEdit.contactDetails.phones['PUBLIC'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Phone (fax):</label></td>
+			<td class="col1"><label>Fax:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['FAX'].number" class="form-control" />
+				<input ng-model="accountEdit.contactDetails.phones['FAX'].number" type="tel" class="form-control phoneNum" data-content="Enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="col1"><label>Phone (home):</label></td>
+			<td class="col1"><label>Home phone:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.contactDetails.phones['HOME'].number" class="form-control" />
+				<input ng-model="accountEdit.contactDetails.phones['HOME'].number" type="tel" class="form-control phoneNum"  data-content="Enter only numbers"/>
 				<div field-error field="number" type="com.vendertool.sharedtypes.core.Phone"></div>
 			</td>
 		</tr>
@@ -168,7 +168,7 @@
 		<tr>
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2 fldWrp">
-				<input ng-model="accountEdit.password" class="form-control" type="password"/>
+				<input ng-model="accountEdit.password"  type="password" autocomplete="off" class="form-control"/>
 				<div field-error field="password" type="com.vendertool.sharedtypes.core.Account"></div>
 			</td>
 		</tr>

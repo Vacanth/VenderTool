@@ -66,7 +66,7 @@
 		<tr class="fldWrp">
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
-				<input ng-model="password" class="form-control" type="password"/>
+				<input ng-model="password" type="password" autocomplete="off" class="form-control" />
 				<div field-error field="password" type="com.vendertool.sharedtypes.rnr.ChangeEmailRequest"></div>
 			</td>
 		</tr>

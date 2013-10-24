@@ -23,6 +23,7 @@
 	</jsp:attribute>
 	
 	<jsp:attribute name="scripts">
+		<script src="<c:url value='/js/page/register.js' />" type="text/javascript"></script>
 		<script src="<c:url value='/js/lib/jquery.placeholder.js' />" type="text/javascript"></script>
 	</jsp:attribute>
 	
