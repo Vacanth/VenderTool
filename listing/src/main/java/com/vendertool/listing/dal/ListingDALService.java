@@ -53,6 +53,7 @@ public class ListingDALService {
 		Long listingID = listingDAO.generateNextSequence();
 		listing.setListingId(listingID);
 		listing.setMasterTemplateId((new Date()).getTime());
+		listing.setCondition(null);
 		listingDAO.insertListing(listing);//TODO if there are any failures, delete the previous product entry.
 		return listingID;
 	}
