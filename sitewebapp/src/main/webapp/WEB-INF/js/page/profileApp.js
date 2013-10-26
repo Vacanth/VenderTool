@@ -9,10 +9,11 @@ profileApp.config(['$routeProvider', function($routeProvider) {
 	/*
 	$routeProvider.when('/info',		{templateUrl: 'profile/partial/account',	controller: 'AccountCtrl'});*/
 	
-	$routeProvider.when('/info',		{templateUrl: 'info',						controller: 'InfoCtrl'});
-	$routeProvider.when('/email',		{templateUrl: 'profile/partial/email',		controller: 'EmailCtrl'});
-	$routeProvider.when('/password',	{templateUrl: 'profile/partial/password',	controller: 'PasswordCtrl'});
-	$routeProvider.when('/questions',	{templateUrl: 'profile/partial/questions',	controller: 'QuestionsCtrl'});
+	$routeProvider.when('/info',			{templateUrl: 'info',							controller: 'InfoCtrl'});
+	$routeProvider.when('/email',			{templateUrl: 'profile/partial/email',			controller: 'EmailCtrl'});
+	$routeProvider.when('/password',		{templateUrl: 'profile/partial/password',		controller: 'PasswordCtrl'});
+	$routeProvider.when('/questionsIntro',	{templateUrl: 'profile/partial/questionsIntro',	controller: 'QuestionsCtrl'});
+	$routeProvider.when('/questions',		{templateUrl: 'profile/partial/questions',		controller: 'QuestionsCtrl'});
 	
 	// Otherwise when no hashtag or hashtag path can't be found, add a hashtag
 	$routeProvider.otherwise({redirectTo: '/info'});

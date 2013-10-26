@@ -109,6 +109,8 @@ public class RegistrationErrorCode extends VTErrorCode implements Serializable{
 			"TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR");
 	public static VTErrorCode TOO_MANY_ACCOUNT_PWD_ATTEMPTS = new RegistrationErrorCode(
 			"TOO_MANY_ACCOUNT_PWD_ATTEMPTS");
-	public static VTErrorCode SUSPENDED = new RegistrationErrorCode(
+	public static VTErrorCode ACCOUNT_SUSPENDED = new RegistrationErrorCode(
 			"SUSPENDED");
+	public static VTErrorCode PASSWORD_PREVIOUSLY_USED = new RegistrationErrorCode(
+			"PASSWORD_PREVIOUSLY_USED");
 }

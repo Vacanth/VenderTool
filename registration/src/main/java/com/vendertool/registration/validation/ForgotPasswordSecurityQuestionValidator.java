@@ -83,7 +83,7 @@ public class ForgotPasswordSecurityQuestionValidator implements Validator {
         
         if(account.getAccountStatus().equals(AccountStatusEnum.SUSPENDED)) {
 			response.addFieldBindingError(
-					Errors.REGISTRATION.SUSPENDED,
+					Errors.REGISTRATION.ACCOUNT_SUSPENDED,
 					null, (String[]) null);
 			return;
         }

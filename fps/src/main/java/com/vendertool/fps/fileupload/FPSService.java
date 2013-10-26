@@ -291,6 +291,7 @@ public class FPSService extends BaseVenderToolServiceImpl {
 							Product product = listing.getProduct();
 							product.setAccountId(accountId);
 							listing.setProduct(product);
+							listing.setCreateOwnerId(accountId);
 							AddListingRequest input = new AddListingRequest();
 							input.setListing(listing);
 							ListingServiceimpl impl = new ListingServiceimpl();

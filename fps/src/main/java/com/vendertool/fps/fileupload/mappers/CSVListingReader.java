@@ -93,6 +93,7 @@ public class CSVListingReader extends CSVBaseReader{
 					
 					AddListingRequest input = new AddListingRequest();
 					input.setListing(listing);
+					listing.setCreateOwnerId(iTask.getAccountId());
 					ListingServiceimpl impl = new ListingServiceimpl();
 					
 					AddListingResponse alResponse = impl.addListing(input);

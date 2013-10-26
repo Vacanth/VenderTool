@@ -479,6 +479,21 @@ public class RegistrationServiceImpl extends BaseVenderToolServiceImpl
 		account.setPassword(hashedNewPassword);
 		account.setConfirmPassword(hashedNewPassword);
 		
+		try {
+			boolean val = 
+					dalservice.isPreviouslyUsedPassword(email, hashedNewPassword);
+			if(val) {
+				response.setStatus(ResponseAckStatusEnum.FAILURE);
+				response.addFieldBindingError(Errors.REGISTRATION.PASSWORD_PREVIOUSLY_USED, null, (String[])null);
+				return response;
+			}
+		} catch (DBConnectionException | FinderException | DatabaseException e1) {
+			logger.debug(e1.getMessage(), e1);
+			response.setStatus(ResponseAckStatusEnum.FAILURE);
+			response.addFieldBindingError(Errors.REGISTRATION.UNABLE_TO_CHANGE_PASSWORD, null, (String[])null);
+			return response;
+		}
+		
 		boolean updated = false;
 		try {
 			updated = dalservice.updatePassword(email, oldDBPassword, hashedNewPassword);

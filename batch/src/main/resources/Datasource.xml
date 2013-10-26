@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="invdbdataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="name" value="jdbc/invdb" />
+		<property name="initialSize" value="2" />
+		<property name="minIdle" value="2" />
+		<property name="maxActive" value="5" />
+		<property name="maxIdle" value="5" />
+		<property name="timeBetweenEvictionRunsMillis" value="34000" />
+		<property name="minEvictableIdleTimeMillis" value="55000" />
+		<property name="jdbcInterceptors" value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport(threshold=10000)" />
+		<property name="jmxEnabled" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="validationInterval" value="34" />
+		<property name="testOnBorrow" value="true" />		
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="55" />
+		<property name="logAbandoned" value="true" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/invdb?allowMultiQueries=true" />
+		<property name="username" value="user5" />
+		<property name="password" value="password" />
+	</bean>
+	
+	<bean id="fpsdbdataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+		<property name="name" value="jdbc/fpsdb" />
+		<property name="initialSize" value="2" />
+		<property name="minIdle" value="2" />
+		<property name="maxActive" value="5" />
+		<property name="maxIdle" value="5" />
+		<property name="timeBetweenEvictionRunsMillis" value="34000" />
+		<property name="minEvictableIdleTimeMillis" value="55000" />
+		<property name="jdbcInterceptors" value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport(threshold=10000)" />
+		<property name="jmxEnabled" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="validationInterval" value="34" />
+		<property name="testOnBorrow" value="true" />		
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="55" />
+		<property name="logAbandoned" value="true" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/batchdb" />
+		<property name="username" value="user5" />
+		<property name="password" value="password" />
+	</bean>
+
+</beans>

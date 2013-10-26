@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  	<parent>
+		<groupId>com.vendertool.serviceparent</groupId>
+		<artifactId>serviceparent</artifactId>
+		<version>1.0</version>
+		<relativePath>../serviceparent/pom.xml</relativePath>
+	</parent>
+  
+  <groupId>com.vendertool.adminservices</groupId>
+  <artifactId>adminservices</artifactId>
+  <packaging>war</packaging>
+  <name>adminservices Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+		<dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <scope>test</scope>
+		</dependency>
+		   
+		<dependency>
+		  <groupId>com.vendertool.sharedtypes</groupId>
+		  <artifactId>sharedtypes</artifactId>
+		  <version>${vendertool-version}</version>
+		</dependency>
+		
+		<dependency>
+	      <groupId>com.vendertool.sharedapp</groupId>
+	      <artifactId>sharedapp</artifactId>
+	      <version>${vendertool-version}</version>
+	    </dependency>
+  </dependencies>
+  <build>
+    <finalName>adminservices</finalName>
+  </build>
+</project>

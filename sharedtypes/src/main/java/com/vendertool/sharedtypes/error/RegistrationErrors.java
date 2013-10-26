@@ -266,9 +266,15 @@ public class RegistrationErrors {
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 	
-	public VTError SUSPENDED = new VTError(
-			RegistrationErrorCode.SUSPENDED, 
+	public VTError ACCOUNT_SUSPENDED = new VTError(
+			RegistrationErrorCode.ACCOUNT_SUSPENDED, 
 			"Your account is suspended", 
+			VTErrorSeverityEnum.ERROR, 
+			DOMAIN);
+	
+	public VTError PASSWORD_PREVIOUSLY_USED = new VTError(
+			RegistrationErrorCode.PASSWORD_PREVIOUSLY_USED, 
+			"Password is previouly used", 
 			VTErrorSeverityEnum.ERROR, 
 			DOMAIN);
 }

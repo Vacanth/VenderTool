@@ -183,7 +183,7 @@ public class ForgotPasswordController {
 		
 		ValidateSecurityQuestionsResponse wsresponse = 
 				response.readEntity(ValidateSecurityQuestionsResponse.class);
-		if(wsresponse.hasError(Errors.REGISTRATION.SUSPENDED.getErrorCode()) ||
+		if(wsresponse.hasError(Errors.REGISTRATION.ACCOUNT_SUSPENDED.getErrorCode()) ||
 				wsresponse.hasError(Errors.REGISTRATION.TOO_MANY_ACCOUNT_PWD_ATTEMPTS.getErrorCode()) || 
 				wsresponse.hasError(Errors.REGISTRATION.TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR.getErrorCode()) || 
 				wsresponse.hasError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED.getErrorCode())) {
@@ -259,7 +259,7 @@ public class ForgotPasswordController {
 		ChangeForgotPasswordResponse wsresponse = 
 				response.readEntity(ChangeForgotPasswordResponse.class);
 		
-		if(wsresponse.hasError(Errors.REGISTRATION.SUSPENDED.getErrorCode()) ||
+		if(wsresponse.hasError(Errors.REGISTRATION.ACCOUNT_SUSPENDED.getErrorCode()) ||
 				wsresponse.hasError(Errors.REGISTRATION.TOO_MANY_ACCOUNT_PWD_ATTEMPTS.getErrorCode()) || 
 				wsresponse.hasError(Errors.REGISTRATION.TOO_MANY_PWD_ATTEMPTS_IN_ONE_HOUR.getErrorCode()) || 
 				wsresponse.hasError(Errors.REGISTRATION.MAX_ACCOUNT_RECONFIRM_ATTEMPTS_REACHED.getErrorCode())) {

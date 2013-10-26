@@ -83,7 +83,13 @@
 	display:none;
 }
 
-
-
-
+.info .introHd {
+	color:#999;
+}
+.info .introQues {
+	margin:10px 0 35px 0;
+}
+.info .introQues div {
+	margin:10px 0;
+}
 
