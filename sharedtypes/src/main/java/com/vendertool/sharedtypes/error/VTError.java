@@ -111,6 +111,15 @@ public class VTError implements Serializable {
 	public String getErrorCodeAsString() {
 		return getErrorCode().getErrorCode();
 	}
+	
+	@JsonIgnore
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("VTError=[[")
+			.append("\n\tCode=").append(getErrorCodeAsString())
+			.append("\n\tEMAIL=").append(getMessage());
+		return sb.toString();
+	}
 
 	private static final long serialVersionUID = 4207311508169879885L;
 }

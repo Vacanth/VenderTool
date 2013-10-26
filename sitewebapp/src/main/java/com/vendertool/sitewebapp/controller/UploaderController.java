@@ -138,7 +138,10 @@ public class UploaderController {
 		else {
 			msg.put("statusMessage", "success");
 		}
+
 		/*UploadFileResponse uResponse = serviceRes.readEntity(UploadFileResponse.class);
+
+		UploadFileResponse uResponse = serviceRes.readEntity(UploadFileResponse.class);
 		
 		url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_PROCESS_PATH;
 		ProcessJobRequest jobRequest = new ProcessJobRequest();
@@ -149,18 +152,6 @@ public class UploaderController {
 				null,
 				MediaType.APPLICATION_JSON_TYPE,
 				HttpMethodEnum.POST); */
-
-//		UploadFileResponse uResponse = serviceRes.readEntity(UploadFileResponse.class);
-//		
-//		url = hostName + WebURLConstants.WEB_SERVICE_PATH + WebURLConstants.JOB_PROCESS_PATH;
-//		ProcessJobRequest jobRequest = new ProcessJobRequest();
-//		jobRequest.setJobId(uResponse.getJobId());
-//		serviceRes = RestServiceClientHelper.invokeRestService(
-//				url,
-//				jobRequest,
-//				null,
-//				MediaType.APPLICATION_JSON_TYPE,
-//				HttpMethodEnum.POST);
 
 		return msg;
 	}
