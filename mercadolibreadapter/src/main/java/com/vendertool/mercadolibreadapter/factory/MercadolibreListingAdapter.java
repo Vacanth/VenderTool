@@ -62,7 +62,7 @@ public class MercadolibreListingAdapter extends
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
 		communicatorVO				
-			.setTargetURL(getEndPointURL("APP_USR-6965385537109061-102422-bdd9a7ee8f54cf99ab9612d7998eff7d__M_G__-141983227"));
+			.setTargetURL(getEndPointURL("APP_USR-6965385537109061-102521-79391fd5da95dbf04f6269b3228aaa64__C_K__-141983227"));
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		Response resp = s_communicator.call(communicatorVO);
 
