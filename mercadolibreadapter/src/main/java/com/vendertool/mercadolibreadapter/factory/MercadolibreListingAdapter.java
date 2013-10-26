@@ -61,8 +61,9 @@ public class MercadolibreListingAdapter extends
 		MercadolibreCommunicatorVO communicatorVO = new MercadolibreCommunicatorVO();
 		communicatorVO.setRequestObject(item);
 		communicatorVO.setMethodEnum(HttpMethodEnum.POST);
-		communicatorVO				
-			.setTargetURL(getEndPointURL("APP_USR-6965385537109061-102521-79391fd5da95dbf04f6269b3228aaa64__C_K__-141983227"));
+		communicatorVO
+			.setTargetURL(getEndPointURL("APP_USR-3303074097273001-102522-3205063990c264e190440364da69627a_K_D_-148129291"));
+
 		communicatorVO.setMediaType(MediaType.APPLICATION_JSON_TYPE);
 		Response resp = s_communicator.call(communicatorVO);
 
@@ -146,7 +147,7 @@ public class MercadolibreListingAdapter extends
 		Item item = new Item();
 		item.setTitle(product.getTitle());
 		List<Classification> classifications = listing.getClassifications();
-
+		
 		// Set Category
 		if (classifications != null) {
 			for (Classification classification : classifications) {
@@ -180,6 +181,7 @@ public class MercadolibreListingAdapter extends
 		}
 
 		item.setCondition(listing.getCondition());
+		item.setCondition("used");
 		// item.setListing_type_id(listing.getListingId());// TODO listing
 		item.setAvailable_quantity(listing.getQuantity());
 		// Set Payment menthods.
