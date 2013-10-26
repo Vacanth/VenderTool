@@ -12,7 +12,7 @@
 	<groupId>com.vendertool.batch</groupId>
 	<artifactId>batch</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>batch</name>
 	<url>http://maven.apache.org</url>
 
@@ -28,6 +28,18 @@
 	<dependency>
 	  <groupId>com.vendertool.sharedtypes</groupId>
 	  <artifactId>sharedtypes</artifactId>
+	  <version>${vendertool-version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>com.vendertool.fps</groupId>
+	  <artifactId>fps</artifactId>
+	  <version>${vendertool-version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>com.vendertool.inventory</groupId>
+	  <artifactId>inventory</artifactId>
 	  <version>${vendertool-version}</version>
 	</dependency>
 	
@@ -119,7 +131,8 @@
 						<tasks>
 							<copy file="../sharedapp/src/main/resources/security/qa/client-credentials.xml"
 								tofile="${project.build.outputDirectory}/security/client-credentials.xml" />
-						</tasks>
+							</tasks>
+						
 					</configuration>
 				</execution>
 			</executions>

@@ -221,6 +221,29 @@ public class JobDaoImpl extends BaseDaoImpl implements JobDao {
 		
 	}
 	
+	public List<Job> findAllJobs( Path<?>[] readSet)
+			throws DBConnectionException, FinderException, DatabaseException {
+		
+		Connection con = null;
+		
+		try { 
+			con = getConnection();
+			
+			QJob f = QJob.job;
+			
+			SQLQuery query = from(con, f);
+
+	    	logger.info("DAL QUERY: " + query.toString());	    	
+	    	
+	    	List<Tuple> rows = query.list(readSet);
+			return convertTupleToJob(rows, readSet);
+			
+		} finally {
+			closeConnection(con);
+		}
+		
+	}
+	
 	private List<Job> convertTupleToJob(List<Tuple> rows, Path<?>[] readSet) 
 		throws DatabaseException {
 

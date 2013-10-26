@@ -34,4 +34,7 @@ public interface JobDao extends BaseDao {
 	public List<Job> findByAccountId(long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
+	public List<Job> findAllJobs(Path<?>[] readSet)
+			throws DBConnectionException, FinderException, DatabaseException;
+	
 }
