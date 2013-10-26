@@ -6,26 +6,11 @@ import java.util.List;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vendertool.batch.dao.JobDao;
-import com.vendertool.batch.model.Job;
+import com.vendertool.batch.model.JobModel;
 
-
-public class JobWriter implements ItemWriter<Job> {
+public class JobWriter implements ItemWriter<JobModel> {
 	@Autowired
-	private JobDao jobDao;
 	
-	public void write(List<? extends Job> items) throws Exception {
-		if(items!=null)
-		{
-			for(Job job: items){
-				jobDao.save(job);
-			}
-		}
-	}
-	public JobDao getJobDao() {
-		return jobDao;
-	}
-	public void setJobDao(JobDao jobDao) {
-		this.jobDao = jobDao;
+	public void write(List<? extends JobModel> items) throws Exception {
 	}
 }

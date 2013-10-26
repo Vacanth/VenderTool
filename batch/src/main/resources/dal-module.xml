@@ -3,7 +3,11 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
- 
- 	<import resource="classpath:security/client-credentials.xml" />
-	<bean id="applicationContextUtils" class="com.vendertool.sharedapp.SpringApplicationContextUtils"></bean>	
- </beans>
+
+	<import resource="Datasource.xml" />
+	<import resource="CommonDAL.xml" />
+	<import resource="FpsDAL.xml" />
+	
+	<bean id="applicationContextUtils" class="com.vendertool.common.SpringApplicationContextUtils"></bean>
+	
+</beans>

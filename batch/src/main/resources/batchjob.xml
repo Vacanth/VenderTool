@@ -9,7 +9,6 @@
 		http://www.springframework.org/schema/task
     http://www.springframework.org/schema/task/spring-task-3.2.xsd">
     
-
 	<batch:job id="statusCheckJob" >
 		<batch:step id="step">
 			<batch:tasklet>
@@ -18,15 +17,10 @@
 		</batch:step>
 	</batch:job>
 
-<!-- 
-	<bean id="runScheduler" class="com.vendertool.batch.RunScheduler" />
--->
-	<!-- Run every 60 seconds -->
-<!--  	<task:scheduled-tasks> -->
-		<!-- <task:scheduled ref="runScheduler" method="run" fixed-delay="5000" 
-			/> -->
-	<!--  	<task:scheduled ref="runScheduler" method="run"
-			cron="*/60 * * * * *" /> -->
-	<!--  </task:scheduled-tasks>  -->
-
+	<!-- Run every 60 seconds
+		<bean id="runScheduler" class="com.vendertool.batch.RunScheduler" />
+	 	<task:scheduled-tasks>
+		<task:scheduled ref="runScheduler" method="run" fixed-delay="5000" /> 
+	 	<task:scheduled ref="runScheduler" method="run" cron="*/60 * * * * *" />
+	  </task:scheduled-tasks>  -->
 </beans>

@@ -16,11 +16,6 @@
 	</div>
 
 	<table class="info" cellspacing="0" cellpadding="0">
-		<%--
-		<tr>
-			<td class="col1"><label>Email:</label></td>
-			<td class="col2"><input ng-model="changeEmailRequest.oldEmailId" class="form-control readonly" readonly/></td>
-		</tr> --%>
 		<tr class="fldWrp">
 			<td class="col1"><label>Question 1:</label></td>
 			<td class="col2">
