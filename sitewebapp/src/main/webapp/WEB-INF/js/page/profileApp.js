@@ -9,10 +9,11 @@ profileApp.config(['$routeProvider', function($routeProvider) {
 	/*
 	$routeProvider.when('/info',		{templateUrl: 'profile/partial/account',	controller: 'AccountCtrl'});*/
 	
-	$routeProvider.when('/info',		{templateUrl: 'info',						controller: 'InfoCtrl'});
-	$routeProvider.when('/email',		{templateUrl: 'profile/partial/email',		controller: 'EmailCtrl'});
-	$routeProvider.when('/password',	{templateUrl: 'profile/partial/password',	controller: 'PasswordCtrl'});
-	$routeProvider.when('/questions',	{templateUrl: 'profile/partial/questions',	controller: 'QuestionsCtrl'});
+	$routeProvider.when('/info',			{templateUrl: 'info',							controller: 'InfoCtrl'});
+	$routeProvider.when('/email',			{templateUrl: 'profile/partial/email',			controller: 'EmailCtrl'});
+	$routeProvider.when('/password',		{templateUrl: 'profile/partial/password',		controller: 'PasswordCtrl'});
+	$routeProvider.when('/questionsIntro',	{templateUrl: 'profile/partial/questionsIntro',	controller: 'QuestionsCtrl'});
+	$routeProvider.when('/questions',		{templateUrl: 'profile/partial/questions',		controller: 'QuestionsCtrl'});
 	
 	// Otherwise when no hashtag or hashtag path can't be found, add a hashtag
 	$routeProvider.otherwise({redirectTo: '/info'});
@@ -43,7 +44,7 @@ profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParam
 	
 	// Hide error or success messages that may be left over from previous view.
 	//hidePageMsg();
-	
+
 	if ($rootScope.accountUpdated) {
 		$scope.accountOrig = $rootScope.accountUpdated;
 		$scope.accountEdit = angular.copy($rootScope.accountUpdated);
@@ -109,6 +110,29 @@ profileApp.controller('InfoCtrl', ['$rootScope', '$scope', '$http', '$routeParam
     	/** TODO: Should we change path to make another request to get the account values from server?? **/
     	//$location.path('/'); // path not hash
   	};
+  	
+  	//
+  	// Binds the phone fields to only accept numbers.
+  	// Also bind the popover to phone fields.
+  	//
+  	$('.phoneNum').keypress(function(e) {
+  		var a = [];
+  		var k = e.which;
+ 
+  		for (var i = 48; i < 58; i++) {
+  			a.push(i);
+  		}
+  		
+  		if (!($.inArray(k, a) >= 0)) {
+  			$(this).popover('show');
+  			e.preventDefault();
+  		}
+  		else {
+  			$(this).popover('hide');
+  		}
+    });
+
+  	
 }]);
 
 /*******************
@@ -399,10 +423,6 @@ function hidePageMsg() {
 	$('.alert-success').hide();
 	$('.alert-danger').hide();
 };
-
-
-
-
 
 
 

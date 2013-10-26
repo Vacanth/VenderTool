@@ -94,6 +94,11 @@ public class AddListingProcessor extends BaseListingProcessor {
 					"product");
 		}
 
+		if(checkSKUExist(product)){
+			addListingResponse.addFieldBindingError(
+					Errors.LISTING.SKU_REQUIRED, product.getClass().getName(),
+					"product");
+		}
 		if (InventoryHelper.getInstance().copyFromProductRequest(product)) {
 			// Below validations are not required, since product contains only
 			// SKU.
@@ -120,6 +125,13 @@ public class AddListingProcessor extends BaseListingProcessor {
 							.getName(), "product");
 		}
 
+	}
+
+	private boolean checkSKUExist(Product product) {
+		Long accountId = product.getAccountId();
+		String sku = product.getSku();
+		Product productFromDB = InventoryDALService.getInstance().findBySKU(accountId, sku);
+		return productFromDB != null;
 	}
 
 	@Override

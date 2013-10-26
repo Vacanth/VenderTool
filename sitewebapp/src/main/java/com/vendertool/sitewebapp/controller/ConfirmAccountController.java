@@ -42,6 +42,7 @@ public class ConfirmAccountController {
 			return "redirect:home";
 		}
 		
+		confirmRegRequest.setEmail(email);
 		acctConf.setEmail(email);
 		acctConf.setConfirmCode(code);
 		acctConf.setConfirmSessionId(sessiontoken);

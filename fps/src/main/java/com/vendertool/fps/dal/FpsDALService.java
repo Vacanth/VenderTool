@@ -17,6 +17,7 @@ import com.vendertool.fps.dal.dao.TaskDao;
 import com.vendertool.fps.dal.fieldset.FileReadSet;
 import com.vendertool.fps.dal.fieldset.JobReadSet;
 import com.vendertool.fps.dal.fieldset.JobUpdateSet;
+import com.vendertool.fps.dal.fieldset.TaskReadSet;
 import com.vendertool.fps.dal.fieldset.TaskUpdateSet;
 import com.vendertool.sharedtypes.core.fps.File;
 import com.vendertool.sharedtypes.core.fps.Job;
@@ -128,7 +129,7 @@ public class FpsDALService {
 			return null;
 		}
 		
-		return taskDao.findByTaskId(taskId, JobReadSet.getInstance().FULL);
+		return taskDao.findByTaskId(taskId, TaskReadSet.getInstance().FULL);
 	}
 
 	public List<Job> getJobs(Long accountId) throws DBConnectionException,

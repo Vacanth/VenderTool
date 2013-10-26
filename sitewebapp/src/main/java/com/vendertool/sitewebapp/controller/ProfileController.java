@@ -415,6 +415,20 @@ public class ProfileController {
 		return "profile/partial/password";
 	}
 	
+	@RequestMapping(value = "profile/partial/questionsIntro", method = RequestMethod.GET)
+	public String getQuestionsIntroPartial(ModelMap modelMap, HttpServletRequest request) {
+		logger.info("getQuestionsPartial controller invoked");
+		
+		boolean userHasQuestions = true;
+		
+		if (userHasQuestions) {
+			return "profile/partial/questionsIntro";
+		}
+		else {
+			return "profile/partial/questions";
+		}
+	}
+	
 	@RequestMapping(value = "profile/partial/questions", method = RequestMethod.GET)
 	public String getQuestionsPartial() {
 		logger.info("getQuestionsPartial controller invoked");

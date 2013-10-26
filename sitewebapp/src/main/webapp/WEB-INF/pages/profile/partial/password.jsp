@@ -15,21 +15,21 @@
 		<tr class="fldWrp">
 			<td class="col1"><label>Current Password:</label></td>
 			<td class="col2">
-				<input ng-model="changePassword.currentPassword" class="form-control" type="password"/>
+				<input ng-model="changePassword.currentPassword" type="password" autocomplete="off" class="form-control" />
 				<div field-error field="currentPassword" type="com.vendertool.sharedtypes.core.ChangePassword"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>New password:</label></td>
 			<td class="col2">
-				<input ng-model="changePassword.newPassword" class="form-control" type="password"/>
+				<input ng-model="changePassword.newPassword" type="password" autocomplete="off" class="form-control" />
 				<div field-error field="newPassword" type="com.vendertool.sharedtypes.core.ChangePassword"></div>
 			</td>
 		</tr>
 		<tr class="fldWrp">
 			<td class="col1"><label>Confirm new password:</label></td>
 			<td class="col2">
-				<input ng-model="changePassword.confirmPassword" class="form-control" type="password"/>
+				<input ng-model="changePassword.confirmPassword" type="password" autocomplete="off" class="form-control" />
 				<div field-error field="confirmPassword" type="com.vendertool.sharedtypes.core.ChangePassword"></div>
 			</td>
 		</tr>

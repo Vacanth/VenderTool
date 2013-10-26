@@ -5,7 +5,7 @@ var securityQuestionsApp = angular.module('securityQuestionsApp', ['pageErrorMod
 securityQuestionsApp.config(['$routeProvider', function($routeProvider) {
 	
 	// When there is something after the hashtag
-	$routeProvider.when('/questions',	{templateUrl: 'questions/partial/questions',	controller: 'SecurityQuestionsCtrl'});
+	$routeProvider.when('/questions',	{templateUrl: 'questionForm',				controller: 'SecurityQuestionsCtrl'});
 	$routeProvider.when('/success',		{templateUrl: 'questions/partial/success',	controller: 'SecurityQuestionsCtrl'});
 	
 	// Otherwise when no hashtag or hashtag path can't be found, add a hashtag
@@ -68,8 +68,8 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 	// }]
 	//
 	$scope.save = function() {
-		
-		//PageUtil.showSpinner();
+
+		PageUtil.showSpinner();
 		
 		var questionsReq = {};
 		questionsReq.questions = [{"question":{"questionCode":$scope.question1}, "answer":$scope.answer1}, {"question":{"questionCode":$scope.question2}, "answer":$scope.answer2}];
@@ -86,9 +86,9 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 					handlePageErrorMsg();
 				}
 				else {
+
 					// Only update this if no errors
 					$scope.errorResponse = undefined;
-					$scope.resetQuestionAnswers();
 					
 					// Take user to accounthub
 					document.location.href = "accounthub";
@@ -96,14 +96,14 @@ securityQuestionsApp.controller('SecurityQuestionsCtrl', ['$scope', '$http', '$l
 				
 				$scope.password = ''; // Clear password field;
 				
-				//PageUtil.hideSpinner();
+				PageUtil.hideSpinner();
 			}).
 			error(function(data, status, headers, config) {
 				handlePageErrorMsg(status, Content);
 				
 				$scope.password = ''; // Clear password field;
 				
-				//PageUtil.hideSpinner();
+				PageUtil.hideSpinner();
 			});
 	};
 	
