@@ -64,7 +64,7 @@ public class ListingServiceTest implements ApplicationContextAware {
 		listing.setFixedPrice(amount);
 		listing.setPrice(amount);
 		listing.setProduct(product);
-		listing.setCreateOwnerId(1234L);
+		listing.setCreateOwnerId(441234L);
 		listing.setQuantity(1);
 		listing.setCondition("used");
 		listing.setMarket(MarketEnum.MERCADO_LIBRE);
