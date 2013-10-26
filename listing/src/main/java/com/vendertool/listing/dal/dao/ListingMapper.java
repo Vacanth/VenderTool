@@ -218,7 +218,9 @@ public class ListingMapper implements DALMapper<Listing> {
 			}
 		}
 
-		bean.setCondition(listing.getCondition());
+		if(listing.getCondition() != null && listing.getCondition().trim().length() > 0){
+			bean.setCondition(listing.getCondition());
+		}
 
 		Date createDate = listing.getCreateDate();
 		if (createDate != null) {
@@ -257,8 +259,12 @@ public class ListingMapper implements DALMapper<Listing> {
 		}
 		
 		bean.setMarketplaceItemId(listing.getMarketPlaceListingId());
-		bean.setMasterTemplateId(listing.getMasterTemplateId());
-		bean.setParentItemId(listing.getParentListingId());
+		if(listing.getMasterTemplateId() != null){
+			bean.setMasterTemplateId(listing.getMasterTemplateId());
+		}
+		if(listing.getParentListingId() != null){
+			bean.setParentItemId(listing.getParentListingId());
+		}
 		
 		Product product = listing.getProduct();
 		if (product != null) {
@@ -266,7 +272,9 @@ public class ListingMapper implements DALMapper<Listing> {
 		}
 		
 		bean.setQuantity(listing.getQuantity());
-		bean.setWarranty(listing.getWarranty());
+		if(listing.getWarranty() != null){
+			bean.setWarranty(listing.getWarranty());
+		}
 		
 		return bean;
 	}

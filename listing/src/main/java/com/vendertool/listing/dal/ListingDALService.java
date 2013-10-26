@@ -1,5 +1,7 @@
 package com.vendertool.listing.dal;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.vendertool.common.dal.exception.DBConnectionException;
@@ -50,6 +52,7 @@ public class ListingDALService {
 //		Product
 		Long listingID = listingDAO.generateNextSequence();
 		listing.setListingId(listingID);
+		listing.setMasterTemplateId((new Date()).getTime());
 		listingDAO.insertListing(listing);//TODO if there are any failures, delete the previous product entry.
 		return listingID;
 	}
