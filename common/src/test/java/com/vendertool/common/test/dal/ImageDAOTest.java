@@ -39,7 +39,7 @@ public class ImageDAOTest implements ApplicationContextAware {
 		image.setFormat(ImageFormatEnum.JPEG);
 		image.setSortOrderId((byte) 1);
 		try {
-			  imageDao.insert(image,123L,(byte) 123);
+			  imageDao.insert(image,123L,123);
 		} catch (DBConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -25,7 +25,7 @@ public class QAccountSecurityQuestion extends com.mysema.query.sql.RelationalPat
 
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
+    public final NumberPath<Integer> lastModifiedApp = createNumber("last_modified_app", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 

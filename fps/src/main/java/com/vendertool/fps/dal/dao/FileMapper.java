@@ -108,10 +108,10 @@ public class FileMapper implements DALMapper<File> {
 		bean.setRefUrl(file.getRefUrl());
 		bean.setStorageSource(file.getStorageSource());
 		if(file.getUseCase() != null) {
-			bean.setUseCase(new Byte(file.getUseCase().getId()+""));
+			bean.setUseCase(file.getUseCase().getId());
 		}
 		if(file.getStatus() != null) {
-			bean.setStatus(new Byte(file.getStatus().getId()+""));
+			bean.setStatus(file.getStatus().getId());
 		}
 		
 		Date cdate = file.getCreatedDate();

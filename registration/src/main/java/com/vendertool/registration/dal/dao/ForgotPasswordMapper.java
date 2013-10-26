@@ -104,7 +104,7 @@ public class ForgotPasswordMapper implements DALMapper<ForgotPassword> {
 		fpbean.setLastModifiedDate(new Timestamp(new Date().getTime()));
 		
 		if(VUTIL.isNotNull(fp.getStatus())) {
-			fpbean.setStatus(new Byte(fp.getStatus().getId()+""));
+			fpbean.setStatus(fp.getStatus().getId());
 		}
 		
 		return fpbean;

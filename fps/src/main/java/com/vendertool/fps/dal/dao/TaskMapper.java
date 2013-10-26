@@ -107,7 +107,7 @@ public class TaskMapper implements DALMapper<Task> {
 		bean.setRequest(task.getRequest());
 		bean.setResponse(task.getResponse());
 		if(task.getStatus() != null) {
-			bean.setStatus(new Byte(task.getStatus().getId()+""));
+			bean.setStatus(task.getStatus().getId());
 		}
 		bean.setIsoCountryCode(task.getIsoCountryCode());
 

@@ -15,7 +15,7 @@ import com.vendertool.sharedtypes.core.Image;
 
 public interface ImageDao extends BaseDao {
 	
-	public long insert(Image image,Long refId,Byte refType) throws DBConnectionException,
+	public long insert(Image image,Long refId, Integer refType) throws DBConnectionException,
 			InsertException, DatabaseException;
 	
 	public void delete(Image image)
@@ -33,7 +33,7 @@ public interface ImageDao extends BaseDao {
 	public List<Image> findByAccountId(Long accountId, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
-	public List<Image> findByAccountIdRefIdAndRefType(Long accountId, Long refId, Byte refType, Path<?>[] readSet)
+	public List<Image> findByAccountIdRefIdAndRefType(Long accountId, Long refId, Integer refType, Path<?>[] readSet)
 			throws DBConnectionException, FinderException, DatabaseException;
 	
 	public Image findByAccountIdAndImageId(Long accountId,Long imageId, Path<?>[] readSet)

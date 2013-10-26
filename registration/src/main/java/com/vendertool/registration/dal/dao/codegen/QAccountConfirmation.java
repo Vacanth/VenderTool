@@ -33,15 +33,15 @@ public class QAccountConfirmation extends com.mysema.query.sql.RelationalPathBas
 
     public final DateTimePath<java.sql.Timestamp> expiryDate = createDateTime("expiry_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
+    public final NumberPath<Integer> lastModifiedApp = createNumber("last_modified_app", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> numberOfAttempts = createNumber("number_of_attempts", Byte.class);
+    public final NumberPath<Integer> numberOfAttempts = createNumber("number_of_attempts", Integer.class);
 
     public final StringPath sessionId = createString("session_id");
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanAccountConfirmation> primary = createPrimaryKey(accountConfirmationId);
 

@@ -125,7 +125,7 @@ public class AddressMapper implements DALMapper<Address> {
 		bean.setAddrLn2(addr.getAddressLine2());
 		
 		if(addr.getAddressType() != null) {
-			bean.setAddrType(new Byte(addr.getAddressType().getId()+""));
+			bean.setAddrType(addr.getAddressType().getId());
 		}
 		
 		bean.setCity(addr.getCity());
@@ -146,11 +146,11 @@ public class AddressMapper implements DALMapper<Address> {
 		bean.setState(addr.getState());
 		
 		if(addr.getStatus() != null) {
-			bean.setStatus(new Byte(addr.getStatus().getId()+""));
+			bean.setStatus(addr.getStatus().getId());
 		}
 		
 		if(addr.getAddressUseCase() != null) {
-			bean.setUseCase(new Byte(addr.getAddressUseCase().getId()+""));
+			bean.setUseCase(addr.getAddressUseCase().getId());
 		}
 		
 		return bean;

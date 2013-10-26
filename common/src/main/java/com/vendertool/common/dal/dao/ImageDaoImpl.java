@@ -29,7 +29,7 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	ValidationUtil VUTIL = ValidationUtil.getInstance();
 
 	@Override
-	public long insert(Image image,Long refId,Byte refType) throws DBConnectionException,
+	public long insert(Image image,Long refId, Integer refType) throws DBConnectionException,
 	InsertException, DatabaseException {
 
 		if(VUTIL.isNull(image)) {
@@ -215,7 +215,7 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao {
 	}
 
 	@Override
-	public List<Image> findByAccountIdRefIdAndRefType(Long accountId,Long refId, Byte refType,
+	public List<Image> findByAccountIdRefIdAndRefType(Long accountId,Long refId, Integer refType,
 			Path<?>[] readSet) throws DBConnectionException, FinderException,
 			DatabaseException {
 		Connection con = null;

@@ -294,7 +294,7 @@ public class AddressDaoImpl extends BaseDaoImpl implements AddressDao {
 	public void updateStatusById(Long id, AddressStatusEnum status)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
-		if(VUTIL.isNull(id)) {
+		if(VUTIL.isNull(id) || VUTIL.isNull(status)) {
 			UpdateException ue = new UpdateException("Cannot update null address");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
@@ -305,10 +305,7 @@ public class AddressDaoImpl extends BaseDaoImpl implements AddressDao {
 		try {
 			con = getConnection();
 			
-			Byte val = null;
-			if(status != null) {
-				val = new Byte(status.getId()+"");
-			}
+			Integer val = status.getId();
 			
 			QAddress a = QAddress.address;
 			SQLUpdateClause s = update(con, a)
@@ -394,7 +391,7 @@ public class AddressDaoImpl extends BaseDaoImpl implements AddressDao {
 	public void updateStatusByAccountId(Long accountId, AddressStatusEnum status)
 			throws DBConnectionException, UpdateException, DatabaseException {
 		
-		if(VUTIL.isNull(accountId)) {
+		if(VUTIL.isNull(accountId) || VUTIL.isNull(status)) {
 			UpdateException ue = new UpdateException("Cannot update null address");
 			logger.debug(ue.getMessage(), ue);
 			throw ue;
@@ -405,10 +402,7 @@ public class AddressDaoImpl extends BaseDaoImpl implements AddressDao {
 		try {
 			con = getConnection();
 			
-			Byte val = null;
-			if(status != null) {
-				val = new Byte(status.getId()+"");
-			}
+			Integer val = status.getId();
 			
 			QAddress a = QAddress.address;
 			SQLUpdateClause s = update(con, a)

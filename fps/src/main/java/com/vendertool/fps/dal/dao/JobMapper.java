@@ -112,10 +112,10 @@ public class JobMapper implements DALMapper<Job> {
 		bean.setResponseFileGroupId(job.getResFileGroupId());
 		bean.setIsoCountryCode(job.getIsoCountryCode());
 		if(job.getUsecase() != null) {
-			bean.setUsecase(new Byte(job.getUsecase().getId()+""));
+			bean.setUsecase(job.getUsecase().getId());
 		}
 		if(job.getStatus() != null) {
-			bean.setStatus(new Byte(job.getStatus().getId()+""));
+			bean.setStatus(job.getStatus().getId());
 		}
 		bean.setTitle(job.getTitle());
 		bean.setTotalRequestFileSize(job.getRequestFileSize());

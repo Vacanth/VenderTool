@@ -41,14 +41,14 @@ public class Image {
 	private String name;
 	private String imgurl;
 	private String hash;
-	private byte sortOrderId;
+	private int sortOrderId;
 	
 	
-	public byte getSortOrderId() {
+	public int getSortOrderId() {
 		return sortOrderId;
 	}
 
-	public void setSortOrderId(byte sortOrderId) {
+	public void setSortOrderId(int sortOrderId) {
 		this.sortOrderId = sortOrderId;
 	}
 

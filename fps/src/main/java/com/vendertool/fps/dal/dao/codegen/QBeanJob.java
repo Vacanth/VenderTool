@@ -24,7 +24,7 @@ public class QBeanJob {
 
     private String responseFileGroupId;
 
-    private Byte status;
+    private Integer status;
 
     private String title;
 
@@ -32,7 +32,7 @@ public class QBeanJob {
 
     private Long totalResponseFileSize;
 
-    private Byte usecase;
+    private Integer usecase;
 
     public Long getAccountId() {
         return accountId;
@@ -98,11 +98,11 @@ public class QBeanJob {
         this.responseFileGroupId = responseFileGroupId;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -130,11 +130,11 @@ public class QBeanJob {
         this.totalResponseFileSize = totalResponseFileSize;
     }
 
-    public Byte getUsecase() {
+    public Integer getUsecase() {
         return usecase;
     }
 
-    public void setUsecase(Byte usecase) {
+    public void setUsecase(Integer usecase) {
         this.usecase = usecase;
     }
 

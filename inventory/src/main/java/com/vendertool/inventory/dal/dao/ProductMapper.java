@@ -161,12 +161,12 @@ public class ProductMapper implements DALMapper<Product> {
 			bean.setProductCode(product.getProductCode());
 		}	
 		if(product.getProductCodeType() != null) {
-			bean.setProductCodeType(new Byte(product.getProductCodeType().getId()+""));
+			bean.setProductCodeType(product.getProductCodeType().getId());
 		}
 		Dimension dimension = product.getDimension();
 		if(dimension != null){
 			if(dimension.getDimensionUnit() != null) {
-				bean.setDimensionUnit(new Byte(dimension.getDimensionUnit().getId()+""));
+				bean.setDimensionUnit(dimension.getDimensionUnit().getId());
 			}
 			if(dimension.getHeight() != null) {
 				bean.setHeight( dimension.getHeight());
@@ -181,10 +181,10 @@ public class ProductMapper implements DALMapper<Product> {
 		Weight weight = product.getWeight();
 		if(weight != null){
 			if(weight.getWeightUnit() != null) {
-				bean.setWeightUnit((byte) weight.getWeightUnit().getId());
+				bean.setWeightUnit(weight.getWeightUnit().getId());
 			}
 			if(weight.getValue() != null) {
-				bean.setWeightUnit((byte) weight.getWeightUnit().getId());
+				bean.setWeightUnit(weight.getWeightUnit().getId());
 			}
 		}
 		if(product.getProductUrl() != null) {

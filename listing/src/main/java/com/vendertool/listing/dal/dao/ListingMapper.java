@@ -245,7 +245,7 @@ public class ListingMapper implements DALMapper<Listing> {
 			bean.setItemStartTime(new Timestamp(startTime.getTime()));
 		}
 
-		bean.setLastModifiedApp(new Byte(listing.getLastModifiedApp()+""));
+		bean.setLastModifiedApp(listing.getLastModifiedApp());
 		
 		Date lastModifiedDate = listing.getLastModifiedDate();
 		if (lastModifiedDate != null) {
@@ -255,7 +255,7 @@ public class ListingMapper implements DALMapper<Listing> {
 		bean.setListingId(listing.getListingId());
 		MarketEnum market = listing.getMarket();
 		if (market != null) {
-			bean.setMarketplaceId(new Byte(market.getId()+""));
+			bean.setMarketplaceId(market.getId());
 		}
 		
 		bean.setMarketplaceItemId(listing.getMarketPlaceListingId());

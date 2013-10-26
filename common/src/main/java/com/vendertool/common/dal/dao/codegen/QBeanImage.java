@@ -16,7 +16,7 @@ public class QBeanImage {
 
     private String hostedUrl;
 
-    private Byte imageFormat;
+    private Integer imageFormat;
 
     private Long imageId;
 
@@ -26,11 +26,11 @@ public class QBeanImage {
 
     private Long refId;
 
-    private Byte refType;
+    private Integer refType;
 
     private String size;
 
-    private Byte sortOrderId;
+    private Integer sortOrderId;
 
     public Long getAccountId() {
         return accountId;
@@ -64,11 +64,11 @@ public class QBeanImage {
         this.hostedUrl = hostedUrl;
     }
 
-    public Byte getImageFormat() {
+    public Integer getImageFormat() {
         return imageFormat;
     }
 
-    public void setImageFormat(Byte imageFormat) {
+    public void setImageFormat(Integer imageFormat) {
         this.imageFormat = imageFormat;
     }
 
@@ -104,11 +104,11 @@ public class QBeanImage {
         this.refId = refId;
     }
 
-    public Byte getRefType() {
+    public Integer getRefType() {
         return refType;
     }
 
-    public void setRefType(Byte refType) {
+    public void setRefType(Integer refType) {
         this.refType = refType;
     }
 
@@ -120,11 +120,11 @@ public class QBeanImage {
         this.size = size;
     }
 
-    public Byte getSortOrderId() {
+    public Integer getSortOrderId() {
         return sortOrderId;
     }
 
-    public void setSortOrderId(Byte sortOrderId) {
+    public void setSortOrderId(Integer sortOrderId) {
         this.sortOrderId = sortOrderId;
     }
 

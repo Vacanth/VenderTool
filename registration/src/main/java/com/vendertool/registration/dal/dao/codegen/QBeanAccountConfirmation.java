@@ -22,15 +22,15 @@ public class QBeanAccountConfirmation {
 
     private java.sql.Timestamp expiryDate;
 
-    private Byte lastModifiedApp;
+    private Integer lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
 
-    private Byte numberOfAttempts;
+    private Integer numberOfAttempts;
 
     private String sessionId;
 
-    private Byte status;
+    private Integer status;
 
     public Long getAccountConfirmationId() {
         return accountConfirmationId;
@@ -88,11 +88,11 @@ public class QBeanAccountConfirmation {
         this.expiryDate = expiryDate;
     }
 
-    public Byte getLastModifiedApp() {
+    public Integer getLastModifiedApp() {
         return lastModifiedApp;
     }
 
-    public void setLastModifiedApp(Byte lastModifiedApp) {
+    public void setLastModifiedApp(Integer lastModifiedApp) {
         this.lastModifiedApp = lastModifiedApp;
     }
 
@@ -104,11 +104,11 @@ public class QBeanAccountConfirmation {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Byte getNumberOfAttempts() {
+    public Integer getNumberOfAttempts() {
         return numberOfAttempts;
     }
 
-    public void setNumberOfAttempts(Byte numberOfAttempts) {
+    public void setNumberOfAttempts(Integer numberOfAttempts) {
         this.numberOfAttempts = numberOfAttempts;
     }
 
@@ -120,11 +120,11 @@ public class QBeanAccountConfirmation {
         this.sessionId = sessionId;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

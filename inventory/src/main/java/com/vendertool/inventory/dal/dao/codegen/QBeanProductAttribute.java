@@ -16,7 +16,7 @@ public class QBeanProductAttribute {
 
     private java.math.BigDecimal attrNumValue;
 
-    private Byte attrValueType;
+    private Integer attrValueType;
 
     private java.sql.Timestamp createdDate;
 
@@ -26,7 +26,7 @@ public class QBeanProductAttribute {
 
     private Long refId;
 
-    private Byte refType;
+    private Integer refType;
 
     public String getAttrCharValue() {
         return attrCharValue;
@@ -60,11 +60,11 @@ public class QBeanProductAttribute {
         this.attrNumValue = attrNumValue;
     }
 
-    public Byte getAttrValueType() {
+    public Integer getAttrValueType() {
         return attrValueType;
     }
 
-    public void setAttrValueType(Byte attrValueType) {
+    public void setAttrValueType(Integer attrValueType) {
         this.attrValueType = attrValueType;
     }
 
@@ -100,11 +100,11 @@ public class QBeanProductAttribute {
         this.refId = refId;
     }
 
-    public Byte getRefType() {
+    public Integer getRefType() {
         return refType;
     }
 
-    public void setRefType(Byte refType) {
+    public void setRefType(Integer refType) {
         this.refType = refType;
     }
 

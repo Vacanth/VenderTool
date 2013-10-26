@@ -14,11 +14,11 @@ public class QBeanProduct {
 
     private String currencyCodeIso3;
 
-    private Byte dimensionUnit;
+    private Integer dimensionUnit;
 
     private Double height;
 
-    private Byte lastModifiedApp;
+    private Integer lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
 
@@ -28,7 +28,7 @@ public class QBeanProduct {
 
     private String productCode;
 
-    private Byte productCodeType;
+    private Integer productCodeType;
 
     private Long productId;
 
@@ -42,7 +42,7 @@ public class QBeanProduct {
 
     private Double weight;
 
-    private Byte weightUnit;
+    private Integer weightUnit;
 
     private Double width;
 
@@ -70,11 +70,11 @@ public class QBeanProduct {
         this.currencyCodeIso3 = currencyCodeIso3;
     }
 
-    public Byte getDimensionUnit() {
+    public Integer getDimensionUnit() {
         return dimensionUnit;
     }
 
-    public void setDimensionUnit(Byte dimensionUnit) {
+    public void setDimensionUnit(Integer dimensionUnit) {
         this.dimensionUnit = dimensionUnit;
     }
 
@@ -86,11 +86,11 @@ public class QBeanProduct {
         this.height = height;
     }
 
-    public Byte getLastModifiedApp() {
+    public Integer getLastModifiedApp() {
         return lastModifiedApp;
     }
 
-    public void setLastModifiedApp(Byte lastModifiedApp) {
+    public void setLastModifiedApp(Integer lastModifiedApp) {
         this.lastModifiedApp = lastModifiedApp;
     }
 
@@ -126,11 +126,11 @@ public class QBeanProduct {
         this.productCode = productCode;
     }
 
-    public Byte getProductCodeType() {
+    public Integer getProductCodeType() {
         return productCodeType;
     }
 
-    public void setProductCodeType(Byte productCodeType) {
+    public void setProductCodeType(Integer productCodeType) {
         this.productCodeType = productCodeType;
     }
 
@@ -182,11 +182,11 @@ public class QBeanProduct {
         this.weight = weight;
     }
 
-    public Byte getWeightUnit() {
+    public Integer getWeightUnit() {
         return weightUnit;
     }
 
-    public void setWeightUnit(Byte weightUnit) {
+    public void setWeightUnit(Integer weightUnit) {
         this.weightUnit = weightUnit;
     }
 

@@ -30,13 +30,13 @@ public class QBeanListing {
 
     private java.sql.Timestamp itemStartTime;
 
-    private Byte lastModifiedApp;
+    private Integer lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
 
     private Long listingId;
 
-    private Byte marketplaceId;
+    private Integer marketplaceId;
 
     private String marketplaceItemId;
 
@@ -138,11 +138,11 @@ public class QBeanListing {
         this.itemStartTime = itemStartTime;
     }
 
-    public Byte getLastModifiedApp() {
+    public Integer getLastModifiedApp() {
         return lastModifiedApp;
     }
 
-    public void setLastModifiedApp(Byte lastModifiedApp) {
+    public void setLastModifiedApp(Integer lastModifiedApp) {
         this.lastModifiedApp = lastModifiedApp;
     }
 
@@ -162,11 +162,11 @@ public class QBeanListing {
         this.listingId = listingId;
     }
 
-    public Byte getMarketplaceId() {
+    public Integer getMarketplaceId() {
         return marketplaceId;
     }
 
-    public void setMarketplaceId(Byte marketplaceId) {
+    public void setMarketplaceId(Integer marketplaceId) {
         this.marketplaceId = marketplaceId;
     }
 

@@ -29,17 +29,17 @@ public class QFile extends com.mysema.query.sql.RelationalPathBase<QBeanFile> {
 
     public final StringPath fileName = createString("file_name");
 
-    public final NumberPath<Byte> filesCountInGroup = createNumber("files_count_in_group", Byte.class);
+    public final NumberPath<Integer> filesCountInGroup = createNumber("files_count_in_group", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
     public final StringPath refUrl = createString("ref_url");
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
-    public final NumberPath<Byte> storageSource = createNumber("storage_source", Byte.class);
+    public final NumberPath<Integer> storageSource = createNumber("storage_source", Integer.class);
 
-    public final NumberPath<Byte> useCase = createNumber("use_case", Byte.class);
+    public final NumberPath<Integer> useCase = createNumber("use_case", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanFile> primary = createPrimaryKey(fileId);
 

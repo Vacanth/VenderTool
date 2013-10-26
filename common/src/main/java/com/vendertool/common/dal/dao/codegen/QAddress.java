@@ -27,7 +27,7 @@ public class QAddress extends com.mysema.query.sql.RelationalPathBase<QBeanAddre
 
     public final StringPath addrLn3 = createString("addr_ln3");
 
-    public final NumberPath<Byte> addrType = createNumber("addr_type", Byte.class);
+    public final NumberPath<Integer> addrType = createNumber("addr_type", Integer.class);
 
     public final NumberPath<Long> addressId = createNumber("address_id", Long.class);
 
@@ -49,9 +49,9 @@ public class QAddress extends com.mysema.query.sql.RelationalPathBase<QBeanAddre
 
     public final StringPath state = createString("state");
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
-    public final NumberPath<Byte> useCase = createNumber("use_case", Byte.class);
+    public final NumberPath<Integer> useCase = createNumber("use_case", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanAddress> primary = createPrimaryKey(addressId);
 

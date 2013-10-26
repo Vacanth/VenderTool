@@ -16,7 +16,7 @@ public class QBeanAddress {
 
     private String addrLn3;
 
-    private Byte addrType;
+    private Integer addrType;
 
     private Long addressId;
 
@@ -38,9 +38,9 @@ public class QBeanAddress {
 
     private String state;
 
-    private Byte status;
+    private Integer status;
 
-    private Byte useCase;
+    private Integer useCase;
 
     public Long getAccountId() {
         return accountId;
@@ -74,11 +74,11 @@ public class QBeanAddress {
         this.addrLn3 = addrLn3;
     }
 
-    public Byte getAddrType() {
+    public Integer getAddrType() {
         return addrType;
     }
 
-    public void setAddrType(Byte addrType) {
+    public void setAddrType(Integer addrType) {
         this.addrType = addrType;
     }
 
@@ -162,19 +162,19 @@ public class QBeanAddress {
         this.state = state;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Byte getUseCase() {
+    public Integer getUseCase() {
         return useCase;
     }
 
-    public void setUseCase(Byte useCase) {
+    public void setUseCase(Integer useCase) {
         this.useCase = useCase;
     }
 
