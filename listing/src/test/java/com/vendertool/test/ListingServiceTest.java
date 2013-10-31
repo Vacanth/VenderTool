@@ -47,9 +47,9 @@ public class ListingServiceTest implements ApplicationContextAware {
 //		listing.setWarranty("Yes");
 		Product product = new Product();
 		product.setTitle("Test Test Test!");
-		product.setAccountId(61234L);
-		product.setProductCode("P1234");
-		product.setSku("123ee");
+		product.setAccountId(613234L);
+		product.setProductCode("P166234");
+		product.setSku("12366ee");
 		listing.setProduct(product);
 		List<Classification> classList = new ArrayList<Classification>();
 		Classification clasif = new Classification();
@@ -64,7 +64,7 @@ public class ListingServiceTest implements ApplicationContextAware {
 		listing.setFixedPrice(amount);
 		listing.setPrice(amount);
 		listing.setProduct(product);
-		listing.setCreateOwnerId(334434L);
+		listing.setCreateOwnerId(33644L);
 		listing.setQuantity(1);
 //		listing.setCondition("used");
 		listing.setMarket(MarketEnum.MERCADO_LIBRE);
