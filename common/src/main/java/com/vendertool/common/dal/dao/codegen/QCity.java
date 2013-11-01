@@ -1,4 +1,4 @@
-package com.vendertool.lookup.dal.dao.codegen;
+package com.vendertool.common.dal.dao.codegen;
 
 import static com.mysema.query.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.mysema.query.types.Path;
 @Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
 public class QCity extends com.mysema.query.sql.RelationalPathBase<QBeanCity> {
 
-    private static final long serialVersionUID = 1496844969;
+    private static final long serialVersionUID = -918294566;
 
     public static final QCity city = new QCity("city");
 

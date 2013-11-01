@@ -1,4 +1,4 @@
-package com.vendertool.lookup.dal.dao.codegen;
+package com.vendertool.common.dal.dao.codegen;
 
 import static com.mysema.query.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.mysema.query.types.Path;
 @Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
 public class QPostalCode extends com.mysema.query.sql.RelationalPathBase<QBeanPostalCode> {
 
-    private static final long serialVersionUID = -1777153002;
+    private static final long serialVersionUID = -1527756665;
 
     public static final QPostalCode postalCode1 = new QPostalCode("postal_code");
 

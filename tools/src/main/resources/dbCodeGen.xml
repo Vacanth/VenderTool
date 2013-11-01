@@ -153,7 +153,7 @@
 	</util:list>
 
 	<bean id="lookupTables" class="com.vendertool.tools.db.codegen.DBCodeGenDetails">
-		<property name="packageName" value="com.vendertool.lookup.dal.dao.codegen" />
+		<property name="packageName" value="com.vendertool.common.dal.dao.codegen" />
 		<property name="targetFolder" value="../common/src/main/java" />
 		<property name="tableNamePattern" value="city,state,postal_code,mercado_category,mercado_category_group" />
 	</bean>

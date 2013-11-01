@@ -1,4 +1,4 @@
-package com.vendertool.lookup.dal.dao.codegen;
+package com.vendertool.common.dal.dao.codegen;
 
 import static com.mysema.query.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.mysema.query.types.Path;
 @Generated("com.mysema.query.sql.codegen.MetaDataSerializer")
 public class QMercadoCategory extends com.mysema.query.sql.RelationalPathBase<QBeanMercadoCategory> {
 
-    private static final long serialVersionUID = -717894557;
+    private static final long serialVersionUID = -499552622;
 
     public static final QMercadoCategory mercadoCategory = new QMercadoCategory("mercado_category");
 

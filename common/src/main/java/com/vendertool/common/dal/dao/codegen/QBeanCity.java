@@ -1,4 +1,4 @@
-package com.vendertool.lookup.dal.dao.codegen;
+package com.vendertool.common.dal.dao.codegen;
 
 import javax.annotation.Generated;
 
