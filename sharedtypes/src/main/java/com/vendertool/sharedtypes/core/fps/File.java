@@ -11,11 +11,11 @@ public class File {
 	private Long fileId;
 	private String name;
 	private String fileGroupId;
-	private Byte filesCountInGroup;
+	private Integer filesCountInGroup;
 	private Long accountId;
 	private String refUrl;
 	private String fileName;
-	private Byte storageSource;
+	private Integer storageSource;
 	private FPSUsecaseEnum useCase;
 	private FPSFileStatusEnum status;
 	private Date createdDate;
@@ -39,10 +39,10 @@ public class File {
 	public void setFileGroupId(String fileGroupId) {
 		this.fileGroupId = fileGroupId;
 	}
-	public Byte getFilesCountInGroup() {
+	public Integer getFilesCountInGroup() {
 		return filesCountInGroup;
 	}
-	public void setFilesCountInGroup(Byte filesCountInGroup) {
+	public void setFilesCountInGroup(Integer filesCountInGroup) {
 		this.filesCountInGroup = filesCountInGroup;
 	}
 	public Long getAccountId() {
@@ -57,10 +57,10 @@ public class File {
 	public void setRefUrl(String refUrl) {
 		this.refUrl = refUrl;
 	}
-	public Byte getStorageSource() {
+	public Integer getStorageSource() {
 		return storageSource;
 	}
-	public void setStorageSource(Byte storageSource) {
+	public void setStorageSource(Integer storageSource) {
 		this.storageSource = storageSource;
 	}
 	public FPSUsecaseEnum getUseCase() {

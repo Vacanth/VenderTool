@@ -93,7 +93,7 @@ public class FPSService extends BaseVenderToolServiceImpl {
 	        	fileObj.setAccountId(Long.valueOf(accountId));
 	        	fileObj.setFileGroupId(uRequest.getGroupId());   
 	        	fileObj.setRefUrl(refMap.get(file.getFileName()));
-	        	fileObj.setStorageSource(new Byte(FPSStorageSourceEnum.AWS_CLOUD.ordinal()+""));
+	        	fileObj.setStorageSource(FPSStorageSourceEnum.AWS_CLOUD.ordinal());
 	        	fileObj.setUseCase(FPSUsecaseEnum.ADD_LISTING);
 	        	fileObj.setStatus(FPSFileStatusEnum.CREATED);
 	        	fileObj.setCreatedDate(new Date());

@@ -28,7 +28,7 @@ public class QBeanTask {
 
     private byte[] response;
 
-    private Byte status;
+    private Integer status;
 
     private Long taskId;
 
@@ -112,11 +112,11 @@ public class QBeanTask {
         this.response = response;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

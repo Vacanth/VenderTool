@@ -18,17 +18,17 @@ public class QBeanFile {
 
     private String fileName;
 
-    private Byte filesCountInGroup;
+    private Integer filesCountInGroup;
 
     private java.sql.Timestamp lastModifiedDate;
 
     private String refUrl;
 
-    private Byte status;
+    private Integer status;
 
-    private Byte storageSource;
+    private Integer storageSource;
 
-    private Byte useCase;
+    private Integer useCase;
 
     public Long getAccountId() {
         return accountId;
@@ -70,11 +70,11 @@ public class QBeanFile {
         this.fileName = fileName;
     }
 
-    public Byte getFilesCountInGroup() {
+    public Integer getFilesCountInGroup() {
         return filesCountInGroup;
     }
 
-    public void setFilesCountInGroup(Byte filesCountInGroup) {
+    public void setFilesCountInGroup(Integer filesCountInGroup) {
         this.filesCountInGroup = filesCountInGroup;
     }
 
@@ -94,27 +94,27 @@ public class QBeanFile {
         this.refUrl = refUrl;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Byte getStorageSource() {
+    public Integer getStorageSource() {
         return storageSource;
     }
 
-    public void setStorageSource(Byte storageSource) {
+    public void setStorageSource(Integer storageSource) {
         this.storageSource = storageSource;
     }
 
-    public Byte getUseCase() {
+    public Integer getUseCase() {
         return useCase;
     }
 
-    public void setUseCase(Byte useCase) {
+    public void setUseCase(Integer useCase) {
         this.useCase = useCase;
     }
 

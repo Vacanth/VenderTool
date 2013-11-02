@@ -31,7 +31,7 @@ public class QForgotPassword extends com.mysema.query.sql.RelationalPathBase<QBe
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanForgotPassword> primary = createPrimaryKey(forgotPasswordId);
 

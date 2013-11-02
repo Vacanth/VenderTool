@@ -35,7 +35,7 @@ public class QJob extends com.mysema.query.sql.RelationalPathBase<QBeanJob> {
 
     public final StringPath responseFileGroupId = createString("response_file_group_id");
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public final StringPath title = createString("title");
 
@@ -43,7 +43,7 @@ public class QJob extends com.mysema.query.sql.RelationalPathBase<QBeanJob> {
 
     public final NumberPath<Long> totalResponseFileSize = createNumber("total_response_file_size", Long.class);
 
-    public final NumberPath<Byte> usecase = createNumber("usecase", Byte.class);
+    public final NumberPath<Integer> usecase = createNumber("usecase", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanJob> primary = createPrimaryKey(jobId);
 

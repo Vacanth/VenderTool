@@ -259,7 +259,7 @@ public class AccountMapper implements DALMapper<Account> {
 		
 		bean.setSalt(account.getPasswordSalt());
 		if(account.getAccountStatus() != null) {
-			bean.setStatus(new Byte(account.getAccountStatus().getId()+""));
+			bean.setStatus(account.getAccountStatus().getId());
 		}
 		
 		

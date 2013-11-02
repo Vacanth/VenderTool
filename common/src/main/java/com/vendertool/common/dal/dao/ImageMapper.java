@@ -93,16 +93,16 @@ public class ImageMapper implements DALMapper<Image> {
 		bean.setAccountId(image.getAccountId());
 		
 		if(image.getFormat() != null) {
-			bean.setImageFormat((byte)image.getFormat().getId());
+			bean.setImageFormat(image.getFormat().getId());
 		}
 		if(image.getName() != null) {
-		bean.setImageName(image.getName());
+			bean.setImageName(image.getName());
 		}
 		if(image.getSize() != null) {
 			bean.setSize(image.getSize());
 		}
 		if(image.getSortOrderId()>0) {
-		bean.setSortOrderId(image.getSortOrderId());
+			bean.setSortOrderId(image.getSortOrderId());
 		}
 		if(image.getHash() != null) {
 			bean.setHash(image.getHash());

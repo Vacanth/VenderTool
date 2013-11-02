@@ -41,13 +41,13 @@ public class QListing extends com.mysema.query.sql.RelationalPathBase<QBeanListi
 
     public final DateTimePath<java.sql.Timestamp> itemStartTime = createDateTime("item_start_time", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
+    public final NumberPath<Integer> lastModifiedApp = createNumber("last_modified_app", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
     public final NumberPath<Long> listingId = createNumber("listing_id", Long.class);
 
-    public final NumberPath<Byte> marketplaceId = createNumber("marketplace_id", Byte.class);
+    public final NumberPath<Integer> marketplaceId = createNumber("marketplace_id", Integer.class);
 
     public final StringPath marketplaceItemId = createString("marketplace_item_id");
 

@@ -27,7 +27,7 @@ public class QProductAttribute extends com.mysema.query.sql.RelationalPathBase<Q
 
     public final NumberPath<java.math.BigDecimal> attrNumValue = createNumber("attr_num_value", java.math.BigDecimal.class);
 
-    public final NumberPath<Byte> attrValueType = createNumber("attr_value_type", Byte.class);
+    public final NumberPath<Integer> attrValueType = createNumber("attr_value_type", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> createdDate = createDateTime("created_date", java.sql.Timestamp.class);
 
@@ -37,7 +37,7 @@ public class QProductAttribute extends com.mysema.query.sql.RelationalPathBase<Q
 
     public final NumberPath<Long> refId = createNumber("ref_id", Long.class);
 
-    public final NumberPath<Byte> refType = createNumber("ref_type", Byte.class);
+    public final NumberPath<Integer> refType = createNumber("ref_type", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanProductAttribute> primary = createPrimaryKey(productAttributeId);
 

@@ -39,7 +39,7 @@ public class QTask extends com.mysema.query.sql.RelationalPathBase<QBeanTask> {
 
     public final SimplePath<byte[]> response = createSimple("response", byte[].class);
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public final NumberPath<Long> taskId = createNumber("task_id", Long.class);
 

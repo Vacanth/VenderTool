@@ -197,7 +197,7 @@ public class AccountDaoImpl extends BaseDaoImpl implements AccountDao {
 			QAccount a = QAccount.account;
 			SQLUpdateClause s = update(con, a)
 					.set(a.emailAddr, newEmail)
-					.set(a.status, new Byte(status.getId()+""))
+					.set(a.status, status.getId())
 					.where(a.emailAddr.eq(oldEmail));
 			
 	    	//Always log the query before executing it

@@ -20,7 +20,7 @@ public class QBeanForgotPassword {
 
     private java.sql.Timestamp lastModifiedDate;
 
-    private Byte status;
+    private Integer status;
 
     public Long getAccountId() {
         return accountId;
@@ -70,11 +70,11 @@ public class QBeanForgotPassword {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

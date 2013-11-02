@@ -43,7 +43,7 @@ public class QAccount extends com.mysema.query.sql.RelationalPathBase<QBeanAccou
 
     public final DateTimePath<java.sql.Timestamp> lastLoginDate = createDateTime("last_login_date", java.sql.Timestamp.class);
 
-    public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
+    public final NumberPath<Integer> lastModifiedApp = createNumber("last_modified_app", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
@@ -61,7 +61,7 @@ public class QAccount extends com.mysema.query.sql.RelationalPathBase<QBeanAccou
 
     public final StringPath salt = createString("salt");
 
-    public final NumberPath<Byte> status = createNumber("status", Byte.class);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanAccount> primary = createPrimaryKey(accountId);
 

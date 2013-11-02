@@ -150,7 +150,7 @@ public class ForgotPasswordDaoImpl extends BaseDaoImpl implements
 									new Timestamp(startDate.getTime())).or(
 									f.createdDate.before(new Timestamp(endDate
 											.getTime())))).and(
-							f.status.eq(new Byte(status.getId()+""))));
+							f.status.eq(status.getId())));
 			
 	    	//Always log the query before executing it
 	    	logger.info("DAL QUERY: " + query.toString());
@@ -274,7 +274,7 @@ public class ForgotPasswordDaoImpl extends BaseDaoImpl implements
 			QForgotPassword f = QForgotPassword.forgotPassword;
 			
 			SQLUpdateClause s = update(con, f)
-					.set(f.status, new Byte(status.getId()+""))
+					.set(f.status, status.getId())
 					.where(f.emailAddr.eq(email));
 			
 	    	//Always log the query before executing it

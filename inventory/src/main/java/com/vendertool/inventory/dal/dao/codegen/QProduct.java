@@ -25,11 +25,11 @@ public class QProduct extends com.mysema.query.sql.RelationalPathBase<QBeanProdu
 
     public final StringPath currencyCodeIso3 = createString("currency_code_iso3");
 
-    public final NumberPath<Byte> dimensionUnit = createNumber("dimension_unit", Byte.class);
+    public final NumberPath<Integer> dimensionUnit = createNumber("dimension_unit", Integer.class);
 
     public final NumberPath<Double> height = createNumber("height", Double.class);
 
-    public final NumberPath<Byte> lastModifiedApp = createNumber("last_modified_app", Byte.class);
+    public final NumberPath<Integer> lastModifiedApp = createNumber("last_modified_app", Integer.class);
 
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = createDateTime("last_modified_date", java.sql.Timestamp.class);
 
@@ -39,7 +39,7 @@ public class QProduct extends com.mysema.query.sql.RelationalPathBase<QBeanProdu
 
     public final StringPath productCode = createString("product_code");
 
-    public final NumberPath<Byte> productCodeType = createNumber("product_code_type", Byte.class);
+    public final NumberPath<Integer> productCodeType = createNumber("product_code_type", Integer.class);
 
     public final NumberPath<Long> productId = createNumber("product_id", Long.class);
 
@@ -53,7 +53,7 @@ public class QProduct extends com.mysema.query.sql.RelationalPathBase<QBeanProdu
 
     public final NumberPath<Double> weight = createNumber("weight", Double.class);
 
-    public final NumberPath<Byte> weightUnit = createNumber("weight_unit", Byte.class);
+    public final NumberPath<Integer> weightUnit = createNumber("weight_unit", Integer.class);
 
     public final NumberPath<Double> width = createNumber("width", Double.class);
 

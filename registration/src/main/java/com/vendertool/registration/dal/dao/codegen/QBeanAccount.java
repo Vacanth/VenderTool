@@ -32,7 +32,7 @@ public class QBeanAccount {
 
     private java.sql.Timestamp lastLoginDate;
 
-    private Byte lastModifiedApp;
+    private Integer lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
 
@@ -50,7 +50,7 @@ public class QBeanAccount {
 
     private String salt;
 
-    private Byte status;
+    private Integer status;
 
     public Long getAccountId() {
         return accountId;
@@ -148,11 +148,11 @@ public class QBeanAccount {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public Byte getLastModifiedApp() {
+    public Integer getLastModifiedApp() {
         return lastModifiedApp;
     }
 
-    public void setLastModifiedApp(Byte lastModifiedApp) {
+    public void setLastModifiedApp(Integer lastModifiedApp) {
         this.lastModifiedApp = lastModifiedApp;
     }
 
@@ -220,11 +220,11 @@ public class QBeanAccount {
         this.salt = salt;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

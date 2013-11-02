@@ -127,7 +127,7 @@ public class AccountConfirmationMapper implements DALMapper<AccountConfirmation>
 		accbean.setSessionId(accConf.getConfirmSessionId());
 		
 		if(VUTIL.isNotNull(accConf.getStatus())) {
-			accbean.setStatus(new Byte(accConf.getStatus().getId()+""));
+			accbean.setStatus(accConf.getStatus().getId());
 		}
 		
 		accbean.setEmailAddr(accConf.getEmail());

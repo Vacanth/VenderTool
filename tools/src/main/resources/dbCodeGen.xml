@@ -14,6 +14,7 @@
 		<ref bean="inventoryDAL" />
 		<ref bean="listingDAL" />
 		<ref bean="fpsDAL" />
+		<ref bean = "lookupDAL"/>
 	</util:list>
 
 
@@ -134,4 +135,27 @@
 		<property name="tableNamePattern" value="file,job,task,sequence_data" />
 	</bean>
 	<!-- FPS **** End ***** -->
+	
+	
+	<!-- LookUp DB ***** Start ****** -->
+	<bean id="lookupDAL" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/lookupdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="codeGenDetails" ref="lookupTableDetails" />
+	</bean>	
+	
+	<util:list id="lookupTableDetails" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="lookupTables" />
+		<!-- <ref bean="productDB2" /> -->
+	</util:list>
+
+	<bean id="lookupTables" class="com.vendertool.tools.db.codegen.DBCodeGenDetails">
+		<property name="packageName" value="com.vendertool.common.dal.dao.codegen" />
+		<property name="targetFolder" value="../common/src/main/java" />
+		<property name="tableNamePattern" value="city,state,postal_code,mercado_category,mercado_category_group" />
+	</bean>
+	<!-- LookUp DB ***** End ****** -->
 </beans>

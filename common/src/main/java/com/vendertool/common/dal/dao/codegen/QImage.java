@@ -27,7 +27,7 @@ public class QImage extends com.mysema.query.sql.RelationalPathBase<QBeanImage> 
 
     public final StringPath hostedUrl = createString("hosted_url");
 
-    public final NumberPath<Byte> imageFormat = createNumber("image_format", Byte.class);
+    public final NumberPath<Integer> imageFormat = createNumber("image_format", Integer.class);
 
     public final NumberPath<Long> imageId = createNumber("image_id", Long.class);
 
@@ -37,11 +37,11 @@ public class QImage extends com.mysema.query.sql.RelationalPathBase<QBeanImage> 
 
     public final NumberPath<Long> refId = createNumber("ref_id", Long.class);
 
-    public final NumberPath<Byte> refType = createNumber("ref_type", Byte.class);
+    public final NumberPath<Integer> refType = createNumber("ref_type", Integer.class);
 
     public final StringPath size = createString("size");
 
-    public final NumberPath<Byte> sortOrderId = createNumber("sort_order_id", Byte.class);
+    public final NumberPath<Integer> sortOrderId = createNumber("sort_order_id", Integer.class);
 
     public final com.mysema.query.sql.PrimaryKey<QBeanImage> primary = createPrimaryKey(imageId);
 

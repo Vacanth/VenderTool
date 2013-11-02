@@ -14,7 +14,7 @@ public class QBeanAccountSecurityQuestion {
 
     private java.sql.Timestamp createdDate;
 
-    private Byte lastModifiedApp;
+    private Integer lastModifiedApp;
 
     private java.sql.Timestamp lastModifiedDate;
 
@@ -46,11 +46,11 @@ public class QBeanAccountSecurityQuestion {
         this.createdDate = createdDate;
     }
 
-    public Byte getLastModifiedApp() {
+    public Integer getLastModifiedApp() {
         return lastModifiedApp;
     }
 
-    public void setLastModifiedApp(Byte lastModifiedApp) {
+    public void setLastModifiedApp(Integer lastModifiedApp) {
         this.lastModifiedApp = lastModifiedApp;
     }
 

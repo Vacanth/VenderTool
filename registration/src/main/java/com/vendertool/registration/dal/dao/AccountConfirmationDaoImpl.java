@@ -107,7 +107,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			QAccountConfirmation ac = QAccountConfirmation.accountConfirmation;
 			
 			SQLUpdateClause s = update(con, ac)
-					.set(ac.numberOfAttempts, new Byte(attempts+""))
+					.set(ac.numberOfAttempts, attempts)
 					.where(ac.accountConfirmationId.eq(pkId).and(ac.accountId.eq(accountId)));
 			
 	    	//Always log the query before executing it
@@ -254,7 +254,7 @@ public class AccountConfirmationDaoImpl extends BaseDaoImpl implements
 			QAccountConfirmation ac = QAccountConfirmation.accountConfirmation;
 			
 			SQLUpdateClause s = update(con, ac)
-					.set(ac.status, new Byte(status.getId()+""))
+					.set(ac.status, status.getId())
 					.where(ac.accountConfirmationId.eq(id));
 			
 	    	//Always log the query before executing it
