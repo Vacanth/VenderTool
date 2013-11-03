@@ -36,7 +36,7 @@ public class ProductDAOTest implements ApplicationContextAware {
 		ProductDao productDao = ProductDaoFactory.getInstance().getProductDao();
 		Product product = new Product();
 		product.setTitle("This product is by GK");
-		product.setSku("R2134455");
+		product.setSku("R21344551");
 		product.setAccountId(1111L);
 		Amount amount = new Amount();
 		amount.setCurrency(Currency.getInstance("ARS"));

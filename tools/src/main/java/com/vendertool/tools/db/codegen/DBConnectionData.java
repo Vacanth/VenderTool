@@ -7,6 +7,15 @@ public class DBConnectionData {
 	private String url;
 	private String user;
 	private String password;
+	private String host;
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
 	private List<DBCodeGenDetails> codeGenDetails;
 
 	public String getUrl() {

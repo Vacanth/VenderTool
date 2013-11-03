@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   					   http://www.springframework.org/schema/util
+	   					   http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:list id="dbList" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="invdb" />
+		<ref bean="jobdb" />
+		<ref bean="searchdb" />
+		<ref bean="lookupdb" />
+	</util:list>
+
+	<util:list id="invdb" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="invhost" />
+		<ref bean="scratchhost" />
+	</util:list>
+
+	<bean id="invhost" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/invdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="host" value="invdb" />
+	</bean>
+
+	<bean id="scratchhost" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/scratchdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="host" value="scratchdb" />
+	</bean>
+
+	<util:list id="jobdb" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="jobhost" />
+	</util:list>
+
+	<bean id="jobhost" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/jobdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="host" value="jobdb" />
+	</bean>
+
+
+	<util:list id="searchdb" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="searchhost" />
+	</util:list>
+
+	<bean id="searchhost" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/searchdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="host" value="searchdb" />
+	</bean>
+
+
+	<util:list id="lookupdb" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="lookuphost" />
+	</util:list>
+
+	<bean id="lookuphost" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/lookupdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="host" value="lookupdb" />
+	</bean>
+</beans>
