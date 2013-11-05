@@ -179,6 +179,7 @@
 		<property name="targetFolder" value="../common/src/main/java" />
 		<property name="tableNamePattern" value="search" />
 	</bean>
+	
 	<!-- Search DB ***** End ****** -->
 	
 </beans>
