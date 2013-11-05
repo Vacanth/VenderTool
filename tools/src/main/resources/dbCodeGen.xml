@@ -159,4 +159,26 @@
 	</bean>
 	<!-- LookUp DB ***** End ****** -->
 	
+		<!-- Search DB ***** Start ****** -->
+	<bean id="lookupDAL" class="com.vendertool.tools.db.codegen.DBConnectionData">
+		<property name="url"
+			value="jdbc:mysql://ec2-54-234-99-88.compute-1.amazonaws.com:3306/searchdb" />
+		<property name="user" value="user5" />
+		<property name="password" value="password" />
+		<property name="codeGenDetails" ref="searchTableDetails" />
+	</bean>	
+	
+	<util:list id="searchTableDetails" list-class="java.util.ArrayList">
+		<!-- Add all DB for which code needs to be generated. -->
+		<ref bean="searchTables" />
+		<!-- <ref bean="productDB2" /> -->
+	</util:list>
+
+	<bean id="searchTables" class="com.vendertool.tools.db.codegen.DBCodeGenDetails">
+		<property name="packageName" value="com.vendertool.common.dal.dao.codegen" />
+		<property name="targetFolder" value="../common/src/main/java" />
+		<property name="tableNamePattern" value="search" />
+	</bean>
+	<!-- Search DB ***** End ****** -->
+	
 </beans>
