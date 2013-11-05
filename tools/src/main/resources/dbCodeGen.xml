@@ -158,4 +158,5 @@
 		<property name="tableNamePattern" value="city,state,postal_code,mercado_category,mercado_category_group" />
 	</bean>
 	<!-- LookUp DB ***** End ****** -->
+	
 </beans>

@@ -1,0 +1,28 @@
+USE `invdb` ;
+insert into `invdb`.`product_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `invdb`.`product_variation_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `invdb`.`listing_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `invdb`.`listing_variation_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+
+commit;
+USE `acctdb` ;
+
+insert into `acctdb`.`account_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `acctdb`.`address_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `acctdb`.`address_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+commit;
+
+insert into `batchdb`.`file_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `batchdb`.`job_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `batchdb`.`task_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+commit;
+
+
+insert into `searchdb`.`search_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+
+
+insert into `lookupdb`.`mercado_category_group_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `lookupdb`.`mercado_category_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `lookupdb`.`city_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `lookupdb`.`state_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
+insert into `lookupdb`.`postal_code_sequence`  values (1,1,1,18446744073709551615,1,0,sysdate(),sysdate());
